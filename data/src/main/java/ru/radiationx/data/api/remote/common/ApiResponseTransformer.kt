@@ -1,4 +1,4 @@
-package ru.radiationx.data.entity.remote.common
+package ru.radiationx.data.api.remote.common
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
