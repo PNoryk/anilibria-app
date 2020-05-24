@@ -1,16 +1,23 @@
 package ru.radiationx.data.api.service.release
 
 import io.reactivex.Single
+import ru.radiationx.data.adomain.RandomRelease
+import ru.radiationx.data.adomain.Release
+import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.remote.RandomReleaseResponse
 import ru.radiationx.data.api.remote.ReleaseResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
+import ru.radiationx.data.api.converter.PaginationConverter
+import ru.radiationx.data.api.converter.ReleaseConverter
 
 class ReleaseService(
-    private val releaseApi: ReleaseApi
+    private val releaseApi: ReleaseApi,
+    private val releaseConverter: ReleaseConverter,
+    private val paginationConverter: PaginationConverter
 ) {
 
-    fun getOne(releaseId: Int? = null, releaseCode: String? = null): Single<ReleaseResponse> {
+    fun getOne(releaseId: Int? = null, releaseCode: String? = null): Single<Release> {
         if (releaseId == null && releaseCode == null) {
             throw IllegalArgumentException("Release id and code is null")
         }
@@ -21,9 +28,10 @@ class ReleaseService(
         return releaseApi
             .getOne(params)
             .handleApiResponse()
+            .map { releaseConverter.toDomain(it) }
     }
 
-    fun getSome(ids: List<Int>? = null, codes: List<String>? = null): Single<List<ReleaseResponse>> {
+    fun getSome(ids: List<Int>? = null, codes: List<String>? = null): Single<List<Release>> {
         if (ids == null && codes == null) {
             throw IllegalArgumentException("Release ids and codes is null")
         }
@@ -34,9 +42,14 @@ class ReleaseService(
         return releaseApi
             .getSome(params)
             .handleApiResponse()
+            .map {
+                it.map { releaseResponse ->
+                    releaseConverter.toDomain(releaseResponse)
+                }
+            }
     }
 
-    fun getList(page: Int): Single<PaginatedResponse<ReleaseResponse>> = releaseApi
+    fun getList(page: Int): Single<Paginated<Release>> = releaseApi
         .getList(
             mapOf(
                 "query" to "list",
@@ -46,8 +59,14 @@ class ReleaseService(
             )
         )
         .handleApiResponse()
+        .map {
+            paginationConverter.toDomain(it) { releaseResponse ->
+                releaseConverter.toDomain(releaseResponse)
+            }
+        }
 
-    fun getRandom(): Single<RandomReleaseResponse> = releaseApi
+    fun getRandom(): Single<RandomRelease> = releaseApi
         .getRandom(mapOf("query" to "random_release"))
         .handleApiResponse()
+        .map { releaseConverter.toDomain(it) }
 }

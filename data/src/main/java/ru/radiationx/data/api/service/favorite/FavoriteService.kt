@@ -1,15 +1,21 @@
 package ru.radiationx.data.api.service.favorite
 
 import io.reactivex.Single
+import ru.radiationx.data.adomain.Release
+import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.remote.ReleaseResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
+import ru.radiationx.data.api.converter.PaginationConverter
+import ru.radiationx.data.api.converter.ReleaseConverter
 
 class FavoriteService(
-    private val favoriteApi: FavoriteApi
+    private val favoriteApi: FavoriteApi,
+    private val releaseConverter: ReleaseConverter,
+    private val paginationConverter: PaginationConverter
 ) {
 
-    fun getList(page: Int): Single<PaginatedResponse<ReleaseResponse>> = favoriteApi
+    fun getList(page: Int): Single<Paginated<Release>> = favoriteApi
         .getList(
             mapOf(
                 "query" to "favorites",
@@ -19,8 +25,13 @@ class FavoriteService(
             )
         )
         .handleApiResponse()
+        .map {
+            paginationConverter.toDomain(it) { releaseResponse ->
+                releaseConverter.toDomain(releaseResponse)
+            }
+        }
 
-    fun add(releaseId: Int): Single<ReleaseResponse> = favoriteApi
+    fun add(releaseId: Int): Single<Release> = favoriteApi
         .add(
             mapOf(
                 "query" to "favorites",
@@ -29,8 +40,9 @@ class FavoriteService(
             )
         )
         .handleApiResponse()
+        .map { releaseConverter.toDomain(it) }
 
-    fun delete(releaseId: Int): Single<ReleaseResponse> = favoriteApi
+    fun delete(releaseId: Int): Single<Release> = favoriteApi
         .delete(
             mapOf(
                 "query" to "favorites",
@@ -39,4 +51,5 @@ class FavoriteService(
             )
         )
         .handleApiResponse()
+        .map { releaseConverter.toDomain(it) }
 }

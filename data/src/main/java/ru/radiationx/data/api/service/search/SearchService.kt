@@ -2,13 +2,19 @@ package ru.radiationx.data.api.service.search
 
 import io.reactivex.Single
 import org.json.JSONObject
+import ru.radiationx.data.adomain.Release
+import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.remote.ReleaseResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
+import ru.radiationx.data.api.converter.PaginationConverter
+import ru.radiationx.data.api.converter.ReleaseConverter
 import ru.radiationx.data.entity.app.search.SearchForm
 
 class SearchService(
-    private val searchApi: SearchApi
+    private val searchApi: SearchApi,
+    private val releaseConverter: ReleaseConverter,
+    private val paginationConverter: PaginationConverter
 ) {
 
     fun getYears(): Single<List<String>> = searchApi
@@ -19,7 +25,7 @@ class SearchService(
         .getGenres(mapOf("query" to "genres"))
         .handleApiResponse()
 
-    fun getSuggestions(name: String): Single<List<ReleaseResponse>> = searchApi
+    fun getSuggestions(name: String): Single<List<Release>> = searchApi
         .getSuggestions(
             mapOf(
                 "query" to "search",
@@ -28,8 +34,13 @@ class SearchService(
             )
         )
         .handleApiResponse()
+        .map {
+            it.map { releaseResponse ->
+                releaseConverter.toDomain(releaseResponse)
+            }
+        }
 
-    fun getMatches(form: SearchForm, page: Int): Single<PaginatedResponse<ReleaseResponse>> {
+    fun getMatches(form: SearchForm, page: Int): Single<Paginated<Release>> {
         val yearsQuery = form.years?.joinToString(",") { it.value }.orEmpty()
         val seasonsQuery = form.seasons?.joinToString(",") { it.value }.orEmpty()
         val genresQuery = form.genres?.joinToString(",") { it.value }.orEmpty()
@@ -57,6 +68,11 @@ class SearchService(
         return searchApi
             .getMatches(params)
             .handleApiResponse()
+            .map {
+                paginationConverter.toDomain(it) { releaseResponse ->
+                    releaseConverter.toDomain(releaseResponse)
+                }
+            }
     }
 
 }

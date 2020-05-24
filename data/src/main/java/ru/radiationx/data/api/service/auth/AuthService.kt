@@ -2,12 +2,16 @@ package ru.radiationx.data.api.service.auth
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import ru.radiationx.data.adomain.auth.OtpInfo
+import ru.radiationx.data.adomain.auth.SocialService
 import ru.radiationx.data.api.remote.auth.OtpInfoResponse
 import ru.radiationx.data.api.remote.auth.SocialServiceResponse
 import ru.radiationx.data.api.common.handleApiResponse
+import ru.radiationx.data.api.converter.AuthConverter
 
 class AuthService(
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val authConverter: AuthConverter
 ) {
 
     fun signIn(login: String, password: String, code2fa: String): Completable = authApi
@@ -28,9 +32,10 @@ class AuthService(
         .ignoreElement()
 
 
-    fun getSocialServices(): Single<List<SocialServiceResponse>> = authApi
+    fun getSocialServices(): Single<List<SocialService>> = authApi
         .getSocialServices(mapOf("query" to "social_auth"))
         .handleApiResponse()
+        .map { it.map { authConverter.toDomain(it) } }
 
     fun signInSocial(resultUrl: String): Completable = authApi
         .signInSocial(mapOf("query" to "login_social"))
@@ -38,7 +43,7 @@ class AuthService(
         .ignoreElement()
 
 
-    fun getOtpInfo(deviceId: String): Single<OtpInfoResponse> = authApi
+    fun getOtpInfo(deviceId: String): Single<OtpInfo> = authApi
         .getOtpInfo(
             mapOf(
                 "query" to "auth_get_otp",
@@ -46,6 +51,7 @@ class AuthService(
             )
         )
         .handleApiResponse()
+        .map { authConverter.toDomain(it) }
 
     fun acceptOtp(code: String): Completable = authApi
         .acceptOtp(

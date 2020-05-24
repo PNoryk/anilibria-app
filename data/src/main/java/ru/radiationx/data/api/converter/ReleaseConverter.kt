@@ -11,6 +11,10 @@ class ReleaseConverter(
     private val apiConfig: ApiConfig
 ) {
 
+    fun toDomain(response: RandomReleaseResponse) = RandomRelease(
+        code = response.code
+    )
+
     fun toDomain(response: ReleaseResponse) = Release(
         id = response.id,
         code = response.code,

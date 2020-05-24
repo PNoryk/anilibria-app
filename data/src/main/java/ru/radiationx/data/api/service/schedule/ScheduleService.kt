@@ -1,11 +1,13 @@
 package ru.radiationx.data.api.service.schedule
 
 import io.reactivex.Single
+import ru.radiationx.data.adomain.ScheduleDay
 import ru.radiationx.data.api.common.handleApiResponse
-import ru.radiationx.data.entity.app.schedule.ScheduleDay
+import ru.radiationx.data.api.converter.ScheduleConverter
 
 class ScheduleService(
-    private val scheduleApi: ScheduleApi
+    private val scheduleApi: ScheduleApi,
+    private val scheduleConverter: ScheduleConverter
 ) {
 
     fun getList(): Single<List<ScheduleDay>> = scheduleApi
@@ -17,4 +19,9 @@ class ScheduleService(
             )
         )
         .handleApiResponse()
+        .map {
+            it.map { dayResponse ->
+                scheduleConverter.toDomain(dayResponse)
+            }
+        }
 }
