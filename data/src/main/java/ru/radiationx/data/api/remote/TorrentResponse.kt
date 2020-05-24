@@ -12,6 +12,6 @@ data class TorrentResponse(
     @SerializedName("quality") val quality: String?,
     @SerializedName("series") val series: String?,
     @SerializedName("size") val size: Long,
-    @SerializedName("ctime") val time: Int,
+    @SerializedName("ctime") val time: Long,
     @SerializedName("url") val url: String?
 )

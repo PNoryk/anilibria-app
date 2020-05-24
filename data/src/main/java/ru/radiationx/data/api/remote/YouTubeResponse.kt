@@ -10,5 +10,5 @@ data class YouTubeResponse(
     @SerializedName("vid") val vid: String?,
     @SerializedName("views") val views: Int,
     @SerializedName("comments") val comments: Int,
-    @SerializedName("timestamp") val timestamp: Int
+    @SerializedName("timestamp") val timestamp: Long
 )

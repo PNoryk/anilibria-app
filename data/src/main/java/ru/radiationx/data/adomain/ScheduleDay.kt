@@ -2,6 +2,6 @@ package ru.radiationx.data.adomain
 
 
 data class ScheduleDay(
-    val day: String,
+    val day: Int,
     val items: List<Release>
 )

@@ -12,7 +12,7 @@ data class ReleaseResponse(
     @SerializedName("favorite") val favorite: FavoriteInfoResponse?,
     @SerializedName("last") val last: String?,
     @SerializedName("moon") val moon: String?,
-    @SerializedName("status") val status: String?,
+    @SerializedName("statusCode") val statusCode: String?,
     @SerializedName("type") val type: String?,
     @SerializedName("genres") val genres: List<String>?,
     @SerializedName("voices") val voices: List<String>?,

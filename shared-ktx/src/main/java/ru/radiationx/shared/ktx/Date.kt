@@ -30,6 +30,8 @@ fun Date.asTimeSecString(): String {
     }
 }
 
+fun Long.dateFromSec() = Date(this * 1000)
+
 fun Long.asUtcTime(): Long = this - TimeZone.getDefault().rawOffset / 1000
 fun Long.asUtc(): Long = this - TimeZone.getDefault().rawOffset
 
