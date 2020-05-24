@@ -1,14 +1,15 @@
 package ru.radiationx.data.api.service.release
 
 import io.reactivex.Single
+import retrofit2.http.FieldMap
 import ru.radiationx.data.api.remote.RandomReleaseResponse
 import ru.radiationx.data.api.remote.ReleaseResponse
 import ru.radiationx.data.api.remote.common.ApiBaseResponse
 import ru.radiationx.data.api.remote.pagination.PaginatedResponse
 
 interface ReleaseApi {
-    fun getOne(): Single<ApiBaseResponse<ReleaseResponse>>
-    fun getSome(): Single<ApiBaseResponse<List<ReleaseResponse>>>
-    fun getList(): Single<ApiBaseResponse<PaginatedResponse<ReleaseResponse>>>
-    fun getRandom(): Single<ApiBaseResponse<RandomReleaseResponse>>
+    fun getOne(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<ReleaseResponse>>
+    fun getSome(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<List<ReleaseResponse>>>
+    fun getList(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<PaginatedResponse<ReleaseResponse>>>
+    fun getRandom(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<RandomReleaseResponse>>
 }

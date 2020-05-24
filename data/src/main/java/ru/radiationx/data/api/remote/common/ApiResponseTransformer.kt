@@ -34,3 +34,5 @@ class ApiResponseTransformer<T> : SingleTransformer<ApiBaseResponse<T>, T> {
         exception
     }
 }
+
+fun <T> Single<ApiBaseResponse<T>>.handleApiResponse(): Single<T> = compose(ApiResponseTransformer())
