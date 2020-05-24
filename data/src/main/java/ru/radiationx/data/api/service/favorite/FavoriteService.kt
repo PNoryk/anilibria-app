@@ -2,9 +2,8 @@ package ru.radiationx.data.api.service.favorite
 
 import io.reactivex.Single
 import ru.radiationx.data.api.remote.ReleaseResponse
-import ru.radiationx.data.api.remote.common.ApiBaseResponse
-import ru.radiationx.data.api.remote.common.handleApiResponse
-import ru.radiationx.data.api.remote.pagination.PaginatedResponse
+import ru.radiationx.data.api.common.handleApiResponse
+import ru.radiationx.data.api.common.pagination.PaginatedResponse
 
 class FavoriteService(
     private val favoriteApi: FavoriteApi

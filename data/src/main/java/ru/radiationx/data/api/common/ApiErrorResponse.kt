@@ -1,4 +1,4 @@
-package ru.radiationx.data.api.remote.common
+package ru.radiationx.data.api.common
 
 
 import com.google.gson.annotations.SerializedName

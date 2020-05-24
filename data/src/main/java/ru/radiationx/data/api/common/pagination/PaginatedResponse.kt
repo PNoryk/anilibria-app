@@ -1,4 +1,4 @@
-package ru.radiationx.data.api.remote.pagination
+package ru.radiationx.data.api.common.pagination
 
 
 import com.google.gson.annotations.SerializedName

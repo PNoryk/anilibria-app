@@ -1,11 +1,9 @@
 package ru.radiationx.data.api.service.youtube
 
 import io.reactivex.Single
-import retrofit2.http.FieldMap
 import ru.radiationx.data.api.remote.YouTubeResponse
-import ru.radiationx.data.api.remote.common.ApiBaseResponse
-import ru.radiationx.data.api.remote.common.handleApiResponse
-import ru.radiationx.data.api.remote.pagination.PaginatedResponse
+import ru.radiationx.data.api.common.handleApiResponse
+import ru.radiationx.data.api.common.pagination.PaginatedResponse
 
 class YouTubeService(
     private val youtubeApi: YoutubeApi

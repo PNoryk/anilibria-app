@@ -4,8 +4,8 @@ import io.reactivex.Single
 import retrofit2.http.FieldMap
 import ru.radiationx.data.api.remote.RandomReleaseResponse
 import ru.radiationx.data.api.remote.ReleaseResponse
-import ru.radiationx.data.api.remote.common.ApiBaseResponse
-import ru.radiationx.data.api.remote.pagination.PaginatedResponse
+import ru.radiationx.data.api.common.ApiBaseResponse
+import ru.radiationx.data.api.common.pagination.PaginatedResponse
 
 interface ReleaseApi {
     fun getOne(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<ReleaseResponse>>

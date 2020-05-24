@@ -4,10 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.api.remote.auth.OtpInfoResponse
 import ru.radiationx.data.api.remote.auth.SocialServiceResponse
-import ru.radiationx.data.api.remote.common.ApiBaseResponse
-import ru.radiationx.data.api.remote.common.ApiResponseTransformer
-import ru.radiationx.data.api.remote.common.handleApiResponse
-import ru.radiationx.data.entity.app.auth.SocialAuth
+import ru.radiationx.data.api.common.handleApiResponse
 
 class AuthService(
     private val authApi: AuthApi

@@ -1,9 +1,7 @@
 package ru.radiationx.data.api.service.schedule
 
 import io.reactivex.Single
-import retrofit2.http.FieldMap
-import ru.radiationx.data.api.remote.common.ApiBaseResponse
-import ru.radiationx.data.api.remote.common.handleApiResponse
+import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.entity.app.schedule.ScheduleDay
 
 class ScheduleService(
