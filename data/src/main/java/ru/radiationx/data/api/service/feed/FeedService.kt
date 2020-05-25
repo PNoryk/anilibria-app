@@ -8,7 +8,9 @@ import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.FeedConverter
 import ru.radiationx.data.api.converter.PaginationConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class FeedService(
     private val feedApi: FeedApi,
     private val feedConverter: FeedConverter,

@@ -5,7 +5,9 @@ import ru.radiationx.data.adomain.User
 import ru.radiationx.data.api.remote.UserResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.UserConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class UserService(
     private val userApi: UserApi,
     private val userConverter: UserConverter

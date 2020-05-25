@@ -5,7 +5,9 @@ import ru.radiationx.data.adomain.LinkMenu
 import ru.radiationx.data.api.remote.LinkMenuResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.LinkMenuConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class MenuService(
     private val menuApi: MenuApi,
     private val menuConverter: LinkMenuConverter

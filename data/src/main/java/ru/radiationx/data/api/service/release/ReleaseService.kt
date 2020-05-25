@@ -10,7 +10,9 @@ import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class ReleaseService(
     private val releaseApi: ReleaseApi,
     private val releaseConverter: ReleaseConverter,

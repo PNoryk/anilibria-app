@@ -5,8 +5,9 @@ import ru.radiationx.data.adomain.auth.SocialService
 import ru.radiationx.data.api.remote.auth.OtpInfoResponse
 import ru.radiationx.data.api.remote.auth.SocialServiceResponse
 import ru.radiationx.shared.ktx.dateFromSec
+import toothpick.InjectConstructor
 
-
+@InjectConstructor
 class AuthConverter{
 
     fun toDomain(response: OtpInfoResponse): OtpInfo = OtpInfo(
@@ -17,10 +18,10 @@ class AuthConverter{
     )
 
     fun toDomain(response: SocialServiceResponse) = SocialService(
-        response.key,
-        response.title,
-        response.socialUrl,
-        response.resultPattern,
-        response.errorUrlPattern
+        key = response.key,
+        title = response.title,
+        socialUrl = response.socialUrl,
+        resultPattern = response.resultPattern,
+        errorUrlPattern = response.errorUrlPattern
     )
 }

@@ -8,7 +8,10 @@ import ru.radiationx.data.api.remote.auth.OtpInfoResponse
 import ru.radiationx.data.api.remote.auth.SocialServiceResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.AuthConverter
+import toothpick.InjectConstructor
 
+//todo Авторизация работать не будет, нужно запилить поддержку на стороне апи и так-же в клиенте замутить полноценную поддержку completable
+@InjectConstructor
 class AuthService(
     private val authApi: AuthApi,
     private val authConverter: AuthConverter

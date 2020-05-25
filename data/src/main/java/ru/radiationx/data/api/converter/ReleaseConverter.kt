@@ -3,12 +3,16 @@ package ru.radiationx.data.api.converter
 import ru.radiationx.data.adomain.*
 import ru.radiationx.data.api.remote.*
 import ru.radiationx.data.datasource.remote.address.ApiConfig
+import ru.radiationx.data.system.ApiUtils
 import ru.radiationx.shared.ktx.dateFromSec
+import toothpick.InjectConstructor
 import java.util.*
 
+@InjectConstructor
 class ReleaseConverter(
     private val dayConverter: DayConverter,
-    private val apiConfig: ApiConfig
+    private val apiConfig: ApiConfig,
+    private val apiUtils: ApiUtils
 ) {
 
     fun toDomain(response: RandomReleaseResponse) = RandomRelease(
@@ -18,7 +22,7 @@ class ReleaseConverter(
     fun toDomain(response: ReleaseResponse) = Release(
         id = response.id,
         code = response.code,
-        names = response.names,
+        names = response.names?.map { apiUtils.escapeHtml(it).toString() },
         series = response.series,
         poster = response.poster?.let { "${apiConfig.baseImagesUrl}$it" },
         favorite = response.favorite?.let { toDomain(it) },
@@ -30,10 +34,12 @@ class ReleaseConverter(
         voices = response.voices,
         year = response.year,
         day = response.day?.let { dayConverter.toDomain(it) },
-        description = response.description,
+        description = response.description?.trim(),
+        announce = response.announce?.trim(),
         blockedInfo = response.blockedInfo?.let { toDomain(it) },
         playlist = response.playlist?.map { toDomain(it) },
-        torrents = response.torrents?.map { toDomain(it) }
+        torrents = response.torrents?.map { toDomain(it) },
+        showDonateDialog = response.showDonateDialog
     )
 
     fun toDomain(response: FavoriteInfoResponse) = FavoriteInfo(
@@ -66,7 +72,7 @@ class ReleaseConverter(
         series = response.series,
         size = response.size,
         time = response.time.dateFromSec(),
-        url = response.url
+        url = response.url?.let { "${apiConfig.baseImagesUrl}$it" }
     )
 
     private fun parseStatus(status: String): Release.Status? = when (status) {

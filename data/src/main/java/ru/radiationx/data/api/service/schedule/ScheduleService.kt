@@ -4,7 +4,9 @@ import io.reactivex.Single
 import ru.radiationx.data.adomain.ScheduleDay
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.ScheduleConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class ScheduleService(
     private val scheduleApi: ScheduleApi,
     private val scheduleConverter: ScheduleConverter

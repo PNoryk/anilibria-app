@@ -1,8 +1,11 @@
 package ru.radiationx.data.api.converter
 
+import toothpick.InjectConstructor
 import java.util.*
 
+@InjectConstructor
 class DayConverter {
+
     companion object {
         const val MONDAY = "1"
         const val TUESDAY = "2"

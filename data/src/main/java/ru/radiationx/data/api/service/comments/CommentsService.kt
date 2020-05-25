@@ -5,7 +5,9 @@ import ru.radiationx.data.adomain.CommentsInfo
 import ru.radiationx.data.api.remote.CommentsInfoResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.CommentsConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class CommentsService(
     private val commentsApi: CommentsApi,
     private val commentsConverter: CommentsConverter

@@ -19,9 +19,11 @@ data class Release(
     val year: String?,
     val day: Int?,
     val description: String?,
+    val announce: String?,
     val blockedInfo: BlockInfo?,
     val playlist: List<Episode>?,
-    val torrents: List<Torrent>?
+    val torrents: List<Torrent>?,
+    val showDonateDialog: Boolean?
 ) {
 
     enum class Status {

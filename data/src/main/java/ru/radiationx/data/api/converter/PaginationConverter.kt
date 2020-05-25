@@ -4,7 +4,9 @@ import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.adomain.pagination.Pagination
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.common.pagination.PaginationResponse
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class PaginationConverter {
 
     fun <T, R> toDomain(response: PaginatedResponse<T>, block: (T) -> R): Paginated<R> = Paginated(

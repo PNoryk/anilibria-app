@@ -10,7 +10,9 @@ import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
 import ru.radiationx.data.entity.app.search.SearchForm
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class SearchService(
     private val searchApi: SearchApi,
     private val releaseConverter: ReleaseConverter,

@@ -8,7 +8,9 @@ import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.YoutubeConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class YouTubeService(
     private val youtubeApi: YoutubeApi,
     private val youtubeConverter: YoutubeConverter,

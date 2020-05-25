@@ -4,7 +4,9 @@ import ru.radiationx.data.adomain.config.ApiAddress
 import ru.radiationx.data.adomain.config.ApiProxy
 import ru.radiationx.data.api.remote.config.ApiAddressResponse
 import ru.radiationx.data.api.remote.config.ApiProxyResponse
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class ConfigConverter {
 
     fun toDomain(response: ApiAddressResponse) = ApiAddress(

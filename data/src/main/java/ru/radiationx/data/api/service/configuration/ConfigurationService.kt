@@ -5,7 +5,9 @@ import ru.radiationx.data.adomain.config.ApiAddress
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.ConfigConverter
 import ru.radiationx.data.api.remote.config.ConfigResponse
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class ConfigurationService(
     private val configurationApi: ConfigurationApi,
     private val configConverter: ConfigConverter

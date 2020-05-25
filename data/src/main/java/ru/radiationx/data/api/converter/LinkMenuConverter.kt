@@ -2,8 +2,9 @@ package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.LinkMenu
 import ru.radiationx.data.api.remote.LinkMenuResponse
+import toothpick.InjectConstructor
 
-
+@InjectConstructor
 class LinkMenuConverter {
 
     fun toDomain(response: LinkMenuResponse) = LinkMenu(

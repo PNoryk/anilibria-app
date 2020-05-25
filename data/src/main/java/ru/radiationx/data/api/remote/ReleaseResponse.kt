@@ -19,7 +19,9 @@ data class ReleaseResponse(
     @SerializedName("year") val year: String?,
     @SerializedName("day") val day: String?,
     @SerializedName("description") val description: String?,
+    @SerializedName("announce") val announce: String?,
     @SerializedName("blockedInfo") val blockedInfo: BlockInfoResponse?,
     @SerializedName("playlist") val playlist: List<EpisodeResponse>?,
-    @SerializedName("torrents") val torrents: List<TorrentResponse>?
+    @SerializedName("torrents") val torrents: List<TorrentResponse>?,
+    @SerializedName("showDonateDialog") val showDonateDialog: Boolean?
 )

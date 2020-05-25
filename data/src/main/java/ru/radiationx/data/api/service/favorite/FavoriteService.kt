@@ -8,7 +8,9 @@ import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class FavoriteService(
     private val favoriteApi: FavoriteApi,
     private val releaseConverter: ReleaseConverter,

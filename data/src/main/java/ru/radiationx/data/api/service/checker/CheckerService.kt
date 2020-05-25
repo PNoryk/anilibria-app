@@ -6,7 +6,9 @@ import ru.radiationx.data.adomain.checker.Update
 import ru.radiationx.data.api.remote.checker.CheckerResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.CheckerConverter
+import toothpick.InjectConstructor
 
+@InjectConstructor
 class CheckerService(
     private val checkerApi: CheckerApi,
     private val buildConfig: SharedBuildConfig,
