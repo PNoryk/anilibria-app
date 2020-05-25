@@ -6,7 +6,8 @@ import java.util.*
 data class Release(
     val id: Int,
     val code: String?,
-    val names: List<String>?,
+    val nameRu: String?,
+    val nameEn: String?,
     val series: String?,
     val poster: String?,
     val favorite: FavoriteInfo?,

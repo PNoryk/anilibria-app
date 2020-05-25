@@ -22,7 +22,8 @@ class ReleaseConverter(
     fun toDomain(response: ReleaseResponse) = Release(
         id = response.id,
         code = response.code,
-        names = response.names?.map { apiUtils.escapeHtml(it).toString() },
+        nameRu = response.names?.getOrNull(0)?.let { apiUtils.escapeHtml(it).toString() },
+        nameEn = response.names?.getOrNull(1)?.let { apiUtils.escapeHtml(it).toString() },
         series = response.series,
         poster = response.poster?.let { "${apiConfig.baseImagesUrl}$it" },
         favorite = response.favorite?.let { toDomain(it) },
