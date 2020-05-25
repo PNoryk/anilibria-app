@@ -1,11 +1,9 @@
 package ru.radiationx.data.api.service.feed
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.FeedItem
+import ru.radiationx.data.adomain.feed.FeedItem
 import ru.radiationx.data.adomain.pagination.Paginated
-import ru.radiationx.data.api.remote.FeedItemResponse
 import ru.radiationx.data.api.common.handleApiResponse
-import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.FeedConverter
 import ru.radiationx.data.api.converter.PaginationConverter
 import toothpick.InjectConstructor

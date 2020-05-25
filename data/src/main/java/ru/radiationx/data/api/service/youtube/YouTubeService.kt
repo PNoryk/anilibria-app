@@ -1,11 +1,9 @@
 package ru.radiationx.data.api.service.youtube
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.YouTube
+import ru.radiationx.data.adomain.youtube.YouTube
 import ru.radiationx.data.adomain.pagination.Paginated
-import ru.radiationx.data.api.remote.YouTubeResponse
 import ru.radiationx.data.api.common.handleApiResponse
-import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.YoutubeConverter
 import toothpick.InjectConstructor

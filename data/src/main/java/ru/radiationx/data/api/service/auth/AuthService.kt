@@ -4,8 +4,6 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adomain.auth.OtpInfo
 import ru.radiationx.data.adomain.auth.SocialService
-import ru.radiationx.data.api.remote.auth.OtpInfoResponse
-import ru.radiationx.data.api.remote.auth.SocialServiceResponse
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.AuthConverter
 import toothpick.InjectConstructor

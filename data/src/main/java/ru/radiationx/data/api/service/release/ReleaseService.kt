@@ -1,13 +1,10 @@
 package ru.radiationx.data.api.service.release
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.RandomRelease
-import ru.radiationx.data.adomain.Release
+import ru.radiationx.data.adomain.release.RandomRelease
+import ru.radiationx.data.adomain.release.Release
 import ru.radiationx.data.adomain.pagination.Paginated
-import ru.radiationx.data.api.remote.RandomReleaseResponse
-import ru.radiationx.data.api.remote.ReleaseResponse
 import ru.radiationx.data.api.common.handleApiResponse
-import ru.radiationx.data.api.common.pagination.PaginatedResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
 import toothpick.InjectConstructor

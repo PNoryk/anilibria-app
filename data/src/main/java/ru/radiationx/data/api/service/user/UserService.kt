@@ -1,8 +1,7 @@
 package ru.radiationx.data.api.service.user
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.User
-import ru.radiationx.data.api.remote.UserResponse
+import ru.radiationx.data.adomain.user.User
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.UserConverter
 import toothpick.InjectConstructor

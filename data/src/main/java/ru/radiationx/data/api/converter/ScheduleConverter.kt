@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.ScheduleDay
-import ru.radiationx.data.api.remote.ScheduleDayResponse
+import ru.radiationx.data.adomain.schedule.ScheduleDay
+import ru.radiationx.data.api.remote.schedule.ScheduleDayResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor

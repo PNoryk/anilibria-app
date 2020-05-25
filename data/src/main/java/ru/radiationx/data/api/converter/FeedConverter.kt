@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.FeedItem
-import ru.radiationx.data.api.remote.FeedItemResponse
+import ru.radiationx.data.adomain.feed.FeedItem
+import ru.radiationx.data.api.remote.feed.FeedItemResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor

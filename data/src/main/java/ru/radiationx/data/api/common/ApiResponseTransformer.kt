@@ -6,6 +6,7 @@ import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.SingleTransformer
 import retrofit2.HttpException
+import ru.radiationx.data.api.remote.common.ApiBaseResponse
 
 class ApiResponseTransformer<T> : SingleTransformer<ApiBaseResponse<T>, T> {
 

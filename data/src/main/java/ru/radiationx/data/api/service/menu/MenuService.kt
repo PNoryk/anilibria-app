@@ -1,8 +1,7 @@
 package ru.radiationx.data.api.service.menu
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.LinkMenu
-import ru.radiationx.data.api.remote.LinkMenuResponse
+import ru.radiationx.data.adomain.menu.LinkMenu
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.LinkMenuConverter
 import toothpick.InjectConstructor

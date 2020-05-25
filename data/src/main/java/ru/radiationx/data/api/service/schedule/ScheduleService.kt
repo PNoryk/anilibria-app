@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.service.schedule
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.ScheduleDay
+import ru.radiationx.data.adomain.schedule.ScheduleDay
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.ScheduleConverter
 import toothpick.InjectConstructor
