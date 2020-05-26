@@ -5,7 +5,7 @@ import androidx.room.Relation
 import ru.radiationx.data.adb.feed.FlatFeedDb
 import ru.radiationx.data.adb.release.ReleaseDb
 
-class FavoriteDb(
+data class FavoriteDb(
     @Embedded val favorite: FlatFavoriteDb,
 
     @Relation(

@@ -5,7 +5,7 @@ import androidx.room.Relation
 import ru.radiationx.data.adb.feed.FlatFeedDb
 import ru.radiationx.data.adb.release.ReleaseDb
 
-class HistoryDb(
+data class HistoryDb(
     @Embedded val history: FlatHistoryDb,
 
     @Relation(

@@ -37,7 +37,7 @@ open class ApiResponse<T>(
 
     companion object {
         fun <T> fetchResult(): SingleTransformer<String, T> = SingleTransformer {
-            it.flatMap { t -> ApiResponse<T>(t).handleError() }.map { t -> t.data }
+            it.flatMap { t -> ApiResponse<T>(t).handleError() }.map { t -> t.data!! }
         }
     }
 }
