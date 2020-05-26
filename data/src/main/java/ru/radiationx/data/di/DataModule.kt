@@ -3,10 +3,14 @@ package ru.radiationx.data.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import ru.radiationx.data.ApiClient
 import ru.radiationx.data.DataPreferences
 import ru.radiationx.data.MainClient
 import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.data.adb.AppDatabase
+import ru.radiationx.data.adb.dao.*
 import ru.radiationx.data.datasource.holders.*
 import ru.radiationx.data.datasource.remote.IApiUtils
 import ru.radiationx.data.datasource.remote.IClient
@@ -30,6 +34,18 @@ class DataModule(context: Context) : Module() {
     init {
         val defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val dataStoragePreferences = context.getSharedPreferences("${context.packageName}_datastorage", Context.MODE_PRIVATE)
+
+        val database = Room.databaseBuilder(context, AppDatabase::class.java, "data_cache.db")
+            .build()
+
+        bind(EpisodeDao::class.java).toInstance(database.episodeDao())
+        bind(FavoriteDao::class.java).toInstance(database.favoriteDao())
+        bind(FeedDao::class.java).toInstance(database.feedDao())
+        bind(HistoryDao::class.java).toInstance(database.historyDao())
+        bind(ReleaseDao::class.java).toInstance(database.releaseDao())
+        bind(ScheduleDayDao::class.java).toInstance(database.scheduleDao())
+        bind(TorrentDao::class.java).toInstance(database.torrentDao())
+        bind(YoutubeDao::class.java).toInstance(database.youtubeDao())
 
         bind(SchedulersProvider::class.java).to(AppSchedulers::class.java).singleton()
 
