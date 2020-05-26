@@ -3,31 +3,44 @@ package ru.radiationx.data.adb.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adb.episode.EpisodeDb
+import ru.radiationx.data.adb.release.BlockInfoDb
+import ru.radiationx.data.adb.release.FavoriteInfoDb
 import ru.radiationx.data.adb.release.FlatReleaseDb
 import ru.radiationx.data.adb.release.ReleaseDb
-import ru.radiationx.data.adb.youtube.YouTubeDb
 
 @Dao
-interface ReleaseDao {
+abstract class ReleaseDao {
 
     @Transaction
     @Query("SELECT * FROM `release`")
-    fun getListAll(): Single<List<ReleaseDb>>
+    abstract fun getListAll(): Single<List<ReleaseDb>>
 
     @Transaction
     @Query("SELECT * FROM `release` WHERE releaseId = :releaseId")
-    fun getList(releaseId: Int): Single<List<ReleaseDb>>
+    abstract fun getList(releaseId: Int): Single<List<ReleaseDb>>
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(items: List<ReleaseDb>): Completable {
+        val actions = mutableListOf<Completable>()
+        items.forEach { releaseDb ->
+            actions.add(insert(releaseDb.release))
+            releaseDb.favorite?.also { actions.add(insert(it)) }
+            releaseDb.blockedInfo?.also { actions.add(insert(it)) }
+        }
+        return Completable.concatArray(*actions.toTypedArray())
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<FlatReleaseDb>): Completable
+    abstract fun insert(release: FlatReleaseDb): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: FlatReleaseDb): Completable
+    abstract fun insert(favoriteInfo: FavoriteInfoDb): Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insert(blockInfoDb: BlockInfoDb): Completable
 
     @Delete
-    fun deleteSome(items: List<FlatReleaseDb>): Completable
+    abstract fun delete(items: List<FlatReleaseDb>): Completable
 
-    @Delete
-    fun deleteOne(item: FlatReleaseDb): Completable
 }

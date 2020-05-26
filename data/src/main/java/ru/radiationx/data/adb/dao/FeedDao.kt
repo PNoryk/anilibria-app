@@ -7,28 +7,40 @@ import ru.radiationx.data.adb.favorite.FavoriteDb
 import ru.radiationx.data.adb.favorite.FlatFavoriteDb
 import ru.radiationx.data.adb.feed.FeedDb
 import ru.radiationx.data.adb.feed.FlatFeedDb
+import ru.radiationx.data.adb.release.ReleaseDb
 import ru.radiationx.data.adb.torrent.TorrentDb
 
 @Dao
-interface FeedDao {
+abstract class FeedDao {
 
     @Transaction
     @Query("SELECT * FROM `feed`")
-    fun getList(): Single<List<FeedDb>>
+    abstract fun getList(): Single<List<FeedDb>>
 
     @Transaction
     @Query("SELECT * FROM `feed` WHERE id = :feedId")
-    fun getOne(feedId: Int): Single<FeedDb>
+    abstract fun getOne(feedId: Int): Single<FeedDb>
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(
+        items: List<FeedDb>,
+        releaseDao: ReleaseDao,
+        youtubeDao: YoutubeDao
+    ): Completable {
+        val actions = mutableListOf<Completable>()
+        items.forEach { feedDb ->
+            actions.add(insert(feedDb.feed))
+            feedDb.release?.also { actions.add(releaseDao.insert(listOf(it))) }
+            feedDb.youtube?.also { actions.add(youtubeDao.insert(listOf(it))) }
+        }
+        return Completable.concatArray(*actions.toTypedArray())
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<FlatFeedDb>): Completable
+    abstract fun insert(item: FlatFeedDb): Completable
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: FlatFeedDb): Completable
 
     @Delete
-    fun deleteSome(items: List<FlatFeedDb>): Completable
-
-    @Delete
-    fun deleteOne(item: FlatFeedDb): Completable
+    abstract fun delete(items: List<FlatFeedDb>): Completable
 }

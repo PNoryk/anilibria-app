@@ -13,8 +13,8 @@ import ru.radiationx.data.adb.youtube.YouTubeDb
     indices = [Index("releaseId"), Index("youtubeId")]
 )
 data class FlatFeedDb(
-    @ColumnInfo(name = "releaseId") val releaseId: Int,
-    @ColumnInfo(name = "youtubeId") val youtubeId: Int
+    @ColumnInfo(name = "releaseId") val releaseId: Int?,
+    @ColumnInfo(name = "youtubeId") val youtubeId: Int?
 ){
 
     @PrimaryKey(autoGenerate = true)

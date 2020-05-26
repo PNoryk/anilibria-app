@@ -49,6 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
     abstract fun releaseDao(): ReleaseDao
     abstract fun scheduleDao(): ScheduleDayDao
+    abstract fun scheduleReleaseCrossRefDao(): ScheduleReleaseCrossRefDao
     abstract fun torrentDao(): TorrentDao
     abstract fun youtubeDao(): YoutubeDao
 }

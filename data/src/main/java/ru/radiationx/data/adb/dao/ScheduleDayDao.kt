@@ -23,14 +23,8 @@ interface ScheduleDayDao {
     fun getOne(scheduleDayId: Int): Single<ScheduleDayDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<FlatScheduleDayDb>): Completable
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: FlatScheduleDayDb): Completable
+    fun insert(items: List<FlatScheduleDayDb>): Completable
 
     @Delete
-    fun deleteSome(items: List<FlatScheduleDayDb>): Completable
-
-    @Delete
-    fun deleteOne(item: FlatScheduleDayDb): Completable
+    fun delete(items: List<FlatScheduleDayDb>): Completable
 }

@@ -19,14 +19,8 @@ interface FavoriteDao {
     fun getOne(releaseId: Int): Single<FavoriteDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<FlatFavoriteDb>): Completable
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: FlatFavoriteDb): Completable
+    fun insert(items: List<FlatFavoriteDb>): Completable
 
     @Delete
-    fun deleteSome(items: List<FlatFavoriteDb>): Completable
-
-    @Delete
-    fun deleteOne(item: FlatFavoriteDb): Completable
+    fun delete(items: List<FlatFavoriteDb>): Completable
 }

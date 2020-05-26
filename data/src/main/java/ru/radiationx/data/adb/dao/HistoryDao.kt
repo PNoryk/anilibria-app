@@ -21,14 +21,8 @@ interface HistoryDao {
     fun getOne(releaseId: Int): Single<HistoryDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<FlatHistoryDb>): Completable
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: FlatHistoryDb): Completable
+    fun insert(items: List<FlatHistoryDb>): Completable
 
     @Delete
-    fun deleteSome(items: List<FlatHistoryDb>): Completable
-
-    @Delete
-    fun deleteOne(item: FlatHistoryDb): Completable
+    fun delete(items: List<FlatHistoryDb>): Completable
 }

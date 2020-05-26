@@ -18,14 +18,8 @@ interface TorrentDao {
     fun getOne(releaseId: Int, torrentId: Int): Single<TorrentDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<TorrentDb>): Completable
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: TorrentDb): Completable
+    fun insert(items: List<TorrentDb>): Completable
 
     @Delete
-    fun deleteSome(items: List<TorrentDb>): Completable
-
-    @Delete
-    fun deleteOne(item: TorrentDb): Completable
+    fun delete(items: List<TorrentDb>): Completable
 }

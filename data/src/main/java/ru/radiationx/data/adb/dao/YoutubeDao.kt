@@ -16,14 +16,8 @@ interface YoutubeDao {
     fun getList(youtubeId: Int): Single<List<YouTubeDb>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<YouTubeDb>): Completable
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: YouTubeDb): Completable
+    fun insert(items: List<YouTubeDb>): Completable
 
     @Delete
-    fun deleteSome(items: List<YouTubeDb>): Completable
-
-    @Delete
-    fun deleteOne(item: YouTubeDb): Completable
+    fun delete(items: List<YouTubeDb>): Completable
 }

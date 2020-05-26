@@ -18,14 +18,8 @@ interface EpisodeDao {
     fun getOne(releaseId: Int, episodeId: Int): Single<EpisodeDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSome(items: List<EpisodeDb>): Completable
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOne(item: EpisodeDb): Completable
+    fun insert(items: List<EpisodeDb>): Completable
 
     @Delete
-    fun deleteSome(items: List<EpisodeDb>): Completable
-
-    @Delete
-    fun deleteOne(item: EpisodeDb): Completable
+    fun delete(items: List<EpisodeDb>): Completable
 }

@@ -14,5 +14,5 @@ data class FavoriteDb(
         parentColumn = "releaseId",
         entityColumn = "releaseId"
     )
-    val release: ReleaseDb?
+    val release: ReleaseDb
 )
