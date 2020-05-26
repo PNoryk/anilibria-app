@@ -10,12 +10,14 @@ data class ReleaseDb(
     @Embedded val release: FlatReleaseDb,
 
     @Relation(
+        entity = FavoriteInfoDb::class,
         parentColumn = "releaseId",
         entityColumn = "releaseId"
     )
     val favorite: FavoriteInfoDb?,
 
     @Relation(
+        entity = BlockInfoDb::class,
         parentColumn = "releaseId",
         entityColumn = "releaseId"
     )

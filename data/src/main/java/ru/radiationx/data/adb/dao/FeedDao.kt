@@ -12,9 +12,11 @@ import ru.radiationx.data.adb.torrent.TorrentDb
 @Dao
 interface FeedDao {
 
+    @Transaction
     @Query("SELECT * FROM `feed`")
     fun getList(): Single<List<FeedDb>>
 
+    @Transaction
     @Query("SELECT * FROM `feed` WHERE id = :feedId")
     fun getOne(feedId: Int): Single<FeedDb>
 

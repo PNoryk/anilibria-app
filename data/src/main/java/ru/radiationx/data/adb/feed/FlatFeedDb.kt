@@ -1,9 +1,6 @@
 package ru.radiationx.data.adb.feed
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import ru.radiationx.data.adb.release.FlatReleaseDb
 import ru.radiationx.data.adb.youtube.YouTubeDb
 
@@ -12,7 +9,8 @@ import ru.radiationx.data.adb.youtube.YouTubeDb
     foreignKeys = [
         ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"]),
         ForeignKey(entity = YouTubeDb::class, parentColumns = ["youtubeId"], childColumns = ["youtubeId"])
-    ]
+    ],
+    indices = [Index("releaseId"), Index("youtubeId")]
 )
 data class FlatFeedDb(
     @ColumnInfo(name = "releaseId") val releaseId: Int,
@@ -21,5 +19,5 @@ data class FlatFeedDb(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int = 0
+    var id: Int = 0
 }

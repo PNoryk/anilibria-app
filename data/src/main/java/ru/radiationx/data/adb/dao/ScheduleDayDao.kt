@@ -12,7 +12,7 @@ import ru.radiationx.data.adb.schedule.ScheduleDayDb
 import ru.radiationx.data.adb.torrent.TorrentDb
 
 @Dao
-interface ScheduleDao {
+interface ScheduleDayDao {
 
     @Transaction
     @Query("SELECT * FROM `schedule_day`")

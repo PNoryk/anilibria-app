@@ -2,6 +2,7 @@ package ru.radiationx.data.adb.release
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import ru.radiationx.data.adomain.release.*
 import java.util.*

@@ -11,9 +11,11 @@ import ru.radiationx.data.adb.youtube.YouTubeDb
 @Dao
 interface ReleaseDao {
 
+    @Transaction
     @Query("SELECT * FROM `release`")
     fun getListAll(): Single<List<ReleaseDb>>
 
+    @Transaction
     @Query("SELECT * FROM `release` WHERE releaseId = :releaseId")
     fun getList(releaseId: Int): Single<List<ReleaseDb>>
 
