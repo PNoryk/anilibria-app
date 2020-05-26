@@ -6,7 +6,7 @@ import androidx.room.Relation
 import ru.radiationx.data.adb.release.ReleaseDb
 import ru.radiationx.data.adb.schedule.FlatScheduleDayDb
 
-data class ScheduleDay(
+data class ScheduleDayDb(
     @Embedded val scheduleDay: FlatScheduleDayDb,
     @Relation(
         parentColumn = "scheduleDayId",

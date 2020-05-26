@@ -6,12 +6,9 @@ import androidx.room.PrimaryKey
 import ru.radiationx.data.adomain.release.*
 import java.util.*
 
-@Entity(
-    tableName = "release",
-    primaryKeys = ["releaseId", "code"]
-)
+@Entity(tableName = "release")
 data class FlatReleaseDb(
-    @ColumnInfo(name = "releaseId") val id: Int,
+    @PrimaryKey @ColumnInfo(name = "releaseId") val id: Int,
     @ColumnInfo(name = "code") val code: String?,
     @ColumnInfo(name = "nameRu") val nameRu: String?,
     @ColumnInfo(name = "nameEn") val nameEn: String?,

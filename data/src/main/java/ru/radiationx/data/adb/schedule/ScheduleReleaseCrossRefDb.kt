@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import ru.radiationx.data.adb.release.FlatReleaseDb
 
 @Entity(
+    tableName = "schedule_release_cross_ref",
     primaryKeys = ["scheduleDay", "releaseId"],
     foreignKeys = [
         ForeignKey(entity = FlatScheduleDayDb::class, parentColumns = ["scheduleDayId"], childColumns = ["scheduleDayId"]),

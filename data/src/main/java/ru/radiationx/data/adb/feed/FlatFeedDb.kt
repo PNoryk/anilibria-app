@@ -3,6 +3,7 @@ package ru.radiationx.data.adb.feed
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import ru.radiationx.data.adb.release.FlatReleaseDb
 import ru.radiationx.data.adb.youtube.YouTubeDb
 
@@ -16,4 +17,9 @@ import ru.radiationx.data.adb.youtube.YouTubeDb
 data class FlatFeedDb(
     @ColumnInfo(name = "releaseId") val releaseId: Int,
     @ColumnInfo(name = "youtubeId") val youtubeId: Int
-)
+){
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int = 0
+}

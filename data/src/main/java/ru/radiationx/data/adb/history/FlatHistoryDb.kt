@@ -14,11 +14,6 @@ import java.util.*
     ]
 )
 data class FlatHistoryDb(
-    @ColumnInfo(name = "releaseId") val releaseId: Int,
+    @PrimaryKey @ColumnInfo(name = "releaseId") val releaseId: Int,
     @ColumnInfo(name = "timestamp") val timestamp: Date
-) {
-
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int = 0
-}
+)

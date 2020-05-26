@@ -4,9 +4,12 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "release_episode")
+@Entity(
+    tableName = "release_episode",
+    primaryKeys = ["releaseId", "id"]
+)
 data class EpisodeDb(
-    @PrimaryKey @ColumnInfo(name = "releaseId") val releaseId: Int,
+    @ColumnInfo(name = "releaseId") val releaseId: Int,
     @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "sd") val sd: String?,

@@ -9,12 +9,13 @@ import java.util.*
 
 @Entity(
     tableName = "release_torrent",
+    primaryKeys = ["releaseId", "id"],
     foreignKeys = [
         ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
     ]
 )
 data class TorrentDb(
-    @PrimaryKey @ColumnInfo(name = "releaseId") val releaseId: Int,
+    @ColumnInfo(name = "releaseId") val releaseId: Int,
     @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "hash") val hash: String?,
     @ColumnInfo(name = "leechers") val leechers: Int,
