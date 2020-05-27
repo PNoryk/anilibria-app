@@ -1,8 +1,8 @@
 package ru.radiationx.data.api.datasource
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.feed.Feed
-import ru.radiationx.data.adomain.pagination.Paginated
+import ru.radiationx.data.adomain.entity.feed.Feed
+import ru.radiationx.data.adomain.entity.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.FeedConverter
 import ru.radiationx.data.api.converter.PaginationConverter

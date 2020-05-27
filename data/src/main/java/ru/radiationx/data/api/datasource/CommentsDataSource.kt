@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.datasource
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.comments.CommentsInfo
+import ru.radiationx.data.adomain.entity.comments.CommentsInfo
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.CommentsConverter
 import ru.radiationx.data.api.service.CommentsService

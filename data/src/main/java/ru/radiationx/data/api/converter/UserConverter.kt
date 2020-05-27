@@ -1,6 +1,6 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.user.User
+import ru.radiationx.data.adomain.entity.user.User
 import ru.radiationx.data.api.entity.user.UserResponse
 import toothpick.InjectConstructor
 

@@ -2,7 +2,7 @@ package ru.radiationx.data.aahorysheet.feed
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adomain.feed.Feed
+import ru.radiationx.data.adomain.entity.feed.Feed
 
 class FeedRepository(
     private val cache: FakeFeedCache,

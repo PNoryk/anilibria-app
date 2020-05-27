@@ -6,9 +6,9 @@ import io.reactivex.Single
 import io.reactivex.functions.Function3
 import ru.radiationx.data.aahorysheet.release.FakeReleaseCache
 import ru.radiationx.data.aahorysheet.youtube.FakeYTCache
-import ru.radiationx.data.adomain.feed.Feed
-import ru.radiationx.data.adomain.release.Release
-import ru.radiationx.data.adomain.youtube.Youtube
+import ru.radiationx.data.adomain.entity.feed.Feed
+import ru.radiationx.data.adomain.entity.release.Release
+import ru.radiationx.data.adomain.entity.youtube.Youtube
 
 class FakeFeedCacheCombiner(
     private val feedCache: FakeFeedCache,

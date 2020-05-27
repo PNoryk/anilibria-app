@@ -1,7 +1,7 @@
 package ru.radiationx.data.adb.converters
 
 import ru.radiationx.data.adb.entity.youtube.YoutubeDb
-import ru.radiationx.data.adomain.youtube.Youtube
+import ru.radiationx.data.adomain.entity.youtube.Youtube
 import toothpick.InjectConstructor
 
 @InjectConstructor

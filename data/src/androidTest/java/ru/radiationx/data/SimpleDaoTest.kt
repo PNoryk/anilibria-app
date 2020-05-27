@@ -20,7 +20,7 @@ import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
 import ru.radiationx.data.adb.entity.release.FlatReleaseDb
 import ru.radiationx.data.adb.entity.release.ReleaseDb
 import ru.radiationx.data.adb.entity.youtube.YoutubeDb
-import ru.radiationx.data.adomain.release.Release
+import ru.radiationx.data.adomain.entity.release.Release
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)

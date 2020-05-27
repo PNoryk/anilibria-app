@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.TorrentDao
 import ru.radiationx.data.adb.converters.TorrentConverter
-import ru.radiationx.data.adomain.release.Torrent
+import ru.radiationx.data.adomain.entity.release.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.config.ApiAddress
-import ru.radiationx.data.adomain.config.ApiProxy
+import ru.radiationx.data.adomain.entity.config.ApiAddress
+import ru.radiationx.data.adomain.entity.config.ApiProxy
 import ru.radiationx.data.api.entity.config.ApiAddressResponse
 import ru.radiationx.data.api.entity.config.ApiProxyResponse
 import toothpick.InjectConstructor

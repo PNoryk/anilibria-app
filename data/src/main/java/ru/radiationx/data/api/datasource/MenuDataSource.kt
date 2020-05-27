@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.datasource
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.menu.LinkMenu
+import ru.radiationx.data.adomain.entity.menu.LinkMenu
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.LinkMenuConverter
 import ru.radiationx.data.api.service.MenuService

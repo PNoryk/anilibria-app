@@ -1,7 +1,7 @@
 package ru.radiationx.data.adb.converters
 
 import ru.radiationx.data.adb.entity.torrent.TorrentDb
-import ru.radiationx.data.adomain.release.Torrent
+import ru.radiationx.data.adomain.entity.release.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

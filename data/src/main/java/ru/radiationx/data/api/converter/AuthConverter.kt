@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.auth.OtpInfo
-import ru.radiationx.data.adomain.auth.SocialService
+import ru.radiationx.data.adomain.entity.auth.OtpInfo
+import ru.radiationx.data.adomain.entity.auth.SocialService
 import ru.radiationx.data.api.entity.auth.OtpInfoResponse
 import ru.radiationx.data.api.entity.auth.SocialServiceResponse
 import ru.radiationx.shared.ktx.dateFromSec

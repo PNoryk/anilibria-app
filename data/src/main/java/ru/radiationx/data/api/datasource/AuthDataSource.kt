@@ -2,8 +2,8 @@ package ru.radiationx.data.api.datasource
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adomain.auth.OtpInfo
-import ru.radiationx.data.adomain.auth.SocialService
+import ru.radiationx.data.adomain.entity.auth.OtpInfo
+import ru.radiationx.data.adomain.entity.auth.SocialService
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.AuthConverter
 import ru.radiationx.data.api.service.AuthService

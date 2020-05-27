@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.datasource
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.config.ApiAddress
+import ru.radiationx.data.adomain.entity.config.ApiAddress
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.ConfigConverter
 import ru.radiationx.data.api.service.ConfigurationService
