@@ -2,8 +2,8 @@ package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.auth.OtpInfo
 import ru.radiationx.data.adomain.auth.SocialService
-import ru.radiationx.data.api.remote.auth.OtpInfoResponse
-import ru.radiationx.data.api.remote.auth.SocialServiceResponse
+import ru.radiationx.data.api.entity.auth.OtpInfoResponse
+import ru.radiationx.data.api.entity.auth.SocialServiceResponse
 import ru.radiationx.shared.ktx.dateFromSec
 import toothpick.InjectConstructor
 

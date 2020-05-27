@@ -1,8 +1,7 @@
 package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.user.User
-import ru.radiationx.data.api.remote.user.UserResponse
-import ru.radiationx.data.datasource.remote.address.ApiConfig
+import ru.radiationx.data.api.entity.user.UserResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor

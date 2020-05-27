@@ -2,8 +2,8 @@ package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.checker.Update
 import ru.radiationx.data.adomain.checker.UpdateLink
-import ru.radiationx.data.api.remote.checker.UpdateLinkResponse
-import ru.radiationx.data.api.remote.checker.UpdateResponse
+import ru.radiationx.data.api.entity.checker.UpdateLinkResponse
+import ru.radiationx.data.api.entity.checker.UpdateResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor

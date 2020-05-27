@@ -2,8 +2,8 @@ package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.adomain.pagination.Pagination
-import ru.radiationx.data.api.remote.pagination.PaginatedResponse
-import ru.radiationx.data.api.remote.pagination.PaginationResponse
+import ru.radiationx.data.api.entity.pagination.PaginatedResponse
+import ru.radiationx.data.api.entity.pagination.PaginationResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor

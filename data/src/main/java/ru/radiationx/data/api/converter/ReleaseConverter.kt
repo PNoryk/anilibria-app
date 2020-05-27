@@ -1,8 +1,7 @@
 package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.release.*
-import ru.radiationx.data.api.remote.release.*
-import ru.radiationx.data.datasource.remote.address.ApiConfig
+import ru.radiationx.data.api.entity.release.*
 import ru.radiationx.data.system.ApiUtils
 import ru.radiationx.shared.ktx.dateFromSec
 import toothpick.InjectConstructor

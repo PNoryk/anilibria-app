@@ -1,9 +1,8 @@
 package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.youtube.Youtube
-import ru.radiationx.data.api.remote.youtube.YouTubeResponse
+import ru.radiationx.data.api.entity.youtube.YouTubeResponse
 import ru.radiationx.data.datasource.remote.IApiUtils
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.dateFromSec
 import toothpick.InjectConstructor
 

@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.comments.CommentsInfo
-import ru.radiationx.data.api.remote.comments.CommentsInfoResponse
+import ru.radiationx.data.api.entity.comments.CommentsInfoResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor

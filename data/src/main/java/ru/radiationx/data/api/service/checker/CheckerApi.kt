@@ -2,8 +2,8 @@ package ru.radiationx.data.api.service.checker
 
 import io.reactivex.Single
 import retrofit2.http.FieldMap
-import ru.radiationx.data.api.remote.checker.CheckerResponse
-import ru.radiationx.data.api.remote.common.ApiBaseResponse
+import ru.radiationx.data.api.entity.checker.CheckerResponse
+import ru.radiationx.data.api.entity.common.ApiBaseResponse
 
 interface CheckerApi {
 

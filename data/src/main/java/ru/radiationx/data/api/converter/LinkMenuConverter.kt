@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
 import ru.radiationx.data.adomain.menu.LinkMenu
-import ru.radiationx.data.api.remote.menu.LinkMenuResponse
+import ru.radiationx.data.api.entity.menu.LinkMenuResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor
