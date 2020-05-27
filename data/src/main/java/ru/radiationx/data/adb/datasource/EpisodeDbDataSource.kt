@@ -29,7 +29,5 @@ class EpisodeDbDataSource(
         .map(episodeConverter::toDb)
         .flatMapCompletable(episodeDao::insert)
 
-    fun delete(items: List<Pair<Int, Episode>>): Completable = Single.just(items)
-        .map(episodeConverter::toDb)
-        .flatMapCompletable(episodeDao::delete)
+    fun delete(): Completable = episodeDao.deleteAll()
 }

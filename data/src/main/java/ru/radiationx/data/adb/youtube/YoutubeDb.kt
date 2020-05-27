@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "youtube")
-data class YouTubeDb(
+data class YoutubeDb(
     @PrimaryKey @ColumnInfo(name = "youtubeId") val id: Int,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "image") val image: String?,

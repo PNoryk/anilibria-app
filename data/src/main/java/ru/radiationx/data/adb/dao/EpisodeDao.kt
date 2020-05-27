@@ -20,6 +20,6 @@ interface EpisodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<EpisodeDb>): Completable
 
-    @Delete
-    fun delete(items: List<EpisodeDb>): Completable
+    @Query("DELETE FROM release_episode")
+    fun deleteAll(): Completable
 }

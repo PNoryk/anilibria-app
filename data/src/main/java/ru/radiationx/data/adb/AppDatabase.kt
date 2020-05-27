@@ -14,7 +14,7 @@ import ru.radiationx.data.adb.release.FlatReleaseDb
 import ru.radiationx.data.adb.schedule.FlatScheduleDayDb
 import ru.radiationx.data.adb.schedule.ScheduleReleaseDb
 import ru.radiationx.data.adb.torrent.TorrentDb
-import ru.radiationx.data.adb.youtube.YouTubeDb
+import ru.radiationx.data.adb.youtube.YoutubeDb
 
 @Database(
     entities = [
@@ -35,7 +35,7 @@ import ru.radiationx.data.adb.youtube.YouTubeDb
 
         TorrentDb::class,
 
-        YouTubeDb::class
+        YoutubeDb::class
     ],
     version = 1,
     exportSchema = false

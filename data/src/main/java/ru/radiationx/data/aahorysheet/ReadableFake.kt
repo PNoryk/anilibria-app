@@ -2,7 +2,6 @@ package ru.radiationx.data.aahorysheet
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adomain.youtube.YouTube
 
 interface ReadableFake<T> {
 

@@ -27,4 +27,6 @@ class HistoryDbDataSource(
     fun insert(items: List<HistoryRelative>): Completable = Single.just(items)
         .map(historyConverter::toDb)
         .flatMapCompletable { historyDao.insert(it) }
+
+    fun deleteAll(): Completable = historyDao.deleteAll()
 }

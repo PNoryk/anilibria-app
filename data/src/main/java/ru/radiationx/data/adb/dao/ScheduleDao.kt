@@ -12,7 +12,7 @@ abstract class ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM `schedule_day`")
-    abstract fun getList(): Single<List<ScheduleDayDb>>
+    abstract fun getListAll(): Single<List<ScheduleDayDb>>
 
     @Transaction
     @Query("SELECT * FROM `schedule_day` WHERE scheduleDayId = :scheduleDayId")
@@ -35,6 +35,6 @@ abstract class ScheduleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertReleases(items: List<ScheduleReleaseDb>): Completable
 
-    @Delete
-    abstract fun delete(items: List<FlatScheduleDayDb>): Completable
+    @Query("DELETE FROM schedule_day")
+    abstract fun deleteAll(): Completable
 }

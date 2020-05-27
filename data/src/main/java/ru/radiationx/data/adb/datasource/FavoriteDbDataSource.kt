@@ -29,7 +29,5 @@ class FavoriteDbDataSource(
         .map(favoriteConverter::toDb)
         .flatMapCompletable(favoriteDao::insert)
 
-    fun delete(items: List<FavoriteRelative>): Completable = Single.just(items)
-        .map(favoriteConverter::toDb)
-        .flatMapCompletable(favoriteDao::delete)
+    fun deleteAll(): Completable = favoriteDao.deleteAll()
 }

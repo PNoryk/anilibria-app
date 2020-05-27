@@ -19,7 +19,7 @@ import ru.radiationx.data.adb.release.BlockInfoDb
 import ru.radiationx.data.adb.release.FavoriteInfoDb
 import ru.radiationx.data.adb.release.FlatReleaseDb
 import ru.radiationx.data.adb.release.ReleaseDb
-import ru.radiationx.data.adb.youtube.YouTubeDb
+import ru.radiationx.data.adb.youtube.YoutubeDb
 import ru.radiationx.data.adomain.release.Release
 import java.util.*
 
@@ -99,7 +99,7 @@ class SimpleDaoTest {
         val blockInfoDb = BlockInfoDb(10, false, null)
         val releaseDb = ReleaseDb(flatReleaseDb, favoriteDb, blockInfoDb)
 
-        val youTubeDb = YouTubeDb(20, "title", "image", "vid", 999, 888, Date(60 * 1000))
+        val youTubeDb = YoutubeDb(20, "title", "image", "vid", 999, 888, Date(60 * 1000))
 
         val feedDb = FeedDb(releaseDb.release.id, youTubeDb.id)
         feedDao.insert(listOf(feedDb)).test().assertComplete()

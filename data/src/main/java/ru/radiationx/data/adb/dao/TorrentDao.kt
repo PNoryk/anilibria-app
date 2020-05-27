@@ -20,6 +20,6 @@ interface TorrentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<TorrentDb>): Completable
 
-    @Delete
-    fun delete(items: List<TorrentDb>): Completable
+    @Query("DELETE FROM release_torrent")
+    fun deleteAll(): Completable
 }

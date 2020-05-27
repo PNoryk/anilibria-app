@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.service.youtube
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.youtube.YouTube
+import ru.radiationx.data.adomain.youtube.Youtube
 import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
@@ -15,7 +15,7 @@ class YouTubeService(
     private val paginationConverter: PaginationConverter
 ) {
 
-    fun getList(page: Int): Single<Paginated<YouTube>> = youtubeApi
+    fun getList(page: Int): Single<Paginated<Youtube>> = youtubeApi
         .getList(
             mapOf(
                 "query" to "youtube",

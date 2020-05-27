@@ -17,7 +17,7 @@ abstract class ReleaseDao {
 
     @Transaction
     @Query("SELECT * FROM `release` WHERE releaseId = :releaseId")
-    abstract fun getList(releaseId: Int): Single<List<ReleaseDb>>
+    abstract fun getOne(releaseId: Int): Single<ReleaseDb>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -25,8 +25,8 @@ abstract class ReleaseDao {
         val actions = mutableListOf<Completable>()
         items.forEach { releaseDb ->
             actions.add(insert(releaseDb.release))
-            releaseDb.favorite?.also { actions.add(insert(it)) }
-            releaseDb.blockedInfo?.also { actions.add(insert(it)) }
+            releaseDb.favorite?.also { actions.add(insertFavorite(it)) }
+            releaseDb.blockedInfo?.also { actions.add(insertBlockInfo(it)) }
         }
         return Completable.concatArray(*actions.toTypedArray())
     }
@@ -35,12 +35,11 @@ abstract class ReleaseDao {
     abstract fun insert(release: FlatReleaseDb): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(favoriteInfo: FavoriteInfoDb): Completable
+    abstract fun insertFavorite(favoriteInfo: FavoriteInfoDb): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(blockInfoDb: BlockInfoDb): Completable
+    abstract fun insertBlockInfo(blockInfoDb: BlockInfoDb): Completable
 
-    @Delete
-    abstract fun delete(items: List<FlatReleaseDb>): Completable
-
+    @Query("DELETE FROM `release`")
+    abstract fun deleteAll(): Completable
 }

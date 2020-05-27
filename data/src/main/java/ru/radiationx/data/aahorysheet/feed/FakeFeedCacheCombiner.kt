@@ -8,7 +8,7 @@ import ru.radiationx.data.aahorysheet.release.FakeReleaseCache
 import ru.radiationx.data.aahorysheet.youtube.FakeYTCache
 import ru.radiationx.data.adomain.feed.Feed
 import ru.radiationx.data.adomain.release.Release
-import ru.radiationx.data.adomain.youtube.YouTube
+import ru.radiationx.data.adomain.youtube.Youtube
 
 class FakeFeedCacheCombiner(
     private val feedCache: FakeFeedCache,
@@ -17,7 +17,7 @@ class FakeFeedCacheCombiner(
 ) {
 
     private val combiner by lazy {
-        Function3<List<FeedRelative>, List<Release>, List<YouTube>, List<Feed>> { t1, t2, t3 ->
+        Function3<List<FeedRelative>, List<Release>, List<Youtube>, List<Feed>> { t1, t2, t3 ->
             return@Function3 t1.map { relative ->
                 val release = relative.releaseId?.let { releaseId ->
                     t2.firstOrNull { it.id == releaseId }

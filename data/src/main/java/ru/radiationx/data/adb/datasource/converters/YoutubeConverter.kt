@@ -1,13 +1,13 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.youtube.YouTubeDb
-import ru.radiationx.data.adomain.youtube.YouTube
+import ru.radiationx.data.adb.youtube.YoutubeDb
+import ru.radiationx.data.adomain.youtube.Youtube
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class YoutubeConverter {
 
-    fun toDomain(source: YouTubeDb) = YouTube(
+    fun toDomain(source: YoutubeDb) = Youtube(
         id = source.id,
         title = source.title,
         image = source.image,
@@ -17,7 +17,7 @@ class YoutubeConverter {
         timestamp = source.timestamp
     )
 
-    fun toDb(source: YouTube) = YouTubeDb(
+    fun toDb(source: Youtube) = YoutubeDb(
         id = source.id,
         title = source.title,
         image = source.image,
@@ -27,7 +27,7 @@ class YoutubeConverter {
         timestamp = source.timestamp
     )
 
-    fun toDomain(source: List<YouTubeDb>) = source.map { toDomain(it) }
+    fun toDomain(source: List<YoutubeDb>) = source.map { toDomain(it) }
 
-    fun toDb(source: List<YouTube>) = source.map { toDb(it) }
+    fun toDb(source: List<Youtube>) = source.map { toDb(it) }
 }

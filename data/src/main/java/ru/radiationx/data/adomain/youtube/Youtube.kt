@@ -3,7 +3,7 @@ package ru.radiationx.data.adomain.youtube
 import java.util.*
 
 
-data class YouTube(
+data class Youtube(
     val id: Int,
     val title: String?,
     val image: String?,

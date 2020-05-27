@@ -2,7 +2,7 @@ package ru.radiationx.data.adb.feed
 
 import androidx.room.*
 import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.youtube.YouTubeDb
+import ru.radiationx.data.adb.youtube.YoutubeDb
 
 @Entity(
     tableName = "feed",
@@ -13,7 +13,7 @@ import ru.radiationx.data.adb.youtube.YouTubeDb
             childColumns = ["releaseId"]
         ),
         ForeignKey(
-            entity = YouTubeDb::class,
+            entity = YoutubeDb::class,
             parentColumns = ["youtubeId"],
             childColumns = ["youtubeId"]
         )

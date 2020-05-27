@@ -17,6 +17,6 @@ interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<FavoriteDb>): Completable
 
-    @Delete
-    fun delete(items: List<FavoriteDb>): Completable
+    @Query("DELETE FROM favorite")
+    fun deleteAll(): Completable
 }
