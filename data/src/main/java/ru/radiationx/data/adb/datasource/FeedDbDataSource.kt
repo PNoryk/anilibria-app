@@ -3,14 +3,17 @@ package ru.radiationx.data.adb.datasource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.FeedDao
+import ru.radiationx.data.adb.dao.ReleaseDao
+import ru.radiationx.data.adb.dao.YoutubeDao
 import ru.radiationx.data.adb.datasource.converters.FeedConverter
 import ru.radiationx.data.adomain.feed.FeedItem
-import ru.radiationx.data.adomain.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class FeedDbDataSource(
     private val feedDao: FeedDao,
+    private val releaseDao: ReleaseDao,
+    private val youtubeDao: YoutubeDao,
     private val feedConverter: FeedConverter
 ) {
 
@@ -18,15 +21,17 @@ class FeedDbDataSource(
         .getList()
         .map(feedConverter::toDomain)
 
-    fun getOne(releaseId: Int): Single<FeedItem> = feedDao
-        .getOne(releaseId)
+    fun getOne(feedId: Int): Single<FeedItem> = feedDao
+        .getOne(feedId)
         .map(feedConverter::toDomain)
-/*
+
+    fun getOne(releaseId: Int?, youtubeId: Int?): Single<FeedItem> = feedDao
+        .getOne(releaseId, youtubeId)
+        .map(feedConverter::toDomain)
+
     fun insert(items: List<FeedItem>): Completable = Single.just(items)
         .map(feedConverter::toDb)
-        .flatMapCompletable(feedDao::insert)
+        .flatMapCompletable { feedDao.insert(it, releaseDao, youtubeDao) }
 
-    fun delete(items: List<FeedItem>): Completable = Single.just(items)
-        .map(feedConverter::toDb)
-        .flatMapCompletable(feedDao::delete)*/
+    fun deleteAll(): Completable = feedDao.deleteAll()
 }

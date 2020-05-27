@@ -22,6 +22,10 @@ abstract class FeedDao {
     abstract fun getOne(feedId: Int): Single<FeedDb>
 
     @Transaction
+    @Query("SELECT * FROM `feed` WHERE releaseId = :releaseId OR youtubeId = :youtubeId")
+    abstract fun getOne(releaseId: Int?, youtubeId: Int?): Single<FeedDb>
+
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(
         items: List<FeedDb>,
@@ -30,9 +34,9 @@ abstract class FeedDao {
     ): Completable {
         val actions = mutableListOf<Completable>()
         items.forEach { feedDb ->
-            actions.add(insert(feedDb.feed))
             feedDb.release?.also { actions.add(releaseDao.insert(listOf(it))) }
             feedDb.youtube?.also { actions.add(youtubeDao.insert(listOf(it))) }
+            actions.add(insert(feedDb.feed))
         }
         return Completable.concatArray(*actions.toTypedArray())
     }
@@ -40,7 +44,6 @@ abstract class FeedDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(item: FlatFeedDb): Completable
 
-
-    @Delete
-    abstract fun delete(items: List<FlatFeedDb>): Completable
+    @Query("DELETE FROM feed")
+    abstract fun deleteAll(): Completable
 }

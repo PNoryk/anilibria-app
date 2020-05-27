@@ -13,7 +13,7 @@ interface YoutubeDao {
     fun getListAll(): Single<List<YouTubeDb>>
 
     @Query("SELECT * FROM youtube WHERE youtubeId = :youtubeId")
-    fun getList(youtubeId: Int): Single<List<YouTubeDb>>
+    fun getOne(youtubeId: Int): Single<YouTubeDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<YouTubeDb>): Completable
