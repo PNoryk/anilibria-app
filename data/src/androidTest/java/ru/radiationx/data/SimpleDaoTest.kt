@@ -101,9 +101,8 @@ class SimpleDaoTest {
 
         val youTubeDb = YouTubeDb(20, "title", "image", "vid", 999, 888, Date(60 * 1000))
 
-        val flatFeedDb = FeedDb(10, 20)
-        val feedDb = FeedDb(flatFeedDb, releaseDb, youTubeDb)
-        feedDao.insert(listOf(feedDb), releaseDao, youtubeDao).test().assertComplete()
+        val feedDb = FeedDb(releaseDb.release.id, youTubeDb.id)
+        feedDao.insert(listOf(feedDb)).test().assertComplete()
         //feedDao.insert(listOf(feedDb), releaseDao, youtubeDao).test().assertComplete()
         assertEquals(1, feedDao.getList().blockingGet().size)
         assertEquals(1, releaseDao.getListAll().blockingGet().size)
