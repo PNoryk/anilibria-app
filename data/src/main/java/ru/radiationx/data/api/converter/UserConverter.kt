@@ -6,13 +6,11 @@ import ru.radiationx.data.datasource.remote.address.ApiConfig
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class UserConverter(
-    private val apiConfig: ApiConfig
-) {
+class UserConverter {
 
     fun toDomain(response: UserResponse) = User(
         id = response.id,
         login = response.login,
-        avatar = response.avatar?.let { "${apiConfig.baseImagesUrl}$it" }
+        avatar = response.avatar
     )
 }

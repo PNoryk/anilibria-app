@@ -11,7 +11,6 @@ import java.util.*
 @InjectConstructor
 class ReleaseConverter(
     private val dayConverter: DayConverter,
-    private val apiConfig: ApiConfig,
     private val apiUtils: ApiUtils
 ) {
 
@@ -25,7 +24,7 @@ class ReleaseConverter(
         nameRu = response.names?.getOrNull(0)?.let { apiUtils.escapeHtml(it).toString() },
         nameEn = response.names?.getOrNull(1)?.let { apiUtils.escapeHtml(it).toString() },
         series = response.series,
-        poster = response.poster?.let { "${apiConfig.baseImagesUrl}$it" },
+        poster = response.poster,
         favorite = response.favorite?.let { toDomain(it) },
         last = response.last?.let { parseLast(it) },
         webPlayer = response.moon,
@@ -73,7 +72,7 @@ class ReleaseConverter(
         series = response.series,
         size = response.size,
         time = response.time.dateFromSec(),
-        url = response.url?.let { "${apiConfig.baseImagesUrl}$it" }
+        url = response.url
     )
 
     private fun parseStatus(status: String): Release.Status? = when (status) {

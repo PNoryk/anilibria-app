@@ -9,14 +9,13 @@ import toothpick.InjectConstructor
 
 @InjectConstructor
 class YoutubeConverter(
-    private val apiUtils: IApiUtils,
-    private val apiConfig: ApiConfig
+    private val apiUtils: IApiUtils
 ) {
 
     fun toDomain(response: YouTubeResponse) = Youtube(
         id = response.id,
         title = response.title?.let { apiUtils.escapeHtml(it).toString() },
-        image = response.image?.let { "${apiConfig.baseImagesUrl}$it" },
+        image = response.image,
         vid = response.vid,
         views = response.views,
         comments = response.comments,
