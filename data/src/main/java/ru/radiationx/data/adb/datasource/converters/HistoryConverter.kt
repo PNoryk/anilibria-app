@@ -1,26 +1,23 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.history.FlatHistoryDb
 import ru.radiationx.data.adb.history.HistoryDb
-import ru.radiationx.data.adomain.history.HistoryItem
+import ru.radiationx.data.adomain.relative.HistoryRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class HistoryConverter(
-    private val releaseConverter: ReleaseConverter
-) {
+class HistoryConverter {
 
-    fun toDomain(historyDb: HistoryDb) = HistoryItem(
-        timestamp = historyDb.history.timestamp,
-        release = releaseConverter.toDomain(historyDb.release)
+    fun toDomain(source: HistoryDb) = HistoryRelative(
+        releaseId = source.releaseId,
+        timestamp = source.timestamp
     )
 
-    fun toDb(historyItem: HistoryItem) = HistoryDb(
-        FlatHistoryDb(historyItem.release.id, historyItem.timestamp),
-        releaseConverter.toDb(historyItem.release)
+    fun toDb(source: HistoryRelative) = HistoryDb(
+        releaseId = source.releaseId,
+        timestamp = source.timestamp
     )
 
-    fun toDomain(items: List<HistoryDb>) = items.map { toDomain(it) }
+    fun toDomain(source: List<HistoryDb>) = source.map { toDomain(it) }
 
-    fun toDb(items: List<HistoryItem>) = items.map { toDb(it) }
+    fun toDb(source: List<HistoryRelative>) = source.map { toDb(it) }
 }

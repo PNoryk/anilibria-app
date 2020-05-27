@@ -1,7 +1,6 @@
 package ru.radiationx.data.aahorysheet.feed
 
 import ru.radiationx.data.aahorysheet.ReadableFake
-import ru.radiationx.data.adomain.feed.FeedItem
-import ru.radiationx.data.adomain.youtube.YouTube
+import ru.radiationx.data.adomain.feed.Feed
 
-interface FakeFeedRemote : ReadableFake<FeedItem>
+interface FakeFeedRemote : ReadableFake<Feed>

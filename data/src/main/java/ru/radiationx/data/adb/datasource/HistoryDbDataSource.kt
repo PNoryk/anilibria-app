@@ -6,25 +6,25 @@ import ru.radiationx.data.adb.dao.HistoryDao
 import ru.radiationx.data.adb.dao.ReleaseDao
 import ru.radiationx.data.adb.datasource.converters.HistoryConverter
 import ru.radiationx.data.adomain.history.HistoryItem
+import ru.radiationx.data.adomain.relative.HistoryRelative
 import ru.radiationx.data.adomain.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class HistoryDbDataSource(
     private val historyDao: HistoryDao,
-    private val releaseDao: ReleaseDao,
     private val historyConverter: HistoryConverter
 ) {
 
-    fun getListAll(): Single<List<HistoryItem>> = historyDao
+    fun getListAll(): Single<List<HistoryRelative>> = historyDao
         .getList()
         .map(historyConverter::toDomain)
 
-    fun getOne(releaseId: Int): Single<HistoryItem> = historyDao
+    fun getOne(releaseId: Int): Single<HistoryRelative> = historyDao
         .getOne(releaseId)
         .map(historyConverter::toDomain)
 
-    fun insert(items: List<HistoryItem>): Completable = Single.just(items)
+    fun insert(items: List<HistoryRelative>): Completable = Single.just(items)
         .map(historyConverter::toDb)
-        .flatMapCompletable { historyDao.insert(it, releaseDao) }
+        .flatMapCompletable { historyDao.insert(it) }
 }

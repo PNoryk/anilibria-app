@@ -7,28 +7,28 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class EpisodeConverter {
 
-    fun toDomain(episodeDb: EpisodeDb) = Episode(
-        id = episodeDb.id,
-        title = episodeDb.title,
-        sd = episodeDb.sd,
-        hd = episodeDb.hd,
-        fullhd = episodeDb.fullhd,
-        srcSd = episodeDb.srcSd,
-        srcHd = episodeDb.srcHd
+    fun toDomain(source: EpisodeDb) = Episode(
+        id = source.id,
+        title = source.title,
+        sd = source.sd,
+        hd = source.hd,
+        fullhd = source.fullhd,
+        srcSd = source.srcSd,
+        srcHd = source.srcHd
     )
 
-    fun toDb(releaseId: Int, episode: Episode) = EpisodeDb(
+    fun toDb(releaseId: Int, source: Episode) = EpisodeDb(
         releaseId = releaseId,
-        id = episode.id,
-        title = episode.title,
-        sd = episode.sd,
-        hd = episode.hd,
-        fullhd = episode.fullhd,
-        srcSd = episode.srcSd,
-        srcHd = episode.srcHd
+        id = source.id,
+        title = source.title,
+        sd = source.sd,
+        hd = source.hd,
+        fullhd = source.fullhd,
+        srcSd = source.srcSd,
+        srcHd = source.srcHd
     )
 
-    fun toDomain(items: List<EpisodeDb>) = items.map { toDomain(it) }
+    fun toDomain(source: List<EpisodeDb>) = source.map { toDomain(it) }
 
-    fun toDb(items: List<Pair<Int, Episode>>) = items.map { toDb(it.first, it.second) }
+    fun toDb(source: List<Pair<Int, Episode>>) = source.map { toDb(it.first, it.second) }
 }

@@ -1,25 +1,31 @@
 package ru.radiationx.data.adb.feed
 
-import androidx.room.Embedded
-import androidx.room.Relation
+import androidx.room.*
 import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.release.ReleaseDb
 import ru.radiationx.data.adb.youtube.YouTubeDb
 
-data class FeedDb(
-    @Embedded val feed: FlatFeedDb,
-
-    @Relation(
-        entity = FlatReleaseDb::class,
-        parentColumn = "releaseId",
-        entityColumn = "releaseId"
-    )
-    val release: ReleaseDb?,
-
-    @Relation(
-        entity = YouTubeDb::class,
-        parentColumn = "youtubeId",
-        entityColumn = "youtubeId"
-    )
-    val youtube: YouTubeDb?
+@Entity(
+    tableName = "feed",
+    foreignKeys = [
+        ForeignKey(
+            entity = FlatReleaseDb::class,
+            parentColumns = ["releaseId"],
+            childColumns = ["releaseId"]
+        ),
+        ForeignKey(
+            entity = YouTubeDb::class,
+            parentColumns = ["youtubeId"],
+            childColumns = ["youtubeId"]
+        )
+    ],
+    indices = [Index("releaseId"), Index("youtubeId")]
 )
+data class FeedDb(
+    @ColumnInfo(name = "releaseId") val releaseId: Int?,
+    @ColumnInfo(name = "youtubeId") val youtubeId: Int?
+) {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int = 0
+}

@@ -1,18 +1,17 @@
 package ru.radiationx.data.adb.favorite
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import ru.radiationx.data.adb.feed.FlatFeedDb
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.release.ReleaseDb
 
+@Entity(
+    tableName = "favorite",
+    foreignKeys = [
+        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
+    ]
+)
 data class FavoriteDb(
-    @Embedded val favorite: FlatFavoriteDb,
-
-    @Relation(
-        entity = FlatReleaseDb::class,
-        parentColumn = "releaseId",
-        entityColumn = "releaseId"
-    )
-    val release: ReleaseDb
+    @PrimaryKey @ColumnInfo(name = "releaseId") val releaseId: Int
 )

@@ -5,9 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -17,14 +15,12 @@ import ru.radiationx.data.adb.dao.FeedDao
 import ru.radiationx.data.adb.dao.ReleaseDao
 import ru.radiationx.data.adb.dao.YoutubeDao
 import ru.radiationx.data.adb.feed.FeedDb
-import ru.radiationx.data.adb.feed.FlatFeedDb
 import ru.radiationx.data.adb.release.BlockInfoDb
 import ru.radiationx.data.adb.release.FavoriteInfoDb
 import ru.radiationx.data.adb.release.FlatReleaseDb
 import ru.radiationx.data.adb.release.ReleaseDb
 import ru.radiationx.data.adb.youtube.YouTubeDb
 import ru.radiationx.data.adomain.release.Release
-import java.lang.Exception
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
@@ -105,7 +101,7 @@ class SimpleDaoTest {
 
         val youTubeDb = YouTubeDb(20, "title", "image", "vid", 999, 888, Date(60 * 1000))
 
-        val flatFeedDb = FlatFeedDb(10, 20)
+        val flatFeedDb = FeedDb(10, 20)
         val feedDb = FeedDb(flatFeedDb, releaseDb, youTubeDb)
         feedDao.insert(listOf(feedDb), releaseDao, youtubeDao).test().assertComplete()
         //feedDao.insert(listOf(feedDb), releaseDao, youtubeDao).test().assertComplete()

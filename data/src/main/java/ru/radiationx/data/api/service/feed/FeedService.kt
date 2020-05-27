@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.service.feed
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.feed.FeedItem
+import ru.radiationx.data.adomain.feed.Feed
 import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.FeedConverter
@@ -15,7 +15,7 @@ class FeedService(
     private val paginationConverter: PaginationConverter
 ) {
 
-    fun getList(page: Int): Single<Paginated<FeedItem>> = feedApi
+    fun getList(page: Int): Single<Paginated<Feed>> = feedApi
         .getList(
             mapOf(
                 "query" to "feed",

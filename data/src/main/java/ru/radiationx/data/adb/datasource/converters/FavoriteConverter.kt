@@ -1,21 +1,18 @@
 package ru.radiationx.data.adb.datasource.converters
 
 import ru.radiationx.data.adb.favorite.FavoriteDb
-import ru.radiationx.data.adb.favorite.FlatFavoriteDb
-import ru.radiationx.data.adomain.release.Release
+import ru.radiationx.data.adomain.relative.FavoriteRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class FavoriteConverter(
-    private val releaseConverter: ReleaseConverter
-) {
+class FavoriteConverter {
 
-    fun toDomain(favoriteDb: FavoriteDb) = releaseConverter.toDomain(favoriteDb.release)
+    fun toDomain(source: FavoriteDb) = FavoriteRelative(source.releaseId)
 
-    fun toDb(release: Release) = FlatFavoriteDb(release.id)
+    fun toDb(source: FavoriteRelative) = FavoriteDb(source.releaseId)
 
 
-    fun toDomain(items: List<FavoriteDb>) = items.map { toDomain(it) }
+    fun toDomain(source: List<FavoriteDb>) = source.map { toDomain(it) }
 
-    fun toDb(items: List<Release>) = items.map { toDb(it) }
+    fun toDb(source: List<FavoriteRelative>) = source.map { toDb(it) }
 }

@@ -6,6 +6,7 @@ import ru.radiationx.data.adb.dao.EpisodeDao
 import ru.radiationx.data.adb.dao.FavoriteDao
 import ru.radiationx.data.adb.datasource.converters.EpisodeConverter
 import ru.radiationx.data.adb.datasource.converters.FavoriteConverter
+import ru.radiationx.data.adomain.relative.FavoriteRelative
 import ru.radiationx.data.adomain.release.Episode
 import ru.radiationx.data.adomain.release.Release
 import toothpick.InjectConstructor
@@ -16,19 +17,19 @@ class FavoriteDbDataSource(
     private val favoriteConverter: FavoriteConverter
 ) {
 
-    fun getListAll(): Single<List<Release>> = favoriteDao
+    fun getListAll(): Single<List<FavoriteRelative>> = favoriteDao
         .getList()
         .map(favoriteConverter::toDomain)
 
-    fun getOne(releaseId: Int): Single<Release> = favoriteDao
+    fun getOne(releaseId: Int): Single<FavoriteRelative> = favoriteDao
         .getOne(releaseId)
         .map(favoriteConverter::toDomain)
 
-    fun insert(items: List<Release>): Completable = Single.just(items)
+    fun insert(items: List<FavoriteRelative>): Completable = Single.just(items)
         .map(favoriteConverter::toDb)
         .flatMapCompletable(favoriteDao::insert)
 
-    fun delete(items: List<Release>): Completable = Single.just(items)
+    fun delete(items: List<FavoriteRelative>): Completable = Single.just(items)
         .map(favoriteConverter::toDb)
         .flatMapCompletable(favoriteDao::delete)
 }

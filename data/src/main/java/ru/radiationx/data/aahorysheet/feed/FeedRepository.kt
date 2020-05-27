@@ -2,7 +2,7 @@ package ru.radiationx.data.aahorysheet.feed
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adomain.feed.FeedItem
+import ru.radiationx.data.adomain.feed.Feed
 
 class FeedRepository(
     private val cache: FakeFeedCache,
@@ -10,9 +10,9 @@ class FeedRepository(
     private val fakeFeedCacheCombiner: FakeFeedCacheCombiner
 ) {
 
-    fun observeFeed(): Observable<List<FeedItem>> = fakeFeedCacheCombiner.observeList()
+    fun observeFeed(): Observable<List<Feed>> = fakeFeedCacheCombiner.observeList()
 
-    fun getList(page: Int): Single<List<FeedItem>> = remote
+    fun getList(page: Int): Single<List<Feed>> = remote
         .getList()
         .flatMap {
             if (page == 1) {

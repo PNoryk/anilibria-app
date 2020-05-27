@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import ru.radiationx.data.ApiClient
 import ru.radiationx.data.DataPreferences
 import ru.radiationx.data.MainClient
@@ -43,7 +42,7 @@ class DataModule(context: Context) : Module() {
         bind(FeedDao::class.java).toInstance(database.feedDao())
         bind(HistoryDao::class.java).toInstance(database.historyDao())
         bind(ReleaseDao::class.java).toInstance(database.releaseDao())
-        bind(ScheduleDayDao::class.java).toInstance(database.scheduleDao())
+        bind(ScheduleDao::class.java).toInstance(database.scheduleDao())
         bind(TorrentDao::class.java).toInstance(database.torrentDao())
         bind(YoutubeDao::class.java).toInstance(database.youtubeDao())
 

@@ -5,14 +5,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.radiationx.data.adb.dao.*
 import ru.radiationx.data.adb.episode.EpisodeDb
-import ru.radiationx.data.adb.favorite.FlatFavoriteDb
-import ru.radiationx.data.adb.feed.FlatFeedDb
-import ru.radiationx.data.adb.history.FlatHistoryDb
+import ru.radiationx.data.adb.favorite.FavoriteDb
+import ru.radiationx.data.adb.feed.FeedDb
+import ru.radiationx.data.adb.history.HistoryDb
 import ru.radiationx.data.adb.release.BlockInfoDb
 import ru.radiationx.data.adb.release.FavoriteInfoDb
 import ru.radiationx.data.adb.release.FlatReleaseDb
 import ru.radiationx.data.adb.schedule.FlatScheduleDayDb
-import ru.radiationx.data.adb.schedule.ScheduleReleaseCrossRefDb
+import ru.radiationx.data.adb.schedule.ScheduleReleaseDb
 import ru.radiationx.data.adb.torrent.TorrentDb
 import ru.radiationx.data.adb.youtube.YouTubeDb
 
@@ -20,18 +20,18 @@ import ru.radiationx.data.adb.youtube.YouTubeDb
     entities = [
         EpisodeDb::class,
 
-        FlatFavoriteDb::class,
+        FavoriteDb::class,
 
-        FlatFeedDb::class,
+        FeedDb::class,
 
-        FlatHistoryDb::class,
+        HistoryDb::class,
 
         BlockInfoDb::class,
         FavoriteInfoDb::class,
         FlatReleaseDb::class,
 
         FlatScheduleDayDb::class,
-        ScheduleReleaseCrossRefDb::class,
+        ScheduleReleaseDb::class,
 
         TorrentDb::class,
 
@@ -48,8 +48,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun feedDao(): FeedDao
     abstract fun historyDao(): HistoryDao
     abstract fun releaseDao(): ReleaseDao
-    abstract fun scheduleDao(): ScheduleDayDao
-    abstract fun scheduleReleaseCrossRefDao(): ScheduleReleaseCrossRefDao
+    abstract fun scheduleDao(): ScheduleDao
     abstract fun torrentDao(): TorrentDao
     abstract fun youtubeDao(): YoutubeDao
 }

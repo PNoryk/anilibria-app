@@ -1,13 +1,12 @@
 package ru.radiationx.data.aahorysheet.feed
 
-import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
 import ru.radiationx.data.aahorysheet.release.FakeReleaseCache
 import ru.radiationx.data.aahorysheet.youtube.FakeYTCache
-import ru.radiationx.data.adomain.feed.FeedItem
+import ru.radiationx.data.adomain.feed.Feed
 import ru.radiationx.data.adomain.release.Release
 import ru.radiationx.data.adomain.youtube.YouTube
 
@@ -18,7 +17,7 @@ class FakeFeedCacheCombiner(
 ) {
 
     private val combiner by lazy {
-        Function3<List<FeedRelative>, List<Release>, List<YouTube>, List<FeedItem>> { t1, t2, t3 ->
+        Function3<List<FeedRelative>, List<Release>, List<YouTube>, List<Feed>> { t1, t2, t3 ->
             return@Function3 t1.map { relative ->
                 val release = relative.releaseId?.let { releaseId ->
                     t2.firstOrNull { it.id == releaseId }
@@ -26,7 +25,7 @@ class FakeFeedCacheCombiner(
                 val youtube = relative.youtubeId?.let { youtubeId ->
                     t3.firstOrNull { it.id == youtubeId }
                 }
-                FeedItem(release, youtube)
+                Feed(release, youtube)
             }.filter {
                 it.release == null || it.youtube != null
             }
@@ -34,7 +33,7 @@ class FakeFeedCacheCombiner(
     }
 
 
-    fun observeList(): Observable<List<FeedItem>> = Observable
+    fun observeList(): Observable<List<Feed>> = Observable
         .combineLatest(
             feedCache.observeChanges(),
             releaseCache.observeChanges(),
@@ -43,7 +42,7 @@ class FakeFeedCacheCombiner(
         )
         .distinctUntilChanged()
 
-    fun fetchList(): Single<List<FeedItem>> = Single
+    fun fetchList(): Single<List<Feed>> = Single
         .zip(
             feedCache.getList(),
             releaseCache.getList(),
@@ -51,7 +50,7 @@ class FakeFeedCacheCombiner(
             combiner
         )
 
-    fun putItems(items: List<FeedItem>): Completable {
+    fun putItems(items: List<Feed>): Completable {
         val putRelease = releaseCache.putList(items.mapNotNull { it.release })
         val putYoutube = ytCache.putList(items.mapNotNull { it.youtube })
         val putFeed = feedCache.putList(items.map { FeedRelative(it.release?.id, it.youtube?.id) })

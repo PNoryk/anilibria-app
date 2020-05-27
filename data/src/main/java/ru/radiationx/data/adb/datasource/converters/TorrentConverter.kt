@@ -7,35 +7,35 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class TorrentConverter {
 
-    fun toDomain(torrentDb: TorrentDb) = Torrent(
-        id = torrentDb.id,
-        hash = torrentDb.hash,
-        leechers = torrentDb.leechers,
-        seeders = torrentDb.seeders,
-        completed = torrentDb.completed,
-        quality = torrentDb.quality,
-        series = torrentDb.series,
-        size = torrentDb.size,
-        time = torrentDb.time,
-        url = torrentDb.url
+    fun toDomain(source: TorrentDb) = Torrent(
+        id = source.id,
+        hash = source.hash,
+        leechers = source.leechers,
+        seeders = source.seeders,
+        completed = source.completed,
+        quality = source.quality,
+        series = source.series,
+        size = source.size,
+        time = source.time,
+        url = source.url
     )
 
-    fun toDb(releaseId: Int, torrent: Torrent): TorrentDb = TorrentDb(
+    fun toDb(releaseId: Int, source: Torrent): TorrentDb = TorrentDb(
         releaseId = releaseId,
-        id = torrent.id,
-        hash = torrent.hash,
-        leechers = torrent.leechers,
-        seeders = torrent.seeders,
-        completed = torrent.completed,
-        quality = torrent.quality,
-        series = torrent.series,
-        size = torrent.size,
-        time = torrent.time,
-        url = torrent.url
+        id = source.id,
+        hash = source.hash,
+        leechers = source.leechers,
+        seeders = source.seeders,
+        completed = source.completed,
+        quality = source.quality,
+        series = source.series,
+        size = source.size,
+        time = source.time,
+        url = source.url
     )
 
 
-    fun toDomain(items: List<TorrentDb>) = items.map { toDomain(it) }
+    fun toDomain(source: List<TorrentDb>) = source.map { toDomain(it) }
 
-    fun toDb(items: List<Pair<Int, Torrent>>) = items.map { toDb(it.first, it.second) }
+    fun toDb(source: List<Pair<Int, Torrent>>) = source.map { toDb(it.first, it.second) }
 }

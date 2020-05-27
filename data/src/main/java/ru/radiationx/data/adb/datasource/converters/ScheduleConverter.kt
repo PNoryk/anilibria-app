@@ -2,28 +2,26 @@ package ru.radiationx.data.adb.datasource.converters
 
 import ru.radiationx.data.adb.schedule.FlatScheduleDayDb
 import ru.radiationx.data.adb.schedule.ScheduleDayDb
-import ru.radiationx.data.adomain.schedule.ScheduleDay
+import ru.radiationx.data.adb.schedule.ScheduleReleaseDb
+import ru.radiationx.data.adomain.relative.ScheduleDayRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class ScheduleConverter(
-    private val releaseConverter: ReleaseConverter
-) {
+class ScheduleConverter {
 
-    fun toDomain(scheduleDayDb: ScheduleDayDb) = ScheduleDay(
-        day = scheduleDayDb.scheduleDay.dayId,
-        items = scheduleDayDb.items.map(releaseConverter::toDomain)
+    fun toDomain(source: ScheduleDayDb) = ScheduleDayRelative(
+        dayId = source.scheduleDay.dayId,
+        releaseIds = source.items.map { it.releaseId }
     )
 
-    fun toDb(scheduleDay: ScheduleDay) = ScheduleDayDb(
-        scheduleDay = toDb(scheduleDay.day),
-        items = scheduleDay.items.map(releaseConverter::toDb)
+    fun toDb(source: ScheduleDayRelative) = ScheduleDayDb(
+        scheduleDay = FlatScheduleDayDb(source.dayId),
+        items = source.releaseIds.map { releaseId ->
+            ScheduleReleaseDb(source.dayId, releaseId)
+        }
     )
 
-    fun toDb(dayId: Int) = FlatScheduleDayDb(dayId)
+    fun toDomain(source: List<ScheduleDayDb>) = source.map { toDomain(it) }
 
-
-    fun toDomain(items: List<ScheduleDayDb>) = items.map { toDomain(it) }
-
-    fun toDb(items: List<ScheduleDay>) = items.map { toDb(it) }
+    fun toDb(source: List<ScheduleDayRelative>) = source.map { toDb(it) }
 }

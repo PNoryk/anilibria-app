@@ -1,18 +1,19 @@
 package ru.radiationx.data.adb.history
 
-import androidx.room.Embedded
-import androidx.room.Relation
-import ru.radiationx.data.adb.feed.FlatFeedDb
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.release.ReleaseDb
+import java.util.*
 
+@Entity(
+    tableName = "history",
+    foreignKeys = [
+        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
+    ]
+)
 data class HistoryDb(
-    @Embedded val history: FlatHistoryDb,
-
-    @Relation(
-        entity = FlatReleaseDb::class,
-        parentColumn = "releaseId",
-        entityColumn = "releaseId"
-    )
-    val release: ReleaseDb
+    @PrimaryKey @ColumnInfo(name = "releaseId") val releaseId: Int,
+    @ColumnInfo(name = "timestamp") val timestamp: Date
 )

@@ -12,10 +12,10 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class ReleaseConverter {
 
-    fun toDomain(releaseDb: ReleaseDb): Release {
-        val favorite = releaseDb.favorite?.let { toDomain(it) }
-        val blockInfo = releaseDb.blockedInfo?.let { toDomain(it) }
-        return releaseDb.release.run {
+    fun toDomain(source: ReleaseDb): Release {
+        val favorite = source.favorite?.let { toDomain(it) }
+        val blockInfo = source.blockedInfo?.let { toDomain(it) }
+        return source.release.run {
             Release(
                 id = id,
                 code = code,
@@ -42,55 +42,55 @@ class ReleaseConverter {
         }
     }
 
-    fun toDomain(favoriteInfoDb: FavoriteInfoDb) = FavoriteInfo(
-        rating = favoriteInfoDb.rating,
-        added = favoriteInfoDb.added
+    fun toDomain(source: FavoriteInfoDb) = FavoriteInfo(
+        rating = source.rating,
+        added = source.added
     )
 
-    fun toDomain(blockInfoDb: BlockInfoDb) = BlockInfo(
-        blocked = blockInfoDb.blocked,
-        reason = blockInfoDb.reason
+    fun toDomain(source: BlockInfoDb) = BlockInfo(
+        blocked = source.blocked,
+        reason = source.reason
     )
 
-    fun toDb(release: Release): ReleaseDb {
-        val favoriteInfoDb = release.favorite?.let { toDb(release.id, it) }
-        val blockedInfoDb = release.blockedInfo?.let { toDb(release.id, it) }
+    fun toDb(source: Release): ReleaseDb {
+        val favoriteInfoDb = source.favorite?.let { toDb(source.id, it) }
+        val blockedInfoDb = source.blockedInfo?.let { toDb(source.id, it) }
         val releaseDb = FlatReleaseDb(
-            id = release.id,
-            code = release.code,
-            nameRu = release.nameRu,
-            nameEn = release.nameEn,
-            series = release.series,
-            poster = release.poster,
-            last = release.last,
-            webPlayer = release.webPlayer,
-            status = release.status,
-            type = release.type,
-            genres = release.genres,
-            voices = release.voices,
-            year = release.year,
-            day = release.day,
-            description = release.description,
-            announce = release.announce,
-            showDonateDialog = release.showDonateDialog
+            id = source.id,
+            code = source.code,
+            nameRu = source.nameRu,
+            nameEn = source.nameEn,
+            series = source.series,
+            poster = source.poster,
+            last = source.last,
+            webPlayer = source.webPlayer,
+            status = source.status,
+            type = source.type,
+            genres = source.genres,
+            voices = source.voices,
+            year = source.year,
+            day = source.day,
+            description = source.description,
+            announce = source.announce,
+            showDonateDialog = source.showDonateDialog
         )
         return ReleaseDb(releaseDb, favoriteInfoDb, blockedInfoDb)
     }
 
-    fun toDb(releaseId: Int, favoriteInfo: FavoriteInfo) = FavoriteInfoDb(
+    fun toDb(releaseId: Int, source: FavoriteInfo) = FavoriteInfoDb(
         releaseId = releaseId,
-        rating = favoriteInfo.rating,
-        added = favoriteInfo.added
+        rating = source.rating,
+        added = source.added
     )
 
-    fun toDb(releaseId: Int, blockInfo: BlockInfo) = BlockInfoDb(
+    fun toDb(releaseId: Int, source: BlockInfo) = BlockInfoDb(
         releaseId = releaseId,
-        blocked = blockInfo.blocked,
-        reason = blockInfo.reason
+        blocked = source.blocked,
+        reason = source.reason
     )
 
 
-    fun toDomain(items: List<ReleaseDb>) = items.map { toDomain(it) }
+    fun toDomain(source: List<ReleaseDb>) = source.map { toDomain(it) }
 
-    fun toDb(items: List<Release>) = items.map { toDb(it) }
+    fun toDb(source: List<Release>) = source.map { toDb(it) }
 }

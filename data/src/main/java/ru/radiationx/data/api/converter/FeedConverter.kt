@@ -1,6 +1,6 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.feed.FeedItem
+import ru.radiationx.data.adomain.feed.Feed
 import ru.radiationx.data.api.remote.feed.FeedItemResponse
 import toothpick.InjectConstructor
 
@@ -10,7 +10,7 @@ class FeedConverter(
     private val youtubeConverter: YoutubeConverter
 ) {
 
-    fun toDomain(response: FeedItemResponse) = FeedItem(
+    fun toDomain(response: FeedItemResponse) = Feed(
         release = response.release?.let { releaseConverter.toDomain(it) },
         youtube = response.youtube?.let { youtubeConverter.toDomain(it) }
     )

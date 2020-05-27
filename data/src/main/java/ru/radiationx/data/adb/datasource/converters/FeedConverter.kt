@@ -1,35 +1,24 @@
 package ru.radiationx.data.adb.datasource.converters
 
 import ru.radiationx.data.adb.feed.FeedDb
-import ru.radiationx.data.adb.feed.FlatFeedDb
-import ru.radiationx.data.adomain.feed.FeedItem
+import ru.radiationx.data.adomain.relative.FeedRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class FeedConverter(
-    private val releaseConverter: ReleaseConverter,
-    private val youtubeConverter: YoutubeConverter
-) {
+class FeedConverter {
 
-    fun toDomain(feedDb: FeedDb) = FeedItem(
-        release = feedDb.release?.let { releaseConverter.toDomain(it) },
-        youtube = feedDb.youtube?.let { youtubeConverter.toDomain(it) }
+    fun toDomain(source: FeedDb) = FeedRelative(
+        releaseId = source.releaseId,
+        youtubeId = source.youtubeId
     )
 
-    fun toDb(feedItem: FeedItem) = FeedDb(
-        feed = toDb(feedItem.release?.id, feedItem.youtube?.id),
-        release = feedItem.release?.let { releaseConverter.toDb(it) },
-        youtube = feedItem.youtube?.let { youtubeConverter.toDb(it) }
+    fun toDb(source: FeedRelative) = FeedDb(
+        source.releaseId,
+        source.youtubeId
     )
 
-    fun toDb(releaseId: Int?, youtubeId: Int?) = FlatFeedDb(
-        releaseId = releaseId,
-        youtubeId = youtubeId
-    )
+    fun toDomain(source: List<FeedDb>) = source.map { toDomain(it) }
 
-
-    fun toDomain(items: List<FeedDb>) = items.map { toDomain(it) }
-
-    fun toDb(items: List<FeedItem>) = items.map { toDb(it) }
+    fun toDb(source: List<FeedRelative>) = source.map { toDb(it) }
 
 }
