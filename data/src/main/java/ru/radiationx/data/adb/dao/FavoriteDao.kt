@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adb.favorite.FavoriteDb
+import ru.radiationx.data.adb.entity.favorite.FavoriteDb
 
 @Dao
 interface FavoriteDao {

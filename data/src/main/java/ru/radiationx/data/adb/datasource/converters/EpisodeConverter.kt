@@ -1,6 +1,6 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.episode.EpisodeDb
+import ru.radiationx.data.adb.entity.episode.EpisodeDb
 import ru.radiationx.data.adomain.release.Episode
 import toothpick.InjectConstructor
 

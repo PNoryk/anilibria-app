@@ -4,17 +4,17 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.radiationx.data.adb.dao.*
-import ru.radiationx.data.adb.episode.EpisodeDb
-import ru.radiationx.data.adb.favorite.FavoriteDb
-import ru.radiationx.data.adb.feed.FeedDb
-import ru.radiationx.data.adb.history.HistoryDb
-import ru.radiationx.data.adb.release.BlockInfoDb
-import ru.radiationx.data.adb.release.FavoriteInfoDb
-import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.schedule.FlatScheduleDayDb
-import ru.radiationx.data.adb.schedule.ScheduleReleaseDb
-import ru.radiationx.data.adb.torrent.TorrentDb
-import ru.radiationx.data.adb.youtube.YoutubeDb
+import ru.radiationx.data.adb.entity.episode.EpisodeDb
+import ru.radiationx.data.adb.entity.favorite.FavoriteDb
+import ru.radiationx.data.adb.entity.feed.FeedDb
+import ru.radiationx.data.adb.entity.history.HistoryDb
+import ru.radiationx.data.adb.entity.release.BlockInfoDb
+import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
+import ru.radiationx.data.adb.entity.release.FlatReleaseDb
+import ru.radiationx.data.adb.entity.schedule.FlatScheduleDayDb
+import ru.radiationx.data.adb.entity.schedule.ScheduleReleaseDb
+import ru.radiationx.data.adb.entity.torrent.TorrentDb
+import ru.radiationx.data.adb.entity.youtube.YoutubeDb
 
 @Database(
     entities = [

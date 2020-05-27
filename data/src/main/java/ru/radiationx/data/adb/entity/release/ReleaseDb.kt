@@ -1,10 +1,7 @@
-package ru.radiationx.data.adb.release
+package ru.radiationx.data.adb.entity.release
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import ru.radiationx.data.adb.release.BlockInfoDb
-import ru.radiationx.data.adb.release.FavoriteInfoDb
-import ru.radiationx.data.adb.release.FlatReleaseDb
 
 data class ReleaseDb(
     @Embedded val release: FlatReleaseDb,

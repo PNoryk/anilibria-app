@@ -1,6 +1,6 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.history.HistoryDb
+import ru.radiationx.data.adb.entity.history.HistoryDb
 import ru.radiationx.data.adomain.relative.HistoryRelative
 import toothpick.InjectConstructor
 

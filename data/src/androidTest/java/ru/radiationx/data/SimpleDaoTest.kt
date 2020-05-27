@@ -14,12 +14,12 @@ import ru.radiationx.data.adb.AppDatabase
 import ru.radiationx.data.adb.dao.FeedDao
 import ru.radiationx.data.adb.dao.ReleaseDao
 import ru.radiationx.data.adb.dao.YoutubeDao
-import ru.radiationx.data.adb.feed.FeedDb
-import ru.radiationx.data.adb.release.BlockInfoDb
-import ru.radiationx.data.adb.release.FavoriteInfoDb
-import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.release.ReleaseDb
-import ru.radiationx.data.adb.youtube.YoutubeDb
+import ru.radiationx.data.adb.entity.feed.FeedDb
+import ru.radiationx.data.adb.entity.release.BlockInfoDb
+import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
+import ru.radiationx.data.adb.entity.release.FlatReleaseDb
+import ru.radiationx.data.adb.entity.release.ReleaseDb
+import ru.radiationx.data.adb.entity.youtube.YoutubeDb
 import ru.radiationx.data.adomain.release.Release
 import java.util.*
 

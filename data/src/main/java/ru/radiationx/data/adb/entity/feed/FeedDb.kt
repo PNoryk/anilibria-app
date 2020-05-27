@@ -1,8 +1,8 @@
-package ru.radiationx.data.adb.feed
+package ru.radiationx.data.adb.entity.feed
 
 import androidx.room.*
-import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.youtube.YoutubeDb
+import ru.radiationx.data.adb.entity.release.FlatReleaseDb
+import ru.radiationx.data.adb.entity.youtube.YoutubeDb
 
 @Entity(
     tableName = "feed",

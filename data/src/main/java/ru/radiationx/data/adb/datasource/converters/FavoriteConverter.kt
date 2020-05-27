@@ -1,6 +1,6 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.favorite.FavoriteDb
+import ru.radiationx.data.adb.entity.favorite.FavoriteDb
 import ru.radiationx.data.adomain.relative.FavoriteRelative
 import toothpick.InjectConstructor
 

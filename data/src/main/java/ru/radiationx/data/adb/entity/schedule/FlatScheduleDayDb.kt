@@ -1,4 +1,4 @@
-package ru.radiationx.data.adb.schedule
+package ru.radiationx.data.adb.entity.schedule
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

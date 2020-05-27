@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adb.episode.EpisodeDb
+import ru.radiationx.data.adb.entity.episode.EpisodeDb
 
 @Dao
 interface EpisodeDao {

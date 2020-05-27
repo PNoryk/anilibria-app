@@ -1,10 +1,10 @@
-package ru.radiationx.data.adb.history
+package ru.radiationx.data.adb.entity.history
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import ru.radiationx.data.adb.release.FlatReleaseDb
+import ru.radiationx.data.adb.entity.release.FlatReleaseDb
 import java.util.*
 
 @Entity(

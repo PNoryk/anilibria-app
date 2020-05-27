@@ -3,10 +3,10 @@ package ru.radiationx.data.adb.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adb.release.BlockInfoDb
-import ru.radiationx.data.adb.release.FavoriteInfoDb
-import ru.radiationx.data.adb.release.FlatReleaseDb
-import ru.radiationx.data.adb.release.ReleaseDb
+import ru.radiationx.data.adb.entity.release.BlockInfoDb
+import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
+import ru.radiationx.data.adb.entity.release.FlatReleaseDb
+import ru.radiationx.data.adb.entity.release.ReleaseDb
 
 @Dao
 abstract class ReleaseDao {

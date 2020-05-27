@@ -1,8 +1,7 @@
-package ru.radiationx.data.adb.episode
+package ru.radiationx.data.adb.entity.episode
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "release_episode",

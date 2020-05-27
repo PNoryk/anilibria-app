@@ -4,8 +4,6 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.ReleaseDao
 import ru.radiationx.data.adb.datasource.converters.ReleaseConverter
-import ru.radiationx.data.adb.release.ReleaseDb
-import ru.radiationx.data.adomain.release.Episode
 import ru.radiationx.data.adomain.release.Release
 import toothpick.InjectConstructor
 

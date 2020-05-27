@@ -1,10 +1,9 @@
-package ru.radiationx.data.adb.torrent
+package ru.radiationx.data.adb.entity.torrent
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-import ru.radiationx.data.adb.release.FlatReleaseDb
+import ru.radiationx.data.adb.entity.release.FlatReleaseDb
 import java.util.*
 
 @Entity(

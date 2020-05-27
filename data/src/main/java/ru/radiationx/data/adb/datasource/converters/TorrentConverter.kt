@@ -1,6 +1,6 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.torrent.TorrentDb
+import ru.radiationx.data.adb.entity.torrent.TorrentDb
 import ru.radiationx.data.adomain.release.Torrent
 import toothpick.InjectConstructor
 

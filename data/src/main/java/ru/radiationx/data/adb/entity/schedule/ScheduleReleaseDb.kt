@@ -1,10 +1,9 @@
-package ru.radiationx.data.adb.schedule
+package ru.radiationx.data.adb.entity.schedule
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import ru.radiationx.data.adb.release.FlatReleaseDb
 
 @Entity(
     tableName = "schedule_release_cross_ref",

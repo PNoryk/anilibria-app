@@ -1,6 +1,6 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.feed.FeedDb
+import ru.radiationx.data.adb.entity.feed.FeedDb
 import ru.radiationx.data.adomain.relative.FeedRelative
 import toothpick.InjectConstructor
 

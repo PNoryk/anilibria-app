@@ -1,8 +1,7 @@
-package ru.radiationx.data.adb.youtube
+package ru.radiationx.data.adb.entity.youtube
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.util.*
 

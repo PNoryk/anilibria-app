@@ -1,4 +1,4 @@
-package ru.radiationx.data.adb.release
+package ru.radiationx.data.adb.entity.release
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

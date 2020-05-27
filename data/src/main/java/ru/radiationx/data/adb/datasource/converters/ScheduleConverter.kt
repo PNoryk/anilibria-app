@@ -1,8 +1,8 @@
 package ru.radiationx.data.adb.datasource.converters
 
-import ru.radiationx.data.adb.schedule.FlatScheduleDayDb
-import ru.radiationx.data.adb.schedule.ScheduleDayDb
-import ru.radiationx.data.adb.schedule.ScheduleReleaseDb
+import ru.radiationx.data.adb.entity.schedule.FlatScheduleDayDb
+import ru.radiationx.data.adb.entity.schedule.ScheduleDayDb
+import ru.radiationx.data.adb.entity.schedule.ScheduleReleaseDb
 import ru.radiationx.data.adomain.relative.ScheduleDayRelative
 import toothpick.InjectConstructor
 

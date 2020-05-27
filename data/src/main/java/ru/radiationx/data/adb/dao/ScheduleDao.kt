@@ -3,9 +3,9 @@ package ru.radiationx.data.adb.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adb.schedule.FlatScheduleDayDb
-import ru.radiationx.data.adb.schedule.ScheduleDayDb
-import ru.radiationx.data.adb.schedule.ScheduleReleaseDb
+import ru.radiationx.data.adb.entity.schedule.FlatScheduleDayDb
+import ru.radiationx.data.adb.entity.schedule.ScheduleDayDb
+import ru.radiationx.data.adb.entity.schedule.ScheduleReleaseDb
 
 @Dao
 abstract class ScheduleDao {
