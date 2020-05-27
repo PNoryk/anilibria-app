@@ -3,9 +3,8 @@ package ru.radiationx.data.adb.datasource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.ScheduleDao
-import ru.radiationx.data.adb.datasource.converters.ScheduleConverter
+import ru.radiationx.data.adb.converters.ScheduleConverter
 import ru.radiationx.data.adomain.relative.ScheduleDayRelative
-import ru.radiationx.data.adomain.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor

@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.datasource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.ReleaseDao
-import ru.radiationx.data.adb.datasource.converters.ReleaseConverter
+import ru.radiationx.data.adb.converters.ReleaseConverter
 import ru.radiationx.data.adomain.release.Release
 import toothpick.InjectConstructor
 

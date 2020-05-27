@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.datasource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.FeedDao
-import ru.radiationx.data.adb.datasource.converters.FeedConverter
+import ru.radiationx.data.adb.converters.FeedConverter
 import ru.radiationx.data.adomain.relative.FeedRelative
 import toothpick.InjectConstructor
 

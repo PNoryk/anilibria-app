@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.datasource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.TorrentDao
-import ru.radiationx.data.adb.datasource.converters.TorrentConverter
+import ru.radiationx.data.adb.converters.TorrentConverter
 import ru.radiationx.data.adomain.release.Torrent
 import toothpick.InjectConstructor
 

@@ -2,13 +2,9 @@ package ru.radiationx.data.adb.datasource
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adb.dao.EpisodeDao
 import ru.radiationx.data.adb.dao.FavoriteDao
-import ru.radiationx.data.adb.datasource.converters.EpisodeConverter
-import ru.radiationx.data.adb.datasource.converters.FavoriteConverter
+import ru.radiationx.data.adb.converters.FavoriteConverter
 import ru.radiationx.data.adomain.relative.FavoriteRelative
-import ru.radiationx.data.adomain.release.Episode
-import ru.radiationx.data.adomain.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor

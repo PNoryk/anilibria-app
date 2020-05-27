@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.datasource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.YoutubeDao
-import ru.radiationx.data.adb.datasource.converters.YoutubeConverter
+import ru.radiationx.data.adb.converters.YoutubeConverter
 import ru.radiationx.data.adomain.youtube.Youtube
 import toothpick.InjectConstructor
 

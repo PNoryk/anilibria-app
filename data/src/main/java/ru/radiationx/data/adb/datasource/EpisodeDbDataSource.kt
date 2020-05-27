@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.datasource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.EpisodeDao
-import ru.radiationx.data.adb.datasource.converters.EpisodeConverter
+import ru.radiationx.data.adb.converters.EpisodeConverter
 import ru.radiationx.data.adomain.release.Episode
 import toothpick.InjectConstructor
 
