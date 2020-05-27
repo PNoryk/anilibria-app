@@ -5,7 +5,7 @@ import retrofit2.http.FieldMap
 import ru.radiationx.data.api.entity.common.ApiBaseResponse
 import ru.radiationx.data.api.entity.config.ConfigResponse
 
-interface ConfigurationApi {
+interface ConfigurationService {
 
     fun get(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<ConfigResponse>>
 }

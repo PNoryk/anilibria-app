@@ -6,7 +6,7 @@ import ru.radiationx.data.api.entity.feed.FeedItemResponse
 import ru.radiationx.data.api.entity.common.ApiBaseResponse
 import ru.radiationx.data.api.entity.pagination.PaginatedResponse
 
-interface FeedApi {
+interface FeedService {
 
     fun getList(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<PaginatedResponse<FeedItemResponse>>>
 }

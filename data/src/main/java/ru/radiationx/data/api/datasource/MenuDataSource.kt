@@ -4,16 +4,16 @@ import io.reactivex.Single
 import ru.radiationx.data.adomain.menu.LinkMenu
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.LinkMenuConverter
-import ru.radiationx.data.api.service.MenuApi
+import ru.radiationx.data.api.service.MenuService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class MenuService(
-    private val menuApi: MenuApi,
+class MenuDataSource(
+    private val menuService: MenuService,
     private val menuConverter: LinkMenuConverter
 ) {
 
-    fun getList(): Single<List<LinkMenu>> = menuApi
+    fun getList(): Single<List<LinkMenu>> = menuService
         .getList(mapOf("query" to "link_menu"))
         .handleApiResponse()
         .map {

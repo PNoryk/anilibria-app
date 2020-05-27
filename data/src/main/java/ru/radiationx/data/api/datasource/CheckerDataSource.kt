@@ -5,17 +5,17 @@ import ru.radiationx.data.SharedBuildConfig
 import ru.radiationx.data.adomain.checker.Update
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.CheckerConverter
-import ru.radiationx.data.api.service.CheckerApi
+import ru.radiationx.data.api.service.CheckerService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class CheckerService(
-    private val checkerApi: CheckerApi,
+class CheckerDataSource(
+    private val checkerService: CheckerService,
     private val buildConfig: SharedBuildConfig,
     private val checkerConverter: CheckerConverter
 ) {
 
-    fun get(): Single<Update> = checkerApi
+    fun get(): Single<Update> = checkerService
         .get(
             mapOf(
                 "query" to "app_update",

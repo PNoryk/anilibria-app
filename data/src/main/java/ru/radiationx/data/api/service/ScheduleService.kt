@@ -5,7 +5,7 @@ import retrofit2.http.FieldMap
 import ru.radiationx.data.api.entity.common.ApiBaseResponse
 import ru.radiationx.data.api.entity.schedule.ScheduleDayResponse
 
-interface ScheduleApi {
+interface ScheduleService {
 
     fun getList(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<List<ScheduleDayResponse>>>
 }

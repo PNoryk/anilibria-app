@@ -7,12 +7,12 @@ import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
-import ru.radiationx.data.api.service.ReleaseApi
+import ru.radiationx.data.api.service.ReleaseService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class ReleaseService(
-    private val releaseApi: ReleaseApi,
+class ReleaseDataSource(
+    private val releaseService: ReleaseService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter
 ) {
@@ -25,7 +25,7 @@ class ReleaseService(
         val params = mutableMapOf("query" to "release")
         releaseId?.also { params["id"] = it.toString() }
         releaseCode?.also { params["code"] = it }
-        return releaseApi
+        return releaseService
             .getOne(params)
             .handleApiResponse()
             .map { releaseConverter.toDomain(it) }
@@ -39,7 +39,7 @@ class ReleaseService(
         val params = mutableMapOf("query" to "release")
         ids?.also { params["id"] = it.joinToString(",") }
         codes?.also { params["code"] = it.joinToString(",") }
-        return releaseApi
+        return releaseService
             .getSome(params)
             .handleApiResponse()
             .map {
@@ -49,7 +49,7 @@ class ReleaseService(
             }
     }
 
-    fun getList(page: Int): Single<Paginated<Release>> = releaseApi
+    fun getList(page: Int): Single<Paginated<Release>> = releaseService
         .getList(
             mapOf(
                 "query" to "list",
@@ -65,7 +65,7 @@ class ReleaseService(
             }
         }
 
-    fun getRandom(): Single<RandomRelease> = releaseApi
+    fun getRandom(): Single<RandomRelease> = releaseService
         .getRandom(mapOf("query" to "random_release"))
         .handleApiResponse()
         .map { releaseConverter.toDomain(it) }

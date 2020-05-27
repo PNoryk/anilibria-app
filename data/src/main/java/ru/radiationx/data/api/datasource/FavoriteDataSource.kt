@@ -6,17 +6,17 @@ import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
-import ru.radiationx.data.api.service.FavoriteApi
+import ru.radiationx.data.api.service.FavoriteService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class FavoriteService(
-    private val favoriteApi: FavoriteApi,
+class FavoriteDataSource(
+    private val favoriteService: FavoriteService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter
 ) {
 
-    fun getList(page: Int): Single<Paginated<Release>> = favoriteApi
+    fun getList(page: Int): Single<Paginated<Release>> = favoriteService
         .getList(
             mapOf(
                 "query" to "favorites",
@@ -32,7 +32,7 @@ class FavoriteService(
             }
         }
 
-    fun add(releaseId: Int): Single<Release> = favoriteApi
+    fun add(releaseId: Int): Single<Release> = favoriteService
         .add(
             mapOf(
                 "query" to "favorites",
@@ -43,7 +43,7 @@ class FavoriteService(
         .handleApiResponse()
         .map { releaseConverter.toDomain(it) }
 
-    fun delete(releaseId: Int): Single<Release> = favoriteApi
+    fun delete(releaseId: Int): Single<Release> = favoriteService
         .delete(
             mapOf(
                 "query" to "favorites",

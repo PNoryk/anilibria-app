@@ -7,26 +7,26 @@ import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
-import ru.radiationx.data.api.service.SearchApi
+import ru.radiationx.data.api.service.SearchService
 import ru.radiationx.data.entity.app.search.SearchForm
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class SearchService(
-    private val searchApi: SearchApi,
+class SearchDataSource(
+    private val searchService: SearchService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter
 ) {
 
-    fun getYears(): Single<List<String>> = searchApi
+    fun getYears(): Single<List<String>> = searchService
         .getYears(mapOf("query" to "years"))
         .handleApiResponse()
 
-    fun getGenres(): Single<List<String>> = searchApi
+    fun getGenres(): Single<List<String>> = searchService
         .getGenres(mapOf("query" to "genres"))
         .handleApiResponse()
 
-    fun getSuggestions(name: String): Single<List<Release>> = searchApi
+    fun getSuggestions(name: String): Single<List<Release>> = searchService
         .getSuggestions(
             mapOf(
                 "query" to "search",
@@ -66,7 +66,7 @@ class SearchService(
             "rm" to "true"
         )
 
-        return searchApi
+        return searchService
             .getMatches(params)
             .handleApiResponse()
             .map {

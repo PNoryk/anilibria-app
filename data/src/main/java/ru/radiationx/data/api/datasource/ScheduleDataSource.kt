@@ -4,16 +4,16 @@ import io.reactivex.Single
 import ru.radiationx.data.adomain.schedule.ScheduleDay
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.ScheduleConverter
-import ru.radiationx.data.api.service.ScheduleApi
+import ru.radiationx.data.api.service.ScheduleService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class ScheduleService(
-    private val scheduleApi: ScheduleApi,
+class ScheduleDataSource(
+    private val scheduleService: ScheduleService,
     private val scheduleConverter: ScheduleConverter
 ) {
 
-    fun getList(): Single<List<ScheduleDay>> = scheduleApi
+    fun getList(): Single<List<ScheduleDay>> = scheduleService
         .getList(
             mapOf(
                 "query" to "schedule",

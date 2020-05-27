@@ -6,17 +6,17 @@ import ru.radiationx.data.adomain.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.FeedConverter
 import ru.radiationx.data.api.converter.PaginationConverter
-import ru.radiationx.data.api.service.FeedApi
+import ru.radiationx.data.api.service.FeedService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class FeedService(
-    private val feedApi: FeedApi,
+class FeedDataSource(
+    private val feedService: FeedService,
     private val feedConverter: FeedConverter,
     private val paginationConverter: PaginationConverter
 ) {
 
-    fun getList(page: Int): Single<Paginated<Feed>> = feedApi
+    fun getList(page: Int): Single<Paginated<Feed>> = feedService
         .getList(
             mapOf(
                 "query" to "feed",

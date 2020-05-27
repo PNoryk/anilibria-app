@@ -6,7 +6,7 @@ import ru.radiationx.data.api.entity.release.ReleaseResponse
 import ru.radiationx.data.api.entity.common.ApiBaseResponse
 import ru.radiationx.data.api.entity.pagination.PaginatedResponse
 
-interface SearchApi {
+interface SearchService {
 
     fun getYears(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<List<String>>>
     fun getGenres(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<List<String>>>
