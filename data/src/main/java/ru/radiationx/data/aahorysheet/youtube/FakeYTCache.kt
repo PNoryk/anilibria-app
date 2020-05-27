@@ -1,0 +1,8 @@
+package ru.radiationx.data.aahorysheet.youtube
+
+import ru.radiationx.data.aahorysheet.ReadableFake
+import ru.radiationx.data.aahorysheet.WritableFake
+import ru.radiationx.data.adomain.feed.FeedItem
+import ru.radiationx.data.adomain.youtube.YouTube
+
+interface FakeYTCache : ReadableFake<YouTube>, WritableFake<YouTube>

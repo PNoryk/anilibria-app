@@ -14,5 +14,5 @@ data class HistoryDb(
         parentColumn = "releaseId",
         entityColumn = "releaseId"
     )
-    val release: ReleaseDb?
+    val release: ReleaseDb
 )
