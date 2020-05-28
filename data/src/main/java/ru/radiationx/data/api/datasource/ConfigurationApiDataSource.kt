@@ -8,7 +8,7 @@ import ru.radiationx.data.api.service.ConfigurationService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class ConfigurationDataSource(
+class ConfigurationApiDataSource(
     private val configurationService: ConfigurationService,
     private val configConverter: ConfigConverter
 ) {

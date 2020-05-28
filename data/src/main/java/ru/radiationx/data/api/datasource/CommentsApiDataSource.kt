@@ -8,7 +8,7 @@ import ru.radiationx.data.api.service.CommentsService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class CommentsDataSource(
+class CommentsApiDataSource(
     private val commentsService: CommentsService,
     private val commentsConverter: CommentsConverter
 ) {

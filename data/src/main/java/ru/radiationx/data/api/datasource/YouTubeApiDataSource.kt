@@ -10,7 +10,7 @@ import ru.radiationx.data.api.service.YoutubeService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class YouTubeDataSource(
+class YouTubeApiDataSource(
     private val youtubeService: YoutubeService,
     private val youtubeConverter: YoutubeConverter,
     private val paginationConverter: PaginationConverter

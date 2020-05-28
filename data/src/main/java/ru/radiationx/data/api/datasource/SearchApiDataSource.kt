@@ -12,7 +12,7 @@ import ru.radiationx.data.entity.app.search.SearchForm
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class SearchDataSource(
+class SearchApiDataSource(
     private val searchService: SearchService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter

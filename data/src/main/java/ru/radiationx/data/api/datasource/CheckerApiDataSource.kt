@@ -9,7 +9,7 @@ import ru.radiationx.data.api.service.CheckerService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class CheckerDataSource(
+class CheckerApiDataSource(
     private val checkerService: CheckerService,
     private val buildConfig: SharedBuildConfig,
     private val checkerConverter: CheckerConverter

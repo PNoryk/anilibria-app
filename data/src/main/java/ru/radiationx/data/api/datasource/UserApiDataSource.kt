@@ -8,7 +8,7 @@ import ru.radiationx.data.api.service.UserService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class UserDataSource(
+class UserApiDataSource(
     private val userService: UserService,
     private val userConverter: UserConverter
 ) {
