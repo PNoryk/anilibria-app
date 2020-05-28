@@ -19,5 +19,5 @@ class HistoryRepository(
 
     fun getList(): Single<List<HistoryItem>> = cacheCombiner.fetchList()
 
-    fun visitRelease(item: Release): Completable = cacheCombiner.putOne(HistoryItem(Date(), item))
+    fun visitRelease(item: Release): Completable = cacheCombiner.putList(listOf(HistoryItem(Date(), item)))
 }

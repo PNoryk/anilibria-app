@@ -8,6 +8,7 @@ import toothpick.InjectConstructor
 class EpisodeConverter {
 
     fun toDomain(source: EpisodeDb) = Episode(
+        releaseId = source.releaseId,
         id = source.id,
         title = source.title,
         sd = source.sd,

@@ -1,8 +1,8 @@
 package ru.radiationx.data.aarepo
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.acache.ReleaseCache
 import ru.radiationx.data.acache.combiner.FavoriteCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
 import ru.radiationx.data.adomain.entity.release.Release
@@ -31,9 +31,13 @@ class FavoriteRepository(
 
     fun add(releaseId: Int): Single<Release> = apiDataSource
         .add(releaseId)
-        .flatMap { cacheCombiner.putOne(it).toSingleDefault(it) }
+        .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
 
     fun delete(releaseId: Int): Single<Release> = apiDataSource
         .delete(releaseId)
-        .flatMap { cacheCombiner.removeOne(it).toSingleDefault(it) }
+        .flatMap {
+            val removeFavorite = cacheCombiner.removeList(listOf(it))
+            val addRelease = releaseCache.putList(listOf(it))
+            Completable.concat(listOf(removeFavorite, addRelease)).toSingleDefault(it)
+        }
 }

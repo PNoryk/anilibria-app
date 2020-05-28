@@ -6,9 +6,7 @@ interface WritableCache<T> {
 
     fun putList(items: List<T>): Completable
 
-    fun putOne(item: T): Completable
-
-    fun removeOne(item: T): Completable
+    fun removeList(items: List<T>): Completable
 
     fun clear(): Completable
 }

@@ -9,6 +9,4 @@ interface ReadableCache<T> {
 
     fun fetchList(): Single<List<T>>
 
-    fun fetchOne(id: Int): Single<T>
-
 }

@@ -36,8 +36,8 @@ class ReleaseConverter(
         description = response.description?.trim(),
         announce = response.announce?.trim(),
         blockedInfo = response.blockedInfo?.let { toDomain(it) },
-        playlist = response.playlist?.map { toDomain(it) },
-        torrents = response.torrents?.map { toDomain(it) },
+        playlist = response.playlist?.map { toDomain(response.id, it) },
+        torrents = response.torrents?.map { toDomain(response.id, it) },
         showDonateDialog = response.showDonateDialog
     )
 
@@ -51,7 +51,8 @@ class ReleaseConverter(
         reason = response.reason
     )
 
-    fun toDomain(response: EpisodeResponse) = Episode(
+    fun toDomain(releaseId: Int, response: EpisodeResponse) = Episode(
+        releaseId = releaseId,
         id = response.id,
         title = response.title,
         sd = response.sd,
@@ -61,7 +62,8 @@ class ReleaseConverter(
         srcHd = response.srcHd
     )
 
-    fun toDomain(response: TorrentResponse) = Torrent(
+    fun toDomain(releaseId: Int, response: TorrentResponse) = Torrent(
+        releaseId = releaseId,
         id = response.id,
         hash = response.hash,
         leechers = response.leechers,

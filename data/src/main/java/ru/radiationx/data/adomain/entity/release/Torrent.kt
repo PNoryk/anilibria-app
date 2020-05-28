@@ -4,6 +4,7 @@ import java.util.*
 
 
 data class Torrent(
+    val releaseId: Int,
     val id: Int,
     val hash: String?,
     val leechers: Int,

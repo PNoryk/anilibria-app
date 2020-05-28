@@ -2,6 +2,7 @@ package ru.radiationx.data.adomain.entity.release
 
 
 data class Episode(
+    val releaseId: Int,
     val id: Int,
     val title: String?,
     val sd: String?,
