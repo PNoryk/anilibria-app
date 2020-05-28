@@ -20,4 +20,5 @@ class ScheduleRepository(
     fun getList(): Single<List<ScheduleDay>> = apiDataSource
         .getList()
         .flatMap { cacheCombiner.putList(it).toSingleDefault(it) }
+        .flatMap { cacheCombiner.fetchList() }
 }

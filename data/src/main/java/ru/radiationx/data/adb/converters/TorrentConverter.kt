@@ -8,6 +8,7 @@ import toothpick.InjectConstructor
 class TorrentConverter {
 
     fun toDomain(source: TorrentDb) = Torrent(
+        releaseId = source.releaseId,
         id = source.id,
         hash = source.hash,
         leechers = source.leechers,

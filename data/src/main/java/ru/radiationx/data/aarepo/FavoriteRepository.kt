@@ -32,6 +32,7 @@ class FavoriteRepository(
     fun add(releaseId: Int): Single<Release> = apiDataSource
         .add(releaseId)
         .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
+        .flatMap { releaseCache.fetchOne(releaseId) }
 
     fun delete(releaseId: Int): Single<Release> = apiDataSource
         .delete(releaseId)
@@ -40,4 +41,5 @@ class FavoriteRepository(
             val addRelease = releaseCache.putList(listOf(it))
             Completable.concat(listOf(removeFavorite, addRelease)).toSingleDefault(it)
         }
+        .flatMap { releaseCache.fetchOne(releaseId) }
 }

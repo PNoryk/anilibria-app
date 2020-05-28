@@ -31,6 +31,14 @@ class ReleaseCacheCombinerImpl(
         }
     }
 
+    private val oneCombiner by lazy {
+        Function3<Release, List<Episode>, List<Torrent>, Release> { release, episodeItems, torrentItems ->
+            val episodes = episodeItems.filter { it.releaseId == release.id }
+            val torrents = torrentItems.filter { it.releaseId == release.id }
+            release.copy(playlist = episodes, torrents = torrents)
+        }
+    }
+
     override fun observeList(): Observable<List<Release>> = Observable
         .combineLatest(
             releaseCache.observeList(),
@@ -39,11 +47,41 @@ class ReleaseCacheCombinerImpl(
             combiner
         )
 
+    override fun observeList(ids: List<Int>?, codes: List<String>?): Observable<List<Release>> = Observable
+        .combineLatest(
+            releaseCache.observeList(ids, codes),
+            episodeCache.observeList(),
+            torrentCache.observeList(),
+            combiner
+        )
+
+    override fun observeOne(releaseId: Int?, releaseCode: String?): Observable<Release> = Observable
+        .combineLatest(
+            releaseCache.observeOne(releaseId, releaseCode),
+            episodeCache.observeList(),
+            torrentCache.observeList(),
+            oneCombiner
+        )
+
     override fun fetchList(): Single<List<Release>> = Single.zip(
         releaseCache.fetchList(),
         episodeCache.fetchList(),
         torrentCache.fetchList(),
         combiner
+    )
+
+    override fun fetchList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = Single.zip(
+        releaseCache.fetchList(ids, codes),
+        episodeCache.fetchList(),
+        torrentCache.fetchList(),
+        combiner
+    )
+
+    override fun fetchOne(releaseId: Int?, releaseCode: String?): Single<Release> = Single.zip(
+        releaseCache.fetchOne(releaseId, releaseCode),
+        episodeCache.fetchList(),
+        torrentCache.fetchList(),
+        oneCombiner
     )
 
     override fun putList(items: List<Release>): Completable {
