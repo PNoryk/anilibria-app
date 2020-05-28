@@ -35,9 +35,9 @@ class FakeFeedCacheCombiner(
 
     fun observeList(): Observable<List<Feed>> = Observable
         .combineLatest(
-            feedCache.observeChanges(),
-            releaseCache.observeChanges(),
-            ytCache.observeChanges(),
+            feedCache.observeList(),
+            releaseCache.observeList(),
+            ytCache.observeList(),
             combiner
         )
         .distinctUntilChanged()

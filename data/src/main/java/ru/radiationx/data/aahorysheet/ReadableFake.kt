@@ -5,7 +5,7 @@ import io.reactivex.Single
 
 interface ReadableFake<T> {
 
-    fun observeChanges(): Observable<List<T>>
+    fun observeList(): Observable<List<T>>
 
     fun getList(): Single<List<T>>
 

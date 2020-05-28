@@ -1,8 +1,8 @@
-package ru.radiationx.data.aahorysheet
+package ru.radiationx.data.acache.common
 
 import io.reactivex.Completable
 
-interface WritableFake<T> {
+interface WritableCache<T> {
 
     fun putList(items: List<T>): Completable
 
