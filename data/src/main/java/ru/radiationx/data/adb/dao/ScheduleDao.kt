@@ -19,7 +19,7 @@ abstract class ScheduleDao {
     abstract fun getList(ids: List<Int>): Single<List<ScheduleDayDb>>
 
     @Transaction
-    @Query("SELECT * FROM `schedule_day` WHERE scheduleDayId = :scheduleDayId")
+    @Query("SELECT * FROM `schedule_day` WHERE scheduleDayId = :scheduleDayId LIMIT 1")
     abstract fun getOne(scheduleDayId: Int): Single<ScheduleDayDb>
 
     @Transaction

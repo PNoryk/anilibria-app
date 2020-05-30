@@ -16,12 +16,12 @@ abstract class ReleaseDao {
     @Query("SELECT * FROM `release`")
     abstract fun getListAll(): Single<List<ReleaseDb>>
 
-    @Query("SELECT * FROM `release` WHERE releaseId IN (:ids)")
-    abstract fun getList(ids: List<Int>): Single<List<ReleaseDb>>
+    @Query("SELECT * FROM `release` WHERE releaseId IN (:ids) OR code IN (:codes)")
+    abstract fun getList(ids: List<Int>, codes: List<String>): Single<List<ReleaseDb>>
 
     @Transaction
-    @Query("SELECT * FROM `release` WHERE releaseId = :releaseId")
-    abstract fun getOne(releaseId: Int): Single<ReleaseDb>
+    @Query("SELECT * FROM `release` WHERE releaseId = :releaseId OR code = :code LIMIT 1")
+    abstract fun getOne(releaseId: Int?, code: String?): Single<ReleaseDb>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)

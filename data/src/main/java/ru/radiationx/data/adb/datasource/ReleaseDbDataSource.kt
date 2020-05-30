@@ -18,12 +18,12 @@ class ReleaseDbDataSource(
         .getListAll()
         .map(converter::toDomain)
 
-    fun getList(ids: List<Int>): Single<List<Release>> = dao
-        .getList(ids)
+    fun getList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = dao
+        .getList(ids.orEmpty(), codes.orEmpty())
         .map(converter::toDomain)
 
-    fun getOne(releaseId: Int): Single<Release> = dao
-        .getOne(releaseId)
+    fun getOne(releaseId: Int?, code: String?): Single<Release> = dao
+        .getOne(releaseId, code)
         .map(converter::toDomain)
 
     fun insert(items: List<Release>): Completable = Single.just(items)
@@ -32,5 +32,5 @@ class ReleaseDbDataSource(
 
     fun removeList(ids: List<Int>): Completable = dao.delete(ids)
 
-    fun delete(): Completable = dao.deleteAll()
+    fun deleteAll(): Completable = dao.deleteAll()
 }

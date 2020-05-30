@@ -17,7 +17,7 @@ interface EpisodeDao {
     @Query("SELECT * FROM release_episode WHERE `key` IN (:keys)")
     fun getList(keys: List<String>): Single<List<EpisodeDb>>
 
-    @Query("SELECT * FROM release_episode WHERE releaseId = :releaseId and id = :episodeId")
+    @Query("SELECT * FROM release_episode WHERE releaseId = :releaseId and id = :episodeId LIMIT 1")
     fun getOne(releaseId: Int, episodeId: Int): Single<EpisodeDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

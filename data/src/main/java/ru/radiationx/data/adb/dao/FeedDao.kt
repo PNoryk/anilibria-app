@@ -15,7 +15,7 @@ interface FeedDao {
     @Query("SELECT * FROM feed WHERE `key` IN (:keys)")
     fun getList(keys: List<String>): Single<List<FeedDb>>
 
-    @Query("SELECT * FROM `feed` WHERE releaseId = :releaseId OR youtubeId = :youtubeId")
+    @Query("SELECT * FROM `feed` WHERE releaseId = :releaseId OR youtubeId = :youtubeId LIMIT 1")
     fun getOne(releaseId: Int?, youtubeId: Int?): Single<FeedDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -15,7 +15,7 @@ interface FavoriteDao {
     @Query("SELECT * FROM favorite WHERE releaseId IN (:ids)")
     fun getList(ids: List<Int>): Single<List<FavoriteDb>>
 
-    @Query("SELECT * FROM `favorite` WHERE releaseId = :releaseId")
+    @Query("SELECT * FROM `favorite` WHERE releaseId = :releaseId LIMIT 1")
     fun getOne(releaseId: Int): Single<FavoriteDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -15,7 +15,7 @@ interface YoutubeDao {
     @Query("SELECT * FROM youtube WHERE youtubeId IN (:ids)")
     abstract fun getList(ids: List<Int>): Single<List<YoutubeDb>>
 
-    @Query("SELECT * FROM youtube WHERE youtubeId = :youtubeId")
+    @Query("SELECT * FROM youtube WHERE youtubeId = :youtubeId LIMIT 1")
     fun getOne(youtubeId: Int): Single<YoutubeDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

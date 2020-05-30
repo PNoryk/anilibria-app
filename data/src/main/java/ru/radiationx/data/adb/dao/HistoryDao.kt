@@ -15,7 +15,7 @@ interface HistoryDao {
     @Query("SELECT * FROM history WHERE releaseId IN (:ids)")
     fun getList(ids: List<Int>): Single<List<HistoryDb>>
 
-    @Query("SELECT * FROM `history` WHERE releaseId = :releaseId")
+    @Query("SELECT * FROM `history` WHERE releaseId = :releaseId LIMIT 1")
     fun getOne(releaseId: Int): Single<HistoryDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
