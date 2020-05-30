@@ -13,22 +13,10 @@ class TorrentRepository(
 
     fun observeList(): Observable<List<Torrent>> = torrentCache.observeList()
 
-    fun observeListByRelease(releaseId: Int): Observable<List<Torrent>> = torrentCache
-        .observeList()
-        .map {
-            it.filter { episode ->
-                episode.releaseId == releaseId
-            }
-        }
+    fun observeListByRelease(releaseIds: List<Int>): Observable<List<Torrent>> = torrentCache.observeList(releaseIds)
 
     fun getList(): Single<List<Torrent>> = torrentCache.getList()
 
-    fun getListByRelease(releaseId: Int): Single<List<Torrent>> = torrentCache
-        .getList()
-        .map {
-            it.filter { episode ->
-                episode.releaseId == releaseId
-            }
-        }
+    fun getListByRelease(releaseIds: List<Int>): Single<List<Torrent>> = torrentCache.getList(releaseIds)
 
 }

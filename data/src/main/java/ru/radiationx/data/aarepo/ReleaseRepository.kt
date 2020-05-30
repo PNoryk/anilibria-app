@@ -17,7 +17,7 @@ class ReleaseRepository(
     fun observeOne(releaseId: Int? = null, releaseCode: String? = null): Observable<Release> =
         cacheCombiner.observeOne(releaseId, releaseCode)
 
-    fun observeSome(ids: List<Int>? = null, codes: List<String>? = null): Observable<List<Release>> = cacheCombiner
+    fun observeList(ids: List<Int>? = null, codes: List<String>? = null): Observable<List<Release>> = cacheCombiner
         .observeList(ids, codes)
 
     fun observeList(): Observable<List<Release>> = cacheCombiner.observeList()

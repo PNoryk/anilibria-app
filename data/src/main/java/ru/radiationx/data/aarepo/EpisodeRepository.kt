@@ -13,22 +13,10 @@ class EpisodeRepository(
 
     fun observeList(): Observable<List<Episode>> = episodeCache.observeList()
 
-    fun observeListByRelease(releaseId: Int): Observable<List<Episode>> = episodeCache
-        .observeList()
-        .map {
-            it.filter { episode ->
-                episode.releaseId == releaseId
-            }
-        }
+    fun observeList(releaseIds: List<Int>): Observable<List<Episode>> = episodeCache.observeList(releaseIds)
 
     fun getList(): Single<List<Episode>> = episodeCache.getList()
 
-    fun getListByRelease(releaseId: Int): Single<List<Episode>> = episodeCache
-        .getList()
-        .map {
-            it.filter { episode ->
-                episode.releaseId == releaseId
-            }
-        }
+    fun getList(releaseIds: List<Int>): Single<List<Episode>> = episodeCache.getList(releaseIds)
 
 }
