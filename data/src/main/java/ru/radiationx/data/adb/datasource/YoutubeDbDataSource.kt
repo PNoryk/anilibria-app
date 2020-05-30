@@ -32,5 +32,5 @@ class YoutubeDbDataSource(
 
     fun removeList(ids: List<Int>): Completable = dao.delete(ids)
 
-    fun delete(): Completable = dao.deleteAll()
+    fun deleteAll(): Completable = dao.deleteAll()
 }

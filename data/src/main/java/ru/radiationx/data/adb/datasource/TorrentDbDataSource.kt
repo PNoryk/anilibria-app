@@ -36,5 +36,5 @@ class TorrentDbDataSource(
 
     fun removeList(ids: List<Pair<Int, Int>>): Completable = dao.delete(converter.toDbKey(ids))
 
-    fun delete(): Completable = dao.deleteAll()
+    fun deleteAll(): Completable = dao.deleteAll()
 }
