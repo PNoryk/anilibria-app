@@ -7,13 +7,15 @@ import ru.radiationx.data.acache.ReleaseCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.ReleaseMemoryDataSource
 import ru.radiationx.data.adb.datasource.ReleaseDbDataSource
+import ru.radiationx.data.acache.merger.ReleaseMerger
 import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class ReleaseCacheImpl(
     private val dbDataSource: ReleaseDbDataSource,
-    private val memoryDataSource: ReleaseMemoryDataSource
+    private val memoryDataSource: ReleaseMemoryDataSource,
+    private val releaseMerger: ReleaseMerger
 ) : ReleaseCache {
 
     override fun observeList(): Observable<List<Release>> = memoryDataSource.observeListAll()
@@ -50,10 +52,16 @@ class ReleaseCacheImpl(
                 .andThen(memoryDataSource.getOne(releaseId, releaseCode))
         }
 
-    override fun putList(items: List<Release>): Completable = dbDataSource
-        .insert(items)
-        .andThen(dbDataSource.getList(items.toIds(), null))
-        .flatMapCompletable { memoryDataSource.insert(it) }
+    override fun putList(items: List<Release>): Completable = getList(items.toIds())
+        .map { releaseMerger.filterSame(it, items) }
+        .flatMapCompletable { newItems ->
+            if (newItems.isEmpty()) {
+                return@flatMapCompletable Completable.complete()
+            }
+            dbDataSource.insert(newItems)
+                .andThen(dbDataSource.getList(newItems.toIds(), null))
+                .flatMapCompletable { memoryDataSource.insert(it) }
+        }
 
     override fun removeList(items: List<Release>): Completable {
         val ids = items.toIds()

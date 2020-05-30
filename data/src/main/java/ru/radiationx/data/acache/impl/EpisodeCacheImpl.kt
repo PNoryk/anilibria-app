@@ -6,6 +6,7 @@ import io.reactivex.Single
 import ru.radiationx.data.acache.EpisodeCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.EpisodeMemoryDataSource
+import ru.radiationx.data.acache.merger.EpisodeMerger
 import ru.radiationx.data.adb.datasource.EpisodeDbDataSource
 import ru.radiationx.data.adomain.entity.release.Episode
 import toothpick.InjectConstructor
@@ -13,7 +14,8 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class EpisodeCacheImpl(
     private val dbDataSource: EpisodeDbDataSource,
-    private val memoryDataSource: EpisodeMemoryDataSource
+    private val memoryDataSource: EpisodeMemoryDataSource,
+    private val episodeMerger: EpisodeMerger
 ) : EpisodeCache {
 
     override fun observeList(): Observable<List<Episode>> = memoryDataSource.observeListAll()
@@ -38,10 +40,17 @@ class EpisodeCacheImpl(
                 .andThen(memoryDataSource.getList(releaseIds))
         }
 
-    override fun putList(items: List<Episode>): Completable = dbDataSource
-        .insert(items)
-        .andThen(dbDataSource.getListByPairIds(items.toIds()))
-        .flatMapCompletable { memoryDataSource.insert(it) }
+    override fun putList(items: List<Episode>): Completable = getList(items.map { it.releaseId })
+        .map { episodeMerger.filterSame(it, items) }
+        .flatMapCompletable { newItems ->
+            if (newItems.isEmpty()) {
+                return@flatMapCompletable Completable.complete()
+            }
+            dbDataSource
+                .insert(items)
+                .andThen(dbDataSource.getListByPairIds(items.toIds()))
+                .flatMapCompletable { memoryDataSource.insert(it) }
+        }
 
     override fun removeList(items: List<Episode>): Completable {
         val ids = items.toIds()

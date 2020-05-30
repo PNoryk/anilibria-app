@@ -6,6 +6,7 @@ import io.reactivex.Single
 import ru.radiationx.data.acache.TorrentCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.TorrentMemoryDataSource
+import ru.radiationx.data.acache.merger.TorrentMerger
 import ru.radiationx.data.adb.datasource.TorrentDbDataSource
 import ru.radiationx.data.adomain.entity.release.Torrent
 import toothpick.InjectConstructor
@@ -13,7 +14,8 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class TorrentCacheImpl(
     private val dbDataSource: TorrentDbDataSource,
-    private val memoryDataSource: TorrentMemoryDataSource
+    private val memoryDataSource: TorrentMemoryDataSource,
+    private val torrentMerger: TorrentMerger
 ) : TorrentCache {
 
     override fun observeList(): Observable<List<Torrent>> = memoryDataSource.observeListAll()
@@ -38,10 +40,17 @@ class TorrentCacheImpl(
                 .andThen(memoryDataSource.getList(releaseIds))
         }
 
-    override fun putList(items: List<Torrent>): Completable = dbDataSource
-        .insert(items)
-        .andThen(dbDataSource.getListByPairIds(items.toIds()))
-        .flatMapCompletable { memoryDataSource.insert(it) }
+    override fun putList(items: List<Torrent>): Completable = getList(items.map { it.releaseId })
+        .map { torrentMerger.filterSame(it, items) }
+        .flatMapCompletable { newItems ->
+            if (newItems.isEmpty()) {
+                return@flatMapCompletable Completable.complete()
+            }
+            dbDataSource
+                .insert(items)
+                .andThen(dbDataSource.getListByPairIds(items.toIds()))
+                .flatMapCompletable { memoryDataSource.insert(it) }
+        }
 
     override fun removeList(items: List<Torrent>): Completable {
         val ids = items.toIds()

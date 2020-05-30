@@ -89,7 +89,7 @@ class ReleaseCacheCombinerImpl(
     override fun putList(items: List<Release>): Completable {
         val putEpisodes = episodeCache.putList(items.mapNotNull { it.playlist }.flatten())
         val putTorrents = torrentCache.putList(items.mapNotNull { it.torrents }.flatten())
-        val putRelease = releaseCache.putList(items)
+        val putRelease = releaseCache.putList(items.map { it.copy(playlist = null, torrents = null) })
         return Completable.concat(listOf(putEpisodes, putTorrents, putRelease))
     }
 
