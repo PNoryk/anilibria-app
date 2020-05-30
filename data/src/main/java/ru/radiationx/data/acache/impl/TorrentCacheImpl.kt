@@ -3,15 +3,10 @@ package ru.radiationx.data.acache.impl
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.acache.EpisodeCache
 import ru.radiationx.data.acache.TorrentCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
-import ru.radiationx.data.acache.memory.EpisodeMemoryDataSource
 import ru.radiationx.data.acache.memory.TorrentMemoryDataSource
-import ru.radiationx.data.adb.datasource.EpisodeDbDataSource
 import ru.radiationx.data.adb.datasource.TorrentDbDataSource
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
-import ru.radiationx.data.adomain.entity.release.Episode
 import ru.radiationx.data.adomain.entity.release.Torrent
 import toothpick.InjectConstructor
 

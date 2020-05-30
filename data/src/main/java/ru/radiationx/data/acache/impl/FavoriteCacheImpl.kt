@@ -8,7 +8,6 @@ import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.FavoriteMemoryDataSource
 import ru.radiationx.data.adb.datasource.FavoriteDbDataSource
 import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

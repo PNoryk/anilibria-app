@@ -4,9 +4,6 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adb.dao.TorrentDao
-import ru.radiationx.data.adb.converters.TorrentConverter
-import ru.radiationx.data.adomain.entity.release.Episode
 import ru.radiationx.data.adomain.entity.release.Torrent
 import toothpick.InjectConstructor
 import java.util.*
