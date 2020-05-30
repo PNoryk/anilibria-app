@@ -69,14 +69,14 @@ class ReleaseCacheCombinerImpl(
         combiner
     )
 
-    override fun fetchList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = Single.zip(
+    override fun getList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = Single.zip(
         releaseCache.getList(ids, codes),
         episodeCache.getList(),
         torrentCache.getList(),
         combiner
     )
 
-    override fun fetchOne(releaseId: Int?, releaseCode: String?): Single<Release> = Single.zip(
+    override fun getOne(releaseId: Int?, releaseCode: String?): Single<Release> = Single.zip(
         releaseCache.getOne(releaseId, releaseCode),
         episodeCache.getList(),
         torrentCache.getList(),

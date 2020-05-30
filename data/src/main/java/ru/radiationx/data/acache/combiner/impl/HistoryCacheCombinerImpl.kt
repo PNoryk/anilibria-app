@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import ru.radiationx.data.acache.HistoryCache
 import ru.radiationx.data.acache.combiner.HistoryCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
@@ -18,27 +19,21 @@ class HistoryCacheCombinerImpl(
     private val releaseCache: ReleaseCacheCombiner
 ) : HistoryCacheCombiner {
 
-    private val combiner by lazy {
-        BiFunction<List<HistoryRelative>, List<Release>, List<HistoryItem>> { relativeItems, releaseItems ->
-            relativeItems.mapNotNull { relative ->
-                val release = releaseItems.firstOrNull { it.id == relative.releaseId }
-                release?.let { HistoryItem(relative.timestamp, release) }
-            }
+    override fun observeList(): Observable<List<HistoryItem>> = historyCache
+        .observeList()
+        .switchMap { relativeItems ->
+            releaseCache
+                .observeList(relativeItems.map { it.releaseId })
+                .map(getSourceCombiner(relativeItems))
         }
-    }
 
-    override fun observeList(): Observable<List<HistoryItem>> = Observable
-        .combineLatest(
-            historyCache.observeList(),
-            releaseCache.observeList(),
-            combiner
-        )
-
-    override fun getList(): Single<List<HistoryItem>> = Single.zip(
-        historyCache.getList(),
-        releaseCache.getList(),
-        combiner
-    )
+    override fun getList(): Single<List<HistoryItem>> = historyCache
+        .getList()
+        .flatMap { relativeItems ->
+            releaseCache
+                .getList(relativeItems.map { it.releaseId })
+                .map(getSourceCombiner(relativeItems))
+        }
 
     override fun putList(items: List<HistoryItem>): Completable {
         val putRelease = releaseCache.putList(items.map { it.release })
@@ -51,4 +46,10 @@ class HistoryCacheCombinerImpl(
 
     override fun clear(): Completable = historyCache.clear()
 
+    private fun getSourceCombiner(relativeItems: List<HistoryRelative>) = Function<List<Release>, List<HistoryItem>> { releaseItems ->
+        relativeItems.mapNotNull { relative ->
+            val release = releaseItems.firstOrNull { it.id == relative.releaseId }
+            release?.let { HistoryItem(relative.timestamp, release) }
+        }
+    }
 }

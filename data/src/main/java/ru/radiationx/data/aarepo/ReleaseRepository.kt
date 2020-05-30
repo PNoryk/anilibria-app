@@ -25,12 +25,12 @@ class ReleaseRepository(
     fun getList(ids: List<Int>? = null, codes: List<String>? = null): Single<List<Release>> = apiDataSource
         .getSome(ids, codes)
         .flatMap { cacheCombiner.putList(it).toSingleDefault(it) }
-        .flatMap { cacheCombiner.fetchList(ids, codes) }
+        .flatMap { cacheCombiner.getList(ids, codes) }
 
     fun getOne(releaseId: Int? = null, releaseCode: String? = null): Single<Release> = apiDataSource
         .getOne(releaseId, releaseCode)
         .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
-        .flatMap { cacheCombiner.fetchOne(releaseId, releaseCode) }
+        .flatMap { cacheCombiner.getOne(releaseId, releaseCode) }
 
     fun getList(page: Int): Single<List<Release>> = apiDataSource
         .getList(page)

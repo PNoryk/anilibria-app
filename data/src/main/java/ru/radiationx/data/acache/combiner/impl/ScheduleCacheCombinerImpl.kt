@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import ru.radiationx.data.acache.ScheduleCache
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
 import ru.radiationx.data.acache.combiner.ScheduleCacheCombiner
@@ -29,18 +30,21 @@ class ScheduleCacheCombinerImpl(
         }
     }
 
-    override fun observeList(): Observable<List<ScheduleDay>> = Observable
-        .combineLatest(
-            scheduleCache.observeList(),
-            releaseCache.observeList(),
-            combiner
-        )
+    override fun observeList(): Observable<List<ScheduleDay>> = scheduleCache
+        .observeList()
+        .switchMap { relativeItems ->
+            releaseCache
+                .observeList(relativeItems.map { it.releaseIds }.flatten())
+                .map(getSourceCombiner(relativeItems))
+        }
 
-    override fun getList(): Single<List<ScheduleDay>> = Single.zip(
-        scheduleCache.getList(),
-        releaseCache.getList(),
-        combiner
-    )
+    override fun getList(): Single<List<ScheduleDay>> = scheduleCache
+        .getList()
+        .flatMap { relativeItems ->
+            releaseCache
+                .getList(relativeItems.map { it.releaseIds }.flatten())
+                .map(getSourceCombiner(relativeItems))
+        }
 
     override fun putList(items: List<ScheduleDay>): Completable {
         val putRelease = releaseCache.putList(items.map { it.items }.flatten())
@@ -58,4 +62,13 @@ class ScheduleCacheCombinerImpl(
         })
 
     override fun clear(): Completable = scheduleCache.clear()
+
+    private fun getSourceCombiner(relativeItems: List<ScheduleDayRelative>) = Function<List<Release>, List<ScheduleDay>> { releaseItems ->
+        relativeItems.map { relative ->
+            val releases = relative.releaseIds.mapNotNull { releaseId ->
+                releaseItems.firstOrNull { it.id == releaseId }
+            }
+            ScheduleDay(relative.dayId, releases)
+        }
+    }
 }

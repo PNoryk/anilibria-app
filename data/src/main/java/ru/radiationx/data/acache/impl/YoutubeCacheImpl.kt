@@ -26,6 +26,8 @@ class YoutubeCacheImpl(
 
     override fun observeList(): Observable<List<Youtube>> = memoryDataSource.observeListAll()
 
+    override fun observeList(ids: List<Int>): Observable<List<Youtube>> = memoryDataSource.observeList(ids)
+
     override fun getList(): Single<List<Youtube>> = memoryDataSource
         .getListAll()
         .flatMapIfListEmpty {
@@ -34,6 +36,8 @@ class YoutubeCacheImpl(
                 .flatMapCompletable { memoryDataSource.insert(it) }
                 .andThen(memoryDataSource.getListAll())
         }
+
+    override fun getList(ids: List<Int>): Single<List<Youtube>> = memoryDataSource.getList(ids)
 
     override fun putList(items: List<Youtube>): Completable = dbDataSource
         .insert(items)

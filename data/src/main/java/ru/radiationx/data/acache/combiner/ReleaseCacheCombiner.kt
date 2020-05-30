@@ -13,7 +13,7 @@ interface ReleaseCacheCombiner : ReadWriteCache<Release> {
 
     fun observeList(ids: List<Int>? = null, codes: List<String>? = null): Observable<List<Release>>
 
-    fun fetchOne(releaseId: Int? = null, releaseCode: String? = null): Single<Release>
+    fun getOne(releaseId: Int? = null, releaseCode: String? = null): Single<Release>
 
-    fun fetchList(ids: List<Int>? = null, codes: List<String>? = null): Single<List<Release>>
+    fun getList(ids: List<Int>? = null, codes: List<String>? = null): Single<List<Release>>
 }

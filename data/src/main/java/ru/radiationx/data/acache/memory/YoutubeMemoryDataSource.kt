@@ -20,8 +20,17 @@ class YoutubeMemoryDataSource {
 
     fun observeListAll(): Observable<List<Youtube>> = dataRelay.hide()
 
+    fun observeList(ids: List<Int>): Observable<List<Youtube>> = observeListAll()
+        .map { youtubeList ->
+            youtubeList.filter { ids.contains(it.id) }
+        }
+
     fun getListAll(): Single<List<Youtube>> = Single.fromCallable {
         memory.toList()
+    }
+
+    fun getList(ids: List<Int>): Single<List<Youtube>> = Single.fromCallable {
+        memory.filter { ids.contains(it.id) }
     }
 
     fun getOne(youtubeId: Int): Single<Youtube> = Single.fromCallable {
