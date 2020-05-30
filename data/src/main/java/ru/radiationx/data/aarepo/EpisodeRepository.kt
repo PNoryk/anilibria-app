@@ -1,14 +1,10 @@
 package ru.radiationx.data.aarepo
 
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.EpisodeCache
-import ru.radiationx.data.adomain.entity.history.HistoryItem
 import ru.radiationx.data.adomain.entity.release.Episode
-import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
-import java.util.*
 
 @InjectConstructor
 class EpisodeRepository(
@@ -25,10 +21,10 @@ class EpisodeRepository(
             }
         }
 
-    fun getList(): Single<List<Episode>> = episodeCache.fetchList()
+    fun getList(): Single<List<Episode>> = episodeCache.getList()
 
     fun getListByRelease(releaseId: Int): Single<List<Episode>> = episodeCache
-        .fetchList()
+        .getList()
         .map {
             it.filter { episode ->
                 episode.releaseId == releaseId

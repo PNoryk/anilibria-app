@@ -21,8 +21,8 @@ class TorrentConverter {
         url = source.url
     )
 
-    fun toDb(releaseId: Int, source: Torrent): TorrentDb = TorrentDb(
-        releaseId = releaseId,
+    fun toDb(source: Torrent): TorrentDb = TorrentDb(
+        releaseId = source.releaseId,
         id = source.id,
         hash = source.hash,
         leechers = source.leechers,
@@ -38,5 +38,5 @@ class TorrentConverter {
 
     fun toDomain(source: List<TorrentDb>) = source.map { toDomain(it) }
 
-    fun toDb(source: List<Pair<Int, Torrent>>) = source.map { toDb(it.first, it.second) }
+    fun toDb(source: List<Torrent>) = source.map { toDb(it) }
 }

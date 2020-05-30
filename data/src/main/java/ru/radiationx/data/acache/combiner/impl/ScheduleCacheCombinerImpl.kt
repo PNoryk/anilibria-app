@@ -36,9 +36,9 @@ class ScheduleCacheCombinerImpl(
             combiner
         )
 
-    override fun fetchList(): Single<List<ScheduleDay>> = Single.zip(
-        scheduleCache.fetchList(),
-        releaseCache.fetchList(),
+    override fun getList(): Single<List<ScheduleDay>> = Single.zip(
+        scheduleCache.getList(),
+        releaseCache.getList(),
         combiner
     )
 

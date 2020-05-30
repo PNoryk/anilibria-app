@@ -47,10 +47,10 @@ class FeedCacheCombinerImpl(
             combiner
         )
 
-    override fun fetchList(): Single<List<Feed>> = Single.zip(
-        feedCache.fetchList(),
-        releaseCache.fetchList(),
-        youtubeCache.fetchList(),
+    override fun getList(): Single<List<Feed>> = Single.zip(
+        feedCache.getList(),
+        releaseCache.getList(),
+        youtubeCache.getList(),
         combiner
     )
 

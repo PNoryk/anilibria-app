@@ -14,11 +14,17 @@ interface EpisodeDao {
     @Query("SELECT * FROM release_episode WHERE releaseId = :releaseId")
     fun getList(releaseId: Int): Single<List<EpisodeDb>>
 
+    @Query("SELECT * FROM release_episode WHERE `key` IN (:keys)")
+    fun getList(keys: List<String>): Single<List<EpisodeDb>>
+
     @Query("SELECT * FROM release_episode WHERE releaseId = :releaseId and id = :episodeId")
     fun getOne(releaseId: Int, episodeId: Int): Single<EpisodeDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<EpisodeDb>): Completable
+
+    @Query("DELETE FROM release_episode WHERE `key` IN (:keys)")
+    fun delete(keys: List<String>): Completable
 
     @Query("DELETE FROM release_episode")
     fun deleteAll(): Completable

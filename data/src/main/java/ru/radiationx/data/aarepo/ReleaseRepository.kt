@@ -2,13 +2,9 @@ package ru.radiationx.data.aarepo
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.Function
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.feed.Feed
-import ru.radiationx.data.adomain.entity.pagination.Paginated
 import ru.radiationx.data.adomain.entity.release.RandomRelease
 import ru.radiationx.data.adomain.entity.release.Release
-import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.datasource.ReleaseApiDataSource
 import toothpick.InjectConstructor
 
@@ -45,14 +41,14 @@ class ReleaseRepository(
                 cacheCombiner.putList(it.items).toSingleDefault(it)
             }
         }
-        .flatMap { cacheCombiner.fetchList() }
+        .flatMap { cacheCombiner.getList() }
 
     fun getRandom(): Single<RandomRelease> = apiDataSource
         .getRandom()
         .onErrorResumeNext { fetchLocalRandom() }
 
     private fun fetchLocalRandom(): Single<RandomRelease> = cacheCombiner
-        .fetchList()
+        .getList()
         .map { it.mapNotNull { release -> release.code }.random() }
         .map { RandomRelease(it) }
 }

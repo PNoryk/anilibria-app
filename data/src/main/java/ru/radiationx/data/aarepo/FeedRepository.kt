@@ -24,6 +24,6 @@ class FeedRepository(
                 cacheCombiner.putList(it.items).toSingleDefault(it)
             }
         }
-        .flatMap { cacheCombiner.fetchList() }
+        .flatMap { cacheCombiner.getList() }
 
 }

@@ -7,9 +7,7 @@ import io.reactivex.functions.BiFunction
 import ru.radiationx.data.acache.FavoriteCache
 import ru.radiationx.data.acache.combiner.FavoriteCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.history.HistoryItem
 import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
 import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
 
@@ -34,9 +32,9 @@ class FavoriteCacheCombinerImpl(
             combiner
         )
 
-    override fun fetchList(): Single<List<Release>> = Single.zip(
-        favoriteCache.fetchList(),
-        releaseCache.fetchList(),
+    override fun getList(): Single<List<Release>> = Single.zip(
+        favoriteCache.getList(),
+        releaseCache.getList(),
         combiner
     )
 

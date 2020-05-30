@@ -17,10 +17,6 @@ class FeedDbDataSource(
         .getList()
         .map(feedConverter::toDomain)
 
-    fun getOne(feedId: Int): Single<FeedRelative> = feedDao
-        .getOne(feedId)
-        .map(feedConverter::toDomain)
-
     fun getOne(releaseId: Int?, youtubeId: Int?): Single<FeedRelative> = feedDao
         .getOne(releaseId, youtubeId)
         .map(feedConverter::toDomain)

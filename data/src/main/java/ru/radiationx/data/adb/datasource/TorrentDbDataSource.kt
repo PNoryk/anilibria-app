@@ -25,7 +25,7 @@ class TorrentDbDataSource(
         .getOne(releaseId, torrentId)
         .map(torrentConverter::toDomain)
 
-    fun insert(items: List<Pair<Int, Torrent>>): Completable = Single.just(items)
+    fun insert(items: List<Torrent>): Completable = Single.just(items)
         .map(torrentConverter::toDb)
         .flatMapCompletable(torrentDao::insert)
 

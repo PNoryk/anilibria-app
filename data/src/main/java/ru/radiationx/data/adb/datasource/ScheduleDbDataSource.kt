@@ -17,8 +17,8 @@ class ScheduleDbDataSource(
         .getListAll()
         .map(scheduleConverter::toDomain)
 
-    fun getOne(releaseId: Int): Single<ScheduleDayRelative> = scheduleDao
-        .getOne(releaseId)
+    fun getOne(dayId: Int): Single<ScheduleDayRelative> = scheduleDao
+        .getOne(dayId)
         .map(scheduleConverter::toDomain)
 
     fun insert(items: List<ScheduleDayRelative>): Completable = Single.just(items)

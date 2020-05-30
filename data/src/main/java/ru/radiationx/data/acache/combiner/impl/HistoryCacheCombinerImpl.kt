@@ -8,7 +8,6 @@ import ru.radiationx.data.acache.HistoryCache
 import ru.radiationx.data.acache.combiner.HistoryCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
 import ru.radiationx.data.adomain.entity.history.HistoryItem
-import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
 import ru.radiationx.data.adomain.entity.relative.HistoryRelative
 import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
@@ -35,9 +34,9 @@ class HistoryCacheCombinerImpl(
             combiner
         )
 
-    override fun fetchList(): Single<List<HistoryItem>> = Single.zip(
-        historyCache.fetchList(),
-        releaseCache.fetchList(),
+    override fun getList(): Single<List<HistoryItem>> = Single.zip(
+        historyCache.getList(),
+        releaseCache.getList(),
         combiner
     )
 

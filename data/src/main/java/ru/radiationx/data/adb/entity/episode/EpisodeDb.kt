@@ -2,12 +2,15 @@ package ru.radiationx.data.adb.entity.episode
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "release_episode",
-    primaryKeys = ["releaseId", "id"]
+    indices = [Index("releaseId"), Index("id")]
 )
 data class EpisodeDb(
+    @PrimaryKey @ColumnInfo(name = "key") val key: String,
     @ColumnInfo(name = "releaseId") val releaseId: Int,
     @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "title") val title: String?,

@@ -7,6 +7,6 @@ interface ReadableCache<T> {
 
     fun observeList(): Observable<List<T>>
 
-    fun fetchList(): Single<List<T>>
+    fun getList(): Single<List<T>>
 
 }

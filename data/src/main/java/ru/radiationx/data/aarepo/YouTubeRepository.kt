@@ -3,7 +3,6 @@ package ru.radiationx.data.aarepo
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.YoutubeCache
-import ru.radiationx.data.adomain.entity.feed.Feed
 import ru.radiationx.data.adomain.entity.youtube.Youtube
 import ru.radiationx.data.api.datasource.YouTubeApiDataSource
 import toothpick.InjectConstructor
@@ -25,5 +24,5 @@ class YouTubeRepository(
                 youtubeCache.putList(it.items).toSingleDefault(it)
             }
         }
-        .flatMap { youtubeCache.fetchList() }
+        .flatMap { youtubeCache.getList() }
 }

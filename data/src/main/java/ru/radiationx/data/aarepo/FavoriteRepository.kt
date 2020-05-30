@@ -27,7 +27,7 @@ class FavoriteRepository(
                 cacheCombiner.putList(it.items).toSingleDefault(it)
             }
         }
-        .flatMap { cacheCombiner.fetchList() }
+        .flatMap { cacheCombiner.getList() }
 
     fun add(releaseId: Int): Single<Release> = apiDataSource
         .add(releaseId)

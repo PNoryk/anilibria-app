@@ -17,8 +17,8 @@ class YoutubeDbDataSource(
         .getListAll()
         .map(releaseConverter::toDomain)
 
-    fun getOne(releaseId: Int): Single<Youtube> = releaseDao
-        .getOne(releaseId)
+    fun getOne(youtubeId: Int): Single<Youtube> = releaseDao
+        .getOne(youtubeId)
         .map(releaseConverter::toDomain)
 
     fun insert(items: List<Youtube>): Completable = Single.just(items)

@@ -3,7 +3,6 @@ package ru.radiationx.data.acache.combiner.impl
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import ru.radiationx.data.acache.EpisodeCache
 import ru.radiationx.data.acache.ReleaseCache
@@ -63,24 +62,24 @@ class ReleaseCacheCombinerImpl(
             oneCombiner
         )
 
-    override fun fetchList(): Single<List<Release>> = Single.zip(
-        releaseCache.fetchList(),
-        episodeCache.fetchList(),
-        torrentCache.fetchList(),
+    override fun getList(): Single<List<Release>> = Single.zip(
+        releaseCache.getList(),
+        episodeCache.getList(),
+        torrentCache.getList(),
         combiner
     )
 
     override fun fetchList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = Single.zip(
-        releaseCache.fetchList(ids, codes),
-        episodeCache.fetchList(),
-        torrentCache.fetchList(),
+        releaseCache.getList(ids, codes),
+        episodeCache.getList(),
+        torrentCache.getList(),
         combiner
     )
 
     override fun fetchOne(releaseId: Int?, releaseCode: String?): Single<Release> = Single.zip(
-        releaseCache.fetchOne(releaseId, releaseCode),
-        episodeCache.fetchList(),
-        torrentCache.fetchList(),
+        releaseCache.getOne(releaseId, releaseCode),
+        episodeCache.getList(),
+        torrentCache.getList(),
         oneCombiner
     )
 

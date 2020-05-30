@@ -3,7 +3,6 @@ package ru.radiationx.data.aarepo
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.TorrentCache
-import ru.radiationx.data.adomain.entity.release.Episode
 import ru.radiationx.data.adomain.entity.release.Torrent
 import toothpick.InjectConstructor
 
@@ -22,10 +21,10 @@ class TorrentRepository(
             }
         }
 
-    fun getList(): Single<List<Torrent>> = torrentCache.fetchList()
+    fun getList(): Single<List<Torrent>> = torrentCache.getList()
 
     fun getListByRelease(releaseId: Int): Single<List<Torrent>> = torrentCache
-        .fetchList()
+        .getList()
         .map {
             it.filter { episode ->
                 episode.releaseId == releaseId
