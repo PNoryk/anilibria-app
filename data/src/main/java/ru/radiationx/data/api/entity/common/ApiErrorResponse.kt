@@ -2,7 +2,6 @@ package ru.radiationx.data.api.entity.common
 
 
 import com.google.gson.annotations.SerializedName
-import java.lang.RuntimeException
 
 data class ApiErrorResponse(
     @SerializedName("code") val code: Int,

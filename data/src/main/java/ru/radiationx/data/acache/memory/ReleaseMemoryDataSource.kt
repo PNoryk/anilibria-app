@@ -4,9 +4,6 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adb.dao.ReleaseDao
-import ru.radiationx.data.adb.converters.ReleaseConverter
-import ru.radiationx.data.adomain.entity.relative.HistoryRelative
 import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
 import java.util.*

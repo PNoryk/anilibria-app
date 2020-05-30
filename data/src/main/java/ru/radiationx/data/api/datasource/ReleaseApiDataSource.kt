@@ -1,9 +1,9 @@
 package ru.radiationx.data.api.datasource
 
 import io.reactivex.Single
+import ru.radiationx.data.adomain.entity.pagination.Paginated
 import ru.radiationx.data.adomain.entity.release.RandomRelease
 import ru.radiationx.data.adomain.entity.release.Release
-import ru.radiationx.data.adomain.entity.pagination.Paginated
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter

@@ -2,9 +2,8 @@ package ru.radiationx.data.adb.datasource
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adb.dao.HistoryDao
 import ru.radiationx.data.adb.converters.HistoryConverter
-import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
+import ru.radiationx.data.adb.dao.HistoryDao
 import ru.radiationx.data.adomain.entity.relative.HistoryRelative
 import toothpick.InjectConstructor
 

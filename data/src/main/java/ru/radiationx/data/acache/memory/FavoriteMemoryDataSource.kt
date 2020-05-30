@@ -4,10 +4,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adb.dao.FavoriteDao
-import ru.radiationx.data.adb.converters.FavoriteConverter
 import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
-import ru.radiationx.data.adomain.entity.release.Episode
 import toothpick.InjectConstructor
 import java.util.*
 

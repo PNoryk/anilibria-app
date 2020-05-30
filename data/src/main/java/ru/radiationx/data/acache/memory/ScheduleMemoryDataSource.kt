@@ -5,7 +5,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.adomain.entity.relative.ScheduleDayRelative
-import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
 import java.util.*
 

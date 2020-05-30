@@ -2,10 +2,10 @@ package ru.radiationx.data.api.service
 
 import io.reactivex.Single
 import retrofit2.http.FieldMap
-import ru.radiationx.data.api.entity.release.RandomReleaseResponse
-import ru.radiationx.data.api.entity.release.ReleaseResponse
 import ru.radiationx.data.api.entity.common.ApiBaseResponse
 import ru.radiationx.data.api.entity.pagination.PaginatedResponse
+import ru.radiationx.data.api.entity.release.RandomReleaseResponse
+import ru.radiationx.data.api.entity.release.ReleaseResponse
 
 interface ReleaseService {
     fun getOne(@FieldMap fields: Map<String, String>): Single<ApiBaseResponse<ReleaseResponse>>

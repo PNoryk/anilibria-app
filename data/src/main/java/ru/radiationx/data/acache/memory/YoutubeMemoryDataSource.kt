@@ -4,9 +4,6 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adb.dao.YoutubeDao
-import ru.radiationx.data.adb.converters.YoutubeConverter
-import ru.radiationx.data.adomain.entity.release.Release
 import ru.radiationx.data.adomain.entity.youtube.Youtube
 import toothpick.InjectConstructor
 import java.util.*

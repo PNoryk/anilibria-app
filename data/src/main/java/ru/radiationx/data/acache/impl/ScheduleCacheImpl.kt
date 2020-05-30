@@ -3,14 +3,10 @@ package ru.radiationx.data.acache.impl
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.acache.HistoryCache
 import ru.radiationx.data.acache.ScheduleCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
-import ru.radiationx.data.acache.memory.HistoryMemoryDataSource
 import ru.radiationx.data.acache.memory.ScheduleMemoryDataSource
-import ru.radiationx.data.adb.datasource.HistoryDbDataSource
 import ru.radiationx.data.adb.datasource.ScheduleDbDataSource
-import ru.radiationx.data.adomain.entity.relative.HistoryRelative
 import ru.radiationx.data.adomain.entity.relative.ScheduleDayRelative
 import toothpick.InjectConstructor
 

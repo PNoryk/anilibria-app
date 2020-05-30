@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.entity.release
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.radiationx.data.adomain.entity.release.*
+import ru.radiationx.data.adomain.entity.release.Release
 import java.util.*
 
 @Entity(tableName = "release")

@@ -3,7 +3,6 @@ package ru.radiationx.data.acache.combiner.impl
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
 import ru.radiationx.data.acache.HistoryCache
 import ru.radiationx.data.acache.combiner.HistoryCacheCombiner
