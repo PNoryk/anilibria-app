@@ -37,7 +37,14 @@ class YoutubeCacheImpl(
                 .andThen(memoryDataSource.getListAll())
         }
 
-    override fun getList(ids: List<Int>): Single<List<Youtube>> = memoryDataSource.getList(ids)
+    override fun getList(ids: List<Int>): Single<List<Youtube>> = memoryDataSource
+        .getList(ids)
+        .flatMapIfListEmpty {
+            dbDataSource
+                .getList(ids)
+                .flatMapCompletable { memoryDataSource.insert(it) }
+                .andThen(memoryDataSource.getList(ids))
+        }
 
     override fun putList(items: List<Youtube>): Completable = dbDataSource
         .insert(items)

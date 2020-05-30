@@ -17,12 +17,12 @@ class EpisodeDbDataSource(
         .getListAll()
         .map(converter::toDomain)
 
-    fun getList(releaseId: Int): Single<List<Episode>> = dao
-        .getList(releaseId)
+    fun getList(releaseIds: List<Int>): Single<List<Episode>> = dao
+        .getList(releaseIds)
         .map(converter::toDomain)
 
-    fun getList(ids: List<Pair<Int, Int>>): Single<List<Episode>> = dao
-        .getList(converter.toDbKey(ids))
+    fun getListByPairIds(ids: List<Pair<Int, Int>>): Single<List<Episode>> = dao
+        .getListByKeys(converter.toDbKey(ids))
         .map(converter::toDomain)
 
     fun getOne(releaseId: Int, episodeId: Int): Single<Episode> = dao

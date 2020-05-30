@@ -19,6 +19,8 @@ class EpisodeCacheImpl(
 
     override fun observeList(): Observable<List<Episode>> = memoryDataSource.observeListAll()
 
+    override fun observeList(releaseIds: List<Int>): Observable<List<Episode>> = memoryDataSource.observeList(releaseIds)
+
     override fun getList(): Single<List<Episode>> = memoryDataSource
         .getListAll()
         .flatMapIfListEmpty {
@@ -28,18 +30,18 @@ class EpisodeCacheImpl(
                 .andThen(memoryDataSource.getListAll())
         }
 
-    override fun getList(releaseId: Int): Single<List<Episode>> = memoryDataSource
-        .getList(releaseId)
+    override fun getList(releaseIds: List<Int>): Single<List<Episode>> = memoryDataSource
+        .getList(releaseIds)
         .flatMapIfListEmpty {
             dbDataSource
-                .getList(releaseId)
+                .getList(releaseIds)
                 .flatMapCompletable { memoryDataSource.insert(it) }
-                .andThen(memoryDataSource.getList(releaseId))
+                .andThen(memoryDataSource.getList(releaseIds))
         }
 
     override fun putList(items: List<Episode>): Completable = dbDataSource
         .insert(items)
-        .andThen(dbDataSource.getList(items.toIds()))
+        .andThen(dbDataSource.getListByPairIds(items.toIds()))
         .flatMapCompletable { memoryDataSource.insert(it) }
 
     override fun removeList(items: List<Episode>): Completable {

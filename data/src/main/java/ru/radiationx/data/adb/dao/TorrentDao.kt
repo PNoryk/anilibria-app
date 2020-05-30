@@ -12,11 +12,11 @@ interface TorrentDao {
     @Query("SELECT * FROM release_torrent")
     fun getListAll(): Single<List<TorrentDb>>
 
-    @Query("SELECT * FROM release_torrent WHERE releaseId = :releaseId")
-    fun getList(releaseId: Int): Single<List<TorrentDb>>
+    @Query("SELECT * FROM release_torrent WHERE releaseId IN (:releaseIds)")
+    fun getList(releaseIds: List<Int>): Single<List<TorrentDb>>
 
     @Query("SELECT * FROM release_torrent WHERE `key` IN (:keys)")
-    fun getList(keys: List<String>): Single<List<TorrentDb>>
+    fun getListByKeys(keys: List<String>): Single<List<TorrentDb>>
 
     @Query("SELECT * FROM release_torrent WHERE releaseId = :releaseId and id = :torrentId LIMIT 1")
     fun getOne(releaseId: Int, torrentId: Int): Single<TorrentDb>

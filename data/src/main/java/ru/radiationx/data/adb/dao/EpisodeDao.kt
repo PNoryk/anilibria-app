@@ -11,11 +11,11 @@ interface EpisodeDao {
     @Query("SELECT * FROM release_episode")
     fun getListAll(): Single<List<EpisodeDb>>
 
-    @Query("SELECT * FROM release_episode WHERE releaseId = :releaseId")
-    fun getList(releaseId: Int): Single<List<EpisodeDb>>
+    @Query("SELECT * FROM release_episode WHERE releaseId IN (:releaseIds)")
+    fun getList(releaseIds: List<Int>): Single<List<EpisodeDb>>
 
     @Query("SELECT * FROM release_episode WHERE `key` IN (:keys)")
-    fun getList(keys: List<String>): Single<List<EpisodeDb>>
+    fun getListByKeys(keys: List<String>): Single<List<EpisodeDb>>
 
     @Query("SELECT * FROM release_episode WHERE releaseId = :releaseId and id = :episodeId LIMIT 1")
     fun getOne(releaseId: Int, episodeId: Int): Single<EpisodeDb>

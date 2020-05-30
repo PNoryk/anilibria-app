@@ -18,12 +18,12 @@ class TorrentDbDataSource(
         .getListAll()
         .map(converter::toDomain)
 
-    fun getList(releaseId: Int): Single<List<Torrent>> = dao
-        .getList(releaseId)
+    fun getList(releaseIds: List<Int>): Single<List<Torrent>> = dao
+        .getList(releaseIds)
         .map(converter::toDomain)
 
-    fun getList(ids: List<Pair<Int, Int>>): Single<List<Torrent>> = dao
-        .getList(converter.toDbKey(ids))
+    fun getListByPairIds(ids: List<Pair<Int, Int>>): Single<List<Torrent>> = dao
+        .getListByKeys(converter.toDbKey(ids))
         .map(converter::toDomain)
 
     fun getOne(releaseId: Int, torrentId: Int): Single<Torrent> = dao

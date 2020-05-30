@@ -20,12 +20,17 @@ class TorrentMemoryDataSource {
 
     fun observeListAll(): Observable<List<Torrent>> = dataRelay.hide()
 
+    fun observeList(releaseIds: List<Int>): Observable<List<Torrent>> = observeListAll()
+        .map { items ->
+            items.filter { releaseIds.contains(it.releaseId) }
+        }
+
     fun getListAll(): Single<List<Torrent>> = Single.fromCallable {
         memory.toList()
     }
 
-    fun getList(releaseId: Int): Single<List<Torrent>> = Single.fromCallable {
-        memory.filter { it.releaseId == releaseId }
+    fun getList(releaseIds: List<Int>): Single<List<Torrent>> = Single.fromCallable {
+        memory.filter { releaseIds.contains(it.releaseId) }
     }
 
     fun getOne(releaseId: Int, episodeId: Int): Single<Torrent> = Single.fromCallable {

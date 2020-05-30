@@ -23,6 +23,8 @@ class TorrentCacheImpl(
 
     override fun observeList(): Observable<List<Torrent>> = memoryDataSource.observeListAll()
 
+    override fun observeList(releaseIds: List<Int>): Observable<List<Torrent>> = memoryDataSource.observeList(releaseIds)
+
     override fun getList(): Single<List<Torrent>> = memoryDataSource
         .getListAll()
         .flatMapIfListEmpty {
@@ -32,18 +34,18 @@ class TorrentCacheImpl(
                 .andThen(memoryDataSource.getListAll())
         }
 
-    override fun getList(releaseId: Int): Single<List<Torrent>> = memoryDataSource
-        .getList(releaseId)
+    override fun getList(releaseIds: List<Int>): Single<List<Torrent>> = memoryDataSource
+        .getList(releaseIds)
         .flatMapIfListEmpty {
             dbDataSource
-                .getList(releaseId)
+                .getList(releaseIds)
                 .flatMapCompletable { memoryDataSource.insert(it) }
-                .andThen(memoryDataSource.getList(releaseId))
+                .andThen(memoryDataSource.getList(releaseIds))
         }
 
     override fun putList(items: List<Torrent>): Completable = dbDataSource
         .insert(items)
-        .andThen(dbDataSource.getList(items.toIds()))
+        .andThen(dbDataSource.getListByPairIds(items.toIds()))
         .flatMapCompletable { memoryDataSource.insert(it) }
 
     override fun removeList(items: List<Torrent>): Completable {

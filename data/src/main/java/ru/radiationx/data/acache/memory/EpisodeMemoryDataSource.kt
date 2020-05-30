@@ -21,12 +21,17 @@ class EpisodeMemoryDataSource() {
 
     fun observeListAll(): Observable<List<Episode>> = dataRelay.hide()
 
+    fun observeList(releaseIds: List<Int>): Observable<List<Episode>> = observeListAll()
+        .map { items ->
+            items.filter { releaseIds.contains(it.releaseId) }
+        }
+
     fun getListAll(): Single<List<Episode>> = Single.fromCallable {
         memory.toList()
     }
 
-    fun getList(releaseId: Int): Single<List<Episode>> = Single.fromCallable {
-        memory.filter { it.releaseId == releaseId }
+    fun getList(releaseIds: List<Int>): Single<List<Episode>> = Single.fromCallable {
+        memory.filter { releaseIds.contains(it.releaseId) }
     }
 
     fun getOne(releaseId: Int, episodeId: Int): Single<Episode> = Single.fromCallable {
