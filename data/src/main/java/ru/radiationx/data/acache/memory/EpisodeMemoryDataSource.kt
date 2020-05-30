@@ -56,7 +56,7 @@ class EpisodeMemoryDataSource() {
         updateRelay()
     }
 
-    fun delete(): Completable = Completable.fromAction {
+    fun deleteAll(): Completable = Completable.fromAction {
         memory.clear()
         updateRelay()
     }

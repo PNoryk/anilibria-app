@@ -4,26 +4,33 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.ReleaseDao
 import ru.radiationx.data.adb.converters.ReleaseConverter
+import ru.radiationx.data.adomain.entity.relative.HistoryRelative
 import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class ReleaseDbDataSource(
-    private val releaseDao: ReleaseDao,
-    private val releaseConverter: ReleaseConverter
+    private val dao: ReleaseDao,
+    private val converter: ReleaseConverter
 ) {
 
-    fun getListAll(): Single<List<Release>> = releaseDao
+    fun getListAll(): Single<List<Release>> = dao
         .getListAll()
-        .map(releaseConverter::toDomain)
+        .map(converter::toDomain)
 
-    fun getOne(releaseId: Int): Single<Release> = releaseDao
+    fun getList(ids: List<Int>): Single<List<Release>> = dao
+        .getList(ids)
+        .map(converter::toDomain)
+
+    fun getOne(releaseId: Int): Single<Release> = dao
         .getOne(releaseId)
-        .map(releaseConverter::toDomain)
+        .map(converter::toDomain)
 
     fun insert(items: List<Release>): Completable = Single.just(items)
-        .map(releaseConverter::toDb)
-        .flatMapCompletable(releaseDao::insert)
+        .map(converter::toDb)
+        .flatMapCompletable(dao::insert)
 
-    fun delete(): Completable = releaseDao.deleteAll()
+    fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+
+    fun delete(): Completable = dao.deleteAll()
 }

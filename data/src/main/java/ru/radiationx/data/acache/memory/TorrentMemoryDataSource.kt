@@ -1,6 +1,8 @@
 package ru.radiationx.data.acache.memory
 
+import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.TorrentDao
 import ru.radiationx.data.adb.converters.TorrentConverter
@@ -13,6 +15,10 @@ import java.util.*
 class TorrentMemoryDataSource {
 
     private val memory = Collections.synchronizedList(mutableListOf<Torrent>())
+
+    private val dataRelay by lazy { BehaviorRelay.createDefault(memory.toList()) }
+
+    fun observeListAll(): Observable<List<Torrent>> = dataRelay.hide()
 
     fun getListAll(): Single<List<Torrent>> = Single.fromCallable {
         memory.toList()
@@ -35,9 +41,26 @@ class TorrentMemoryDataSource {
             }
             memory.addAll(items)
         }
+        updateRelay()
     }
 
-    fun delete(): Completable = Completable.fromAction {
+    fun removeList(ids: List<Pair<Int, Int>>): Completable = Completable.fromAction {
+        synchronized(this) {
+            ids.forEach { pair ->
+                memory.removeAll { old ->
+                    old.releaseId == pair.first && old.id == pair.second
+                }
+            }
+        }
+        updateRelay()
+    }
+
+    fun deleteAll(): Completable = Completable.fromAction {
         memory.clear()
+        updateRelay()
+    }
+
+    private fun updateRelay() {
+        dataRelay.accept(memory.toList())
     }
 }

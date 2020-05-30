@@ -7,6 +7,8 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class TorrentConverter {
 
+    fun toDbKey(releaseId: Int, torrentId: Int): String = "${releaseId}_$torrentId"
+
     fun toDomain(source: TorrentDb) = Torrent(
         releaseId = source.releaseId,
         id = source.id,
@@ -22,6 +24,7 @@ class TorrentConverter {
     )
 
     fun toDb(source: Torrent): TorrentDb = TorrentDb(
+        key = toDbKey(source.releaseId, source.id),
         releaseId = source.releaseId,
         id = source.id,
         hash = source.hash,
@@ -35,6 +38,7 @@ class TorrentConverter {
         url = source.url
     )
 
+    fun toDbKey(ids: List<Pair<Int, Int>>) = ids.map { toDbKey(it.first, it.second) }
 
     fun toDomain(source: List<TorrentDb>) = source.map { toDomain(it) }
 

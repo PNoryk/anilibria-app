@@ -5,25 +5,32 @@ import io.reactivex.Single
 import ru.radiationx.data.adb.dao.ScheduleDao
 import ru.radiationx.data.adb.converters.ScheduleConverter
 import ru.radiationx.data.adomain.entity.relative.ScheduleDayRelative
+import ru.radiationx.data.adomain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class ScheduleDbDataSource(
-    private val scheduleDao: ScheduleDao,
-    private val scheduleConverter: ScheduleConverter
+    private val dao: ScheduleDao,
+    private val converter: ScheduleConverter
 ) {
 
-    fun getListAll(): Single<List<ScheduleDayRelative>> = scheduleDao
+    fun getListAll(): Single<List<ScheduleDayRelative>> = dao
         .getListAll()
-        .map(scheduleConverter::toDomain)
+        .map(converter::toDomain)
 
-    fun getOne(dayId: Int): Single<ScheduleDayRelative> = scheduleDao
+    fun getList(ids: List<Int>): Single<List<ScheduleDayRelative>> = dao
+        .getList(ids)
+        .map(converter::toDomain)
+
+    fun getOne(dayId: Int): Single<ScheduleDayRelative> = dao
         .getOne(dayId)
-        .map(scheduleConverter::toDomain)
+        .map(converter::toDomain)
 
     fun insert(items: List<ScheduleDayRelative>): Completable = Single.just(items)
-        .map(scheduleConverter::toDb)
-        .flatMapCompletable(scheduleDao::insert)
+        .map(converter::toDb)
+        .flatMapCompletable(dao::insert)
 
-    fun delete(): Completable = scheduleDao.deleteAll()
+    fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+
+    fun delete(): Completable = dao.deleteAll()
 }

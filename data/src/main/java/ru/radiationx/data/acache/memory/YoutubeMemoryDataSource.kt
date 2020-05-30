@@ -1,9 +1,12 @@
 package ru.radiationx.data.acache.memory
 
+import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.YoutubeDao
 import ru.radiationx.data.adb.converters.YoutubeConverter
+import ru.radiationx.data.adomain.entity.release.Release
 import ru.radiationx.data.adomain.entity.youtube.Youtube
 import toothpick.InjectConstructor
 import java.util.*
@@ -12,6 +15,10 @@ import java.util.*
 class YoutubeMemoryDataSource {
 
     private val memory = Collections.synchronizedList(mutableListOf<Youtube>())
+
+    private val dataRelay by lazy { BehaviorRelay.createDefault(memory.toList()) }
+
+    fun observeListAll(): Observable<List<Youtube>> = dataRelay.hide()
 
     fun getListAll(): Single<List<Youtube>> = Single.fromCallable {
         memory.toList()
@@ -30,9 +37,24 @@ class YoutubeMemoryDataSource {
             }
             memory.addAll(items)
         }
+        updateRelay()
     }
 
-    fun delete(): Completable = Completable.fromAction {
+    fun removeList(ids: List<Int>): Completable = Completable.fromAction {
+        synchronized(this) {
+            ids.forEach { id ->
+                memory.removeAll { old -> old.id == id }
+            }
+        }
+        updateRelay()
+    }
+
+    fun deleteAll(): Completable = Completable.fromAction {
         memory.clear()
+        updateRelay()
+    }
+
+    private fun updateRelay() {
+        dataRelay.accept(memory.toList())
     }
 }

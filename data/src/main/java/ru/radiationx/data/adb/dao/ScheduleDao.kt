@@ -3,6 +3,7 @@ package ru.radiationx.data.adb.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
+import ru.radiationx.data.adb.entity.release.ReleaseDb
 import ru.radiationx.data.adb.entity.schedule.FlatScheduleDayDb
 import ru.radiationx.data.adb.entity.schedule.ScheduleDayDb
 import ru.radiationx.data.adb.entity.schedule.ScheduleReleaseDb
@@ -13,6 +14,9 @@ abstract class ScheduleDao {
     @Transaction
     @Query("SELECT * FROM `schedule_day`")
     abstract fun getListAll(): Single<List<ScheduleDayDb>>
+
+    @Query("SELECT * FROM schedule_day WHERE scheduleDayId IN (:ids)")
+    abstract fun getList(ids: List<Int>): Single<List<ScheduleDayDb>>
 
     @Transaction
     @Query("SELECT * FROM `schedule_day` WHERE scheduleDayId = :scheduleDayId")
@@ -34,6 +38,9 @@ abstract class ScheduleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertReleases(items: List<ScheduleReleaseDb>): Completable
+
+    @Query("DELETE FROM schedule_day WHERE scheduleDayId IN (:ids)")
+    abstract fun delete(ids: List<Int>): Completable
 
     @Query("DELETE FROM schedule_day")
     abstract fun deleteAll(): Completable

@@ -1,19 +1,18 @@
 package ru.radiationx.data.adb.entity.torrent
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.*
 import ru.radiationx.data.adb.entity.release.FlatReleaseDb
 import java.util.*
 
 @Entity(
     tableName = "release_torrent",
-    primaryKeys = ["releaseId", "id"],
     foreignKeys = [
         ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
-    ]
+    ],
+    indices = [Index("releaseId"), Index("id")]
 )
 data class TorrentDb(
+    @PrimaryKey @ColumnInfo(name = "key") val key: String,
     @ColumnInfo(name = "releaseId") val releaseId: Int,
     @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "hash") val hash: String?,

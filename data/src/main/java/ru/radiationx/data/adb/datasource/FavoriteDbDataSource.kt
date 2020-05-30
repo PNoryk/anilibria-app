@@ -9,21 +9,27 @@ import toothpick.InjectConstructor
 
 @InjectConstructor
 class FavoriteDbDataSource(
-    private val favoriteDao: FavoriteDao,
-    private val favoriteConverter: FavoriteConverter
+    private val dao: FavoriteDao,
+    private val converter: FavoriteConverter
 ) {
 
-    fun getListAll(): Single<List<FavoriteRelative>> = favoriteDao
+    fun getListAll(): Single<List<FavoriteRelative>> = dao
         .getList()
-        .map(favoriteConverter::toDomain)
+        .map(converter::toDomain)
 
-    fun getOne(releaseId: Int): Single<FavoriteRelative> = favoriteDao
+    fun getList(ids: List<Int>): Single<List<FavoriteRelative>> = dao
+        .getList(ids)
+        .map(converter::toDomain)
+
+    fun getOne(releaseId: Int): Single<FavoriteRelative> = dao
         .getOne(releaseId)
-        .map(favoriteConverter::toDomain)
+        .map(converter::toDomain)
 
     fun insert(items: List<FavoriteRelative>): Completable = Single.just(items)
-        .map(favoriteConverter::toDb)
-        .flatMapCompletable(favoriteDao::insert)
+        .map(converter::toDb)
+        .flatMapCompletable(dao::insert)
 
-    fun deleteAll(): Completable = favoriteDao.deleteAll()
+    fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+
+    fun deleteAll(): Completable = dao.deleteAll()
 }

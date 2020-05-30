@@ -1,0 +1,48 @@
+package ru.radiationx.data.acache.impl
+
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
+import ru.radiationx.data.acache.FavoriteCache
+import ru.radiationx.data.acache.common.flatMapIfListEmpty
+import ru.radiationx.data.acache.memory.FavoriteMemoryDataSource
+import ru.radiationx.data.adb.datasource.FavoriteDbDataSource
+import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
+import ru.radiationx.data.adomain.entity.relative.FeedRelative
+import toothpick.InjectConstructor
+
+@InjectConstructor
+class FavoriteCacheImpl(
+    private val dbDataSource: FavoriteDbDataSource,
+    private val memoryDataSource: FavoriteMemoryDataSource
+) : FavoriteCache {
+
+    override fun observeList(): Observable<List<FavoriteRelative>> = memoryDataSource.observeListAll()
+
+    override fun getList(): Single<List<FavoriteRelative>> = memoryDataSource
+        .getListAll()
+        .flatMapIfListEmpty {
+            dbDataSource
+                .getListAll()
+                .flatMapCompletable { memoryDataSource.insert(it) }
+                .andThen(memoryDataSource.getListAll())
+        }
+
+    override fun putList(items: List<FavoriteRelative>): Completable = dbDataSource
+        .insert(items)
+        .andThen(dbDataSource.getList(items.toIds()))
+        .flatMapCompletable { memoryDataSource.insert(it) }
+
+    override fun removeList(items: List<FavoriteRelative>): Completable {
+        val ids = items.toIds()
+        return dbDataSource
+            .removeList(ids)
+            .andThen(memoryDataSource.removeList(ids))
+    }
+
+    override fun clear(): Completable = dbDataSource
+        .deleteAll()
+        .andThen(memoryDataSource.deleteAll())
+
+    private fun List<FavoriteRelative>.toIds() = map { it.releaseId }
+}

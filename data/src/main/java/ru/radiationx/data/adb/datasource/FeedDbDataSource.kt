@@ -4,26 +4,33 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.dao.FeedDao
 import ru.radiationx.data.adb.converters.FeedConverter
+import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
 import ru.radiationx.data.adomain.entity.relative.FeedRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class FeedDbDataSource(
-    private val feedDao: FeedDao,
-    private val feedConverter: FeedConverter
+    private val dao: FeedDao,
+    private val converter: FeedConverter
 ) {
 
-    fun getListAll(): Single<List<FeedRelative>> = feedDao
+    fun getListAll(): Single<List<FeedRelative>> = dao
         .getList()
-        .map(feedConverter::toDomain)
+        .map(converter::toDomain)
 
-    fun getOne(releaseId: Int?, youtubeId: Int?): Single<FeedRelative> = feedDao
+    fun getList(ids: List<Pair<Int?, Int?>>): Single<List<FeedRelative>> = dao
+        .getList(converter.toDbKey(ids))
+        .map(converter::toDomain)
+
+    fun getOne(releaseId: Int?, youtubeId: Int?): Single<FeedRelative> = dao
         .getOne(releaseId, youtubeId)
-        .map(feedConverter::toDomain)
+        .map(converter::toDomain)
 
     fun insert(items: List<FeedRelative>): Completable = Single.just(items)
-        .map(feedConverter::toDb)
-        .flatMapCompletable { feedDao.insert(it) }
+        .map(converter::toDb)
+        .flatMapCompletable { dao.insert(it) }
 
-    fun deleteAll(): Completable = feedDao.deleteAll()
+    fun removeList(ids: List<Pair<Int?, Int?>>): Completable = dao.delete(converter.toDbKey(ids))
+
+    fun deleteAll(): Completable = dao.deleteAll()
 }

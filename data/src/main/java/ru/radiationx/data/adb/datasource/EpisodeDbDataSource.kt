@@ -2,40 +2,38 @@ package ru.radiationx.data.adb.datasource
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.functions.Function
 import ru.radiationx.data.adb.dao.EpisodeDao
 import ru.radiationx.data.adb.converters.EpisodeConverter
 import ru.radiationx.data.adomain.entity.release.Episode
 import toothpick.InjectConstructor
-import java.lang.Exception
 
 @InjectConstructor
 class EpisodeDbDataSource(
-    private val episodeDao: EpisodeDao,
-    private val episodeConverter: EpisodeConverter
+    private val dao: EpisodeDao,
+    private val converter: EpisodeConverter
 ) {
 
-    fun getListAll(): Single<List<Episode>> = episodeDao
+    fun getListAll(): Single<List<Episode>> = dao
         .getListAll()
-        .map(episodeConverter::toDomain)
+        .map(converter::toDomain)
 
-    fun getList(releaseId: Int): Single<List<Episode>> = episodeDao
+    fun getList(releaseId: Int): Single<List<Episode>> = dao
         .getList(releaseId)
-        .map(episodeConverter::toDomain)
+        .map(converter::toDomain)
 
-    fun getList(ids: List<Pair<Int, Int>>): Single<List<Episode>> = episodeDao
-        .getList(episodeConverter.toDbKey(ids))
-        .map(episodeConverter::toDomain)
+    fun getList(ids: List<Pair<Int, Int>>): Single<List<Episode>> = dao
+        .getList(converter.toDbKey(ids))
+        .map(converter::toDomain)
 
-    fun getOne(releaseId: Int, episodeId: Int): Single<Episode> = episodeDao
+    fun getOne(releaseId: Int, episodeId: Int): Single<Episode> = dao
         .getOne(releaseId, episodeId)
-        .map(episodeConverter::toDomain)
+        .map(converter::toDomain)
 
     fun insert(items: List<Episode>): Completable = Single.just(items)
-        .map(episodeConverter::toDb)
-        .flatMapCompletable(episodeDao::insert)
+        .map(converter::toDb)
+        .flatMapCompletable(dao::insert)
 
-    fun removeList(ids: List<Pair<Int, Int>>): Completable = episodeDao.delete(episodeConverter.toDbKey(ids))
+    fun removeList(ids: List<Pair<Int, Int>>): Completable = dao.delete(converter.toDbKey(ids))
 
-    fun delete(): Completable = episodeDao.deleteAll()
+    fun deleteAll(): Completable = dao.deleteAll()
 }

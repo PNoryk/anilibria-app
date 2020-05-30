@@ -3,6 +3,7 @@ package ru.radiationx.data.adb.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
+import ru.radiationx.data.adb.entity.favorite.FavoriteDb
 import ru.radiationx.data.adb.entity.release.BlockInfoDb
 import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
 import ru.radiationx.data.adb.entity.release.FlatReleaseDb
@@ -14,6 +15,9 @@ abstract class ReleaseDao {
     @Transaction
     @Query("SELECT * FROM `release`")
     abstract fun getListAll(): Single<List<ReleaseDb>>
+
+    @Query("SELECT * FROM `release` WHERE releaseId IN (:ids)")
+    abstract fun getList(ids: List<Int>): Single<List<ReleaseDb>>
 
     @Transaction
     @Query("SELECT * FROM `release` WHERE releaseId = :releaseId")
@@ -39,6 +43,9 @@ abstract class ReleaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertBlockInfo(blockInfoDb: BlockInfoDb): Completable
+
+    @Query("DELETE FROM `release` WHERE releaseId IN (:ids)")
+    abstract fun delete(ids: List<Int>): Completable
 
     @Query("DELETE FROM `release`")
     abstract fun deleteAll(): Completable
