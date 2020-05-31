@@ -1,4 +1,4 @@
-include ':domain'
+include ':domain-entity'
 include ':data-db'
 include ':data-cache'
 include ':data-api'
