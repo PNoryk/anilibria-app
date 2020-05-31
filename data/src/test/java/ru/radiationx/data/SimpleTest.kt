@@ -49,7 +49,7 @@ class SimpleTest {
             }
         }.flatten()
 
-        val filtered = merger.filter(oldItems, newItems)
+        val filtered = merger.filterSame(oldItems, newItems)
 
         assertEquals(expected, filtered)
     }
