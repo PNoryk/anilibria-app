@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import anilibria.tv.cache.YoutubeCache
 import anilibria.tv.domain.entity.youtube.Youtube
-import ru.radiationx.data.api.datasource.YouTubeApiDataSource
+import anilibria.tv.api.YouTubeApiDataSource
 import toothpick.InjectConstructor
 
 @InjectConstructor

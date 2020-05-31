@@ -5,7 +5,7 @@ import io.reactivex.Single
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
 import anilibria.tv.domain.entity.release.RandomRelease
 import anilibria.tv.domain.entity.release.Release
-import ru.radiationx.data.api.datasource.ReleaseApiDataSource
+import anilibria.tv.api.ReleaseApiDataSource
 import toothpick.InjectConstructor
 
 @InjectConstructor

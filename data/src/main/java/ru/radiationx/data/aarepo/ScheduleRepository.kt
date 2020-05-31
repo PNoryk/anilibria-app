@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import anilibria.tv.cache.combiner.ScheduleCacheCombiner
 import anilibria.tv.domain.entity.schedule.ScheduleDay
-import ru.radiationx.data.api.datasource.ScheduleApiDataSource
+import anilibria.tv.api.ScheduleApiDataSource
 import toothpick.InjectConstructor
 
 @InjectConstructor

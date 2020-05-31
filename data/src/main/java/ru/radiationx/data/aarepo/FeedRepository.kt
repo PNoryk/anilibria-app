@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import anilibria.tv.cache.combiner.FeedCacheCombiner
 import anilibria.tv.domain.entity.feed.Feed
-import ru.radiationx.data.api.datasource.FeedApiDataSource
+import anilibria.tv.api.FeedApiDataSource
 import toothpick.InjectConstructor
 
 @InjectConstructor

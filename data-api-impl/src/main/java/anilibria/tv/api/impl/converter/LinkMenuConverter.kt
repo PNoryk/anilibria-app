@@ -1,0 +1,16 @@
+package anilibria.tv.api.impl.converter
+
+import anilibria.tv.domain.entity.menu.LinkMenu
+import anilibria.tv.api.impl.entity.menu.LinkMenuResponse
+import toothpick.InjectConstructor
+
+@InjectConstructor
+class LinkMenuConverter {
+
+    fun toDomain(response: LinkMenuResponse) = LinkMenu(
+        title = response.title,
+        absoluteLink = response.absoluteLink,
+        sitePagePath = response.sitePagePath,
+        icon = response.icon
+    )
+}
