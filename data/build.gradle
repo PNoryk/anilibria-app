@@ -39,6 +39,7 @@ dependencies {
     implementation project(':data-api')
     implementation project(':data-cache')
     implementation project(':data-db')
+    implementation project(':data-storage')
     implementation project(':domain-entity')
 
     api "com.squareup.okhttp3:okhttp:${okHttpVersion}"
