@@ -1,4 +1,7 @@
 include ':data-db'
 include ':data-cache'
 include ':data-api'
+include ':data-db-impl'
+include ':data-cache-impl'
+include ':data-api-impl'
 include ':app-mobile', ':bottomsheet', ':data', ':shared-ktx', ':shared-android-ktx', ':lapism-search', ':app-tv', ':shared-app'
