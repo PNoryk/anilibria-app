@@ -10,24 +10,24 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.radiationx.data.adb.AppDatabase
-import ru.radiationx.data.adb.converters.FeedConverter
-import ru.radiationx.data.adb.dao.FeedDao
-import ru.radiationx.data.adb.dao.ReleaseDao
-import ru.radiationx.data.adb.dao.YoutubeDao
-import ru.radiationx.data.adb.entity.feed.FeedDb
-import ru.radiationx.data.adb.entity.release.BlockInfoDb
-import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
-import ru.radiationx.data.adb.entity.release.FlatReleaseDb
-import ru.radiationx.data.adb.entity.release.ReleaseDb
-import ru.radiationx.data.adb.entity.youtube.YoutubeDb
+import anilibria.tv.db.impl.AppDatabase
+import anilibria.tv.db.impl.converters.FeedConverter
+import anilibria.tv.db.impl.dao.FeedDao
+import anilibria.tv.db.impl.dao.ReleaseDao
+import anilibria.tv.db.impl.dao.YoutubeDao
+import anilibria.tv.db.impl.entity.feed.FeedDb
+import anilibria.tv.db.impl.entity.release.BlockInfoDb
+import anilibria.tv.db.impl.entity.release.FavoriteInfoDb
+import anilibria.tv.db.impl.entity.release.FlatReleaseDb
+import anilibria.tv.db.impl.entity.release.ReleaseDb
+import anilibria.tv.db.impl.entity.youtube.YoutubeDb
 import anilibria.tv.domain.entity.relative.FeedRelative
 import anilibria.tv.domain.entity.release.Release
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class SimpleDaoTest {
-    private lateinit var db: AppDatabase
+    private lateinit var db: anilibria.tv.db.impl.AppDatabase
     private lateinit var feedDao: FeedDao
     private lateinit var releaseDao: ReleaseDao
     private lateinit var youtubeDao: YoutubeDao
@@ -36,7 +36,7 @@ class SimpleDaoTest {
     fun createDb() {
         val real = Room.databaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java,
+            anilibria.tv.db.impl.AppDatabase::class.java,
             "kekos.db"
         )
             .addCallback(object : RoomDatabase.Callback() {
@@ -52,7 +52,7 @@ class SimpleDaoTest {
 
         val memory = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java
+            anilibria.tv.db.impl.AppDatabase::class.java
         )
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onOpen(db: SupportSQLiteDatabase) {
