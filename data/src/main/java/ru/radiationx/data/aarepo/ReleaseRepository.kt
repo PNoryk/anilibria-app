@@ -5,12 +5,12 @@ import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
 import ru.radiationx.data.adomain.entity.release.RandomRelease
 import ru.radiationx.data.adomain.entity.release.Release
-import ru.radiationx.data.api.datasource.ReleaseApiDataSource
+import ru.radiationx.data.api.datasource.ReleaseApiDataSourceImpl
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class ReleaseRepository(
-    private val apiDataSource: ReleaseApiDataSource,
+    private val apiDataSource: ReleaseApiDataSourceImpl,
     private val cacheCombiner: ReleaseCacheCombiner
 ) {
 

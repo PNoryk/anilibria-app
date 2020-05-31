@@ -10,7 +10,7 @@ import ru.radiationx.data.api.service.FavoriteService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class FavoriteApiDataSource(
+class FavoriteApiDataSourceImpl(
     private val favoriteService: FavoriteService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter

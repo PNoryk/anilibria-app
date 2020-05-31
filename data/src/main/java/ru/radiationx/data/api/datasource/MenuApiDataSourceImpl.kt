@@ -8,7 +8,7 @@ import ru.radiationx.data.api.service.MenuService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class MenuApiDataSource(
+class MenuApiDataSourceImpl(
     private val menuService: MenuService,
     private val menuConverter: LinkMenuConverter
 ) {

@@ -11,7 +11,7 @@ import ru.radiationx.data.api.service.ReleaseService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class ReleaseApiDataSource(
+class ReleaseApiDataSourceImpl(
     private val releaseService: ReleaseService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter

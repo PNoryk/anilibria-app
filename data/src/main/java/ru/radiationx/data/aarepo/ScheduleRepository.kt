@@ -4,12 +4,12 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.ScheduleCacheCombiner
 import ru.radiationx.data.adomain.entity.schedule.ScheduleDay
-import ru.radiationx.data.api.datasource.ScheduleApiDataSource
+import ru.radiationx.data.api.datasource.ScheduleApiDataSourceImpl
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class ScheduleRepository(
-    private val apiDataSource: ScheduleApiDataSource,
+    private val apiDataSource: ScheduleApiDataSourceImpl,
     private val cacheCombiner: ScheduleCacheCombiner
 ) {
 

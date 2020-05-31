@@ -10,7 +10,7 @@ import ru.radiationx.data.api.service.FeedService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class FeedApiDataSource(
+class FeedApiDataSourceImpl(
     private val feedService: FeedService,
     private val feedConverter: FeedConverter,
     private val paginationConverter: PaginationConverter

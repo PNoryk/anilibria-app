@@ -11,7 +11,7 @@ import toothpick.InjectConstructor
 
 //todo Авторизация работать не будет, нужно запилить поддержку на стороне апи и так-же в клиенте замутить полноценную поддержку completable
 @InjectConstructor
-class AuthApiDataSource(
+class AuthApiDataSourceImpl(
     private val authService: AuthService,
     private val authConverter: AuthConverter
 ) {

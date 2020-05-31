@@ -4,12 +4,12 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.YoutubeCache
 import ru.radiationx.data.adomain.entity.youtube.Youtube
-import ru.radiationx.data.api.datasource.YouTubeApiDataSource
+import ru.radiationx.data.api.datasource.YouTubeApiDataSourceImpl
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class YouTubeRepository(
-    private val apiDataSource: YouTubeApiDataSource,
+    private val apiDataSource: YouTubeApiDataSourceImpl,
     private val youtubeCache: YoutubeCache
 ) {
 

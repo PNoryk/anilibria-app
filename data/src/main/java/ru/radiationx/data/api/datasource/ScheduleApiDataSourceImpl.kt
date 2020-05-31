@@ -8,7 +8,7 @@ import ru.radiationx.data.api.service.ScheduleService
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class ScheduleApiDataSource(
+class ScheduleApiDataSourceImpl(
     private val scheduleService: ScheduleService,
     private val scheduleConverter: ScheduleConverter
 ) {

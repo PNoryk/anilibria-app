@@ -6,12 +6,12 @@ import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.FavoriteCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
 import ru.radiationx.data.adomain.entity.release.Release
-import ru.radiationx.data.api.datasource.FavoriteApiDataSource
+import ru.radiationx.data.api.datasource.FavoriteApiDataSourceImpl
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class FavoriteRepository(
-    private val apiDataSource: FavoriteApiDataSource,
+    private val apiDataSource: FavoriteApiDataSourceImpl,
     private val cacheCombiner: FavoriteCacheCombiner,
     private val releaseCache: ReleaseCacheCombiner
 ) {
