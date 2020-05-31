@@ -36,7 +36,9 @@ ext {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(":shared-android-ktx")
+    implementation project(':data-api')
     implementation project(':data-cache')
+    implementation project(':data-db')
     implementation project(':domain-entity')
 
     api "com.squareup.okhttp3:okhttp:${okHttpVersion}"

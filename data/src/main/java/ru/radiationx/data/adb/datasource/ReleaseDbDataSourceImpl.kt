@@ -1,5 +1,6 @@
 package ru.radiationx.data.adb.datasource
 
+import anilibria.tv.db.ReleaseDbDataSource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.ReleaseConverter
@@ -8,28 +9,28 @@ import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class ReleaseDbDataSource(
+class ReleaseDbDataSourceImpl(
     private val dao: ReleaseDao,
     private val converter: ReleaseConverter
-) {
+) : ReleaseDbDataSource {
 
-    fun getListAll(): Single<List<Release>> = dao
+    override fun getListAll(): Single<List<Release>> = dao
         .getListAll()
         .map(converter::toDomain)
 
-    fun getList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = dao
+    override fun getList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = dao
         .getList(ids.orEmpty(), codes.orEmpty())
         .map(converter::toDomain)
 
-    fun getOne(releaseId: Int?, code: String?): Single<Release> = dao
+    override fun getOne(releaseId: Int?, code: String?): Single<Release> = dao
         .getOne(releaseId, code)
         .map(converter::toDomain)
 
-    fun insert(items: List<Release>): Completable = Single.just(items)
+    override fun insert(items: List<Release>): Completable = Single.just(items)
         .map(converter::toDb)
         .flatMapCompletable(dao::insert)
 
-    fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+    override fun removeList(ids: List<Int>): Completable = dao.delete(ids)
 
-    fun deleteAll(): Completable = dao.deleteAll()
+    override fun deleteAll(): Completable = dao.deleteAll()
 }

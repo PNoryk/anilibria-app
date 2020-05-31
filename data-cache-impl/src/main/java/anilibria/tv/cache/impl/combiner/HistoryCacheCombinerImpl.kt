@@ -1,15 +1,15 @@
 package anilibria.tv.cache.impl.combiner
 
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.Function
 import anilibria.tv.cache.HistoryCache
 import anilibria.tv.cache.combiner.HistoryCacheCombiner
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
 import anilibria.tv.domain.entity.history.HistoryItem
 import anilibria.tv.domain.entity.relative.HistoryRelative
 import anilibria.tv.domain.entity.release.Release
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.Function
 import toothpick.InjectConstructor
 
 @InjectConstructor

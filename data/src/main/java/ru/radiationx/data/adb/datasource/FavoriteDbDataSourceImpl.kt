@@ -1,5 +1,6 @@
 package ru.radiationx.data.adb.datasource
 
+import anilibria.tv.db.FavoriteDbDataSource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.FavoriteConverter
@@ -8,28 +9,28 @@ import anilibria.tv.domain.entity.relative.FavoriteRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class FavoriteDbDataSource(
+class FavoriteDbDataSourceImpl(
     private val dao: FavoriteDao,
     private val converter: FavoriteConverter
-) {
+) : FavoriteDbDataSource {
 
-    fun getListAll(): Single<List<FavoriteRelative>> = dao
+    override fun getListAll(): Single<List<FavoriteRelative>> = dao
         .getList()
         .map(converter::toDomain)
 
-    fun getList(ids: List<Int>): Single<List<FavoriteRelative>> = dao
+    override fun getList(ids: List<Int>): Single<List<FavoriteRelative>> = dao
         .getList(ids)
         .map(converter::toDomain)
 
-    fun getOne(releaseId: Int): Single<FavoriteRelative> = dao
+    override fun getOne(releaseId: Int): Single<FavoriteRelative> = dao
         .getOne(releaseId)
         .map(converter::toDomain)
 
-    fun insert(items: List<FavoriteRelative>): Completable = Single.just(items)
+    override fun insert(items: List<FavoriteRelative>): Completable = Single.just(items)
         .map(converter::toDb)
         .flatMapCompletable(dao::insert)
 
-    fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+    override fun removeList(ids: List<Int>): Completable = dao.delete(ids)
 
-    fun deleteAll(): Completable = dao.deleteAll()
+    override fun deleteAll(): Completable = dao.deleteAll()
 }

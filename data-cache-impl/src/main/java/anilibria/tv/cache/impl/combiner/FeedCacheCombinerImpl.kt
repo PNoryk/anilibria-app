@@ -1,9 +1,5 @@
 package anilibria.tv.cache.impl.combiner
 
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import anilibria.tv.cache.FeedCache
 import anilibria.tv.cache.YoutubeCache
 import anilibria.tv.cache.combiner.FeedCacheCombiner
@@ -12,6 +8,10 @@ import anilibria.tv.domain.entity.feed.Feed
 import anilibria.tv.domain.entity.relative.FeedRelative
 import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.domain.entity.youtube.Youtube
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import toothpick.InjectConstructor
 
 @InjectConstructor

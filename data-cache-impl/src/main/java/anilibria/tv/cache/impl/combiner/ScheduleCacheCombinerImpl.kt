@@ -1,16 +1,16 @@
 package anilibria.tv.cache.impl.combiner
 
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function
 import anilibria.tv.cache.ScheduleCache
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
 import anilibria.tv.cache.combiner.ScheduleCacheCombiner
 import anilibria.tv.domain.entity.relative.ScheduleDayRelative
 import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.domain.entity.schedule.ScheduleDay
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import toothpick.InjectConstructor
 
 @InjectConstructor

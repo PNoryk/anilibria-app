@@ -1,7 +1,6 @@
 package ru.radiationx.data.api.converter
 
 import anilibria.tv.domain.entity.release.*
-import ru.radiationx.data.adomain.entity.release.*
 import ru.radiationx.data.api.entity.release.*
 import ru.radiationx.data.system.ApiUtils
 import ru.radiationx.shared.ktx.dateFromSec

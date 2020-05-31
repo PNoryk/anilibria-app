@@ -1,5 +1,6 @@
 package ru.radiationx.data.adb.datasource
 
+import anilibria.tv.db.HistoryDbDataSource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.HistoryConverter
@@ -8,28 +9,28 @@ import anilibria.tv.domain.entity.relative.HistoryRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class HistoryDbDataSource(
+class HistoryDbDataSourceImpl(
     private val dao: HistoryDao,
     private val converter: HistoryConverter
-) {
+) : HistoryDbDataSource {
 
-    fun getListAll(): Single<List<HistoryRelative>> = dao
+    override fun getListAll(): Single<List<HistoryRelative>> = dao
         .getList()
         .map(converter::toDomain)
 
-    fun getList(ids: List<Int>): Single<List<HistoryRelative>> = dao
+    override fun getList(ids: List<Int>): Single<List<HistoryRelative>> = dao
         .getList(ids)
         .map(converter::toDomain)
 
-    fun getOne(releaseId: Int): Single<HistoryRelative> = dao
+    override fun getOne(releaseId: Int): Single<HistoryRelative> = dao
         .getOne(releaseId)
         .map(converter::toDomain)
 
-    fun insert(items: List<HistoryRelative>): Completable = Single.just(items)
+    override fun insert(items: List<HistoryRelative>): Completable = Single.just(items)
         .map(converter::toDb)
         .flatMapCompletable { dao.insert(it) }
 
-    fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+    override fun removeList(ids: List<Int>): Completable = dao.delete(ids)
 
-    fun deleteAll(): Completable = dao.deleteAll()
+    override fun deleteAll(): Completable = dao.deleteAll()
 }

@@ -1,4 +1,4 @@
-package anilibria.tv.cache.common
+package anilibria.tv.cache.impl.common
 
 import io.reactivex.Single
 import io.reactivex.SingleSource

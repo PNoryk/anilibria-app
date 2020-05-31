@@ -1,5 +1,6 @@
 package ru.radiationx.data.adb.datasource
 
+import anilibria.tv.db.YoutubeDbDataSource
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.YoutubeConverter
@@ -8,28 +9,28 @@ import anilibria.tv.domain.entity.youtube.Youtube
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class YoutubeDbDataSource(
+class YoutubeDbDataSourceImpl(
     private val dao: YoutubeDao,
     private val converter: YoutubeConverter
-) {
+) : YoutubeDbDataSource {
 
-    fun getListAll(): Single<List<Youtube>> = dao
+    override fun getListAll(): Single<List<Youtube>> = dao
         .getListAll()
         .map(converter::toDomain)
 
-    fun getList(ids: List<Int>): Single<List<Youtube>> = dao
+    override fun getList(ids: List<Int>): Single<List<Youtube>> = dao
         .getList(ids)
         .map(converter::toDomain)
 
-    fun getOne(youtubeId: Int): Single<Youtube> = dao
+    override fun getOne(youtubeId: Int): Single<Youtube> = dao
         .getOne(youtubeId)
         .map(converter::toDomain)
 
-    fun insert(items: List<Youtube>): Completable = Single.just(items)
+    override fun insert(items: List<Youtube>): Completable = Single.just(items)
         .map(converter::toDb)
         .flatMapCompletable(dao::insert)
 
-    fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+    override fun removeList(ids: List<Int>): Completable = dao.delete(ids)
 
-    fun deleteAll(): Completable = dao.deleteAll()
+    override fun deleteAll(): Completable = dao.deleteAll()
 }
