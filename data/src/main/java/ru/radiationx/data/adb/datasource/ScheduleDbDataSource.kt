@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.ScheduleConverter
 import ru.radiationx.data.adb.dao.ScheduleDao
-import ru.radiationx.data.adomain.entity.relative.ScheduleDayRelative
+import anilibria.tv.domain.entity.relative.ScheduleDayRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

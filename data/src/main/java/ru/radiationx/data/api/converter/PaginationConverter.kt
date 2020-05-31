@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.entity.pagination.Paginated
-import ru.radiationx.data.adomain.entity.pagination.Pagination
+import anilibria.tv.domain.entity.pagination.Paginated
+import anilibria.tv.domain.entity.pagination.Pagination
 import ru.radiationx.data.api.entity.pagination.PaginatedResponse
 import ru.radiationx.data.api.entity.pagination.PaginationResponse
 import toothpick.InjectConstructor
@@ -9,10 +9,11 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class PaginationConverter {
 
-    fun <T, R> toDomain(response: PaginatedResponse<T>, block: (T) -> R): Paginated<R> = Paginated(
-        items = response.items.map(block),
-        pagination = toDomain(response.pagination)
-    )
+    fun <T, R> toDomain(response: PaginatedResponse<T>, block: (T) -> R): Paginated<R> =
+        Paginated(
+            items = response.items.map(block),
+            pagination = toDomain(response.pagination)
+        )
 
     fun toDomain(response: PaginationResponse) = Pagination(
         page = response.page,

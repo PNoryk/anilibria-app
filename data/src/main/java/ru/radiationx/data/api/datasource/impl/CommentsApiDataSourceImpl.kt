@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.entity.comments.CommentsInfo
+import anilibria.tv.domain.entity.comments.CommentsInfo
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.CommentsConverter
 import ru.radiationx.data.api.datasource.CommentsApiDataSource

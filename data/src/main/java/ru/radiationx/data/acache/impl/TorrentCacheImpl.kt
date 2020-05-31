@@ -8,7 +8,7 @@ import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.TorrentMemoryDataSource
 import ru.radiationx.data.acache.merger.TorrentMerger
 import ru.radiationx.data.adb.datasource.TorrentDbDataSource
-import ru.radiationx.data.adomain.entity.release.Torrent
+import anilibria.tv.domain.entity.release.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

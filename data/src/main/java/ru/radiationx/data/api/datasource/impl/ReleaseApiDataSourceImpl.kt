@@ -1,9 +1,9 @@
 package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.entity.pagination.Paginated
-import ru.radiationx.data.adomain.entity.release.RandomRelease
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.pagination.Paginated
+import anilibria.tv.domain.entity.release.RandomRelease
+import anilibria.tv.domain.entity.release.Release
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter

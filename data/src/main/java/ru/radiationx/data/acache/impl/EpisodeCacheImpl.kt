@@ -8,7 +8,7 @@ import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.EpisodeMemoryDataSource
 import ru.radiationx.data.acache.merger.EpisodeMerger
 import ru.radiationx.data.adb.datasource.EpisodeDbDataSource
-import ru.radiationx.data.adomain.entity.release.Episode
+import anilibria.tv.domain.entity.release.Episode
 import toothpick.InjectConstructor
 
 @InjectConstructor

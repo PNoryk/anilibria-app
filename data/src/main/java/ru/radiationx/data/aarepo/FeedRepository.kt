@@ -3,7 +3,7 @@ package ru.radiationx.data.aarepo
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.FeedCacheCombiner
-import ru.radiationx.data.adomain.entity.feed.Feed
+import anilibria.tv.domain.entity.feed.Feed
 import ru.radiationx.data.api.datasource.FeedApiDataSource
 import ru.radiationx.data.api.datasource.impl.FeedApiDataSourceImpl
 import toothpick.InjectConstructor

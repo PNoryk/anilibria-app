@@ -3,7 +3,7 @@ package ru.radiationx.data.acache.combiner
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.common.ReadWriteCache
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.release.Release
 
 interface ReleaseCacheCombiner : ReadWriteCache<Release> {
 

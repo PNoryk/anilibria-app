@@ -1,7 +1,7 @@
 package ru.radiationx.data.adb.converters
 
 import ru.radiationx.data.adb.entity.feed.FeedDb
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
+import anilibria.tv.domain.entity.relative.FeedRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

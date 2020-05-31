@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.HistoryConverter
 import ru.radiationx.data.adb.dao.HistoryDao
-import ru.radiationx.data.adomain.entity.relative.HistoryRelative
+import anilibria.tv.domain.entity.relative.HistoryRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

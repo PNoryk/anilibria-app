@@ -8,10 +8,10 @@ import ru.radiationx.data.acache.FeedCache
 import ru.radiationx.data.acache.YoutubeCache
 import ru.radiationx.data.acache.combiner.FeedCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.feed.Feed
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
-import ru.radiationx.data.adomain.entity.release.Release
-import ru.radiationx.data.adomain.entity.youtube.Youtube
+import anilibria.tv.domain.entity.feed.Feed
+import anilibria.tv.domain.entity.relative.FeedRelative
+import anilibria.tv.domain.entity.release.Release
+import anilibria.tv.domain.entity.youtube.Youtube
 import toothpick.InjectConstructor
 
 @InjectConstructor
@@ -48,7 +48,12 @@ class FeedCacheCombinerImpl(
     override fun putList(items: List<Feed>): Completable {
         val putRelease = releaseCache.putList(items.mapNotNull { it.release })
         val putYoutube = youtubeCache.putList(items.mapNotNull { it.youtube })
-        val putFeed = feedCache.putList(items.map { FeedRelative(it.release?.id, it.youtube?.id) })
+        val putFeed = feedCache.putList(items.map {
+            FeedRelative(
+                it.release?.id,
+                it.youtube?.id
+            )
+        })
         return Completable.concat(listOf(putRelease, putYoutube, putFeed))
     }
 

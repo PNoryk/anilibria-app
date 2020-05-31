@@ -4,8 +4,8 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.HistoryCacheCombiner
-import ru.radiationx.data.adomain.entity.history.HistoryItem
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.history.HistoryItem
+import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 import java.util.*
 
@@ -18,5 +18,7 @@ class HistoryRepository(
 
     fun getList(): Single<List<HistoryItem>> = cacheCombiner.getList()
 
-    fun visitRelease(item: Release): Completable = cacheCombiner.putList(listOf(HistoryItem(Date(), item)))
+    fun visitRelease(item: Release): Completable = cacheCombiner.putList(listOf(
+        HistoryItem(Date(), item)
+    ))
 }

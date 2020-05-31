@@ -8,9 +8,9 @@ import ru.radiationx.data.acache.EpisodeCache
 import ru.radiationx.data.acache.ReleaseCache
 import ru.radiationx.data.acache.TorrentCache
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.release.Episode
-import ru.radiationx.data.adomain.entity.release.Release
-import ru.radiationx.data.adomain.entity.release.Torrent
+import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.release.Release
+import anilibria.tv.domain.entity.release.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

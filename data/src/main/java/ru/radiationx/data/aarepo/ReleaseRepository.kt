@@ -3,8 +3,8 @@ package ru.radiationx.data.aarepo
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.release.RandomRelease
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.release.RandomRelease
+import anilibria.tv.domain.entity.release.Release
 import ru.radiationx.data.api.datasource.ReleaseApiDataSource
 import ru.radiationx.data.api.datasource.impl.ReleaseApiDataSourceImpl
 import toothpick.InjectConstructor

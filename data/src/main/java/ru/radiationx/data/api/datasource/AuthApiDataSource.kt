@@ -2,8 +2,8 @@ package ru.radiationx.data.api.datasource
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.radiationx.data.adomain.entity.auth.OtpInfo
-import ru.radiationx.data.adomain.entity.auth.SocialService
+import anilibria.tv.domain.entity.auth.OtpInfo
+import anilibria.tv.domain.entity.auth.SocialService
 
 interface AuthApiDataSource {
     fun signIn(login: String, password: String, code2fa: String): Completable

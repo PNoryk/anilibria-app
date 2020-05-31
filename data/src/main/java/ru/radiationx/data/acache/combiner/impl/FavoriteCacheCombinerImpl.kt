@@ -7,8 +7,8 @@ import io.reactivex.functions.Function
 import ru.radiationx.data.acache.FavoriteCache
 import ru.radiationx.data.acache.combiner.FavoriteCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.relative.FavoriteRelative
+import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor

@@ -3,7 +3,7 @@ package ru.radiationx.data.adb.converters
 import ru.radiationx.data.adb.entity.schedule.FlatScheduleDayDb
 import ru.radiationx.data.adb.entity.schedule.ScheduleDayDb
 import ru.radiationx.data.adb.entity.schedule.ScheduleReleaseDb
-import ru.radiationx.data.adomain.entity.relative.ScheduleDayRelative
+import anilibria.tv.domain.entity.relative.ScheduleDayRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

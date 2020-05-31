@@ -3,7 +3,7 @@ package ru.radiationx.data.aarepo
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.TorrentCache
-import ru.radiationx.data.adomain.entity.release.Torrent
+import anilibria.tv.domain.entity.release.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

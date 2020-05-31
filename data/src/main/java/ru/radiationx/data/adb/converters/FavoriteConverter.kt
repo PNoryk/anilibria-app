@@ -1,7 +1,7 @@
 package ru.radiationx.data.adb.converters
 
 import ru.radiationx.data.adb.entity.favorite.FavoriteDb
-import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
+import anilibria.tv.domain.entity.relative.FavoriteRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

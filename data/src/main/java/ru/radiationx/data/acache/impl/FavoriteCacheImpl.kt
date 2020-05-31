@@ -7,7 +7,7 @@ import ru.radiationx.data.acache.FavoriteCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.FavoriteMemoryDataSource
 import ru.radiationx.data.adb.datasource.FavoriteDbDataSource
-import ru.radiationx.data.adomain.entity.relative.FavoriteRelative
+import anilibria.tv.domain.entity.relative.FavoriteRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

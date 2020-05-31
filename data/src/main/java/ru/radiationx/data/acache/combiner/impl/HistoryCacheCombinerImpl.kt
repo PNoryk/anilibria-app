@@ -7,9 +7,9 @@ import io.reactivex.functions.Function
 import ru.radiationx.data.acache.HistoryCache
 import ru.radiationx.data.acache.combiner.HistoryCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.history.HistoryItem
-import ru.radiationx.data.adomain.entity.relative.HistoryRelative
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.history.HistoryItem
+import anilibria.tv.domain.entity.relative.HistoryRelative
+import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor
@@ -36,7 +36,12 @@ class HistoryCacheCombinerImpl(
 
     override fun putList(items: List<HistoryItem>): Completable {
         val putRelease = releaseCache.putList(items.map { it.release })
-        val putFavorite = historyCache.putList(items.map { HistoryRelative(it.release.id, it.timestamp) })
+        val putFavorite = historyCache.putList(items.map {
+            HistoryRelative(
+                it.release.id,
+                it.timestamp
+            )
+        })
         return Completable.concat(listOf(putRelease, putFavorite))
     }
 

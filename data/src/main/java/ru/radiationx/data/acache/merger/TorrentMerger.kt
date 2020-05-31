@@ -1,26 +1,27 @@
 package ru.radiationx.data.acache.merger
 
 import ru.radiationx.data.acache.common.mergeField
-import ru.radiationx.data.adomain.entity.release.Episode
-import ru.radiationx.data.adomain.entity.release.Torrent
+import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.release.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class TorrentMerger {
 
-    fun merge(old: Torrent, new: Torrent) = Torrent(
-        releaseId = old.releaseId.mergeField(new.releaseId),
-        id = old.id.mergeField(new.id),
-        hash = old.hash.mergeField(new.hash),
-        leechers = old.leechers.mergeField(new.leechers),
-        seeders = old.seeders.mergeField(new.seeders),
-        completed = old.completed.mergeField(new.completed),
-        quality = old.quality.mergeField(new.quality),
-        series = old.series.mergeField(new.series),
-        size = old.size.mergeField(new.size),
-        time = old.time.mergeField(new.time),
-        url = old.url.mergeField(new.url)
-    )
+    fun merge(old: Torrent, new: Torrent) =
+        Torrent(
+            releaseId = old.releaseId.mergeField(new.releaseId),
+            id = old.id.mergeField(new.id),
+            hash = old.hash.mergeField(new.hash),
+            leechers = old.leechers.mergeField(new.leechers),
+            seeders = old.seeders.mergeField(new.seeders),
+            completed = old.completed.mergeField(new.completed),
+            quality = old.quality.mergeField(new.quality),
+            series = old.series.mergeField(new.series),
+            size = old.size.mergeField(new.size),
+            time = old.time.mergeField(new.time),
+            url = old.url.mergeField(new.url)
+        )
 
     fun filterSame(oldItems: List<Torrent>, newItems: List<Torrent>): List<Torrent> {
         val oldGrouped = oldItems.groupBy { it.releaseId }

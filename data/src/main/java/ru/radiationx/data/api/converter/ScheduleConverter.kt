@@ -1,6 +1,6 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.entity.schedule.ScheduleDay
+import anilibria.tv.domain.entity.schedule.ScheduleDay
 import ru.radiationx.data.api.entity.schedule.ScheduleDayResponse
 import toothpick.InjectConstructor
 

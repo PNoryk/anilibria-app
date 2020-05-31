@@ -3,7 +3,7 @@ package ru.radiationx.data
 import org.junit.Assert.*
 import org.junit.Test
 import ru.radiationx.data.acache.merger.EpisodeMerger
-import ru.radiationx.data.adomain.entity.release.Episode
+import anilibria.tv.domain.entity.release.Episode
 
 class SimpleTest {
 

@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.entity.checker.Update
-import ru.radiationx.data.adomain.entity.checker.UpdateLink
+import anilibria.tv.domain.entity.checker.Update
+import anilibria.tv.domain.entity.checker.UpdateLink
 import ru.radiationx.data.api.entity.checker.UpdateLinkResponse
 import ru.radiationx.data.api.entity.checker.UpdateResponse
 import toothpick.InjectConstructor

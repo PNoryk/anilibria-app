@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.entity.schedule.ScheduleDay
+import anilibria.tv.domain.entity.schedule.ScheduleDay
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.ScheduleConverter
 import ru.radiationx.data.api.datasource.ScheduleApiDataSource

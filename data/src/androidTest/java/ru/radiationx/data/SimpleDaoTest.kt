@@ -21,8 +21,8 @@ import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
 import ru.radiationx.data.adb.entity.release.FlatReleaseDb
 import ru.radiationx.data.adb.entity.release.ReleaseDb
 import ru.radiationx.data.adb.entity.youtube.YoutubeDb
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.relative.FeedRelative
+import anilibria.tv.domain.entity.release.Release
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
@@ -104,7 +104,12 @@ class SimpleDaoTest {
         val youTubeDb = YoutubeDb(20, "title", "image", "vid", 999, 888, Date(60 * 1000))
         val feedConverter = FeedConverter()
 
-        val feedDb = feedConverter.toDb(FeedRelative(releaseDb.release.id, youTubeDb.id))
+        val feedDb = feedConverter.toDb(
+            FeedRelative(
+                releaseDb.release.id,
+                youTubeDb.id
+            )
+        )
         feedDao.insert(listOf(feedDb)).test().assertComplete()
         //feedDao.insert(listOf(feedDb), releaseDao, youtubeDao).test().assertComplete()
         assertEquals(1, feedDao.getList().blockingGet().size)

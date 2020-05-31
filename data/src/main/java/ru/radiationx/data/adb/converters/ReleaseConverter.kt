@@ -4,9 +4,9 @@ import ru.radiationx.data.adb.entity.release.BlockInfoDb
 import ru.radiationx.data.adb.entity.release.FavoriteInfoDb
 import ru.radiationx.data.adb.entity.release.FlatReleaseDb
 import ru.radiationx.data.adb.entity.release.ReleaseDb
-import ru.radiationx.data.adomain.entity.release.BlockInfo
-import ru.radiationx.data.adomain.entity.release.FavoriteInfo
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.release.BlockInfo
+import anilibria.tv.domain.entity.release.FavoriteInfo
+import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor

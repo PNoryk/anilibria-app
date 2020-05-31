@@ -7,7 +7,7 @@ import ru.radiationx.data.acache.FeedCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.FeedMemoryDataSource
 import ru.radiationx.data.adb.datasource.FeedDbDataSource
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
+import anilibria.tv.domain.entity.relative.FeedRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

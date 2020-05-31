@@ -1,7 +1,7 @@
 package ru.radiationx.data.adb.converters
 
 import ru.radiationx.data.adb.entity.history.HistoryDb
-import ru.radiationx.data.adomain.entity.relative.HistoryRelative
+import anilibria.tv.domain.entity.relative.HistoryRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

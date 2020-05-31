@@ -7,7 +7,7 @@ import ru.radiationx.data.acache.ScheduleCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.ScheduleMemoryDataSource
 import ru.radiationx.data.adb.datasource.ScheduleDbDataSource
-import ru.radiationx.data.adomain.entity.relative.ScheduleDayRelative
+import anilibria.tv.domain.entity.relative.ScheduleDayRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

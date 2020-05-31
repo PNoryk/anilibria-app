@@ -4,7 +4,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.adomain.entity.release.Episode
+import anilibria.tv.domain.entity.release.Episode
 import toothpick.InjectConstructor
 import java.util.*
 

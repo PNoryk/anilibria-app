@@ -1,7 +1,7 @@
 package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
-import ru.radiationx.data.adomain.entity.user.User
+import anilibria.tv.domain.entity.user.User
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.UserConverter
 import ru.radiationx.data.api.datasource.UserApiDataSource

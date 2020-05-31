@@ -7,7 +7,7 @@ import ru.radiationx.data.acache.HistoryCache
 import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.HistoryMemoryDataSource
 import ru.radiationx.data.adb.datasource.HistoryDbDataSource
-import ru.radiationx.data.adomain.entity.relative.HistoryRelative
+import anilibria.tv.domain.entity.relative.HistoryRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

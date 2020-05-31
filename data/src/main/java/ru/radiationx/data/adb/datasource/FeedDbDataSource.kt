@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.FeedConverter
 import ru.radiationx.data.adb.dao.FeedDao
-import ru.radiationx.data.adomain.entity.relative.FeedRelative
+import anilibria.tv.domain.entity.relative.FeedRelative
 import toothpick.InjectConstructor
 
 @InjectConstructor

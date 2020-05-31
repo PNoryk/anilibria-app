@@ -8,9 +8,9 @@ import io.reactivex.functions.Function
 import ru.radiationx.data.acache.ScheduleCache
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
 import ru.radiationx.data.acache.combiner.ScheduleCacheCombiner
-import ru.radiationx.data.adomain.entity.relative.ScheduleDayRelative
-import ru.radiationx.data.adomain.entity.release.Release
-import ru.radiationx.data.adomain.entity.schedule.ScheduleDay
+import anilibria.tv.domain.entity.relative.ScheduleDayRelative
+import anilibria.tv.domain.entity.release.Release
+import anilibria.tv.domain.entity.schedule.ScheduleDay
 import toothpick.InjectConstructor
 
 @InjectConstructor

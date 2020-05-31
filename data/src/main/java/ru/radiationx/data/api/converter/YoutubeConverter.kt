@@ -1,6 +1,6 @@
 package ru.radiationx.data.api.converter
 
-import ru.radiationx.data.adomain.entity.youtube.Youtube
+import anilibria.tv.domain.entity.youtube.Youtube
 import ru.radiationx.data.api.entity.youtube.YouTubeResponse
 import ru.radiationx.data.datasource.remote.IApiUtils
 import ru.radiationx.shared.ktx.dateFromSec

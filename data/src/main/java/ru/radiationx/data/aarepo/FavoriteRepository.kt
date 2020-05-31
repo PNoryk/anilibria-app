@@ -5,7 +5,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.FavoriteCacheCombiner
 import ru.radiationx.data.acache.combiner.ReleaseCacheCombiner
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.release.Release
 import ru.radiationx.data.api.datasource.FavoriteApiDataSource
 import ru.radiationx.data.api.datasource.impl.FavoriteApiDataSourceImpl
 import toothpick.InjectConstructor

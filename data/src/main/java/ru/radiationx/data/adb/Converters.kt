@@ -1,7 +1,7 @@
 package ru.radiationx.data.adb
 
 import androidx.room.TypeConverter
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.release.Release
 import java.util.*
 
 class Converters {

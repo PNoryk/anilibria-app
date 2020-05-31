@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import ru.radiationx.data.adb.converters.ReleaseConverter
 import ru.radiationx.data.adb.dao.ReleaseDao
-import ru.radiationx.data.adomain.entity.release.Release
+import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 
 @InjectConstructor

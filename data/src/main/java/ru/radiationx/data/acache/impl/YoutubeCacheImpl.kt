@@ -8,7 +8,7 @@ import ru.radiationx.data.acache.common.flatMapIfListEmpty
 import ru.radiationx.data.acache.memory.YoutubeMemoryDataSource
 import ru.radiationx.data.acache.merger.YoutubeMerger
 import ru.radiationx.data.adb.datasource.YoutubeDbDataSource
-import ru.radiationx.data.adomain.entity.youtube.Youtube
+import anilibria.tv.domain.entity.youtube.Youtube
 import toothpick.InjectConstructor
 
 @InjectConstructor
