@@ -6,7 +6,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
 
-class SimpleListMemoryCache<T> {
+open class ListMemoryDataSource<T> {
 
     private val memory = Collections.synchronizedList(mutableListOf<T>())
 
