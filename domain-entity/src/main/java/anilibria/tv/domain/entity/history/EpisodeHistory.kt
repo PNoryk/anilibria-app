@@ -1,4 +1,4 @@
-package anilibria.tv.domain.entity.episode
+package anilibria.tv.domain.entity.history
 
 import anilibria.tv.domain.entity.episode.Episode
 import java.util.*

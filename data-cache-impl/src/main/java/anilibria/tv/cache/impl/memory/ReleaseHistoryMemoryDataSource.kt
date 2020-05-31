@@ -9,7 +9,7 @@ import toothpick.InjectConstructor
 import java.util.*
 
 @InjectConstructor
-class HistoryMemoryDataSource {
+class ReleaseHistoryMemoryDataSource {
 
     private val memory = Collections.synchronizedList(mutableListOf<ReleaseHistoryRelative>())
 

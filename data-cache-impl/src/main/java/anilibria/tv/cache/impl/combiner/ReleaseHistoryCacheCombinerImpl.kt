@@ -3,7 +3,8 @@ package anilibria.tv.cache.impl.combiner
 import anilibria.tv.cache.ReleaseHistoryCache
 import anilibria.tv.cache.combiner.ReleaseHistoryCacheCombiner
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
-import anilibria.tv.domain.entity.release.ReleaseHistory
+import anilibria.tv.domain.entity.converter.ReleaseHistoryRelativeConverter
+import anilibria.tv.domain.entity.history.ReleaseHistory
 import anilibria.tv.domain.entity.relative.ReleaseHistoryRelative
 import anilibria.tv.domain.entity.release.Release
 import io.reactivex.Completable
@@ -15,7 +16,8 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class ReleaseHistoryCacheCombinerImpl(
     private val releaseHistoryCache: ReleaseHistoryCache,
-    private val releaseCache: ReleaseCacheCombiner
+    private val releaseCache: ReleaseCacheCombiner,
+    private val relativeConverter: ReleaseHistoryRelativeConverter
 ) : ReleaseHistoryCacheCombiner {
 
     override fun observeList(): Observable<List<ReleaseHistory>> = releaseHistoryCache
@@ -36,24 +38,19 @@ class ReleaseHistoryCacheCombinerImpl(
 
     override fun putList(items: List<ReleaseHistory>): Completable {
         val putRelease = releaseCache.putList(items.map { it.release })
-        val putFavorite = releaseHistoryCache.putList(items.map {
-            ReleaseHistoryRelative(
-                it.release.id,
-                it.timestamp
-            )
-        })
+        val putFavorite = releaseHistoryCache.putList(items.map { relativeConverter.toRelative(it) })
         return Completable.concat(listOf(putRelease, putFavorite))
     }
 
     override fun removeList(items: List<ReleaseHistory>): Completable = releaseHistoryCache
-        .removeList(items.map { ReleaseHistoryRelative(it.release.id, it.timestamp) })
+        .removeList(items.map { relativeConverter.toRelative(it) })
 
     override fun clear(): Completable = releaseHistoryCache.clear()
 
-    private fun getSourceCombiner(relativeItems: List<ReleaseHistoryRelative>) = Function<List<Release>, List<ReleaseHistory>> { releaseItems ->
-        relativeItems.mapNotNull { relative ->
-            val release = releaseItems.firstOrNull { it.id == relative.releaseId }
-            release?.let { ReleaseHistory(relative.timestamp, release) }
+    private fun getSourceCombiner(relativeItems: List<ReleaseHistoryRelative>) =
+        Function<List<Release>, List<ReleaseHistory>> { releaseItems ->
+            relativeItems.mapNotNull { relative ->
+                relativeConverter.fromRelative(relative, releaseItems)
+            }
         }
-    }
 }

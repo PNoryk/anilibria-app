@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import anilibria.tv.cache.combiner.ReleaseHistoryCacheCombiner
-import anilibria.tv.domain.entity.release.ReleaseHistory
+import anilibria.tv.domain.entity.history.ReleaseHistory
 import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 import java.util.*

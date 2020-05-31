@@ -7,6 +7,7 @@ import anilibria.tv.db.impl.dao.*
 import anilibria.tv.db.impl.entity.episode.EpisodeDb
 import anilibria.tv.db.impl.entity.favorite.FavoriteDb
 import anilibria.tv.db.impl.entity.feed.FeedDb
+import anilibria.tv.db.impl.entity.history.EpisodeHistoryDb
 import anilibria.tv.db.impl.entity.history.ReleaseHistoryDb
 import anilibria.tv.db.impl.entity.release.BlockInfoDb
 import anilibria.tv.db.impl.entity.release.FavoriteInfoDb
@@ -24,6 +25,8 @@ import anilibria.tv.db.impl.entity.youtube.YoutubeDb
 
         FeedDb::class,
 
+        EpisodeHistoryDb::class,
+        ReleaseHistoryDb::class,
 
         BlockInfoDb::class,
         FavoriteInfoDb::class,
@@ -31,7 +34,6 @@ import anilibria.tv.db.impl.entity.youtube.YoutubeDb
 
         FlatScheduleDayDb::class,
         ScheduleReleaseDb::class,
-        ReleaseHistoryDb::class,
 
         TorrentDb::class,
 
@@ -40,10 +42,11 @@ import anilibria.tv.db.impl.entity.youtube.YoutubeDb
     version = 1,
     exportSchema = false
 )
-@TypeConverters(anilibria.tv.db.impl.RoomConverters::class)
+@TypeConverters(RoomConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun episodeDao(): EpisodeDao
+    abstract fun episodeHistoryDao(): EpisodeHistoryDao
     abstract fun favoriteDao(): FavoriteDao
     abstract fun feedDao(): FeedDao
     abstract fun releaseDao(): ReleaseDao

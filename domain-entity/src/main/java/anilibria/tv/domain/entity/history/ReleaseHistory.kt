@@ -1,4 +1,4 @@
-package anilibria.tv.domain.entity.release
+package anilibria.tv.domain.entity.history
 
 import anilibria.tv.domain.entity.release.Release
 import java.util.*

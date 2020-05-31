@@ -2,7 +2,7 @@ package anilibria.tv.cache.impl
 
 import anilibria.tv.cache.ReleaseHistoryCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
-import anilibria.tv.cache.impl.memory.HistoryMemoryDataSource
+import anilibria.tv.cache.impl.memory.ReleaseHistoryMemoryDataSource
 import anilibria.tv.db.ReleaseHistoryDbDataSource
 import anilibria.tv.domain.entity.relative.ReleaseHistoryRelative
 import io.reactivex.Completable
@@ -13,7 +13,7 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class ReleaseHistoryCacheImpl(
     private val dbDataSource: ReleaseHistoryDbDataSource,
-    private val memoryDataSource: HistoryMemoryDataSource
+    private val memoryDataSource: ReleaseHistoryMemoryDataSource
 ) : ReleaseHistoryCache {
 
     override fun observeList(): Observable<List<ReleaseHistoryRelative>> = memoryDataSource.observeListAll()
