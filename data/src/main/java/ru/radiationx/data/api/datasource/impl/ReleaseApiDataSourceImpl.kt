@@ -1,4 +1,4 @@
-package ru.radiationx.data.api.datasource
+package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
 import ru.radiationx.data.adomain.entity.pagination.Paginated
@@ -7,6 +7,7 @@ import ru.radiationx.data.adomain.entity.release.Release
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
+import ru.radiationx.data.api.datasource.ReleaseApiDataSource
 import ru.radiationx.data.api.service.ReleaseService
 import toothpick.InjectConstructor
 
@@ -15,9 +16,9 @@ class ReleaseApiDataSourceImpl(
     private val releaseService: ReleaseService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter
-) {
+) : ReleaseApiDataSource {
 
-    fun getOne(releaseId: Int? = null, releaseCode: String? = null): Single<Release> {
+    override fun getOne(releaseId: Int?, releaseCode: String?): Single<Release> {
         if (releaseId == null && releaseCode == null) {
             throw IllegalArgumentException("Release id and code is null")
         }
@@ -31,7 +32,7 @@ class ReleaseApiDataSourceImpl(
             .map { releaseConverter.toDomain(it) }
     }
 
-    fun getSome(ids: List<Int>? = null, codes: List<String>? = null): Single<List<Release>> {
+    override fun getSome(ids: List<Int>?, codes: List<String>?): Single<List<Release>> {
         if (ids == null && codes == null) {
             throw IllegalArgumentException("Release ids and codes is null")
         }
@@ -49,7 +50,7 @@ class ReleaseApiDataSourceImpl(
             }
     }
 
-    fun getList(page: Int): Single<Paginated<Release>> = releaseService
+    override fun getList(page: Int): Single<Paginated<Release>> = releaseService
         .getList(
             mapOf(
                 "query" to "list",
@@ -65,7 +66,7 @@ class ReleaseApiDataSourceImpl(
             }
         }
 
-    fun getRandom(): Single<RandomRelease> = releaseService
+    override fun getRandom(): Single<RandomRelease> = releaseService
         .getRandom(mapOf("query" to "random_release"))
         .handleApiResponse()
         .map { releaseConverter.toDomain(it) }

@@ -4,12 +4,13 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.acache.combiner.FeedCacheCombiner
 import ru.radiationx.data.adomain.entity.feed.Feed
-import ru.radiationx.data.api.datasource.FeedApiDataSourceImpl
+import ru.radiationx.data.api.datasource.FeedApiDataSource
+import ru.radiationx.data.api.datasource.impl.FeedApiDataSourceImpl
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class FeedRepository(
-    private val apiDataSource: FeedApiDataSourceImpl,
+    private val apiDataSource: FeedApiDataSource,
     private val cacheCombiner: FeedCacheCombiner
 ) {
 

@@ -1,4 +1,4 @@
-package ru.radiationx.data.api.datasource
+package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
 import ru.radiationx.data.adomain.entity.pagination.Paginated
@@ -6,6 +6,7 @@ import ru.radiationx.data.adomain.entity.release.Release
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
+import ru.radiationx.data.api.datasource.FavoriteApiDataSource
 import ru.radiationx.data.api.service.FavoriteService
 import toothpick.InjectConstructor
 
@@ -14,9 +15,9 @@ class FavoriteApiDataSourceImpl(
     private val favoriteService: FavoriteService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter
-) {
+) : FavoriteApiDataSource {
 
-    fun getList(page: Int): Single<Paginated<Release>> = favoriteService
+    override fun getList(page: Int): Single<Paginated<Release>> = favoriteService
         .getList(
             mapOf(
                 "query" to "favorites",
@@ -32,7 +33,7 @@ class FavoriteApiDataSourceImpl(
             }
         }
 
-    fun add(releaseId: Int): Single<Release> = favoriteService
+    override fun add(releaseId: Int): Single<Release> = favoriteService
         .add(
             mapOf(
                 "query" to "favorites",
@@ -43,7 +44,7 @@ class FavoriteApiDataSourceImpl(
         .handleApiResponse()
         .map { releaseConverter.toDomain(it) }
 
-    fun delete(releaseId: Int): Single<Release> = favoriteService
+    override fun delete(releaseId: Int): Single<Release> = favoriteService
         .delete(
             mapOf(
                 "query" to "favorites",

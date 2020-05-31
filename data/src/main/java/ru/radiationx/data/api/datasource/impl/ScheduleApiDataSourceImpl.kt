@@ -1,9 +1,10 @@
-package ru.radiationx.data.api.datasource
+package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
 import ru.radiationx.data.adomain.entity.schedule.ScheduleDay
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.ScheduleConverter
+import ru.radiationx.data.api.datasource.ScheduleApiDataSource
 import ru.radiationx.data.api.service.ScheduleService
 import toothpick.InjectConstructor
 
@@ -11,9 +12,9 @@ import toothpick.InjectConstructor
 class ScheduleApiDataSourceImpl(
     private val scheduleService: ScheduleService,
     private val scheduleConverter: ScheduleConverter
-) {
+) : ScheduleApiDataSource {
 
-    fun getList(): Single<List<ScheduleDay>> = scheduleService
+    override fun getList(): Single<List<ScheduleDay>> = scheduleService
         .getList(
             mapOf(
                 "query" to "schedule",

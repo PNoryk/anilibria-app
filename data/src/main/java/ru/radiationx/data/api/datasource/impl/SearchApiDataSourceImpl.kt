@@ -1,4 +1,4 @@
-package ru.radiationx.data.api.datasource
+package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
 import org.json.JSONObject
@@ -7,6 +7,7 @@ import ru.radiationx.data.adomain.entity.release.Release
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.PaginationConverter
 import ru.radiationx.data.api.converter.ReleaseConverter
+import ru.radiationx.data.api.datasource.SearchApiDataSource
 import ru.radiationx.data.api.service.SearchService
 import ru.radiationx.data.entity.app.search.SearchForm
 import toothpick.InjectConstructor
@@ -16,17 +17,17 @@ class SearchApiDataSourceImpl(
     private val searchService: SearchService,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter
-) {
+) : SearchApiDataSource {
 
-    fun getYears(): Single<List<String>> = searchService
+    override fun getYears(): Single<List<String>> = searchService
         .getYears(mapOf("query" to "years"))
         .handleApiResponse()
 
-    fun getGenres(): Single<List<String>> = searchService
+    override fun getGenres(): Single<List<String>> = searchService
         .getGenres(mapOf("query" to "genres"))
         .handleApiResponse()
 
-    fun getSuggestions(name: String): Single<List<Release>> = searchService
+    override fun getSuggestions(name: String): Single<List<Release>> = searchService
         .getSuggestions(
             mapOf(
                 "query" to "search",
@@ -41,7 +42,7 @@ class SearchApiDataSourceImpl(
             }
         }
 
-    fun getMatches(form: SearchForm, page: Int): Single<Paginated<Release>> {
+    override fun getMatches(form: SearchForm, page: Int): Single<Paginated<Release>> {
         val yearsQuery = form.years?.joinToString(",") { it.value }.orEmpty()
         val seasonsQuery = form.seasons?.joinToString(",") { it.value }.orEmpty()
         val genresQuery = form.genres?.joinToString(",") { it.value }.orEmpty()

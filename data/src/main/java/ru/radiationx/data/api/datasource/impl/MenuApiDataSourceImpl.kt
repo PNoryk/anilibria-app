@@ -1,9 +1,10 @@
-package ru.radiationx.data.api.datasource
+package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Single
 import ru.radiationx.data.adomain.entity.menu.LinkMenu
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.LinkMenuConverter
+import ru.radiationx.data.api.datasource.MenuApiDataSource
 import ru.radiationx.data.api.service.MenuService
 import toothpick.InjectConstructor
 
@@ -11,9 +12,9 @@ import toothpick.InjectConstructor
 class MenuApiDataSourceImpl(
     private val menuService: MenuService,
     private val menuConverter: LinkMenuConverter
-) {
+) : MenuApiDataSource {
 
-    fun getList(): Single<List<LinkMenu>> = menuService
+    override fun getList(): Single<List<LinkMenu>> = menuService
         .getList(mapOf("query" to "link_menu"))
         .handleApiResponse()
         .map {

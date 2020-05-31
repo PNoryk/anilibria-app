@@ -1,4 +1,4 @@
-package ru.radiationx.data.api.datasource
+package ru.radiationx.data.api.datasource.impl
 
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -6,6 +6,7 @@ import ru.radiationx.data.adomain.entity.auth.OtpInfo
 import ru.radiationx.data.adomain.entity.auth.SocialService
 import ru.radiationx.data.api.common.handleApiResponse
 import ru.radiationx.data.api.converter.AuthConverter
+import ru.radiationx.data.api.datasource.AuthApiDataSource
 import ru.radiationx.data.api.service.AuthService
 import toothpick.InjectConstructor
 
@@ -14,9 +15,9 @@ import toothpick.InjectConstructor
 class AuthApiDataSourceImpl(
     private val authService: AuthService,
     private val authConverter: AuthConverter
-) {
+) : AuthApiDataSource {
 
-    fun signIn(login: String, password: String, code2fa: String): Completable = authService
+    override fun signIn(login: String, password: String, code2fa: String): Completable = authService
         .signIn(
             mapOf(
                 "query" to "login",
@@ -28,24 +29,24 @@ class AuthApiDataSourceImpl(
         .handleApiResponse()
         .ignoreElement()
 
-    fun signOut(): Completable = authService
+    override fun signOut(): Completable = authService
         .signOut(mapOf("query" to "logout"))
         .handleApiResponse()
         .ignoreElement()
 
 
-    fun getSocialServices(): Single<List<SocialService>> = authService
+    override fun getSocialServices(): Single<List<SocialService>> = authService
         .getSocialServices(mapOf("query" to "social_auth"))
         .handleApiResponse()
         .map { it.map { authConverter.toDomain(it) } }
 
-    fun signInSocial(resultUrl: String): Completable = authService
+    override fun signInSocial(resultUrl: String): Completable = authService
         .signInSocial(mapOf("query" to "login_social"))
         .handleApiResponse()
         .ignoreElement()
 
 
-    fun getOtpInfo(deviceId: String): Single<OtpInfo> = authService
+    override fun getOtpInfo(deviceId: String): Single<OtpInfo> = authService
         .getOtpInfo(
             mapOf(
                 "query" to "auth_get_otp",
@@ -55,7 +56,7 @@ class AuthApiDataSourceImpl(
         .handleApiResponse()
         .map { authConverter.toDomain(it) }
 
-    fun acceptOtp(code: String): Completable = authService
+    override fun acceptOtp(code: String): Completable = authService
         .acceptOtp(
             mapOf(
                 "query" to "auth_accept_otp",
@@ -65,7 +66,7 @@ class AuthApiDataSourceImpl(
         .handleApiResponse()
         .ignoreElement()
 
-    fun signInOtp(code: String, deviceId: String): Completable = authService
+    override fun signInOtp(code: String, deviceId: String): Completable = authService
         .signInOtp(
             mapOf(
                 "query" to "auth_login_otp",
