@@ -2,10 +2,9 @@ package ru.radiationx.data.aarepo
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.acache.combiner.ScheduleCacheCombiner
+import anilibria.tv.cache.combiner.ScheduleCacheCombiner
 import anilibria.tv.domain.entity.schedule.ScheduleDay
 import ru.radiationx.data.api.datasource.ScheduleApiDataSource
-import ru.radiationx.data.api.datasource.impl.ScheduleApiDataSourceImpl
 import toothpick.InjectConstructor
 
 @InjectConstructor

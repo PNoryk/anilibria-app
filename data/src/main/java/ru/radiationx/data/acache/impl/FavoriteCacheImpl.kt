@@ -3,9 +3,8 @@ package ru.radiationx.data.acache.impl
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.acache.FavoriteCache
-import ru.radiationx.data.acache.common.flatMapIfListEmpty
-import ru.radiationx.data.acache.memory.FavoriteMemoryDataSource
+import anilibria.tv.cache.FavoriteCache
+import anilibria.tv.cache.impl.memory.FavoriteMemoryDataSource
 import ru.radiationx.data.adb.datasource.FavoriteDbDataSource
 import anilibria.tv.domain.entity.relative.FavoriteRelative
 import toothpick.InjectConstructor
