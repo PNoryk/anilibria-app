@@ -1,6 +1,6 @@
 package anilibria.tv.cache.impl.memory
 
-import anilibria.tv.domain.entity.relative.HistoryRelative
+import anilibria.tv.domain.entity.relative.ReleaseHistoryRelative
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -11,21 +11,21 @@ import java.util.*
 @InjectConstructor
 class HistoryMemoryDataSource {
 
-    private val memory = Collections.synchronizedList(mutableListOf<HistoryRelative>())
+    private val memory = Collections.synchronizedList(mutableListOf<ReleaseHistoryRelative>())
 
     private val dataRelay by lazy { BehaviorRelay.createDefault(memory.toList()) }
 
-    fun observeListAll(): Observable<List<HistoryRelative>> = dataRelay.hide()
+    fun observeListAll(): Observable<List<ReleaseHistoryRelative>> = dataRelay.hide()
 
-    fun getListAll(): Single<List<HistoryRelative>> = Single.fromCallable {
+    fun getListAll(): Single<List<ReleaseHistoryRelative>> = Single.fromCallable {
         memory.toList()
     }
 
-    fun getOne(releaseId: Int): Single<HistoryRelative> = Single.fromCallable {
+    fun getOne(releaseId: Int): Single<ReleaseHistoryRelative> = Single.fromCallable {
         memory.first { it.releaseId == releaseId }
     }
 
-    fun insert(items: List<HistoryRelative>): Completable = Completable.fromAction {
+    fun insert(items: List<ReleaseHistoryRelative>): Completable = Completable.fromAction {
         synchronized(this) {
             items.forEach { new ->
                 memory.removeAll { old ->

@@ -4,9 +4,9 @@ import anilibria.tv.cache.EpisodeCache
 import anilibria.tv.cache.ReleaseCache
 import anilibria.tv.cache.TorrentCache
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.release.Release
-import anilibria.tv.domain.entity.release.Torrent
+import anilibria.tv.domain.entity.torrent.Torrent
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

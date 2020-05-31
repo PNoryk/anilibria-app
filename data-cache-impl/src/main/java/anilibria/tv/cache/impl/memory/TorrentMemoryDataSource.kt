@@ -1,6 +1,6 @@
 package anilibria.tv.cache.impl.memory
 
-import anilibria.tv.domain.entity.release.Torrent
+import anilibria.tv.domain.entity.torrent.Torrent
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable

@@ -1,6 +1,6 @@
 package anilibria.tv.cache.impl.memory
 
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable

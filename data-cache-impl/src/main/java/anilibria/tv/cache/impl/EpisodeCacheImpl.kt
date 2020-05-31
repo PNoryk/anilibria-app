@@ -5,7 +5,7 @@ import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.EpisodeMemoryDataSource
 import anilibria.tv.cache.merger.EpisodeMerger
 import anilibria.tv.db.EpisodeDbDataSource
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

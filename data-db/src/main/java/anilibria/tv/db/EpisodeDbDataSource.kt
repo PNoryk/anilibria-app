@@ -1,6 +1,6 @@
 package anilibria.tv.db
 
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import io.reactivex.Completable
 import io.reactivex.Single
 

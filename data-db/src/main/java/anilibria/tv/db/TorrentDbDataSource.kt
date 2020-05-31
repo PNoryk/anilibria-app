@@ -1,6 +1,6 @@
 package anilibria.tv.db
 
-import anilibria.tv.domain.entity.release.Torrent
+import anilibria.tv.domain.entity.torrent.Torrent
 import io.reactivex.Completable
 import io.reactivex.Single
 

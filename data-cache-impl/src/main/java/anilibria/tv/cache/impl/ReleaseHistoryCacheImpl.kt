@@ -1,24 +1,24 @@
 package anilibria.tv.cache.impl
 
-import anilibria.tv.cache.HistoryCache
+import anilibria.tv.cache.ReleaseHistoryCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.HistoryMemoryDataSource
-import anilibria.tv.db.HistoryDbDataSource
-import anilibria.tv.domain.entity.relative.HistoryRelative
+import anilibria.tv.db.ReleaseHistoryDbDataSource
+import anilibria.tv.domain.entity.relative.ReleaseHistoryRelative
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class HistoryCacheImpl(
-    private val dbDataSource: HistoryDbDataSource,
+class ReleaseHistoryCacheImpl(
+    private val dbDataSource: ReleaseHistoryDbDataSource,
     private val memoryDataSource: HistoryMemoryDataSource
-) : HistoryCache {
+) : ReleaseHistoryCache {
 
-    override fun observeList(): Observable<List<HistoryRelative>> = memoryDataSource.observeListAll()
+    override fun observeList(): Observable<List<ReleaseHistoryRelative>> = memoryDataSource.observeListAll()
 
-    override fun getList(): Single<List<HistoryRelative>> = memoryDataSource
+    override fun getList(): Single<List<ReleaseHistoryRelative>> = memoryDataSource
         .getListAll()
         .flatMapIfListEmpty {
             dbDataSource
@@ -27,12 +27,12 @@ class HistoryCacheImpl(
                 .andThen(memoryDataSource.getListAll())
         }
 
-    override fun putList(items: List<HistoryRelative>): Completable = dbDataSource
+    override fun putList(items: List<ReleaseHistoryRelative>): Completable = dbDataSource
         .insert(items)
         .andThen(dbDataSource.getList(items.toIds()))
         .flatMapCompletable { memoryDataSource.insert(it) }
 
-    override fun removeList(items: List<HistoryRelative>): Completable {
+    override fun removeList(items: List<ReleaseHistoryRelative>): Completable {
         val ids = items.toIds()
         return dbDataSource
             .removeList(ids)
@@ -43,5 +43,5 @@ class HistoryCacheImpl(
         .deleteAll()
         .andThen(memoryDataSource.deleteAll())
 
-    private fun List<HistoryRelative>.toIds() = map { it.releaseId }
+    private fun List<ReleaseHistoryRelative>.toIds() = map { it.releaseId }
 }

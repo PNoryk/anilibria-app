@@ -1,6 +1,6 @@
 package anilibria.tv.cache.merger
 
-import anilibria.tv.domain.entity.release.Torrent
+import anilibria.tv.domain.entity.torrent.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

@@ -3,22 +3,22 @@ package ru.radiationx.data.aarepo
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import anilibria.tv.cache.combiner.HistoryCacheCombiner
-import anilibria.tv.domain.entity.history.HistoryItem
+import anilibria.tv.cache.combiner.ReleaseHistoryCacheCombiner
+import anilibria.tv.domain.entity.release.ReleaseHistory
 import anilibria.tv.domain.entity.release.Release
 import toothpick.InjectConstructor
 import java.util.*
 
 @InjectConstructor
 class HistoryRepository(
-    private val cacheCombiner: HistoryCacheCombiner
+    private val cacheCombinerRelease: ReleaseHistoryCacheCombiner
 ) {
 
-    fun observeList(): Observable<List<HistoryItem>> = cacheCombiner.observeList()
+    fun observeList(): Observable<List<ReleaseHistory>> = cacheCombinerRelease.observeList()
 
-    fun getList(): Single<List<HistoryItem>> = cacheCombiner.getList()
+    fun getList(): Single<List<ReleaseHistory>> = cacheCombinerRelease.getList()
 
-    fun visitRelease(item: Release): Completable = cacheCombiner.putList(listOf(
-        HistoryItem(Date(), item)
+    fun visitRelease(item: Release): Completable = cacheCombinerRelease.putList(listOf(
+        ReleaseHistory(Date(), item)
     ))
 }

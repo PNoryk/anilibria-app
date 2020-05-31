@@ -1,3 +1,5 @@
+include ':data-storage-impl'
+include ':data-storage'
 include ':domain-entity'
 include ':data-db'
 include ':data-cache'

@@ -5,7 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import anilibria.tv.db.impl.converters.EpisodeConverter
 import anilibria.tv.db.impl.dao.EpisodeDao
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import toothpick.InjectConstructor
 
 @InjectConstructor

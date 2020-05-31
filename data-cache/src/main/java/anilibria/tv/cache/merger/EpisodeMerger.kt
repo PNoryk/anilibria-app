@@ -1,6 +1,6 @@
 package anilibria.tv.cache.merger
 
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import toothpick.InjectConstructor
 
 @InjectConstructor

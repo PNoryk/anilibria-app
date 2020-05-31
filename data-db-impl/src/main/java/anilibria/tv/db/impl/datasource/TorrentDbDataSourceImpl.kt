@@ -5,7 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import anilibria.tv.db.impl.converters.TorrentConverter
 import anilibria.tv.db.impl.dao.TorrentDao
-import anilibria.tv.domain.entity.release.Torrent
+import anilibria.tv.domain.entity.torrent.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

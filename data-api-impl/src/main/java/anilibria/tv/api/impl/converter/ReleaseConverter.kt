@@ -4,6 +4,8 @@ import anilibria.tv.api.common.HtmlUnescapeTool
 import anilibria.tv.api.impl.common.dateFromSec
 import anilibria.tv.domain.entity.release.*
 import anilibria.tv.api.impl.entity.release.*
+import anilibria.tv.domain.entity.episode.Episode
+import anilibria.tv.domain.entity.torrent.Torrent
 import toothpick.InjectConstructor
 import java.util.*
 

@@ -3,7 +3,7 @@ package anilibria.tv.cache
 import io.reactivex.Observable
 import io.reactivex.Single
 import anilibria.tv.cache.common.ReadWriteCache
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 
 interface EpisodeCache : ReadWriteCache<Episode> {
 

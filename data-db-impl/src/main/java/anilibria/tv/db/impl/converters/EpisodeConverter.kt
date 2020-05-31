@@ -1,7 +1,7 @@
 package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.episode.EpisodeDb
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import toothpick.InjectConstructor
 
 @InjectConstructor

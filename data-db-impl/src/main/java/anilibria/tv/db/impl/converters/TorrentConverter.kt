@@ -1,7 +1,7 @@
 package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.torrent.TorrentDb
-import anilibria.tv.domain.entity.release.Torrent
+import anilibria.tv.domain.entity.torrent.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor

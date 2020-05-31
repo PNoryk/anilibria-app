@@ -1,5 +1,7 @@
 package anilibria.tv.domain.entity.release
 
+import anilibria.tv.domain.entity.episode.Episode
+import anilibria.tv.domain.entity.torrent.Torrent
 import java.util.*
 
 

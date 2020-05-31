@@ -2,7 +2,7 @@ package anilibria.tv.domain.entity.relative
 
 import java.util.*
 
-data class HistoryRelative(
+data class ReleaseHistoryRelative(
     val releaseId: Int,
     val timestamp: Date
 )

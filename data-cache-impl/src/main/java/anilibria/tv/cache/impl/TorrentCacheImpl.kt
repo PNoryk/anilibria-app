@@ -5,7 +5,7 @@ import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.TorrentMemoryDataSource
 import anilibria.tv.cache.merger.TorrentMerger
 import anilibria.tv.db.TorrentDbDataSource
-import anilibria.tv.domain.entity.release.Torrent
+import anilibria.tv.domain.entity.torrent.Torrent
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

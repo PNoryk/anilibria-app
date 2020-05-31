@@ -1,4 +1,4 @@
-package anilibria.tv.domain.entity.release
+package anilibria.tv.domain.entity.torrent
 
 import java.util.*
 

@@ -3,7 +3,7 @@ package ru.radiationx.data.aarepo
 import io.reactivex.Observable
 import io.reactivex.Single
 import anilibria.tv.cache.EpisodeCache
-import anilibria.tv.domain.entity.release.Episode
+import anilibria.tv.domain.entity.episode.Episode
 import toothpick.InjectConstructor
 
 @InjectConstructor
