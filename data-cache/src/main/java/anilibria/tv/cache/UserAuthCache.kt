@@ -13,5 +13,7 @@ interface UserAuthCache {
 
     fun getUser(): Single<UserAuth>
 
-    fun putUser(user: UserAuth): Completable
+    fun putUser(user: User): Completable
+
+    fun deleteUser(): Completable
 }

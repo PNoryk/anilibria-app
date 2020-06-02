@@ -7,7 +7,13 @@ data class UserAuth(
     val user: User?
 ) {
 
+    init {
+        if ((state == State.AUTH && user == null) || (state == State.NO_AUTH && user != null)) {
+            throw IllegalStateException("AuthUser is broken $state, ${user?.id}")
+        }
+    }
+
     enum class State {
-        NO_AUTH, AUTH_SKIPPED, AUTH
+        NO_AUTH, AUTH
     }
 }

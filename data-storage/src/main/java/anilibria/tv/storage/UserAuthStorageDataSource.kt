@@ -10,5 +10,7 @@ interface UserAuthStorageDataSource {
 
     fun getUser(): Single<UserAuth>
 
-    fun putUser(user: UserAuth): Completable
+    fun putUser(user: User): Completable
+
+    fun delete(): Completable
 }

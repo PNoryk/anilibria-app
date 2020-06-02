@@ -29,22 +29,26 @@ class AuthApiDataSourceImpl(
         .handleApiResponse()
         .ignoreElement()
 
-    override fun signOut(): Completable = authService
-        .signOut(mapOf("query" to "logout"))
+    override fun signInOtp(code: String, deviceId: String): Completable = authService
+        .signInOtp(
+            mapOf(
+                "query" to "auth_login_otp",
+                "deviceId" to deviceId,
+                "code" to code
+            )
+        )
         .handleApiResponse()
         .ignoreElement()
 
+    override fun signInSocial(resultUrl: String, service: SocialService): Completable = authService
+        .signInSocial(mapOf("query" to "login_social"))
+        .handleApiResponse()
+        .ignoreElement()
 
     override fun getSocialServices(): Single<List<SocialService>> = authService
         .getSocialServices(mapOf("query" to "social_auth"))
         .handleApiResponse()
         .map { it.map { authConverter.toDomain(it) } }
-
-    override fun signInSocial(resultUrl: String): Completable = authService
-        .signInSocial(mapOf("query" to "login_social"))
-        .handleApiResponse()
-        .ignoreElement()
-
 
     override fun getOtpInfo(deviceId: String): Single<OtpInfo> = authService
         .getOtpInfo(
@@ -66,14 +70,8 @@ class AuthApiDataSourceImpl(
         .handleApiResponse()
         .ignoreElement()
 
-    override fun signInOtp(code: String, deviceId: String): Completable = authService
-        .signInOtp(
-            mapOf(
-                "query" to "auth_login_otp",
-                "deviceId" to deviceId,
-                "code" to code
-            )
-        )
+    override fun signOut(): Completable = authService
+        .signOut(mapOf("query" to "logout"))
         .handleApiResponse()
         .ignoreElement()
 }

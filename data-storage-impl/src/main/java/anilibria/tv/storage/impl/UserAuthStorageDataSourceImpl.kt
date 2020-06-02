@@ -1,6 +1,7 @@
 package anilibria.tv.storage.impl
 
 import anilibria.tv.domain.entity.auth.UserAuth
+import anilibria.tv.domain.entity.user.User
 import anilibria.tv.storage.UserAuthStorageDataSource
 import anilibria.tv.storage.common.KeyValueStorage
 import anilibria.tv.storage.impl.converter.UserAuthConverter
@@ -35,8 +36,10 @@ class UserAuthStorageDataSourceImpl(
         .map { converter.toDomain(it) }
         .switchIfEmpty(Single.just(defaultUser))
 
-    override fun putUser(user: UserAuth): Completable = Single
-        .fromCallable { converter.toStorage(user) }
+    override fun putUser(user: User): Completable = Single
+        .fromCallable { converter.toStorage(UserAuth(state = UserAuth.State.AUTH, user = null)) }
         .map { gson.toJson(it, dataType) }
         .flatMapCompletable { keyValueStorage.putValue(KEY, it) }
+
+    override fun delete(): Completable = keyValueStorage.delete(KEY)
 }
