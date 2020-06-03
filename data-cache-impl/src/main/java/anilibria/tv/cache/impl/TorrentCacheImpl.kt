@@ -3,7 +3,7 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.TorrentCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.TorrentMemoryDataSource
-import anilibria.tv.cache.merger.TorrentMerger
+import anilibria.tv.cache.impl.merger.TorrentMerger
 import anilibria.tv.db.TorrentDbDataSource
 import anilibria.tv.domain.entity.torrent.Torrent
 import io.reactivex.Completable

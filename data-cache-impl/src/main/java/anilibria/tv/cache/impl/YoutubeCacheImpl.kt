@@ -3,7 +3,7 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.YoutubeCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.YoutubeMemoryDataSource
-import anilibria.tv.cache.merger.YoutubeMerger
+import anilibria.tv.cache.impl.merger.YoutubeMerger
 import anilibria.tv.db.YoutubeDbDataSource
 import anilibria.tv.domain.entity.youtube.Youtube
 import io.reactivex.Completable

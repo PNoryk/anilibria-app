@@ -3,7 +3,7 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.EpisodeCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.EpisodeMemoryDataSource
-import anilibria.tv.cache.merger.EpisodeMerger
+import anilibria.tv.cache.impl.merger.EpisodeMerger
 import anilibria.tv.db.EpisodeDbDataSource
 import anilibria.tv.domain.entity.episode.Episode
 import io.reactivex.Completable

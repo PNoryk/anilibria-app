@@ -1,4 +1,4 @@
-package anilibria.tv.cache.merger
+package anilibria.tv.cache.impl.merger
 
 
 fun <T> T.mergeField(new: T): T {

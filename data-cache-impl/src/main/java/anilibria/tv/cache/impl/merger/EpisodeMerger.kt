@@ -1,4 +1,4 @@
-package anilibria.tv.cache.merger
+package anilibria.tv.cache.impl.merger
 
 import anilibria.tv.domain.entity.episode.Episode
 import toothpick.InjectConstructor
@@ -6,17 +6,16 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class EpisodeMerger {
 
-    fun merge(old: Episode, new: Episode) =
-        Episode(
-            releaseId = old.releaseId.mergeField(new.releaseId),
-            id = old.id.mergeField(new.id),
-            title = old.title.mergeField(new.title),
-            sd = old.sd.mergeField(new.sd),
-            hd = old.hd.mergeField(new.hd),
-            fullhd = old.fullhd.mergeField(new.fullhd),
-            srcSd = old.srcSd.mergeField(new.srcSd),
-            srcHd = old.srcHd.mergeField(new.srcHd)
-        )
+    fun merge(old: Episode, new: Episode) = Episode(
+        releaseId = old.releaseId.mergeField(new.releaseId),
+        id = old.id.mergeField(new.id),
+        title = old.title.mergeField(new.title),
+        sd = old.sd.mergeField(new.sd),
+        hd = old.hd.mergeField(new.hd),
+        fullhd = old.fullhd.mergeField(new.fullhd),
+        srcSd = old.srcSd.mergeField(new.srcSd),
+        srcHd = old.srcHd.mergeField(new.srcHd)
+    )
 
     fun filterSame(oldItems: List<Episode>, newItems: List<Episode>): List<Episode> {
         val oldGrouped = oldItems.groupBy { it.releaseId }

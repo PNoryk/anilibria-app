@@ -3,7 +3,7 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.ReleaseCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.ReleaseMemoryDataSource
-import anilibria.tv.cache.merger.ReleaseMerger
+import anilibria.tv.cache.impl.merger.ReleaseMerger
 import anilibria.tv.db.ReleaseDbDataSource
 import anilibria.tv.domain.entity.release.Release
 import io.reactivex.Completable
