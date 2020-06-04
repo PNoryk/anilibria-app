@@ -20,13 +20,13 @@ class UserAuthConverter(
     )
 
     private fun UserAuth.State.asStorageState(): Int = when (this) {
-        UserAuth.State.NO_AUTH -> 1
-        UserAuth.State.AUTH -> 2
+        UserAuth.State.NO_AUTH -> UserAuthStorage.STATE_NO_AUTH
+        UserAuth.State.AUTH -> UserAuthStorage.STATE_AUTH
     }
 
     private fun Int.asDomainState(): UserAuth.State = when (this) {
-        1 -> UserAuth.State.NO_AUTH
-        2 -> UserAuth.State.AUTH
+        UserAuthStorage.STATE_NO_AUTH -> UserAuth.State.NO_AUTH
+        UserAuthStorage.STATE_AUTH -> UserAuth.State.AUTH
         else -> throw IllegalStateException("Wrong auth state")
     }
 }
