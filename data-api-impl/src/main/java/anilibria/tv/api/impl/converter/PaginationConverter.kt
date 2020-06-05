@@ -9,11 +9,10 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class PaginationConverter {
 
-    fun <T, R> toDomain(response: PaginatedResponse<T>, block: (T) -> R): Paginated<R> =
-        Paginated(
-            items = response.items.map(block),
-            pagination = toDomain(response.pagination)
-        )
+    fun <T, R> toDomain(response: PaginatedResponse<T>, block: (T) -> R): Paginated<R> = Paginated(
+        items = response.items.map(block),
+        pagination = toDomain(response.pagination)
+    )
 
     fun toDomain(response: PaginationResponse) = Pagination(
         page = response.page,

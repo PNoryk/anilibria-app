@@ -8,15 +8,14 @@ import anilibria.tv.api.impl.entity.auth.SocialServiceResponse
 import toothpick.InjectConstructor
 
 @InjectConstructor
-class AuthConverter{
+class AuthConverter {
 
-    fun toDomain(response: OtpInfoResponse): OtpInfo =
-        OtpInfo(
-            code = response.code,
-            description = response.description,
-            expiresAt = response.expiresAt.dateFromSec(),
-            remainingTime = response.remainingTime
-        )
+    fun toDomain(response: OtpInfoResponse): OtpInfo = OtpInfo(
+        code = response.code,
+        description = response.description,
+        expiresAt = response.expiresAt.dateFromSec(),
+        remainingTime = response.remainingTime
+    )
 
     fun toDomain(response: SocialServiceResponse) = SocialService(
         key = response.key,

@@ -1,7 +1,6 @@
 package anilibria.tv.api.impl.datasource
 
 import io.reactivex.Single
-import org.json.JSONObject
 import anilibria.tv.domain.entity.pagination.Paginated
 import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.api.impl.common.handleApiResponse
@@ -10,13 +9,15 @@ import anilibria.tv.api.impl.converter.ReleaseConverter
 import anilibria.tv.api.SearchApiDataSource
 import anilibria.tv.domain.entity.search.SearchForm
 import anilibria.tv.api.impl.service.SearchService
+import com.google.gson.Gson
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class SearchApiDataSourceImpl(
     private val searchService: SearchService,
     private val releaseConverter: ReleaseConverter,
-    private val paginationConverter: PaginationConverter
+    private val paginationConverter: PaginationConverter,
+    private val gson: Gson
 ) : SearchApiDataSource {
 
     override fun getYears(): Single<List<String>> = searchService
@@ -52,13 +53,15 @@ class SearchApiDataSourceImpl(
         }
         val onlyCompletedStr = if (form.onlyCompleted) "2" else "1"
 
+        val searchParams = mapOf(
+            "genre" to genresQuery,
+            "year" to yearsQuery,
+            "season" to seasonsQuery
+        )
+
         val params = mapOf(
             "query" to "catalog",
-            "search" to JSONObject().apply {
-                put("genre", genresQuery)
-                put("year", yearsQuery)
-                put("season", seasonsQuery)
-            }.toString(),
+            "search" to gson.toJson(searchParams),
             "finish" to onlyCompletedStr,
             "xpage" to "catalog",
             "sort" to sortStr,
