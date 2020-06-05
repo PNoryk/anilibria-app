@@ -22,7 +22,7 @@ class ConfigConverter {
         proxies = response.proxies.map { toDomain(it) }
     )
 
-    fun toDomain(response: ApiProxyResponse) = ApiProxy(
+    private fun toDomain(response: ApiProxyResponse) = ApiProxy(
         tag = response.tag,
         name = response.name,
         desc = response.desc,

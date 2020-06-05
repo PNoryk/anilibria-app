@@ -16,7 +16,7 @@ class DayConverter {
         const val SUNDAY = "7"
     }
 
-    fun toData(day: Int): String = when (day) {
+    fun toResponse(day: Int): String = when (day) {
         Calendar.MONDAY -> MONDAY
         Calendar.TUESDAY -> TUESDAY
         Calendar.WEDNESDAY -> WEDNESDAY

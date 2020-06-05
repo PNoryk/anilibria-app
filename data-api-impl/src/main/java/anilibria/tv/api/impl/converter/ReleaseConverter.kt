@@ -78,7 +78,7 @@ class ReleaseConverter(
         url = response.url
     )
 
-    private fun parseStatus(status: String): Release.Status? = when (status) {
+    fun parseStatus(status: String): Release.Status? = when (status) {
         "1" -> Release.Status.PROGRESS
         "2" -> Release.Status.COMPLETE
         "3" -> Release.Status.HIDDEN
@@ -86,7 +86,7 @@ class ReleaseConverter(
         else -> null
     }
 
-    private fun parseLast(last: String): Date? = try {
+    fun parseLast(last: String): Date? = try {
         last.toLong().dateFromSec()
     } catch (ex: Exception) {
         null

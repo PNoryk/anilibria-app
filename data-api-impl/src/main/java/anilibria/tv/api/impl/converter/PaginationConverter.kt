@@ -14,7 +14,7 @@ class PaginationConverter {
         pagination = toDomain(response.pagination)
     )
 
-    fun toDomain(response: PaginationResponse) = Pagination(
+    private fun toDomain(response: PaginationResponse) = Pagination(
         page = response.page,
         perPage = response.perPage,
         allPages = response.allPages,
