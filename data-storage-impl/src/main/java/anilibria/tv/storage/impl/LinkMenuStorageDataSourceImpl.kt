@@ -23,6 +23,7 @@ class LinkMenuStorageDataSourceImpl(
 
         private val dataType = object : TypeToken<List<LinkMenuStorage>>() {}.type
 
+        //todo перенести дефолтные значения в репозиторий или куда-нибудь повыше
         private val defaultMenu = listOf(
             LinkMenu(
                 title = "Группа VK",
@@ -67,7 +68,7 @@ class LinkMenuStorageDataSourceImpl(
         .getValue(KEY)
         .map { gson.fromJson<List<LinkMenuStorage>>(it, dataType) }
         .map { converter.toDomain(it) }
-        .switchIfEmpty(Single.just(defaultMenu))
+        .switchIfEmpty(Single.just(emptyList()))
 
     override fun putList(items: List<LinkMenu>): Completable = Single
         .fromCallable { converter.toStorage(items) }
