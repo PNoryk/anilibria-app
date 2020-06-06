@@ -1,4 +1,4 @@
-package anilibria.tv.api.impl.converter.common
+package anilibria.tv.api.impl.common
 
 import anilibria.tv.api.common.HtmlUnescapeTool
 

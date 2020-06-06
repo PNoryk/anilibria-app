@@ -1,22 +1,16 @@
 package anilibria.tv.api.impl.converter.release
 
-import anilibria.tv.api.common.HtmlUnescapeTool
 import anilibria.tv.api.impl.converter.DayConverter
 import anilibria.tv.api.impl.converter.ReleaseConverter
-import anilibria.tv.api.impl.converter.common.DummyHtmlUnescapeTool
-import anilibria.tv.api.impl.entity.comments.CommentsInfoResponse
+import anilibria.tv.api.impl.common.DummyHtmlUnescapeTool
 import anilibria.tv.api.impl.entity.release.*
-import anilibria.tv.domain.entity.comments.CommentsInfo
 import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.release.BlockInfo
 import anilibria.tv.domain.entity.release.FavoriteInfo
 import anilibria.tv.domain.entity.release.RandomRelease
 import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.domain.entity.torrent.Torrent
-import io.mockk.every
-import io.mockk.mockk
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import java.util.*
 

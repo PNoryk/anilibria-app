@@ -1,15 +1,7 @@
 package anilibria.tv.api.impl.converter
 
-import anilibria.tv.api.impl.converter.common.DummyHtmlUnescapeTool
-import anilibria.tv.api.impl.entity.checker.UpdateLinkResponse
-import anilibria.tv.api.impl.entity.checker.UpdateResponse
-import anilibria.tv.api.impl.entity.comments.CommentsInfoResponse
-import anilibria.tv.api.impl.entity.user.UserResponse
+import anilibria.tv.api.impl.common.DummyHtmlUnescapeTool
 import anilibria.tv.api.impl.entity.youtube.YouTubeResponse
-import anilibria.tv.domain.entity.checker.Update
-import anilibria.tv.domain.entity.checker.UpdateLink
-import anilibria.tv.domain.entity.comments.CommentsInfo
-import anilibria.tv.domain.entity.user.User
 import anilibria.tv.domain.entity.youtube.Youtube
 import org.junit.Assert.assertEquals
 import org.junit.Test

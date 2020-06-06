@@ -1,14 +1,7 @@
 package anilibria.tv.api.impl.converter
 
-import anilibria.tv.api.impl.converter.common.DummyHtmlUnescapeTool
-import anilibria.tv.api.impl.entity.checker.UpdateLinkResponse
-import anilibria.tv.api.impl.entity.checker.UpdateResponse
-import anilibria.tv.api.impl.entity.comments.CommentsInfoResponse
 import anilibria.tv.api.impl.entity.release.ReleaseResponse
 import anilibria.tv.api.impl.entity.schedule.ScheduleDayResponse
-import anilibria.tv.domain.entity.checker.Update
-import anilibria.tv.domain.entity.checker.UpdateLink
-import anilibria.tv.domain.entity.comments.CommentsInfo
 import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.domain.entity.schedule.ScheduleDay
 import io.mockk.*
