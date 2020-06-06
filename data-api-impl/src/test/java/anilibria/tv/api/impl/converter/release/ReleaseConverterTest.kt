@@ -66,7 +66,7 @@ class ReleaseConverterTest {
         day = 3,
         description = "description$id",
         announce = "announce$id",
-        blockedInfo = BlockInfo(false, null),
+        blockedInfo = BlockInfo(false, "reason"),
         playlist = listOf(createEpisode(id, 1), createEpisode(id, 2)),
         torrents = listOf(createTorrent(id, 1), createTorrent(id, 2)),
         showDonateDialog = true
@@ -141,7 +141,7 @@ class ReleaseConverterTest {
         day = "2",
         description = "description$id",
         announce = "announce$id",
-        blockedInfo = BlockInfoResponse(false, null),
+        blockedInfo = BlockInfoResponse(false, "reason"),
         playlist = listOf(createEpisodeResponse(id, 1), createEpisodeResponse(id, 2)),
         torrents = listOf(createTorrentResponse(id, 1), createTorrentResponse(id, 2)),
         showDonateDialog = true

@@ -55,27 +55,29 @@ class ReleaseConverter {
     fun toDb(source: Release): ReleaseDb {
         val favoriteInfoDb = source.favorite?.let { toDb(source.id, it) }
         val blockedInfoDb = source.blockedInfo?.let { toDb(source.id, it) }
-        val releaseDb = FlatReleaseDb(
-            id = source.id,
-            code = source.code,
-            nameRu = source.nameRu,
-            nameEn = source.nameEn,
-            series = source.series,
-            poster = source.poster,
-            last = source.last,
-            webPlayer = source.webPlayer,
-            status = source.status,
-            type = source.type,
-            genres = source.genres,
-            voices = source.voices,
-            year = source.year,
-            day = source.day,
-            description = source.description,
-            announce = source.announce,
-            showDonateDialog = source.showDonateDialog
-        )
+        val releaseDb = toFlatDb(source)
         return ReleaseDb(releaseDb, favoriteInfoDb, blockedInfoDb)
     }
+
+    fun toFlatDb(source: Release) = FlatReleaseDb(
+        id = source.id,
+        code = source.code,
+        nameRu = source.nameRu,
+        nameEn = source.nameEn,
+        series = source.series,
+        poster = source.poster,
+        last = source.last,
+        webPlayer = source.webPlayer,
+        status = source.status,
+        type = source.type,
+        genres = source.genres,
+        voices = source.voices,
+        year = source.year,
+        day = source.day,
+        description = source.description,
+        announce = source.announce,
+        showDonateDialog = source.showDonateDialog
+    )
 
     fun toDb(releaseId: Int, source: FavoriteInfo) = FavoriteInfoDb(
         releaseId = releaseId,
