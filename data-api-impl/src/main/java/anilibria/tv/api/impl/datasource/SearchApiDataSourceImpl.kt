@@ -7,6 +7,7 @@ import anilibria.tv.api.impl.common.handleApiResponse
 import anilibria.tv.api.impl.converter.PaginationConverter
 import anilibria.tv.api.impl.converter.ReleaseConverter
 import anilibria.tv.api.SearchApiDataSource
+import anilibria.tv.api.impl.converter.SearchFormConverter
 import anilibria.tv.domain.entity.search.SearchForm
 import anilibria.tv.api.impl.service.SearchService
 import com.google.gson.Gson
@@ -15,6 +16,7 @@ import toothpick.InjectConstructor
 @InjectConstructor
 class SearchApiDataSourceImpl(
     private val searchService: SearchService,
+    private val searchFormConverter: SearchFormConverter,
     private val releaseConverter: ReleaseConverter,
     private val paginationConverter: PaginationConverter,
     private val gson: Gson
@@ -43,41 +45,33 @@ class SearchApiDataSourceImpl(
             }
         }
 
-    override fun getMatches(form: SearchForm, page: Int): Single<Paginated<Release>> {
-        val yearsQuery = form.years?.joinToString(",").orEmpty()
-        val seasonsQuery = form.seasons?.joinToString(",").orEmpty()
-        val genresQuery = form.genres?.joinToString(",").orEmpty()
-        val sortStr = when (form.sort) {
-            SearchForm.Sort.RATING -> "2"
-            SearchForm.Sort.DATE -> "1"
+    override fun getMatches(form: SearchForm, page: Int): Single<Paginated<Release>> = Single
+        .defer {
+            val formRequest = searchFormConverter.toRequest(form)
+
+            val searchParams = linkedMapOf(
+                "genre" to formRequest.genres,
+                "year" to formRequest.years,
+                "season" to formRequest.seasons
+            )
+
+            val params = mapOf(
+                "query" to "catalog",
+                "search" to gson.toJson(searchParams),
+                "finish" to formRequest.onlyCompleted,
+                "xpage" to "catalog",
+                "sort" to formRequest.sort,
+                "page" to page.toString(),
+                "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
+                "rm" to "true"
+            )
+            searchService.getMatches(params)
         }
-        val onlyCompletedStr = if (form.onlyCompleted) "2" else "1"
-
-        val searchParams = mapOf(
-            "genre" to genresQuery,
-            "year" to yearsQuery,
-            "season" to seasonsQuery
-        )
-
-        val params = mapOf(
-            "query" to "catalog",
-            "search" to gson.toJson(searchParams),
-            "finish" to onlyCompletedStr,
-            "xpage" to "catalog",
-            "sort" to sortStr,
-            "page" to page.toString(),
-            "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
-            "rm" to "true"
-        )
-
-        return searchService
-            .getMatches(params)
-            .handleApiResponse()
-            .map {
-                paginationConverter.toDomain(it) { releaseResponse ->
-                    releaseConverter.toDomain(releaseResponse)
-                }
+        .handleApiResponse()
+        .map {
+            paginationConverter.toDomain(it) { releaseResponse ->
+                releaseConverter.toDomain(releaseResponse)
             }
-    }
+        }
 
 }
