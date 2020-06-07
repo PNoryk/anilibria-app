@@ -6,18 +6,23 @@ import org.junit.Test
 
 class AmazingMemoryDataSourceTest {
 
-    private val dataSource = AmazingMemoryDataSource<String>()
+    private data class TestMemoryKey(val col1: Int?, val col2: String?) : MemoryKey(arrayOf(col1, col2))
 
-    private data class StringMemoryKey(val key: String) : MemoryKey()
+    private val dataSource = AmazingMemoryDataSource<TestMemoryKey, String>()
 
-    private fun String.toKey() = StringMemoryKey(this)
-    private fun String.toKeyValue() = Pair(StringMemoryKey(this), this)
-    private fun List<String>.toKeys() = map { it.toKey() }
-    private fun List<String>.toKeyValues() = map { it.toKeyValue() }
+    private fun String.toStringKey() = TestMemoryKey(null, this)
+    private fun String.toStringKeyValue() = Pair(TestMemoryKey(null, this), this)
+    private fun List<String>.toStringKeys() = map { it.toStringKey() }
+    private fun List<String>.toStringKeyValues() = map { it.toStringKeyValue() }
+
+    private fun Int.toIntKey() = TestMemoryKey(this, null)
+    private fun Int.toIntKeyValue() = Pair(TestMemoryKey(this, null), this)
+    private fun List<Int>.toIntKeys() = map { it.toIntKey() }
+    private fun List<Int>.toIntKeyValues() = map { it.toIntKeyValue() }
 
     @Test
     fun `first fetch EXPECT empty list`() {
-        val phantomKey = "phantom".toKey()
+        val phantomKey = "phantom".toStringKey()
 
         dataSource.observeList().test().assertValue(emptyList())
         dataSource.observeSome(listOf(phantomKey)).test().assertValue(emptyList())
@@ -25,16 +30,16 @@ class AmazingMemoryDataSourceTest {
 
         dataSource.getList().test().assertValue(emptyList())
         dataSource.getSome(listOf(phantomKey)).test().assertValue(emptyList())
-        dataSource.getOne(phantomKey).test().assertComplete()
+        dataSource.getOne(phantomKey).test().assertError(NoSuchElementException::class.java)
     }
 
     @Test
     fun `insert items EXPECT success and notify`() {
         val insertItems = listOf("key1", "key2")
         val insertItem = insertItems[0]
-        val insertKey = insertItem.toKey()
-        val insertKeys = insertItems.toKeys()
-        val insertKeyValues = insertItems.toKeyValues()
+        val insertKey = insertItem.toStringKey()
+        val insertKeys = insertItems.toStringKeys()
+        val insertKeyValues = insertItems.toStringKeyValues()
 
         val listObserver = dataSource.observeList().test()
         val someObserver = dataSource.observeSome(insertKeys).test()
@@ -62,9 +67,9 @@ class AmazingMemoryDataSourceTest {
         val afterDeleteItems = listOf(insertItems[0])
 
         val insertItem = insertItems[0]
-        val insertKey = insertItem.toKey()
-        val insertKeys = insertItems.toKeys()
-        val insertKeyValues = insertItems.toKeyValues()
+        val insertKey = insertItem.toStringKey()
+        val insertKeys = insertItems.toStringKeys()
+        val insertKeyValues = insertItems.toStringKeyValues()
 
         val listObserver = dataSource.observeList().test()
         val someObserver = dataSource.observeSome(insertKeys).test()
@@ -89,7 +94,7 @@ class AmazingMemoryDataSourceTest {
 
 
         // Remove
-        dataSource.removeList(deleteItems.toKeys()).test().assertComplete()
+        dataSource.removeList(deleteItems.toStringKeys()).test().assertComplete()
 
         // Verify remove
         listObserver.assertValueAt(2, afterDeleteItems)
@@ -111,9 +116,9 @@ class AmazingMemoryDataSourceTest {
         val afterClearItems = emptyList<String>()
 
         val insertItem = insertItems[0]
-        val insertKey = insertItem.toKey()
-        val insertKeys = insertItems.toKeys()
-        val insertKeyValues = insertItems.toKeyValues()
+        val insertKey = insertItem.toStringKey()
+        val insertKeys = insertItems.toStringKeys()
+        val insertKeyValues = insertItems.toStringKeyValues()
 
         val listObserver = dataSource.observeList().test()
         val someObserver = dataSource.observeSome(insertKeys).test()
@@ -151,6 +156,82 @@ class AmazingMemoryDataSourceTest {
 
         dataSource.getList().test().assertValue(afterClearItems)
         dataSource.getSome(insertKeys).test().assertValue(afterClearItems)
-        dataSource.getOne(insertKey).test().assertComplete()
+        dataSource.getOne(insertKey).test().assertError(NoSuchElementException::class.java)
     }
+
+    @Test
+    fun `check column indexing`() {
+        val records = listOf(
+            createRecord(10, "may"),
+            createRecord(10, "june"),
+            createRecord(10, "july"),
+            createRecord(10, "august"),
+
+            createRecord(20, "may"),
+            createRecord(30, "june"),
+            createRecord(40, "july"),
+            createRecord(50, "august"),
+
+            createRecord(60, "june"),
+            createRecord(70, "june"),
+            createRecord(80, "june"),
+            createRecord(90, "june")
+        )
+
+        val values = records.map { it.second }
+
+        val dataObserver = dataSource.observeSome(records.map { it.first }).test()
+
+        dataSource.insert(records).test().assertComplete()
+        dataObserver.assertValueAt(1, values)
+        dataSource.observeSome(records.map { it.first }).test().assertValue(values)
+
+        dataSource.getList().test().assertValue(values)
+        dataSource.getOne(TestMemoryKey(100, "june")).test().assertError(NoSuchElementException::class.java)
+        dataSource.getSome(listOf(TestMemoryKey(100, "june"))).test().assertValue(emptyList())
+
+        dataSource.getSome(
+            listOf(
+                TestMemoryKey(10, "may"),
+                TestMemoryKey(90, "june"),
+                TestMemoryKey(50, "august"),
+                TestMemoryKey(10, "july")
+            )
+        ).test().assertValue(
+            listOf(
+                getRecordValue(10, "may"),
+                getRecordValue(90, "june"),
+                getRecordValue(50, "august"),
+                getRecordValue(10, "july")
+            )
+        )
+
+        dataSource.getOne(TestMemoryKey(null, "may")).test().assertValue(getRecordValue(10, "may"))
+        dataSource.getSome(listOf(TestMemoryKey(null, "may"))).test().assertValue(
+            listOf(
+                getRecordValue(10, "may"),
+                getRecordValue(20, "may")
+            )
+        )
+
+        dataSource.getOne(TestMemoryKey(10, null)).test().assertValue(getRecordValue(10, "may"))
+        dataSource.getSome(listOf(TestMemoryKey(10, null))).test().assertValue(
+            listOf(
+                getRecordValue(10, "may"),
+                getRecordValue(10, "june"),
+                getRecordValue(10, "july"),
+                getRecordValue(10, "august")
+            )
+        )
+
+        dataSource.getOne(TestMemoryKey(null, null)).test().assertError(NoSuchElementException::class.java)
+
+    }
+
+    private fun getRecordValue(col1: Int?, col2: String?) = "record_$col1:$col2"
+
+    private fun createRecord(col1: Int?, col2: String?) = Pair(
+        TestMemoryKey(col1, col2),
+        getRecordValue(col1, col2)
+    )
 }

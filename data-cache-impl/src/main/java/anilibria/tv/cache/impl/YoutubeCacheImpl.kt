@@ -3,8 +3,12 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.YoutubeCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.YoutubeMemoryDataSource
+import anilibria.tv.cache.impl.memory.keys.ReleaseMemoryKey
+import anilibria.tv.cache.impl.memory.keys.TorrentMemoryKey
+import anilibria.tv.cache.impl.memory.keys.YoutubeMemoryKey
 import anilibria.tv.cache.impl.merger.YoutubeMerger
 import anilibria.tv.db.YoutubeDbDataSource
+import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.domain.entity.youtube.Youtube
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -18,26 +22,26 @@ class YoutubeCacheImpl(
     private val youtubeMerger: YoutubeMerger
 ) : YoutubeCache {
 
-    override fun observeList(): Observable<List<Youtube>> = memoryDataSource.observeListAll()
+    override fun observeList(): Observable<List<Youtube>> = memoryDataSource.observeList()
 
-    override fun observeList(ids: List<Int>): Observable<List<Youtube>> = memoryDataSource.observeList(ids)
+    override fun observeList(ids: List<Int>): Observable<List<Youtube>> = memoryDataSource.observeSome(ids.toIdKeys())
 
     override fun getList(): Single<List<Youtube>> = memoryDataSource
-        .getListAll()
+        .getList()
         .flatMapIfListEmpty {
             dbDataSource
                 .getListAll()
-                .flatMapCompletable { memoryDataSource.insert(it) }
-                .andThen(memoryDataSource.getListAll())
+                .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
+                .andThen(memoryDataSource.getList())
         }
 
     override fun getList(ids: List<Int>): Single<List<Youtube>> = memoryDataSource
-        .getList(ids)
+        .getSome(ids.toIdKeys())
         .flatMapIfListEmpty {
             dbDataSource
                 .getList(ids)
-                .flatMapCompletable { memoryDataSource.insert(it) }
-                .andThen(memoryDataSource.getList(ids))
+                .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
+                .andThen(memoryDataSource.getSome(ids.toIdKeys()))
         }
 
     override fun putList(items: List<Youtube>): Completable = getList(items.toIds())
@@ -49,19 +53,22 @@ class YoutubeCacheImpl(
             dbDataSource
                 .insert(items)
                 .andThen(dbDataSource.getList(items.toIds()))
-                .flatMapCompletable { memoryDataSource.insert(it) }
+                .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 
-    override fun removeList(items: List<Youtube>): Completable {
-        val ids = items.toIds()
-        return dbDataSource
-            .removeList(ids)
-            .andThen(memoryDataSource.removeList(ids))
-    }
+    override fun removeList(items: List<Youtube>): Completable = dbDataSource
+        .removeList(items.toIds())
+        .andThen(memoryDataSource.removeList(items.toKeys()))
 
     override fun clear(): Completable = dbDataSource
         .deleteAll()
-        .andThen(memoryDataSource.deleteAll())
+        .andThen(memoryDataSource.clear())
 
     private fun List<Youtube>.toIds() = map { it.id }
+
+    private fun List<Int>.toIdKeys() = map { YoutubeMemoryKey(it) }
+
+    private fun List<Youtube>.toKeys() = map { YoutubeMemoryKey(it.id) }
+
+    private fun List<Youtube>.toKeyValues() = map { Pair(YoutubeMemoryKey(it.id), it) }
 }

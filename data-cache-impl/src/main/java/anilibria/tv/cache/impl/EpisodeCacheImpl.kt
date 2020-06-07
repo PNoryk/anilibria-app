@@ -3,9 +3,12 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.EpisodeCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.EpisodeMemoryDataSource
+import anilibria.tv.cache.impl.memory.keys.EpisodeMemoryKey
+import anilibria.tv.cache.impl.memory.keys.FeedMemoryKey
 import anilibria.tv.cache.impl.merger.EpisodeMerger
 import anilibria.tv.db.EpisodeDbDataSource
 import anilibria.tv.domain.entity.episode.Episode
+import anilibria.tv.domain.entity.relative.FeedRelative
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -18,26 +21,26 @@ class EpisodeCacheImpl(
     private val episodeMerger: EpisodeMerger
 ) : EpisodeCache {
 
-    override fun observeList(): Observable<List<Episode>> = memoryDataSource.observeListAll()
+    override fun observeList(): Observable<List<Episode>> = memoryDataSource.observeList()
 
-    override fun observeList(releaseIds: List<Int>): Observable<List<Episode>> = memoryDataSource.observeList(releaseIds)
+    override fun observeList(releaseIds: List<Int>): Observable<List<Episode>> = memoryDataSource.observeSome(releaseIds.toReleaseKeys())
 
     override fun getList(): Single<List<Episode>> = memoryDataSource
-        .getListAll()
+        .getList()
         .flatMapIfListEmpty {
             dbDataSource
                 .getListAll()
-                .flatMapCompletable { memoryDataSource.insert(it) }
-                .andThen(memoryDataSource.getListAll())
+                .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
+                .andThen(memoryDataSource.getList())
         }
 
     override fun getList(releaseIds: List<Int>): Single<List<Episode>> = memoryDataSource
-        .getList(releaseIds)
+        .getSome(releaseIds.toReleaseKeys())
         .flatMapIfListEmpty {
             dbDataSource
                 .getList(releaseIds)
-                .flatMapCompletable { memoryDataSource.insert(it) }
-                .andThen(memoryDataSource.getList(releaseIds))
+                .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
+                .andThen(memoryDataSource.getSome(releaseIds.toReleaseKeys()))
         }
 
     override fun putList(items: List<Episode>): Completable = getList(items.map { it.releaseId })
@@ -47,21 +50,24 @@ class EpisodeCacheImpl(
                 return@flatMapCompletable Completable.complete()
             }
             dbDataSource
-                .insert(items)
-                .andThen(dbDataSource.getListByPairIds(items.toIds()))
-                .flatMapCompletable { memoryDataSource.insert(it) }
+                .insert(newItems)
+                .andThen(dbDataSource.getListByPairIds(newItems.toIds()))
+                .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 
-    override fun removeList(items: List<Episode>): Completable {
-        val ids = items.toIds()
-        return dbDataSource
-            .removeList(ids)
-            .andThen(memoryDataSource.removeList(ids))
-    }
+    override fun removeList(items: List<Episode>): Completable = dbDataSource
+        .removeList(items.toIds())
+        .andThen(memoryDataSource.removeList(items.toKeys()))
 
     override fun clear(): Completable = dbDataSource
         .deleteAll()
-        .andThen(memoryDataSource.deleteAll())
+        .andThen(memoryDataSource.clear())
 
     private fun List<Episode>.toIds() = map { Pair(it.releaseId, it.id) }
+
+    private fun List<Int>.toReleaseKeys() = map { EpisodeMemoryKey(it, null) }
+
+    private fun List<Episode>.toKeys() = map { EpisodeMemoryKey(it.releaseId, it.id) }
+
+    private fun List<Episode>.toKeyValues() = map { Pair(EpisodeMemoryKey(it.releaseId, it.id), it) }
 }
