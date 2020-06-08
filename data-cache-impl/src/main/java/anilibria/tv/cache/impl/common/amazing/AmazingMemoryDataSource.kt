@@ -2,7 +2,6 @@ package anilibria.tv.cache.impl.common.amazing
 
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
@@ -12,7 +11,9 @@ open class AmazingMemoryDataSource<K : MemoryKey, V : Any> {
 
     private val memoryMap by lazy { Collections.synchronizedMap(mutableMapOf<K, V>()) }
 
-    private val columnIndices by lazy { Collections.synchronizedList(mutableListOf<MutableMap<Any?, MutableSet<K>>>()) }
+    private val columnCache by lazy { AmazingColumnCache<K>() }
+
+    private val keyCache by lazy { AmazingKeyCache<K>() }
 
     private val dataRelay by lazy { BehaviorRelay.createDefault(getMemoryList()) }
 
@@ -25,14 +26,12 @@ open class AmazingMemoryDataSource<K : MemoryKey, V : Any> {
 
     fun observeSome(keys: List<K>): Observable<List<V>> = dataRelay
         .map {
-            keys.firstOrNull()?.also { createColumnIndices(it) }
             getMemoryList(keys)
         }
 
 
     /* Read */
     fun getOne(key: K): Single<V> = Single.fromCallable {
-        createColumnIndices(key)
         getMemoryOne(key) ?: throw NoSuchElementException()
     }
 
@@ -41,22 +40,15 @@ open class AmazingMemoryDataSource<K : MemoryKey, V : Any> {
     }
 
     fun getSome(keys: List<K>): Single<List<V>> = Single.fromCallable {
-        keys.firstOrNull()?.also { createColumnIndices(it) }
         getMemoryList(keys)
     }
 
 
     /* Insert */
     fun insert(items: List<Pair<K, V>>): Completable = Completable.fromAction {
-        items.firstOrNull()?.also { createColumnIndices(it.first) }
-
-        items.forEach { pair ->
-            val key = pair.first
-            key.columns.forEachIndexed { columnIndex, columnValue ->
-                putIndex(columnIndex, columnValue, key)
-            }
-        }
-
+        val keys = items.map { it.first }
+        keyCache.insert(keys)
+        columnCache.insert(keys)
         memoryMap.plusAssign(items)
         updateRelay()
     }
@@ -64,77 +56,33 @@ open class AmazingMemoryDataSource<K : MemoryKey, V : Any> {
 
     /* Delete */
     fun removeList(keys: List<K>): Completable = Completable.fromAction {
-        keys.firstOrNull()?.also { createColumnIndices(it) }
-
-        keys.forEach { key ->
-            key.columns.forEachIndexed { columnIndex, columnValue ->
-                removeIndex(columnIndex, columnValue, key)
-            }
-        }
-
+        keyCache.remove(keys)
+        columnCache.remove(keys)
         memoryMap.minusAssign(keys)
         updateRelay()
     }
 
     fun clear(): Completable = Completable.fromAction {
+        keyCache.clear()
         memoryMap.clear()
-        columnIndices.forEach { columnMap ->
-            columnMap.values.forEach { columnKeys ->
-                columnKeys.clear()
-            }
-            columnMap.clear()
-        }
-        columnIndices.clear()
+        columnCache.clear()
         updateRelay()
     }
 
     /* Common */
 
-    private fun createColumnIndices(key: K) {
-        if (columnIndices.isNotEmpty()) return
-        repeat(key.columns.size) {
-            columnIndices.add(Collections.synchronizedMap(mutableMapOf<Any?, MutableSet<K>>()))
-        }
-    }
-
-    private fun putIndex(index: Int, columnValue: Any?, key: K) {
-        val columnMap = columnIndices[index]
-        if (!columnMap.containsKey(columnValue)) {
-            columnMap[columnValue] = mutableSetOf()
-        }
-        columnMap.getValue(columnValue).add(key)
-    }
-
-    private fun getIndexColumn(index: Int, columnValue: Any?): Set<K>? {
-        return columnIndices[index][columnValue]
-    }
-
-    private fun removeIndex(index: Int, columnValue: Any?, key: K) {
-        val columnMap = columnIndices[index]
-        columnMap[columnValue]?.remove(key)
-    }
-
     private fun getMemoryOne(key: K): V? = getMemoryList(listOf(key)).firstOrNull()
 
     private fun getMemoryList(): List<V> = memoryMap.values.toList()
 
-    private fun getMemoryList(keys: List<K>): List<V> = findSameKeys(keys).mapNotNull { memoryMap[it] }
-
-    private fun findSameKeys(keys: List<K>): Set<K> {
-        val result = mutableSetOf<K>()
+    private fun getMemoryList(keys: List<K>): List<V> {
         keys.forEach { key ->
-            println("find by key ${key}")
-            key.columns.forEachIndexed { columnIndex, columnValue ->
-                getIndexColumn(columnIndex, columnValue)?.also { columnKeys ->
-                    columnKeys.forEach { columnKey ->
-                        if (key.hasAnyEqualKeys(columnKey)) {
-                            result.add(columnKey)
-                        }
-                    }
-                }
+            val cachedKey = keyCache.get(key)
+            if (cachedKey == null) {
+                keyCache.insert(key, columnCache.get(listOf(key)))
             }
         }
-        return result
+        return keyCache.get(keys).mapNotNull { memoryMap[it] }
     }
 
     private fun updateRelay() {
