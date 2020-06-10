@@ -1,7 +1,7 @@
 package anilibria.tv.cache.impl
 
 import anilibria.tv.cache.impl.memory.EpisodeMemoryDataSource
-import anilibria.tv.cache.impl.memory.keys.EpisodeMemoryKey
+import anilibria.tv.domain.entity.common.keys.EpisodeKey
 import anilibria.tv.cache.impl.merger.EpisodeMerger
 import anilibria.tv.db.EpisodeDbDataSource
 import anilibria.tv.domain.entity.episode.Episode
@@ -31,7 +31,7 @@ class EpisodeCacheTest {
     /* get all list */
     @Test
     fun `get list WHEN db & memory empty EXPECT success empty`() {
-        val insertSlot = slot<List<Pair<EpisodeMemoryKey, Episode>>>()
+        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
         val dbResult = listOf<Episode>()
         val memoryResult = listOf<Episode>()
         val expectResult = emptyList<Episode>()
@@ -40,20 +40,20 @@ class EpisodeCacheTest {
         every { memoryDataSource.getList() } returns Single.fromCallable {
             if (insertSlot.isCaptured) dbResult else memoryResult
         }
-        every { dbDataSource.getListAll() } returns Single.just(dbResult)
+        every { dbDataSource.getList() } returns Single.just(dbResult)
         every { memoryDataSource.insert(capture(insertSlot)) } returns Completable.complete()
 
         cache.getList().test().assertValue(expectResult)
 
         verify { memoryDataSource.getList() }
-        verify { dbDataSource.getListAll() }
+        verify { dbDataSource.getList() }
         verify { memoryDataSource.insert(insertKeyValues) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
     @Test
     fun `get list WHEN db not empty, memory empty EXPECT success update & get memory from db`() {
-        val insertSlot = slot<List<Pair<EpisodeMemoryKey, Episode>>>()
+        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
         val dbResult = mockEpisodes
         val memoryResult = listOf<Episode>()
         val expectResult = dbResult.toList()
@@ -62,13 +62,13 @@ class EpisodeCacheTest {
         every { memoryDataSource.getList() } returns Single.fromCallable {
             if (insertSlot.isCaptured) dbResult else memoryResult
         }
-        every { dbDataSource.getListAll() } returns Single.just(dbResult)
+        every { dbDataSource.getList() } returns Single.just(dbResult)
         every { memoryDataSource.insert(capture(insertSlot)) } returns Completable.complete()
 
         cache.getList().test().assertValue(expectResult)
 
         verify { memoryDataSource.getList() }
-        verify { dbDataSource.getListAll() }
+        verify { dbDataSource.getList() }
         verify { memoryDataSource.insert(insertKeyValues) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
@@ -90,7 +90,7 @@ class EpisodeCacheTest {
     /* get by keys */
     @Test
     fun `get by keys WHEN db & memory empty EXPECT success empty`() {
-        val insertSlot = slot<List<Pair<EpisodeMemoryKey, Episode>>>()
+        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
         val dbResult = listOf<Episode>()
         val memoryResult = listOf<Episode>()
         val expectResult = emptyList<Episode>()
@@ -101,20 +101,20 @@ class EpisodeCacheTest {
         every { memoryDataSource.getSome(releaseKeys) } returns Single.fromCallable {
             if (insertSlot.isCaptured) dbResult else memoryResult
         }
-        every { dbDataSource.getList(releaseIds) } returns Single.just(dbResult)
+        every { dbDataSource.getSome(releaseIds) } returns Single.just(dbResult)
         every { memoryDataSource.insert(capture(insertSlot)) } returns Completable.complete()
 
-        cache.getList(releaseIds).test().assertValue(expectResult)
+        cache.getSome(releaseIds).test().assertValue(expectResult)
 
         verify { memoryDataSource.getSome(releaseKeys) }
-        verify { dbDataSource.getList(releaseIds) }
+        verify { dbDataSource.getSome(releaseIds) }
         verify { memoryDataSource.insert(insertKeyValues) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
     @Test
     fun `get by keys WHEN db not empty, memory empty EXPECT success update & get memory from db`() {
-        val insertSlot = slot<List<Pair<EpisodeMemoryKey, Episode>>>()
+        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
         val dbResult = mockEpisodes
         val memoryResult = listOf<Episode>()
         val expectResult = dbResult.toList()
@@ -125,13 +125,13 @@ class EpisodeCacheTest {
         every { memoryDataSource.getSome(releaseKeys) } returns Single.fromCallable {
             if (insertSlot.isCaptured) dbResult else memoryResult
         }
-        every { dbDataSource.getList(releaseIds) } returns Single.just(dbResult)
+        every { dbDataSource.getSome(releaseIds) } returns Single.just(dbResult)
         every { memoryDataSource.insert(capture(insertSlot)) } returns Completable.complete()
 
-        cache.getList(releaseIds).test().assertValue(expectResult)
+        cache.getSome(releaseIds).test().assertValue(expectResult)
 
         verify { memoryDataSource.getSome(releaseKeys) }
-        verify { dbDataSource.getList(releaseIds) }
+        verify { dbDataSource.getSome(releaseIds) }
         verify { memoryDataSource.insert(insertKeyValues) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
@@ -145,7 +145,7 @@ class EpisodeCacheTest {
 
         every { memoryDataSource.getSome(releaseKeys) } returns Single.just(memoryResult)
 
-        cache.getList(releaseIds).test().assertValue(expectResult)
+        cache.getSome(releaseIds).test().assertValue(expectResult)
 
         verify { memoryDataSource.getSome(releaseKeys) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
@@ -192,10 +192,10 @@ class EpisodeCacheTest {
 
     private fun List<Episode>.toIds() = map { Pair(it.releaseId, it.id) }
 
-    private fun List<Int>.toReleaseKeys() = map { EpisodeMemoryKey(it, null) }
+    private fun List<Int>.toReleaseKeys() = map { EpisodeKey(it, null) }
 
-    private fun List<Episode>.toKeys() = map { EpisodeMemoryKey(it.releaseId, it.id) }
+    private fun List<Episode>.toKeys() = map { EpisodeKey(it.releaseId, it.id) }
 
-    private fun List<Episode>.toKeyValues() = map { Pair(EpisodeMemoryKey(it.releaseId, it.id), it) }
+    private fun List<Episode>.toKeyValues() = map { Pair(EpisodeKey(it.releaseId, it.id), it) }
 
 }

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "release_block",
     foreignKeys = [
-        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
+        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["id"], childColumns = ["releaseId"])
     ]
 )
 data class BlockInfoDb(

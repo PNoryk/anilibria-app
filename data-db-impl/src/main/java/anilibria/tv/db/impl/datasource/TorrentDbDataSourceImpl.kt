@@ -1,10 +1,13 @@
 package anilibria.tv.db.impl.datasource
 
 import anilibria.tv.db.TorrentDbDataSource
+import anilibria.tv.db.impl.common.zipCollections
 import io.reactivex.Completable
 import io.reactivex.Single
 import anilibria.tv.db.impl.converters.TorrentConverter
 import anilibria.tv.db.impl.dao.TorrentDao
+import anilibria.tv.db.impl.entity.torrent.TorrentDb
+import anilibria.tv.domain.entity.common.keys.TorrentKey
 import anilibria.tv.domain.entity.torrent.Torrent
 import toothpick.InjectConstructor
 
@@ -14,27 +17,41 @@ class TorrentDbDataSourceImpl(
     private val converter: TorrentConverter
 ) : TorrentDbDataSource {
 
-    override fun getListAll(): Single<List<Torrent>> = dao
-        .getListAll()
+    override fun getList(): Single<List<Torrent>> = dao
+        .getList()
         .map(converter::toDomain)
 
-    override fun getList(releaseIds: List<Int>): Single<List<Torrent>> = dao
-        .getList(releaseIds)
+    override fun getSome(keys: List<TorrentKey>): Single<List<Torrent>> = Single
+        .defer {
+            val fullKeys = converter.toDbKey(keys.filter { it.id != null })
+            val releaseIds = keys.filter { it.id == null }.map { it.releaseId }
+
+            val singles = mutableListOf<Single<List<TorrentDb>>>()
+            if (fullKeys.isNotEmpty()) {
+                singles.add(dao.getSome(fullKeys))
+            }
+            if (releaseIds.isNotEmpty()) {
+                singles.add(dao.getSomeByReleases(releaseIds))
+            }
+            zipCollections(singles)
+        }
         .map(converter::toDomain)
 
-    override fun getListByPairIds(ids: List<Pair<Int, Int>>): Single<List<Torrent>> = dao
-        .getListByKeys(converter.toDbKey(ids))
-        .map(converter::toDomain)
-
-    override fun getOne(releaseId: Int, torrentId: Int): Single<Torrent> = dao
-        .getOne(releaseId, torrentId)
+    override fun getOne(key: TorrentKey): Single<Torrent> = dao
+        .getOne(converter.toDbKey(key))
         .map(converter::toDomain)
 
     override fun insert(items: List<Torrent>): Completable = Single.just(items)
         .map(converter::toDb)
         .flatMapCompletable(dao::insert)
 
-    override fun removeList(ids: List<Pair<Int, Int>>): Completable = dao.delete(converter.toDbKey(ids))
+    override fun remove(keys: List<TorrentKey>): Completable = Completable
+        .fromAction {
+            if (keys.any { it.id == null }) {
+                throw IllegalArgumentException("All keys should contains not null id")
+            }
+        }
+        .andThen(dao.remove(converter.toDbKey(keys)))
 
-    override fun deleteAll(): Completable = dao.deleteAll()
+    override fun clear(): Completable = dao.clear()
 }

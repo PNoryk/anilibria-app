@@ -1,14 +1,9 @@
 package anilibria.tv.cache.impl.memory
 
 import anilibria.tv.cache.impl.common.amazing.AmazingMemoryDataSource
-import anilibria.tv.cache.impl.memory.keys.FavoriteMemoryKey
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
 import anilibria.tv.domain.entity.relative.FavoriteRelative
-import com.jakewharton.rxrelay2.BehaviorRelay
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
 import toothpick.InjectConstructor
-import java.util.*
 
 @InjectConstructor
-class FavoriteMemoryDataSource : AmazingMemoryDataSource<FavoriteMemoryKey, FavoriteRelative>()
+class FavoriteMemoryDataSource : AmazingMemoryDataSource<ReleaseKey, FavoriteRelative>()

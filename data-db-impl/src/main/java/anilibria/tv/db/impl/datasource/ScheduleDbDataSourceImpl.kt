@@ -6,6 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import anilibria.tv.db.impl.converters.ScheduleConverter
 import anilibria.tv.db.impl.dao.ScheduleDao
+import anilibria.tv.domain.entity.common.keys.ScheduleKey
 import toothpick.InjectConstructor
 
 @InjectConstructor
@@ -14,23 +15,23 @@ class ScheduleDbDataSourceImpl(
     private val converter: ScheduleConverter
 ) : ScheduleDbDataSource {
 
-    override fun getListAll(): Single<List<ScheduleDayRelative>> = dao
-        .getListAll()
+    override fun getList(): Single<List<ScheduleDayRelative>> = dao
+        .getList()
         .map(converter::toDomain)
 
-    override fun getList(ids: List<Int>): Single<List<ScheduleDayRelative>> = dao
-        .getList(ids)
+    override fun getSome(keys: List<ScheduleKey>): Single<List<ScheduleDayRelative>> = dao
+        .getSome(keys.map { it.dayId })
         .map(converter::toDomain)
 
-    override fun getOne(dayId: Int): Single<ScheduleDayRelative> = dao
-        .getOne(dayId)
+    override fun getOne(key: ScheduleKey): Single<ScheduleDayRelative> = dao
+        .getOne(key.dayId)
         .map(converter::toDomain)
 
     override fun insert(items: List<ScheduleDayRelative>): Completable = Single.just(items)
         .map(converter::toDb)
         .flatMapCompletable(dao::insert)
 
-    override fun removeList(ids: List<Int>): Completable = dao.delete(ids)
+    override fun remove(keys: List<ScheduleKey>): Completable = dao.remove(keys.map { it.dayId })
 
-    override fun deleteAll(): Completable = dao.deleteAll()
+    override fun clear(): Completable = dao.clear()
 }

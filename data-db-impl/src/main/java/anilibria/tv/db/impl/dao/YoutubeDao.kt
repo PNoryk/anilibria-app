@@ -12,20 +12,20 @@ import anilibria.tv.db.impl.entity.youtube.YoutubeDb
 interface YoutubeDao {
 
     @Query("SELECT * FROM youtube")
-    fun getListAll(): Single<List<YoutubeDb>>
+    fun getList(): Single<List<YoutubeDb>>
 
-    @Query("SELECT * FROM youtube WHERE youtubeId IN (:ids)")
-    abstract fun getList(ids: List<Int>): Single<List<YoutubeDb>>
+    @Query("SELECT * FROM youtube WHERE id IN (:ids)")
+    fun getSome(ids: List<Int>): Single<List<YoutubeDb>>
 
-    @Query("SELECT * FROM youtube WHERE youtubeId = :youtubeId LIMIT 1")
-    fun getOne(youtubeId: Int): Single<YoutubeDb>
+    @Query("SELECT * FROM youtube WHERE id = :id LIMIT 1")
+    fun getOne(id: Int): Single<YoutubeDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<YoutubeDb>): Completable
 
-    @Query("DELETE FROM youtube WHERE youtubeId IN (:ids)")
-    abstract fun delete(ids: List<Int>): Completable
+    @Query("DELETE FROM youtube WHERE id IN (:ids)")
+    fun remove(ids: List<Int>): Completable
 
     @Query("DELETE FROM youtube")
-    fun deleteAll(): Completable
+    fun clear(): Completable
 }

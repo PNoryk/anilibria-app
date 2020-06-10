@@ -15,17 +15,17 @@ interface FeedDao {
     fun getList(): Single<List<FeedDb>>
 
     @Query("SELECT * FROM feed WHERE `key` IN (:keys)")
-    fun getList(keys: List<String>): Single<List<FeedDb>>
+    fun getSome(keys: List<String>): Single<List<FeedDb>>
 
-    @Query("SELECT * FROM `feed` WHERE releaseId = :releaseId OR youtubeId = :youtubeId LIMIT 1")
-    fun getOne(releaseId: Int?, youtubeId: Int?): Single<FeedDb>
+    @Query("SELECT * FROM `feed` WHERE `key` = :key LIMIT 1")
+    fun getOne(key: String): Single<FeedDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<FeedDb>): Completable
 
     @Query("DELETE FROM feed WHERE `key` IN (:keys)")
-    fun delete(keys: List<String>): Completable
+    fun remove(keys: List<String>): Completable
 
     @Query("DELETE FROM feed")
-    fun deleteAll(): Completable
+    fun clear(): Completable
 }

@@ -3,10 +3,8 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.FavoriteCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.FavoriteMemoryDataSource
-import anilibria.tv.cache.impl.memory.keys.EpisodeMemoryKey
-import anilibria.tv.cache.impl.memory.keys.FavoriteMemoryKey
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
 import anilibria.tv.db.FavoriteDbDataSource
-import anilibria.tv.domain.entity.relative.EpisodeHistoryRelative
 import anilibria.tv.domain.entity.relative.FavoriteRelative
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -25,29 +23,25 @@ class FavoriteCacheImpl(
         .getList()
         .flatMapIfListEmpty {
             dbDataSource
-                .getListAll()
+                .getList()
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
                 .andThen(memoryDataSource.getList())
         }
 
     override fun putList(items: List<FavoriteRelative>): Completable = dbDataSource
         .insert(items)
-        .andThen(dbDataSource.getList(items.toIds()))
+        .andThen(dbDataSource.getSome(items.toKeys()))
         .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
 
-    override fun removeList(items: List<FavoriteRelative>): Completable = dbDataSource
-        .removeList(items.toIds())
-        .andThen(memoryDataSource.removeList(items.toKeys()))
+    override fun removeList(keys: List<ReleaseKey>): Completable = dbDataSource
+        .remove(keys)
+        .andThen(memoryDataSource.removeList(keys))
 
     override fun clear(): Completable = dbDataSource
-        .deleteAll()
+        .clear()
         .andThen(memoryDataSource.clear())
 
-    private fun List<FavoriteRelative>.toIds() = map { it.releaseId }
+    private fun List<FavoriteRelative>.toKeys() = map { ReleaseKey(it.releaseId) }
 
-    private fun List<Int>.toReleaseKeys() = map { FavoriteMemoryKey(it) }
-
-    private fun List<FavoriteRelative>.toKeys() = map { FavoriteMemoryKey(it.releaseId) }
-
-    private fun List<FavoriteRelative>.toKeyValues() = map { Pair(FavoriteMemoryKey(it.releaseId), it) }
+    private fun List<FavoriteRelative>.toKeyValues() = map { Pair(ReleaseKey(it.releaseId), it) }
 }

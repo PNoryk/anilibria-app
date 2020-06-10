@@ -1,14 +1,9 @@
 package anilibria.tv.cache.impl.memory
 
 import anilibria.tv.cache.impl.common.amazing.AmazingMemoryDataSource
-import anilibria.tv.cache.impl.memory.keys.TorrentMemoryKey
+import anilibria.tv.domain.entity.common.keys.TorrentKey
 import anilibria.tv.domain.entity.torrent.Torrent
-import com.jakewharton.rxrelay2.BehaviorRelay
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
 import toothpick.InjectConstructor
-import java.util.*
 
 @InjectConstructor
-class TorrentMemoryDataSource : AmazingMemoryDataSource<TorrentMemoryKey, Torrent>()
+class TorrentMemoryDataSource : AmazingMemoryDataSource<TorrentKey, Torrent>()

@@ -4,6 +4,9 @@ import anilibria.tv.cache.EpisodeCache
 import anilibria.tv.cache.ReleaseCache
 import anilibria.tv.cache.TorrentCache
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
+import anilibria.tv.domain.entity.common.keys.EpisodeKey
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
+import anilibria.tv.domain.entity.common.keys.TorrentKey
 import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.domain.entity.torrent.Torrent
@@ -22,66 +25,72 @@ class ReleaseCacheCombinerImpl(
 
     override fun observeList(): Observable<List<Release>> = releaseCache
         .observeList()
-        .switchMap { relativeItems ->
-            val releaseIds = relativeItems.map { it.id }
+        .switchMap { releaseItems ->
+            val episodeKeys = releaseItems.toEpisodeKeys()
+            val torrentKeys = releaseItems.toTorrentKeys()
             Observable.zip(
-                episodeCache.observeList(releaseIds),
-                torrentCache.observeList(releaseIds),
-                getSourceCombiner(relativeItems)
+                episodeCache.observeSome(episodeKeys),
+                torrentCache.observeSome(torrentKeys),
+                getSourceCombiner(releaseItems)
             )
         }
 
-    override fun observeList(ids: List<Int>?, codes: List<String>?): Observable<List<Release>> = releaseCache
+    override fun observeSome(keys: List<ReleaseKey>): Observable<List<Release>> = releaseCache
         .observeList()
-        .switchMap { relativeItems ->
-            val releaseIds = relativeItems.map { it.id }
+        .switchMap { releaseItems ->
+            val episodeKeys = releaseItems.toEpisodeKeys()
+            val torrentKeys = releaseItems.toTorrentKeys()
             Observable.zip(
-                episodeCache.observeList(releaseIds),
-                torrentCache.observeList(releaseIds),
-                getSourceCombiner(relativeItems)
+                episodeCache.observeSome(episodeKeys),
+                torrentCache.observeSome(torrentKeys),
+                getSourceCombiner(releaseItems)
             )
         }
 
-    override fun observeOne(releaseId: Int?, releaseCode: String?): Observable<Release> = releaseCache
-        .observeOne(releaseId, releaseCode)
+    override fun observeOne(key: ReleaseKey): Observable<Release> = releaseCache
+        .observeOne(key)
         .switchMap { relativeItem ->
-            val releaseIds = listOf(relativeItem.id)
+            val episodeKeys = listOf(relativeItem.toEpisodeKey())
+            val torrentKeys = listOf(relativeItem.toTorrentKey())
             Observable.zip(
-                episodeCache.observeList(releaseIds),
-                torrentCache.observeList(releaseIds),
+                episodeCache.observeSome(episodeKeys),
+                torrentCache.observeSome(torrentKeys),
                 getSourceCombiner(relativeItem)
             )
         }
 
     override fun getList(): Single<List<Release>> = releaseCache
         .getList()
-        .flatMap { relativeItems ->
-            val releaseIds = relativeItems.map { it.id }
+        .flatMap { releaseItems ->
+            val episodeKeys = releaseItems.toEpisodeKeys()
+            val torrentKeys = releaseItems.toTorrentKeys()
             Single.zip(
-                episodeCache.getList(releaseIds),
-                torrentCache.getList(releaseIds),
-                getSourceCombiner(relativeItems)
+                episodeCache.getSome(episodeKeys),
+                torrentCache.getSome(torrentKeys),
+                getSourceCombiner(releaseItems)
             )
         }
 
-    override fun getList(ids: List<Int>?, codes: List<String>?): Single<List<Release>> = releaseCache
-        .getList(ids, codes)
-        .flatMap { relativeItems ->
-            val releaseIds = relativeItems.map { it.id }
+    override fun getSome(keys: List<ReleaseKey>): Single<List<Release>> = releaseCache
+        .getSome(keys)
+        .flatMap { releaseItems ->
+            val episodeKeys = releaseItems.toEpisodeKeys()
+            val torrentKeys = releaseItems.toTorrentKeys()
             Single.zip(
-                episodeCache.getList(releaseIds),
-                torrentCache.getList(releaseIds),
-                getSourceCombiner(relativeItems)
+                episodeCache.getSome(episodeKeys),
+                torrentCache.getSome(torrentKeys),
+                getSourceCombiner(releaseItems)
             )
         }
 
-    override fun getOne(releaseId: Int?, releaseCode: String?): Single<Release> = releaseCache
-        .getOne(releaseId, releaseCode)
+    override fun getOne(key: ReleaseKey): Single<Release> = releaseCache
+        .getOne(key)
         .flatMap { relativeItem ->
-            val releaseIds = listOf(relativeItem.id)
+            val episodeKeys = listOf(relativeItem.toEpisodeKey())
+            val torrentKeys = listOf(relativeItem.toTorrentKey())
             Single.zip(
-                episodeCache.getList(releaseIds),
-                torrentCache.getList(releaseIds),
+                episodeCache.getSome(episodeKeys),
+                torrentCache.getSome(torrentKeys),
                 getSourceCombiner(relativeItem)
             )
         }
@@ -93,14 +102,13 @@ class ReleaseCacheCombinerImpl(
         return Completable.concat(listOf(putEpisodes, putTorrents, putRelease))
     }
 
-    override fun removeList(items: List<Release>): Completable = releaseCache
-        .removeList(items)
+    override fun removeList(keys: List<ReleaseKey>): Completable = releaseCache.removeList(keys)
 
     override fun clear(): Completable = releaseCache.clear()
 
-    private fun getSourceCombiner(relativeItems: List<Release>) =
+    private fun getSourceCombiner(releaseItems: List<Release>) =
         BiFunction<List<Episode>, List<Torrent>, List<Release>> { episodeItems, torrentItems ->
-            relativeItems.map { release ->
+            releaseItems.map { release ->
                 val episodes = episodeItems.filter { it.releaseId == release.id }
                 val torrents = torrentItems.filter { it.releaseId == release.id }
                 release.copy(playlist = episodes, torrents = torrents)
@@ -113,4 +121,10 @@ class ReleaseCacheCombinerImpl(
             val torrents = torrentItems.filter { it.releaseId == relativeItem.id }
             relativeItem.copy(playlist = episodes, torrents = torrents)
         }
+
+    private fun Release.toEpisodeKey() = EpisodeKey(id, null)
+    private fun List<Release>.toEpisodeKeys() = map { it.toEpisodeKey() }
+
+    private fun Release.toTorrentKey() = TorrentKey(id, null)
+    private fun List<Release>.toTorrentKeys() = map { it.toTorrentKey() }
 }

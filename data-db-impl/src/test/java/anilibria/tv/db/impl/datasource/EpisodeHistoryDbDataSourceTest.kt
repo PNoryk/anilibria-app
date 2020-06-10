@@ -1,17 +1,9 @@
 package anilibria.tv.db.impl.datasource
 
-import anilibria.tv.db.impl.converters.EpisodeConverter
 import anilibria.tv.db.impl.converters.EpisodeHistoryConverter
-import anilibria.tv.db.impl.converters.TorrentConverter
-import anilibria.tv.db.impl.dao.EpisodeDao
 import anilibria.tv.db.impl.dao.EpisodeHistoryDao
-import anilibria.tv.db.impl.dao.TorrentDao
-import anilibria.tv.db.impl.entity.episode.EpisodeDb
 import anilibria.tv.db.impl.entity.history.EpisodeHistoryDb
-import anilibria.tv.db.impl.entity.torrent.TorrentDb
-import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.relative.EpisodeHistoryRelative
-import anilibria.tv.domain.entity.torrent.Torrent
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -31,12 +23,12 @@ class EpisodeHistoryDbDataSourceTest {
 
     @Test
     fun `getListAll EXPECT success`() {
-        every { dao.getListAll() } returns Single.just(dto)
+        every { dao.getList() } returns Single.just(dto)
         every { converter.toDomain(dto) } returns domain
 
-        dataSource.getListAll().test().assertValue(domain)
+        dataSource.getList().test().assertValue(domain)
 
-        verify { dao.getListAll() }
+        verify { dao.getList() }
         verify { converter.toDomain(dto) }
         confirmVerified(dao, converter)
     }
@@ -102,23 +94,23 @@ class EpisodeHistoryDbDataSourceTest {
     fun `removeList EXPECT success`() {
         val ids = listOf(1 to 10, 2 to 20)
         val keys = listOf("1_10", "2_20")
-        every { dao.delete(keys) } returns Completable.complete()
+        every { dao.remove(keys) } returns Completable.complete()
         every { converter.toDbKey(ids) } returns keys
 
-        dataSource.removeList(ids).test().assertComplete()
+        dataSource.remove(ids).test().assertComplete()
 
         verify { converter.toDbKey(ids) }
-        verify { dao.delete(keys) }
+        verify { dao.remove(keys) }
         confirmVerified(dao, converter)
     }
 
     @Test
     fun `deleteAll EXPECT success`() {
-        every { dao.deleteAll() } returns Completable.complete()
+        every { dao.clear() } returns Completable.complete()
 
-        dataSource.deleteAll().test().assertComplete()
+        dataSource.clear().test().assertComplete()
 
-        verify { dao.deleteAll() }
+        verify { dao.clear() }
         confirmVerified(dao, converter)
     }
 }

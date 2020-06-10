@@ -3,6 +3,8 @@ package anilibria.tv.cache.impl.combiner
 import anilibria.tv.cache.ScheduleCache
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
 import anilibria.tv.cache.combiner.ScheduleCacheCombiner
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
+import anilibria.tv.domain.entity.common.keys.ScheduleKey
 import anilibria.tv.domain.entity.converter.ScheduleDayRelativeConverter
 import anilibria.tv.domain.entity.relative.ScheduleDayRelative
 import anilibria.tv.domain.entity.release.Release
@@ -10,7 +12,6 @@ import anilibria.tv.domain.entity.schedule.ScheduleDay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
 import toothpick.InjectConstructor
 
@@ -25,7 +26,7 @@ class ScheduleCacheCombinerImpl(
         .observeList()
         .switchMap { relativeItems ->
             releaseCache
-                .observeList(relativeItems.map { it.releaseIds }.flatten())
+                .observeSome(relativeItems.toReleaseKeys())
                 .map(getSourceCombiner(relativeItems))
         }
 
@@ -33,7 +34,7 @@ class ScheduleCacheCombinerImpl(
         .getList()
         .flatMap { relativeItems ->
             releaseCache
-                .getList(relativeItems.map { it.releaseIds }.flatten())
+                .getSome(relativeItems.toReleaseKeys())
                 .map(getSourceCombiner(relativeItems))
         }
 
@@ -43,8 +44,7 @@ class ScheduleCacheCombinerImpl(
         return Completable.concat(listOf(putRelease, putSchedule))
     }
 
-    override fun removeList(items: List<ScheduleDay>): Completable = scheduleCache
-        .removeList(items.map { relativeConverter.toRelative(it) })
+    override fun removeList(keys: List<ScheduleKey>): Completable = scheduleCache.removeList(keys)
 
     override fun clear(): Completable = scheduleCache.clear()
 
@@ -53,4 +53,6 @@ class ScheduleCacheCombinerImpl(
             relativeConverter.fromRelative(relative, releaseItems)
         }
     }
+
+    private fun List<ScheduleDayRelative>.toReleaseKeys() = map { it.releaseIds }.flatten().map { ReleaseKey(it) }
 }

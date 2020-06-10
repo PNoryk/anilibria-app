@@ -7,7 +7,7 @@ import java.util.*
 @Entity(
     tableName = "release_torrent",
     foreignKeys = [
-        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
+        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["id"], childColumns = ["releaseId"])
     ],
     indices = [Index("releaseId"), Index("id")]
 )

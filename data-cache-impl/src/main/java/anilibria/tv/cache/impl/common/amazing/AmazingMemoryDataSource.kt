@@ -1,5 +1,6 @@
 package anilibria.tv.cache.impl.common.amazing
 
+import anilibria.tv.domain.entity.common.MemoryKey
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable

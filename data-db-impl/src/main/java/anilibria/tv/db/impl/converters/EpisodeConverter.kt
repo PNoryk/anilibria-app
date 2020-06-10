@@ -1,13 +1,16 @@
 package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.episode.EpisodeDb
+import anilibria.tv.domain.entity.common.keys.EpisodeKey
 import anilibria.tv.domain.entity.episode.Episode
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class EpisodeConverter {
 
-    fun toDbKey(releaseId: Int, episodeId: Int): String = "${releaseId}_$episodeId"
+    fun toDbKey(releaseId: Int, episodeId: Int?): String = "${releaseId}_$episodeId"
+
+    fun toDbKey(key: EpisodeKey): String = toDbKey(key.releaseId, key.id)
 
     fun toDomain(source: EpisodeDb) = Episode(
         releaseId = source.releaseId,
@@ -32,7 +35,7 @@ class EpisodeConverter {
         srcHd = source.srcHd
     )
 
-    fun toDbKey(ids: List<Pair<Int, Int>>) = ids.map { toDbKey(it.first, it.second) }
+    fun toDbKey(keys: List<EpisodeKey>) = keys.map { toDbKey(it) }
 
     fun toDomain(source: List<EpisodeDb>) = source.map { toDomain(it) }
 

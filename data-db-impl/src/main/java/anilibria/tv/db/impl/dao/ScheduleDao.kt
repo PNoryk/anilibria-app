@@ -12,14 +12,14 @@ abstract class ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM `schedule_day`")
-    abstract fun getListAll(): Single<List<ScheduleDayDb>>
+    abstract fun getList(): Single<List<ScheduleDayDb>>
 
-    @Query("SELECT * FROM schedule_day WHERE scheduleDayId IN (:ids)")
-    abstract fun getList(ids: List<Int>): Single<List<ScheduleDayDb>>
+    @Query("SELECT * FROM schedule_day WHERE scheduleDayId IN (:dayIds)")
+    abstract fun getSome(dayIds: List<Int>): Single<List<ScheduleDayDb>>
 
     @Transaction
-    @Query("SELECT * FROM `schedule_day` WHERE scheduleDayId = :scheduleDayId LIMIT 1")
-    abstract fun getOne(scheduleDayId: Int): Single<ScheduleDayDb>
+    @Query("SELECT * FROM `schedule_day` WHERE scheduleDayId = :dayId LIMIT 1")
+    abstract fun getOne(dayId: Int): Single<ScheduleDayDb>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -38,9 +38,9 @@ abstract class ScheduleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertReleases(items: List<ScheduleReleaseDb>): Completable
 
-    @Query("DELETE FROM schedule_day WHERE scheduleDayId IN (:ids)")
-    abstract fun delete(ids: List<Int>): Completable
+    @Query("DELETE FROM schedule_day WHERE scheduleDayId IN (:dayIds)")
+    abstract fun remove(dayIds: List<Int>): Completable
 
     @Query("DELETE FROM schedule_day")
-    abstract fun deleteAll(): Completable
+    abstract fun clear(): Completable
 }

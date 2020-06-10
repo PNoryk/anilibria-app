@@ -3,15 +3,16 @@ package anilibria.tv.cache.combiner
 import io.reactivex.Observable
 import io.reactivex.Single
 import anilibria.tv.cache.common.ReadWriteCache
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
 import anilibria.tv.domain.entity.release.Release
 
-interface ReleaseCacheCombiner : ReadWriteCache<Release> {
+interface ReleaseCacheCombiner : ReadWriteCache<ReleaseKey, Release> {
 
-    fun observeOne(releaseId: Int? = null, releaseCode: String? = null): Observable<Release>
+    fun observeOne(key: ReleaseKey): Observable<Release>
 
-    fun observeList(ids: List<Int>? = null, codes: List<String>? = null): Observable<List<Release>>
+    fun observeSome(keys: List<ReleaseKey>): Observable<List<Release>>
 
-    fun getOne(releaseId: Int? = null, releaseCode: String? = null): Single<Release>
+    fun getOne(key: ReleaseKey): Single<Release>
 
-    fun getList(ids: List<Int>? = null, codes: List<String>? = null): Single<List<Release>>
+    fun getSome(keys: List<ReleaseKey>): Single<List<Release>>
 }

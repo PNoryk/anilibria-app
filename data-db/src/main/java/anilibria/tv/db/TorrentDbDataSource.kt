@@ -1,15 +1,15 @@
 package anilibria.tv.db
 
+import anilibria.tv.domain.entity.common.keys.TorrentKey
 import anilibria.tv.domain.entity.torrent.Torrent
 import io.reactivex.Completable
 import io.reactivex.Single
 
 interface TorrentDbDataSource {
-    fun getListAll(): Single<List<Torrent>>
-    fun getList(releaseIds: List<Int>): Single<List<Torrent>>
-    fun getListByPairIds(ids: List<Pair<Int, Int>>): Single<List<Torrent>>
-    fun getOne(releaseId: Int, torrentId: Int): Single<Torrent>
+    fun getList(): Single<List<Torrent>>
+    fun getSome(keys: List<TorrentKey>): Single<List<Torrent>>
+    fun getOne(key: TorrentKey): Single<Torrent>
     fun insert(items: List<Torrent>): Completable
-    fun removeList(ids: List<Pair<Int, Int>>): Completable
-    fun deleteAll(): Completable
+    fun remove(keys: List<TorrentKey>): Completable
+    fun clear(): Completable
 }

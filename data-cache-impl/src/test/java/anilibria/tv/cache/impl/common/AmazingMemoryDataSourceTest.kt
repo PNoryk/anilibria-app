@@ -1,7 +1,7 @@
 package anilibria.tv.cache.impl.common
 
 import anilibria.tv.cache.impl.common.amazing.AmazingMemoryDataSource
-import anilibria.tv.cache.impl.common.amazing.MemoryKey
+import anilibria.tv.domain.entity.common.MemoryKey
 import org.junit.Test
 
 class AmazingMemoryDataSourceTest {

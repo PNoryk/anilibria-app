@@ -1,3 +1,5 @@
 package anilibria.tv.cache.common
 
-interface ReadWriteCache<T> : ReadableCache<T>, WritableCache<T>
+import anilibria.tv.domain.entity.common.MemoryKey
+
+interface ReadWriteCache<K : MemoryKey, T> : ReadableCache<T>, WritableCache<K, T>

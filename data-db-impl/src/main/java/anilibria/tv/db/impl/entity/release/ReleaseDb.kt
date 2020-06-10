@@ -8,14 +8,14 @@ data class ReleaseDb(
 
     @Relation(
         entity = FavoriteInfoDb::class,
-        parentColumn = "releaseId",
+        parentColumn = "id",
         entityColumn = "releaseId"
     )
     val favorite: FavoriteInfoDb?,
 
     @Relation(
         entity = BlockInfoDb::class,
-        parentColumn = "releaseId",
+        parentColumn = "id",
         entityColumn = "releaseId"
     )
     val blockedInfo: BlockInfoDb?

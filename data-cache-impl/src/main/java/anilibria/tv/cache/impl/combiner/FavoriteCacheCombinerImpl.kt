@@ -3,6 +3,7 @@ package anilibria.tv.cache.impl.combiner
 import anilibria.tv.cache.FavoriteCache
 import anilibria.tv.cache.combiner.FavoriteCacheCombiner
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
 import anilibria.tv.domain.entity.converter.FavoriteRelativeConverter
 import anilibria.tv.domain.entity.relative.FavoriteRelative
 import anilibria.tv.domain.entity.release.Release
@@ -23,7 +24,7 @@ class FavoriteCacheCombinerImpl(
         .observeList()
         .switchMap { relativeItems ->
             releaseCache
-                .observeList(relativeItems.map { it.releaseId })
+                .observeSome(relativeItems.toKeys())
                 .map(getSourceCombiner(relativeItems))
         }
 
@@ -31,7 +32,7 @@ class FavoriteCacheCombinerImpl(
         .getList()
         .flatMap { relativeItems ->
             releaseCache
-                .getList(relativeItems.map { it.releaseId })
+                .getSome(relativeItems.toKeys())
                 .map(getSourceCombiner(relativeItems))
         }
 
@@ -41,8 +42,7 @@ class FavoriteCacheCombinerImpl(
         return Completable.concat(listOf(putRelease, putFavorite))
     }
 
-    override fun removeList(items: List<Release>): Completable = favoriteCache
-        .removeList(items.map { relativeConverter.toRelative(it) })
+    override fun removeList(keys: List<ReleaseKey>): Completable = favoriteCache.removeList(keys)
 
     override fun clear(): Completable = favoriteCache.clear()
 
@@ -51,4 +51,6 @@ class FavoriteCacheCombinerImpl(
             relativeConverter.fromRelative(relative, releaseItems)
         }
     }
+
+    private fun List<FavoriteRelative>.toKeys() = map { ReleaseKey(it.releaseId) }
 }

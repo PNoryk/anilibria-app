@@ -1,6 +1,7 @@
 package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.feed.FeedDb
+import anilibria.tv.domain.entity.common.keys.FeedKey
 import anilibria.tv.domain.entity.relative.FeedRelative
 import toothpick.InjectConstructor
 
@@ -8,6 +9,8 @@ import toothpick.InjectConstructor
 class FeedConverter {
 
     fun toDbKey(releaseId: Int?, youtubeId: Int?): String = "${releaseId}_$youtubeId"
+
+    fun toDbKey(key: FeedKey): String = toDbKey(key.releaseId, key.youtubeId)
 
     fun toDomain(source: FeedDb) = FeedRelative(
         releaseId = source.releaseId,
@@ -20,7 +23,7 @@ class FeedConverter {
         youtubeId = source.youtubeId
     )
 
-    fun toDbKey(ids: List<Pair<Int?, Int?>>) = ids.map { toDbKey(it.first, it.second) }
+    fun toDbKey(ids: List<FeedKey>) = ids.map { toDbKey(it) }
 
     fun toDomain(source: List<FeedDb>) = source.map { toDomain(it) }
 

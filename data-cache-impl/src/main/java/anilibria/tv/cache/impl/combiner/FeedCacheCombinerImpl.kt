@@ -4,6 +4,9 @@ import anilibria.tv.cache.FeedCache
 import anilibria.tv.cache.YoutubeCache
 import anilibria.tv.cache.combiner.FeedCacheCombiner
 import anilibria.tv.cache.combiner.ReleaseCacheCombiner
+import anilibria.tv.domain.entity.common.keys.FeedKey
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
+import anilibria.tv.domain.entity.common.keys.YoutubeKey
 import anilibria.tv.domain.entity.converter.FeedRelativeConverter
 import anilibria.tv.domain.entity.feed.Feed
 import anilibria.tv.domain.entity.relative.FeedRelative
@@ -26,11 +29,9 @@ class FeedCacheCombinerImpl(
     override fun observeList(): Observable<List<Feed>> = feedCache
         .observeList()
         .switchMap { relativeItems ->
-            val releaseIds = relativeItems.mapNotNull { it.releaseId }
-            val youtubeIds = relativeItems.mapNotNull { it.youtubeId }
             Observable.zip(
-                releaseCache.observeList(releaseIds),
-                youtubeCache.observeList(youtubeIds),
+                releaseCache.observeSome(relativeItems.toReleaseKeys()),
+                youtubeCache.observeSome(relativeItems.toYoutubeKeys()),
                 getSourceCombiner(relativeItems)
             )
         }
@@ -38,11 +39,9 @@ class FeedCacheCombinerImpl(
     override fun getList(): Single<List<Feed>> = feedCache
         .getList()
         .flatMap { relativeItems ->
-            val releaseIds = relativeItems.mapNotNull { it.releaseId }
-            val youtubeIds = relativeItems.mapNotNull { it.youtubeId }
             Single.zip(
-                releaseCache.getList(releaseIds),
-                youtubeCache.getList(youtubeIds),
+                releaseCache.getSome(relativeItems.toReleaseKeys()),
+                youtubeCache.getSome(relativeItems.toYoutubeKeys()),
                 getSourceCombiner(relativeItems)
             )
         }
@@ -54,8 +53,7 @@ class FeedCacheCombinerImpl(
         return Completable.concat(listOf(putRelease, putYoutube, putFeed))
     }
 
-    override fun removeList(items: List<Feed>): Completable = feedCache
-        .removeList(items.map { relativeConverter.toRelative(it) })
+    override fun removeList(keys: List<FeedKey>): Completable = feedCache.removeList(keys)
 
     override fun clear(): Completable = feedCache.clear()
 
@@ -65,4 +63,8 @@ class FeedCacheCombinerImpl(
                 relativeConverter.fromRelative(relative, releaseItems, youtubeItems)
             }
         }
+
+    private fun List<FeedRelative>.toReleaseKeys() = mapNotNull { feed -> feed.releaseId?.let { ReleaseKey(it) } }
+
+    private fun List<FeedRelative>.toYoutubeKeys() = mapNotNull { feed -> feed.youtubeId?.let { YoutubeKey(it) } }
 }

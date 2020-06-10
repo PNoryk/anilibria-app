@@ -6,31 +6,32 @@ import anilibria.tv.cache.combiner.ReleaseCacheCombiner
 import anilibria.tv.domain.entity.release.RandomRelease
 import anilibria.tv.domain.entity.release.Release
 import anilibria.tv.api.ReleaseApiDataSource
+import anilibria.tv.cache.ReleaseCache
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class ReleaseRepository(
     private val apiDataSource: ReleaseApiDataSource,
-    private val cacheCombiner: ReleaseCacheCombiner
+    private val cacheCombiner: ReleaseCacheCombiner,
+    private val releaseCache: ReleaseCache
 ) {
 
-    fun observeOne(releaseId: Int? = null, releaseCode: String? = null): Observable<Release> =
-        cacheCombiner.observeOne(releaseId, releaseCode)
+    fun observeOne(id: Int): Observable<Release> = cacheCombiner.observeOne(id.toKey())
 
-    fun observeList(ids: List<Int>? = null, codes: List<String>? = null): Observable<List<Release>> = cacheCombiner
-        .observeList(ids, codes)
+    fun observeSome(ids: List<Int>): Observable<List<Release>> = cacheCombiner.observeSome(ids.toKeys())
 
     fun observeList(): Observable<List<Release>> = cacheCombiner.observeList()
 
-    fun getList(ids: List<Int>? = null, codes: List<String>? = null): Single<List<Release>> = apiDataSource
-        .getSome(ids, codes)
+    fun getSome(ids: List<Int>): Single<List<Release>> = apiDataSource
+        .getSome(ids)
         .flatMap { cacheCombiner.putList(it).toSingleDefault(it) }
-        .flatMap { cacheCombiner.getList(ids, codes) }
+        .flatMap { cacheCombiner.getSome(ids.toKeys()) }
 
-    fun getOne(releaseId: Int? = null, releaseCode: String? = null): Single<Release> = apiDataSource
-        .getOne(releaseId, releaseCode)
+    fun getOne(id: Int): Single<Release> = apiDataSource
+        .getOne(id)
         .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
-        .flatMap { cacheCombiner.getOne(releaseId, releaseCode) }
+        .flatMap { cacheCombiner.getOne(id.toKey()) }
 
     fun getList(page: Int): Single<List<Release>> = apiDataSource
         .getList(page)
@@ -47,8 +48,26 @@ class ReleaseRepository(
         .getRandom()
         .onErrorResumeNext { fetchLocalRandom() }
 
-    private fun fetchLocalRandom(): Single<RandomRelease> = cacheCombiner
+    fun getIdByCode(code: String): Single<Int> = releaseCache
+        .getList()
+        .flatMap {
+            val foundRelease = it.firstOrNull { it.code == code }
+            if (foundRelease != null) {
+                Single.just(foundRelease.id)
+            } else {
+                apiDataSource
+                    .getOne(releaseCode = code)
+                    .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
+                    .map { it.id }
+            }
+        }
+
+    private fun fetchLocalRandom(): Single<RandomRelease> = releaseCache
         .getList()
         .map { it.mapNotNull { release -> release.code }.random() }
         .map { RandomRelease(it) }
+
+    private fun Int.toKey() = ReleaseKey(this)
+
+    private fun List<Int>.toKeys() = map { ReleaseKey(it) }
 }

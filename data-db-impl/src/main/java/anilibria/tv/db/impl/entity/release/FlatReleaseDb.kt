@@ -8,7 +8,7 @@ import java.util.*
 
 @Entity(tableName = "release")
 data class FlatReleaseDb(
-    @PrimaryKey @ColumnInfo(name = "releaseId") val id: Int,
+    @PrimaryKey @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "code") val code: String?,
     @ColumnInfo(name = "nameRu") val nameRu: String?,
     @ColumnInfo(name = "nameEn") val nameEn: String?,

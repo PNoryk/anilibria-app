@@ -1,6 +1,6 @@
 package anilibria.tv.cache.impl.common.amazing
 
-import io.reactivex.Completable
+import anilibria.tv.domain.entity.common.MemoryKey
 import java.util.*
 
 class AmazingColumnCache<K : MemoryKey> {

@@ -12,10 +12,10 @@ import anilibria.tv.db.impl.entity.favorite.FavoriteDb
 interface FavoriteDao {
 
     @Query("SELECT * FROM `favorite`")
-    fun getList(): Single<List<FavoriteDb>>
+    fun getSome(): Single<List<FavoriteDb>>
 
     @Query("SELECT * FROM favorite WHERE releaseId IN (:ids)")
-    fun getList(ids: List<Int>): Single<List<FavoriteDb>>
+    fun getSome(ids: List<Int>): Single<List<FavoriteDb>>
 
     @Query("SELECT * FROM `favorite` WHERE releaseId = :releaseId LIMIT 1")
     fun getOne(releaseId: Int): Single<FavoriteDb>
@@ -24,8 +24,8 @@ interface FavoriteDao {
     fun insert(items: List<FavoriteDb>): Completable
 
     @Query("DELETE FROM favorite WHERE releaseId IN (:ids)")
-    fun delete(ids: List<Int>): Completable
+    fun remove(ids: List<Int>): Completable
 
     @Query("DELETE FROM favorite")
-    fun deleteAll(): Completable
+    fun clear(): Completable
 }

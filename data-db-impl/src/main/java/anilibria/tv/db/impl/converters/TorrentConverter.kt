@@ -1,13 +1,16 @@
 package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.torrent.TorrentDb
+import anilibria.tv.domain.entity.common.keys.TorrentKey
 import anilibria.tv.domain.entity.torrent.Torrent
 import toothpick.InjectConstructor
 
 @InjectConstructor
 class TorrentConverter {
 
-    fun toDbKey(releaseId: Int, torrentId: Int): String = "${releaseId}_$torrentId"
+    fun toDbKey(releaseId: Int, torrentId: Int?): String = "${releaseId}_$torrentId"
+
+    fun toDbKey(key: TorrentKey): String = toDbKey(key.releaseId, key.id)
 
     fun toDomain(source: TorrentDb) = Torrent(
         releaseId = source.releaseId,
@@ -38,7 +41,7 @@ class TorrentConverter {
         url = source.url
     )
 
-    fun toDbKey(ids: List<Pair<Int, Int>>) = ids.map { toDbKey(it.first, it.second) }
+    fun toDbKey(ids: List<TorrentKey>) = ids.map { toDbKey(it) }
 
     fun toDomain(source: List<TorrentDb>) = source.map { toDomain(it) }
 

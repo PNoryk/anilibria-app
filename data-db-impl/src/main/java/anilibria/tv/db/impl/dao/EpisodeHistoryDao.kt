@@ -14,23 +14,23 @@ import anilibria.tv.db.impl.entity.history.ReleaseHistoryDb
 interface EpisodeHistoryDao {
 
     @Query("SELECT * FROM episode_history")
-    fun getListAll(): Single<List<EpisodeHistoryDb>>
-
-    @Query("SELECT * FROM episode_history WHERE releaseId IN (:releaseIds)")
-    fun getList(releaseIds: List<Int>): Single<List<EpisodeHistoryDb>>
+    fun getList(): Single<List<EpisodeHistoryDb>>
 
     @Query("SELECT * FROM episode_history WHERE `key` IN (:keys)")
-    fun getListByKeys(keys: List<String>): Single<List<EpisodeHistoryDb>>
+    fun getSome(keys: List<String>): Single<List<EpisodeHistoryDb>>
 
-    @Query("SELECT * FROM episode_history WHERE releaseId = :releaseId and id = :episodeId LIMIT 1")
-    fun getOne(releaseId: Int, episodeId: Int): Single<EpisodeHistoryDb>
+    @Query("SELECT * FROM episode_history WHERE releaseId IN (:releaseIds)")
+    fun getSomeByReleases(releaseIds: List<Int>): Single<List<EpisodeHistoryDb>>
+
+    @Query("SELECT * FROM episode_history WHERE `key` = :key LIMIT 1")
+    fun getOne(key: String): Single<EpisodeHistoryDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<EpisodeHistoryDb>): Completable
 
     @Query("DELETE FROM episode_history WHERE `key` IN (:keys)")
-    fun delete(keys: List<String>): Completable
+    fun remove(keys: List<String>): Completable
 
     @Query("DELETE FROM episode_history")
-    fun deleteAll(): Completable
+    fun clear(): Completable
 }

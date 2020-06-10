@@ -9,7 +9,7 @@ import anilibria.tv.db.impl.entity.release.FlatReleaseDb
 @Entity(
     tableName = "favorite",
     foreignKeys = [
-        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
+        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["id"], childColumns = ["releaseId"])
     ]
 )
 data class FavoriteDb(

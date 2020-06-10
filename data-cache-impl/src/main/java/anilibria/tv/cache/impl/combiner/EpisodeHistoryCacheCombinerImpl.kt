@@ -3,6 +3,7 @@ package anilibria.tv.cache.impl.combiner
 import anilibria.tv.cache.EpisodeCache
 import anilibria.tv.cache.EpisodeHistoryCache
 import anilibria.tv.cache.combiner.EpisodeHistoryCacheCombiner
+import anilibria.tv.domain.entity.common.keys.EpisodeKey
 import anilibria.tv.domain.entity.converter.EpisodeHistoryRelativeConverter
 import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.history.EpisodeHistory
@@ -24,7 +25,7 @@ class EpisodeHistoryCacheCombinerImpl(
         .observeList()
         .switchMap { relativeItems ->
             episodeCache
-                .observeList(relativeItems.map { it.releaseId })
+                .observeSome(relativeItems.toKeys())
                 .map(getSourceCombiner(relativeItems))
         }
 
@@ -32,7 +33,7 @@ class EpisodeHistoryCacheCombinerImpl(
         .getList()
         .flatMap { relativeItems ->
             episodeCache
-                .getList(relativeItems.map { it.releaseId })
+                .getSome(relativeItems.toKeys())
                 .map(getSourceCombiner(relativeItems))
         }
 
@@ -42,8 +43,7 @@ class EpisodeHistoryCacheCombinerImpl(
         return Completable.concat(listOf(putRelease, putFavorite))
     }
 
-    override fun removeList(items: List<EpisodeHistory>): Completable = episodeHistoryCache
-        .removeList(items.map { relativeConverter.toRelative(it) })
+    override fun removeList(keys: List<EpisodeKey>): Completable = episodeHistoryCache.removeList(keys)
 
     override fun clear(): Completable = episodeHistoryCache.clear()
 
@@ -53,4 +53,6 @@ class EpisodeHistoryCacheCombinerImpl(
                 relativeConverter.fromRelative(relative, episodeItems)
             }
         }
+
+    private fun List<EpisodeHistoryRelative>.toKeys() = map { EpisodeKey(it.releaseId, it.id) }
 }

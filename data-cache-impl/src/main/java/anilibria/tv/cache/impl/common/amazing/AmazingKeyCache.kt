@@ -1,5 +1,6 @@
 package anilibria.tv.cache.impl.common.amazing
 
+import anilibria.tv.domain.entity.common.MemoryKey
 import java.util.*
 
 class AmazingKeyCache<K : MemoryKey> {

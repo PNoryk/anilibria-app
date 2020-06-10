@@ -9,12 +9,12 @@ import anilibria.tv.db.impl.entity.youtube.YoutubeDb
     foreignKeys = [
         ForeignKey(
             entity = FlatReleaseDb::class,
-            parentColumns = ["releaseId"],
+            parentColumns = ["id"],
             childColumns = ["releaseId"]
         ),
         ForeignKey(
             entity = YoutubeDb::class,
-            parentColumns = ["youtubeId"],
+            parentColumns = ["id"],
             childColumns = ["youtubeId"]
         )
     ],

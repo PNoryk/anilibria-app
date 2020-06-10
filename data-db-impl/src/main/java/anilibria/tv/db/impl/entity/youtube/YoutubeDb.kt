@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity(tableName = "youtube")
 data class YoutubeDb(
-    @PrimaryKey @ColumnInfo(name = "youtubeId") val id: Int,
+    @PrimaryKey @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "image") val image: String?,
     @ColumnInfo(name = "vid") val vid: String?,

@@ -3,11 +3,9 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.TorrentCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.TorrentMemoryDataSource
-import anilibria.tv.cache.impl.memory.keys.EpisodeMemoryKey
-import anilibria.tv.cache.impl.memory.keys.TorrentMemoryKey
+import anilibria.tv.domain.entity.common.keys.TorrentKey
 import anilibria.tv.cache.impl.merger.TorrentMerger
 import anilibria.tv.db.TorrentDbDataSource
-import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.torrent.Torrent
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -23,27 +21,27 @@ class TorrentCacheImpl(
 
     override fun observeList(): Observable<List<Torrent>> = memoryDataSource.observeList()
 
-    override fun observeList(releaseIds: List<Int>): Observable<List<Torrent>> = memoryDataSource.observeSome(releaseIds.toReleaseKeys())
+    override fun observeSome(keys: List<TorrentKey>): Observable<List<Torrent>> = memoryDataSource.observeSome(keys)
 
     override fun getList(): Single<List<Torrent>> = memoryDataSource
         .getList()
         .flatMapIfListEmpty {
             dbDataSource
-                .getListAll()
+                .getList()
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
                 .andThen(memoryDataSource.getList())
         }
 
-    override fun getList(releaseIds: List<Int>): Single<List<Torrent>> = memoryDataSource
-        .getSome(releaseIds.toReleaseKeys())
+    override fun getSome(keys: List<TorrentKey>): Single<List<Torrent>> = memoryDataSource
+        .getSome(keys)
         .flatMapIfListEmpty {
             dbDataSource
-                .getList(releaseIds)
+                .getSome(keys)
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
-                .andThen(memoryDataSource.getSome(releaseIds.toReleaseKeys()))
+                .andThen(memoryDataSource.getSome(keys))
         }
 
-    override fun putList(items: List<Torrent>): Completable = getList(items.map { it.releaseId })
+    override fun putList(items: List<Torrent>): Completable = getSome(items.toKeys())
         .map { torrentMerger.filterSame(it, items) }
         .flatMapCompletable { newItems ->
             if (newItems.isEmpty()) {
@@ -51,23 +49,19 @@ class TorrentCacheImpl(
             }
             dbDataSource
                 .insert(newItems)
-                .andThen(dbDataSource.getListByPairIds(newItems.toIds()))
+                .andThen(dbDataSource.getSome(newItems.toKeys()))
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 
-    override fun removeList(items: List<Torrent>): Completable = dbDataSource
-        .removeList(items.toIds())
-        .andThen(memoryDataSource.removeList(items.toKeys()))
+    override fun removeList(keys: List<TorrentKey>): Completable = dbDataSource
+        .remove(keys)
+        .andThen(memoryDataSource.removeList(keys))
 
     override fun clear(): Completable = dbDataSource
-        .deleteAll()
+        .clear()
         .andThen(memoryDataSource.clear())
 
-    private fun List<Torrent>.toIds() = map { Pair(it.releaseId, it.id) }
+    private fun List<Torrent>.toKeys() = map { TorrentKey(it.releaseId, it.id) }
 
-    private fun List<Int>.toReleaseKeys() = map { TorrentMemoryKey(it, null) }
-
-    private fun List<Torrent>.toKeys() = map { TorrentMemoryKey(it.releaseId, it.id) }
-
-    private fun List<Torrent>.toKeyValues() = map { Pair(TorrentMemoryKey(it.releaseId, it.id), it) }
+    private fun List<Torrent>.toKeyValues() = map { Pair(TorrentKey(it.releaseId, it.id), it) }
 }

@@ -10,7 +10,7 @@ import java.util.*
 @Entity(
     tableName = "release_history",
     foreignKeys = [
-        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["releaseId"], childColumns = ["releaseId"])
+        ForeignKey(entity = FlatReleaseDb::class, parentColumns = ["id"], childColumns = ["releaseId"])
     ]
 )
 data class ReleaseHistoryDb(

@@ -1,14 +1,9 @@
 package anilibria.tv.db.impl.datasource
 
 import anilibria.tv.db.impl.converters.FeedConverter
-import anilibria.tv.db.impl.converters.TorrentConverter
 import anilibria.tv.db.impl.dao.FeedDao
-import anilibria.tv.db.impl.dao.TorrentDao
 import anilibria.tv.db.impl.entity.feed.FeedDb
-import anilibria.tv.db.impl.entity.torrent.TorrentDb
-import anilibria.tv.domain.entity.feed.Feed
 import anilibria.tv.domain.entity.relative.FeedRelative
-import anilibria.tv.domain.entity.torrent.Torrent
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -31,7 +26,7 @@ class FeedDbDataSourceTest {
         every { dao.getList() } returns Single.just(dto)
         every { converter.toDomain(dto) } returns domain
 
-        dataSource.getListAll().test().assertValue(domain)
+        dataSource.getList().test().assertValue(domain)
 
         verify { dao.getList() }
         verify { converter.toDomain(dto) }
@@ -43,14 +38,14 @@ class FeedDbDataSourceTest {
     fun `getList EXPECT success`() {
         val ids = listOf(1 to 10, 2 to 20)
         val keys = listOf("1_10", "2_20")
-        every { dao.getList(keys) } returns Single.just(dto)
+        every { dao.getSome(keys) } returns Single.just(dto)
         every { converter.toDbKey(ids) } returns keys
         every { converter.toDomain(dto) } returns domain
 
-        dataSource.getList(ids).test().assertValue(domain)
+        dataSource.getSome(ids).test().assertValue(domain)
 
         verify { converter.toDbKey(ids) }
-        verify { dao.getList(keys) }
+        verify { dao.getSome(keys) }
         verify { converter.toDomain(dto) }
         confirmVerified(dao, converter)
     }
@@ -87,23 +82,23 @@ class FeedDbDataSourceTest {
     fun `removeList EXPECT success`() {
         val ids = listOf(1 to 10, 2 to 20)
         val keys = listOf("1_10", "2_20")
-        every { dao.delete(keys) } returns Completable.complete()
+        every { dao.remove(keys) } returns Completable.complete()
         every { converter.toDbKey(ids) } returns keys
 
-        dataSource.removeList(ids).test().assertComplete()
+        dataSource.remove(ids).test().assertComplete()
 
         verify { converter.toDbKey(ids) }
-        verify { dao.delete(keys) }
+        verify { dao.remove(keys) }
         confirmVerified(dao, converter)
     }
 
     @Test
     fun `deleteAll EXPECT success`() {
-        every { dao.deleteAll() } returns Completable.complete()
+        every { dao.clear() } returns Completable.complete()
 
-        dataSource.deleteAll().test().assertComplete()
+        dataSource.clear().test().assertComplete()
 
-        verify { dao.deleteAll() }
+        verify { dao.clear() }
         confirmVerified(dao, converter)
     }
 }

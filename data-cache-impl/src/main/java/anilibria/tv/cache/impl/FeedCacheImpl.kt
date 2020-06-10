@@ -3,7 +3,7 @@ package anilibria.tv.cache.impl
 import anilibria.tv.cache.FeedCache
 import anilibria.tv.cache.impl.common.flatMapIfListEmpty
 import anilibria.tv.cache.impl.memory.FeedMemoryDataSource
-import anilibria.tv.cache.impl.memory.keys.FeedMemoryKey
+import anilibria.tv.domain.entity.common.keys.FeedKey
 import anilibria.tv.db.FeedDbDataSource
 import anilibria.tv.domain.entity.relative.FeedRelative
 import io.reactivex.Completable
@@ -23,27 +23,25 @@ class FeedCacheImpl(
         .getList()
         .flatMapIfListEmpty {
             dbDataSource
-                .getListAll()
+                .getList()
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
                 .andThen(memoryDataSource.getList())
         }
 
     override fun putList(items: List<FeedRelative>): Completable = dbDataSource
         .insert(items)
-        .andThen(dbDataSource.getList(items.toIds()))
+        .andThen(dbDataSource.getSome(items.toKeys()))
         .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
 
-    override fun removeList(items: List<FeedRelative>): Completable = dbDataSource
-        .removeList(items.toIds())
-        .andThen(memoryDataSource.removeList(items.toKeys()))
+    override fun removeList(keys: List<FeedKey>): Completable = dbDataSource
+        .remove(keys)
+        .andThen(memoryDataSource.removeList(keys))
 
     override fun clear(): Completable = dbDataSource
-        .deleteAll()
+        .clear()
         .andThen(memoryDataSource.clear())
 
-    private fun List<FeedRelative>.toIds() = map { Pair(it.releaseId, it.youtubeId) }
+    private fun List<FeedRelative>.toKeys() = map { FeedKey(it.releaseId, it.youtubeId) }
 
-    private fun List<FeedRelative>.toKeys() = map { FeedMemoryKey(it.releaseId, it.youtubeId) }
-
-    private fun List<FeedRelative>.toKeyValues() = map { Pair(FeedMemoryKey(it.releaseId, it.youtubeId), it) }
+    private fun List<FeedRelative>.toKeyValues() = map { Pair(FeedKey(it.releaseId, it.youtubeId), it) }
 }

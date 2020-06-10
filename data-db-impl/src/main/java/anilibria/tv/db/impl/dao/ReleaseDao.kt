@@ -13,14 +13,14 @@ abstract class ReleaseDao {
 
     @Transaction
     @Query("SELECT * FROM `release`")
-    abstract fun getListAll(): Single<List<ReleaseDb>>
+    abstract fun getList(): Single<List<ReleaseDb>>
 
-    @Query("SELECT * FROM `release` WHERE releaseId IN (:ids) OR code IN (:codes)")
-    abstract fun getList(ids: List<Int>, codes: List<String>): Single<List<ReleaseDb>>
+    @Query("SELECT * FROM `release` WHERE id IN (:ids)")
+    abstract fun getSome(ids: List<Int>): Single<List<ReleaseDb>>
 
     @Transaction
-    @Query("SELECT * FROM `release` WHERE releaseId = :releaseId OR code = :code LIMIT 1")
-    abstract fun getOne(releaseId: Int?, code: String?): Single<ReleaseDb>
+    @Query("SELECT * FROM `release` WHERE id = :id LIMIT 1")
+    abstract fun getOne(id: Int): Single<ReleaseDb>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -43,9 +43,9 @@ abstract class ReleaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertBlockInfo(blockInfoDb: BlockInfoDb): Completable
 
-    @Query("DELETE FROM `release` WHERE releaseId IN (:ids)")
-    abstract fun delete(ids: List<Int>): Completable
+    @Query("DELETE FROM `release` WHERE id IN (:ids)")
+    abstract fun remove(ids: List<Int>): Completable
 
     @Query("DELETE FROM `release`")
-    abstract fun deleteAll(): Completable
+    abstract fun clear(): Completable
 }
