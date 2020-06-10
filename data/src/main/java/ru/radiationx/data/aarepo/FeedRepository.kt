@@ -21,7 +21,7 @@ class FeedRepository(
             if (page == 1) {
                 cacheCombiner.clear().toSingleDefault(it)
             } else {
-                cacheCombiner.putList(it.items).toSingleDefault(it)
+                cacheCombiner.insert(it.items).toSingleDefault(it)
             }
         }
         .flatMap { cacheCombiner.getList() }

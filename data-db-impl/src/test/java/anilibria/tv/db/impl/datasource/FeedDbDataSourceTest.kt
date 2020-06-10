@@ -3,6 +3,7 @@ package anilibria.tv.db.impl.datasource
 import anilibria.tv.db.impl.converters.FeedConverter
 import anilibria.tv.db.impl.dao.FeedDao
 import anilibria.tv.db.impl.entity.feed.FeedDb
+import anilibria.tv.domain.entity.common.keys.FeedKey
 import anilibria.tv.domain.entity.relative.FeedRelative
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -22,7 +23,7 @@ class FeedDbDataSourceTest {
     private val domain = listOf<FeedRelative>(mockk(), mockk())
 
     @Test
-    fun `getListAll EXPECT success`() {
+    fun `getList EXPECT success`() {
         every { dao.getList() } returns Single.just(dto)
         every { converter.toDomain(dto) } returns domain
 
@@ -35,17 +36,18 @@ class FeedDbDataSourceTest {
 
 
     @Test
-    fun `getList EXPECT success`() {
+    fun `getSome EXPECT success`() {
         val ids = listOf(1 to 10, 2 to 20)
-        val keys = listOf("1_10", "2_20")
-        every { dao.getSome(keys) } returns Single.just(dto)
-        every { converter.toDbKey(ids) } returns keys
+        val keys = listOf(FeedKey(1, 10), FeedKey(2, 20))
+        val dbKeys = listOf("1_10", "2_20")
+        every { dao.getSome(dbKeys) } returns Single.just(dto)
+        every { converter.toDbKey(keys) } returns dbKeys
         every { converter.toDomain(dto) } returns domain
 
-        dataSource.getSome(ids).test().assertValue(domain)
+        dataSource.getSome(keys).test().assertValue(domain)
 
-        verify { converter.toDbKey(ids) }
-        verify { dao.getSome(keys) }
+        verify { converter.toDbKey(keys) }
+        verify { dao.getSome(dbKeys) }
         verify { converter.toDomain(dto) }
         confirmVerified(dao, converter)
     }
@@ -54,14 +56,18 @@ class FeedDbDataSourceTest {
     fun `getOne EXPECT success`() {
         val releaseId = 1
         val torrentId = 10
+        val key = FeedKey(releaseId, torrentId)
+        val dbKey = "1_10"
         val dtoItem = dto[0]
         val domainItem = domain[0]
-        every { dao.getOne(releaseId, torrentId) } returns Single.just(dtoItem)
+        every { dao.getOne(dbKey) } returns Single.just(dtoItem)
+        every { converter.toDbKey(key) } returns dbKey
         every { converter.toDomain(dtoItem) } returns domainItem
 
-        dataSource.getOne(releaseId, torrentId).test().assertValue(domainItem)
+        dataSource.getOne(key).test().assertValue(domainItem)
 
-        verify { dao.getOne(releaseId, torrentId) }
+        verify { dao.getOne(dbKey) }
+        verify { converter.toDbKey(key) }
         verify { converter.toDomain(dtoItem) }
         confirmVerified(dao, converter)
     }
@@ -79,21 +85,21 @@ class FeedDbDataSourceTest {
     }
 
     @Test
-    fun `removeList EXPECT success`() {
-        val ids = listOf(1 to 10, 2 to 20)
-        val keys = listOf("1_10", "2_20")
-        every { dao.remove(keys) } returns Completable.complete()
-        every { converter.toDbKey(ids) } returns keys
+    fun `remove EXPECT success`() {
+        val keys = listOf(FeedKey(1, 10), FeedKey(2, 20))
+        val dbKeys = listOf("1_10", "2_20")
+        every { dao.remove(dbKeys) } returns Completable.complete()
+        every { converter.toDbKey(keys) } returns dbKeys
 
-        dataSource.remove(ids).test().assertComplete()
+        dataSource.remove(keys).test().assertComplete()
 
-        verify { converter.toDbKey(ids) }
-        verify { dao.remove(keys) }
+        verify { converter.toDbKey(keys) }
+        verify { dao.remove(dbKeys) }
         confirmVerified(dao, converter)
     }
 
     @Test
-    fun `deleteAll EXPECT success`() {
+    fun `clear EXPECT success`() {
         every { dao.clear() } returns Completable.complete()
 
         dataSource.clear().test().assertComplete()

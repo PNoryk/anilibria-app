@@ -40,7 +40,7 @@ class LinkMenuMemoryDataSourceTest {
         dataSource.getList().test().assertValue(insertItems)
 
         // action
-        dataSource.removeList(deleteItems).test().assertComplete()
+        dataSource.remove(deleteItems).test().assertComplete()
 
         // verify
         dataObserver.assertValueAt(2, afterDeleteItems)
@@ -62,7 +62,7 @@ class LinkMenuMemoryDataSourceTest {
         dataSource.getList().test().assertValue(insertItems)
 
         // action
-        dataSource.deleteAll().test().assertComplete()
+        dataSource.clear().test().assertComplete()
 
         // verify
         dataObserver.assertValueAt(2, emptyList())

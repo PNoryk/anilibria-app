@@ -12,7 +12,7 @@ import anilibria.tv.db.impl.entity.episode.EpisodeDb
 interface EpisodeDao {
 
     @Query("SELECT * FROM release_episode")
-    fun getListAll(): Single<List<EpisodeDb>>
+    fun getList(): Single<List<EpisodeDb>>
 
     @Query("SELECT * FROM release_episode WHERE `key` IN (:keys)")
     fun getSome(keys: List<String>): Single<List<EpisodeDb>>

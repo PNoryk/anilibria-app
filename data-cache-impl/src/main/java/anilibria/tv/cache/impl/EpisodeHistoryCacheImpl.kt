@@ -39,14 +39,14 @@ class EpisodeHistoryCacheImpl(
                 .andThen(memoryDataSource.getSome(keys))
         }
 
-    override fun putList(items: List<EpisodeHistoryRelative>): Completable = dbDataSource
+    override fun insert(items: List<EpisodeHistoryRelative>): Completable = dbDataSource
         .insert(items)
         .andThen(dbDataSource.getSome(items.toKeys()))
         .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
 
-    override fun removeList(keys: List<EpisodeKey>): Completable = dbDataSource
+    override fun remove(keys: List<EpisodeKey>): Completable = dbDataSource
         .remove(keys)
-        .andThen(memoryDataSource.removeList(keys))
+        .andThen(memoryDataSource.remove(keys))
 
     override fun clear(): Completable = dbDataSource
         .clear()

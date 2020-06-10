@@ -41,7 +41,7 @@ class YoutubeCacheImpl(
                 .andThen(memoryDataSource.getSome(keys))
         }
 
-    override fun putList(items: List<Youtube>): Completable = getSome(items.toKeys())
+    override fun insert(items: List<Youtube>): Completable = getSome(items.toKeys())
         .map { youtubeMerger.filterSame(it, items) }
         .flatMapCompletable { newItems ->
             if (newItems.isEmpty()) {
@@ -53,9 +53,9 @@ class YoutubeCacheImpl(
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 
-    override fun removeList(keys: List<YoutubeKey>): Completable = dbDataSource
+    override fun remove(keys: List<YoutubeKey>): Completable = dbDataSource
         .remove(keys)
-        .andThen(memoryDataSource.removeList(keys))
+        .andThen(memoryDataSource.remove(keys))
 
     override fun clear(): Completable = dbDataSource
         .clear()

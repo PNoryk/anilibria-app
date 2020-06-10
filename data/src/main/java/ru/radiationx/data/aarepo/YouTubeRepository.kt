@@ -21,7 +21,7 @@ class YouTubeRepository(
             if (page == 1) {
                 youtubeCache.clear().toSingleDefault(it)
             } else {
-                youtubeCache.putList(it.items).toSingleDefault(it)
+                youtubeCache.insert(it.items).toSingleDefault(it)
             }
         }
         .flatMap { youtubeCache.getList() }

@@ -18,7 +18,7 @@ class EpisodeDbDataSourceImpl(
 ) : EpisodeDbDataSource {
 
     override fun getList(): Single<List<Episode>> = dao
-        .getListAll()
+        .getList()
         .map(converter::toDomain)
 
     override fun getSome(keys: List<EpisodeKey>): Single<List<Episode>> = Single

@@ -26,14 +26,14 @@ open class ListMemoryDataSource<T> {
         updateRelay()
     }
 
-    fun removeList(items: List<T>): Completable = Completable.fromAction {
+    fun remove(items: List<T>): Completable = Completable.fromAction {
         synchronized(this) {
             memory.removeAll(items)
         }
         updateRelay()
     }
 
-    fun deleteAll(): Completable = Completable.fromAction {
+    fun clear(): Completable = Completable.fromAction {
         memory.clear()
         updateRelay()
     }

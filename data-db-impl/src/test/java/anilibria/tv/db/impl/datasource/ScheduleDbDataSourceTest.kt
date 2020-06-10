@@ -3,6 +3,7 @@ package anilibria.tv.db.impl.datasource
 import anilibria.tv.db.impl.converters.*
 import anilibria.tv.db.impl.dao.*
 import anilibria.tv.db.impl.entity.schedule.ScheduleDayDb
+import anilibria.tv.domain.entity.common.keys.ScheduleKey
 import anilibria.tv.domain.entity.relative.ScheduleDayRelative
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -22,7 +23,7 @@ class ScheduleDbDataSourceTest {
     private val domain = listOf<ScheduleDayRelative>(mockk(), mockk())
 
     @Test
-    fun `getListAll EXPECT success`() {
+    fun `getList EXPECT success`() {
         every { dao.getList() } returns Single.just(dto)
         every { converter.toDomain(dto) } returns domain
 
@@ -34,12 +35,13 @@ class ScheduleDbDataSourceTest {
     }
 
     @Test
-    fun `getList EXPECT success`() {
+    fun `getSome EXPECT success`() {
         val ids = listOf(1, 2)
+        val keys = ids.map { ScheduleKey(it) }
         every { dao.getSome(ids) } returns Single.just(dto)
         every { converter.toDomain(dto) } returns domain
 
-        dataSource.getList(ids).test().assertValue(domain)
+        dataSource.getSome(keys).test().assertValue(domain)
 
         verify { dao.getSome(ids) }
         verify { converter.toDomain(dto) }
@@ -49,12 +51,13 @@ class ScheduleDbDataSourceTest {
     @Test
     fun `getOne EXPECT success`() {
         val releaseId = 1
+        val key = ScheduleKey(releaseId)
         val dtoItem = dto[0]
         val domainItem = domain[0]
         every { dao.getOne(releaseId) } returns Single.just(dtoItem)
         every { converter.toDomain(dtoItem) } returns domainItem
 
-        dataSource.getOne(releaseId).test().assertValue(domainItem)
+        dataSource.getOne(key).test().assertValue(domainItem)
 
         verify { dao.getOne(releaseId) }
         verify { converter.toDomain(dtoItem) }
@@ -74,18 +77,19 @@ class ScheduleDbDataSourceTest {
     }
 
     @Test
-    fun `removeList EXPECT success`() {
+    fun `remove EXPECT success`() {
         val ids = listOf(1, 2)
+        val keys = ids.map { ScheduleKey(it) }
         every { dao.remove(ids) } returns Completable.complete()
 
-        dataSource.remove(ids).test().assertComplete()
+        dataSource.remove(keys).test().assertComplete()
 
         verify { dao.remove(ids) }
         confirmVerified(dao, converter)
     }
 
     @Test
-    fun `deleteAll EXPECT success`() {
+    fun `clear EXPECT success`() {
         every { dao.clear() } returns Completable.complete()
 
         dataSource.clear().test().assertComplete()

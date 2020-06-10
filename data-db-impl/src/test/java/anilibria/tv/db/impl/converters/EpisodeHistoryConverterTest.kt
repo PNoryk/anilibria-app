@@ -2,6 +2,7 @@ package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.episode.EpisodeDb
 import anilibria.tv.db.impl.entity.history.EpisodeHistoryDb
+import anilibria.tv.domain.entity.common.keys.EpisodeKey
 import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.history.EpisodeHistory
 import anilibria.tv.domain.entity.relative.EpisodeHistoryRelative
@@ -75,8 +76,8 @@ class EpisodeHistoryConverterTest {
         converter.toDbKey(10, 1).also {
             assertEquals("10_1", it)
         }
-        converter.toDbKey(listOf(10 to 1, 10 to 2)).also {
-            assertEquals(listOf("10_1", "10_2"), it)
+        converter.toDbKey(listOf(EpisodeKey(10, 1), EpisodeKey(10, 2), EpisodeKey(20, null))).also {
+            assertEquals(listOf("10_1", "10_2", "20_null"), it)
         }
     }
 }

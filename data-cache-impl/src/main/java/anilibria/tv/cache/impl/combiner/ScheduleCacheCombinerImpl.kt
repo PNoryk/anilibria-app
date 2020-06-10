@@ -38,13 +38,13 @@ class ScheduleCacheCombinerImpl(
                 .map(getSourceCombiner(relativeItems))
         }
 
-    override fun putList(items: List<ScheduleDay>): Completable {
-        val putRelease = releaseCache.putList(items.map { it.items }.flatten())
-        val putSchedule = scheduleCache.putList(items.map { relativeConverter.toRelative(it) })
+    override fun insert(items: List<ScheduleDay>): Completable {
+        val putRelease = releaseCache.insert(items.map { it.items }.flatten())
+        val putSchedule = scheduleCache.insert(items.map { relativeConverter.toRelative(it) })
         return Completable.concat(listOf(putRelease, putSchedule))
     }
 
-    override fun removeList(keys: List<ScheduleKey>): Completable = scheduleCache.removeList(keys)
+    override fun remove(keys: List<ScheduleKey>): Completable = scheduleCache.remove(keys)
 
     override fun clear(): Completable = scheduleCache.clear()
 

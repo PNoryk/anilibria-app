@@ -1,7 +1,6 @@
 package anilibria.tv.cache.impl.memory
 
 import anilibria.tv.domain.entity.auth.SocialService
-import anilibria.tv.domain.entity.menu.LinkMenu
 import io.mockk.mockk
 import org.junit.Test
 
@@ -41,7 +40,7 @@ class SocialServiceMemoryDataSourceTest {
         dataSource.getList().test().assertValue(insertItems)
 
         // action
-        dataSource.removeList(deleteItems).test().assertComplete()
+        dataSource.remove(deleteItems).test().assertComplete()
 
         // verify
         dataObserver.assertValueAt(2, afterDeleteItems)
@@ -63,7 +62,7 @@ class SocialServiceMemoryDataSourceTest {
         dataSource.getList().test().assertValue(insertItems)
 
         // action
-        dataSource.deleteAll().test().assertComplete()
+        dataSource.clear().test().assertComplete()
 
         // verify
         dataObserver.assertValueAt(2, emptyList())

@@ -56,7 +56,7 @@ open class AmazingMemoryDataSource<K : MemoryKey, V : Any> {
 
 
     /* Delete */
-    fun removeList(keys: List<K>): Completable = Completable.fromAction {
+    fun remove(keys: List<K>): Completable = Completable.fromAction {
         keyCache.remove(keys)
         columnCache.remove(keys)
         memoryMap.minusAssign(keys)

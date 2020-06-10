@@ -3,6 +3,7 @@ package anilibria.tv.db.impl.datasource
 import anilibria.tv.db.impl.converters.ReleaseHistoryConverter
 import anilibria.tv.db.impl.dao.ReleaseHistoryDao
 import anilibria.tv.db.impl.entity.history.ReleaseHistoryDb
+import anilibria.tv.domain.entity.common.keys.ReleaseKey
 import anilibria.tv.domain.entity.relative.ReleaseHistoryRelative
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -22,7 +23,7 @@ class ReleaseHistoryDbDataSourceTest {
     private val domain = listOf<ReleaseHistoryRelative>(mockk(), mockk())
 
     @Test
-    fun `getListAll EXPECT success`() {
+    fun `getList EXPECT success`() {
         every { dao.getList() } returns Single.just(dto)
         every { converter.toDomain(dto) } returns domain
 
@@ -34,12 +35,13 @@ class ReleaseHistoryDbDataSourceTest {
     }
 
     @Test
-    fun `getList EXPECT success`() {
+    fun `getSome EXPECT success`() {
         val ids = listOf(1, 2)
+        val keys = ids.map { ReleaseKey(it) }
         every { dao.getSome(ids) } returns Single.just(dto)
         every { converter.toDomain(dto) } returns domain
 
-        dataSource.getList(ids).test().assertValue(domain)
+        dataSource.getSome(keys).test().assertValue(domain)
 
         verify { dao.getSome(ids) }
         verify { converter.toDomain(dto) }
@@ -49,12 +51,13 @@ class ReleaseHistoryDbDataSourceTest {
     @Test
     fun `getOne EXPECT success`() {
         val releaseId = 1
+        val key = ReleaseKey(releaseId)
         val dtoItem = dto[0]
         val domainItem = domain[0]
         every { dao.getOne(releaseId) } returns Single.just(dtoItem)
         every { converter.toDomain(dtoItem) } returns domainItem
 
-        dataSource.getOne(releaseId).test().assertValue(domainItem)
+        dataSource.getOne(key).test().assertValue(domainItem)
 
         verify { dao.getOne(releaseId) }
         verify { converter.toDomain(dtoItem) }
@@ -74,18 +77,19 @@ class ReleaseHistoryDbDataSourceTest {
     }
 
     @Test
-    fun `removeList EXPECT success`() {
+    fun `remove EXPECT success`() {
         val ids = listOf(1, 2)
+        val keys = ids.map { ReleaseKey(it) }
         every { dao.remove(ids) } returns Completable.complete()
 
-        dataSource.remove(ids).test().assertComplete()
+        dataSource.remove(keys).test().assertComplete()
 
         verify { dao.remove(ids) }
         confirmVerified(dao, converter)
     }
 
     @Test
-    fun `deleteAll EXPECT success`() {
+    fun `clear EXPECT success`() {
         every { dao.clear() } returns Completable.complete()
 
         dataSource.clear().test().assertComplete()

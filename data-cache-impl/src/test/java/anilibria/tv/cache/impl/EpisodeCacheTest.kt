@@ -94,20 +94,19 @@ class EpisodeCacheTest {
         val dbResult = listOf<Episode>()
         val memoryResult = listOf<Episode>()
         val expectResult = emptyList<Episode>()
-        val releaseIds = listOf(10, 20)
-        val releaseKeys = releaseIds.toReleaseKeys()
+        val episodeKeys = mockEpisodes.toKeys()
         val insertKeyValues = dbResult.toKeyValues()
 
-        every { memoryDataSource.getSome(releaseKeys) } returns Single.fromCallable {
+        every { memoryDataSource.getSome(episodeKeys) } returns Single.fromCallable {
             if (insertSlot.isCaptured) dbResult else memoryResult
         }
-        every { dbDataSource.getSome(releaseIds) } returns Single.just(dbResult)
+        every { dbDataSource.getSome(episodeKeys) } returns Single.just(dbResult)
         every { memoryDataSource.insert(capture(insertSlot)) } returns Completable.complete()
 
-        cache.getSome(releaseIds).test().assertValue(expectResult)
+        cache.getSome(episodeKeys).test().assertValue(expectResult)
 
-        verify { memoryDataSource.getSome(releaseKeys) }
-        verify { dbDataSource.getSome(releaseIds) }
+        verify { memoryDataSource.getSome(episodeKeys) }
+        verify { dbDataSource.getSome(episodeKeys) }
         verify { memoryDataSource.insert(insertKeyValues) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
@@ -118,20 +117,19 @@ class EpisodeCacheTest {
         val dbResult = mockEpisodes
         val memoryResult = listOf<Episode>()
         val expectResult = dbResult.toList()
-        val releaseIds = listOf(10, 20)
-        val releaseKeys = releaseIds.toReleaseKeys()
+        val episodeKeys = mockEpisodes.toKeys()
         val insertKeyValues = dbResult.toKeyValues()
 
-        every { memoryDataSource.getSome(releaseKeys) } returns Single.fromCallable {
+        every { memoryDataSource.getSome(episodeKeys) } returns Single.fromCallable {
             if (insertSlot.isCaptured) dbResult else memoryResult
         }
-        every { dbDataSource.getSome(releaseIds) } returns Single.just(dbResult)
+        every { dbDataSource.getSome(episodeKeys) } returns Single.just(dbResult)
         every { memoryDataSource.insert(capture(insertSlot)) } returns Completable.complete()
 
-        cache.getSome(releaseIds).test().assertValue(expectResult)
+        cache.getSome(episodeKeys).test().assertValue(expectResult)
 
-        verify { memoryDataSource.getSome(releaseKeys) }
-        verify { dbDataSource.getSome(releaseIds) }
+        verify { memoryDataSource.getSome(episodeKeys) }
+        verify { dbDataSource.getSome(episodeKeys) }
         verify { memoryDataSource.insert(insertKeyValues) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
@@ -140,14 +138,13 @@ class EpisodeCacheTest {
     fun `get by keys WHEN memory not empty EXPECT success get from memory`() {
         val memoryResult = mockEpisodes
         val expectResult = memoryResult.toList()
-        val releaseIds = listOf(10, 20)
-        val releaseKeys = releaseIds.toReleaseKeys()
+        val episodeKeys = mockEpisodes.toKeys()
 
-        every { memoryDataSource.getSome(releaseKeys) } returns Single.just(memoryResult)
+        every { memoryDataSource.getSome(episodeKeys) } returns Single.just(memoryResult)
 
-        cache.getSome(releaseIds).test().assertValue(expectResult)
+        cache.getSome(episodeKeys).test().assertValue(expectResult)
 
-        verify { memoryDataSource.getSome(releaseKeys) }
+        verify { memoryDataSource.getSome(episodeKeys) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
@@ -157,16 +154,15 @@ class EpisodeCacheTest {
         val oldItems = emptyList<Episode>()
         val newItems = mockEpisodes
         val newKeys = newItems.toKeys()
-        val newDbIds = newItems.toIds()
         val newKeyValues = newItems.toKeyValues()
 
         every { memoryDataSource.getSome(newKeys) } returns Single.just(oldItems)
         every { episodeMerger.filterSame(oldItems, newItems) } returns newItems
         every { dbDataSource.insert(newItems) } returns Completable.complete()
-        every { dbDataSource.getListByPairIds(newDbIds) } returns Single.just(newItems)
+        every { dbDataSource.getSome(newKeys) } returns Single.just(newItems)
         every { memoryDataSource.insert(newKeyValues) } returns Completable.complete()
 
-        cache.putList(mockEpisodes).test().assertComplete()
+        cache.insert(mockEpisodes).test().assertComplete()
 
 
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
@@ -188,11 +184,6 @@ class EpisodeCacheTest {
     @Test
     fun `clear EXPECT success, clear`() {
     }
-
-
-    private fun List<Episode>.toIds() = map { Pair(it.releaseId, it.id) }
-
-    private fun List<Int>.toReleaseKeys() = map { EpisodeKey(it, null) }
 
     private fun List<Episode>.toKeys() = map { EpisodeKey(it.releaseId, it.id) }
 

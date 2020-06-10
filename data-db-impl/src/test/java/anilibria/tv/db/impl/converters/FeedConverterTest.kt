@@ -2,6 +2,7 @@ package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.episode.EpisodeDb
 import anilibria.tv.db.impl.entity.feed.FeedDb
+import anilibria.tv.domain.entity.common.keys.FeedKey
 import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.feed.Feed
 import anilibria.tv.domain.entity.relative.FeedRelative
@@ -65,7 +66,7 @@ class FeedConverterTest {
         converter.toDbKey(null, 20).also {
             assertEquals("null_20", it)
         }
-        converter.toDbKey(listOf(10 to null, null to 20)).also {
+        converter.toDbKey(listOf(FeedKey(10, null), FeedKey(null, 20))).also {
             assertEquals(listOf("10_null", "null_20"), it)
         }
     }

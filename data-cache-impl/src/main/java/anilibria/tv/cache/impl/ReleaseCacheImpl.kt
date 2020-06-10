@@ -52,7 +52,7 @@ class ReleaseCacheImpl(
                 .andThen(memoryDataSource.getOne(key))
         }
 
-    override fun putList(items: List<Release>): Completable = getSome(items.toKeys())
+    override fun insert(items: List<Release>): Completable = getSome(items.toKeys())
         .map { releaseMerger.filterSame(it, items) }
         .flatMapCompletable { newItems ->
             if (newItems.isEmpty()) {
@@ -63,9 +63,9 @@ class ReleaseCacheImpl(
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 
-    override fun removeList(keys: List<ReleaseKey>): Completable = dbDataSource
+    override fun remove(keys: List<ReleaseKey>): Completable = dbDataSource
         .remove(keys)
-        .andThen(memoryDataSource.removeList(keys))
+        .andThen(memoryDataSource.remove(keys))
 
     override fun clear(): Completable = dbDataSource
         .clear()

@@ -25,21 +25,21 @@ class FavoriteRepository(
             if (page == 1) {
                 cacheCombiner.clear().toSingleDefault(it)
             } else {
-                cacheCombiner.putList(it.items).toSingleDefault(it)
+                cacheCombiner.insert(it.items).toSingleDefault(it)
             }
         }
         .flatMap { cacheCombiner.getList() }
 
     fun add(releaseId: Int): Single<Release> = apiDataSource
         .add(releaseId)
-        .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
+        .flatMap { cacheCombiner.insert(listOf(it)).toSingleDefault(it) }
         .flatMap { releaseCache.getOne(releaseId.toKey()) }
 
     fun delete(releaseId: Int): Single<Release> = apiDataSource
         .delete(releaseId)
         .flatMap {
-            val removeFavorite = cacheCombiner.removeList(listOf(it.id.toKey()))
-            val addRelease = releaseCache.putList(listOf(it))
+            val removeFavorite = cacheCombiner.remove(listOf(it.id.toKey()))
+            val addRelease = releaseCache.insert(listOf(it))
             Completable.concat(listOf(removeFavorite, addRelease)).toSingleDefault(it)
         }
         .flatMap { releaseCache.getOne(releaseId.toKey()) }

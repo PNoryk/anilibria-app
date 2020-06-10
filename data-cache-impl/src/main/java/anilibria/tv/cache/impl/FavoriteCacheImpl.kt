@@ -28,14 +28,14 @@ class FavoriteCacheImpl(
                 .andThen(memoryDataSource.getList())
         }
 
-    override fun putList(items: List<FavoriteRelative>): Completable = dbDataSource
+    override fun insert(items: List<FavoriteRelative>): Completable = dbDataSource
         .insert(items)
         .andThen(dbDataSource.getSome(items.toKeys()))
         .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
 
-    override fun removeList(keys: List<ReleaseKey>): Completable = dbDataSource
+    override fun remove(keys: List<ReleaseKey>): Completable = dbDataSource
         .remove(keys)
-        .andThen(memoryDataSource.removeList(keys))
+        .andThen(memoryDataSource.remove(keys))
 
     override fun clear(): Completable = dbDataSource
         .clear()

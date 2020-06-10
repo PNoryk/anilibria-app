@@ -41,7 +41,7 @@ class TorrentCacheImpl(
                 .andThen(memoryDataSource.getSome(keys))
         }
 
-    override fun putList(items: List<Torrent>): Completable = getSome(items.toKeys())
+    override fun insert(items: List<Torrent>): Completable = getSome(items.toKeys())
         .map { torrentMerger.filterSame(it, items) }
         .flatMapCompletable { newItems ->
             if (newItems.isEmpty()) {
@@ -53,9 +53,9 @@ class TorrentCacheImpl(
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 
-    override fun removeList(keys: List<TorrentKey>): Completable = dbDataSource
+    override fun remove(keys: List<TorrentKey>): Completable = dbDataSource
         .remove(keys)
-        .andThen(memoryDataSource.removeList(keys))
+        .andThen(memoryDataSource.remove(keys))
 
     override fun clear(): Completable = dbDataSource
         .clear()

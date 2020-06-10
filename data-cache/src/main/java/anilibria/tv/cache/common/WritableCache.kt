@@ -5,9 +5,9 @@ import io.reactivex.Completable
 
 interface WritableCache<K : MemoryKey, T> {
 
-    fun putList(items: List<T>): Completable
+    fun insert(items: List<T>): Completable
 
-    fun removeList(keys: List<K>): Completable
+    fun remove(keys: List<K>): Completable
 
     fun clear(): Completable
 }

@@ -25,12 +25,12 @@ class ReleaseRepository(
 
     fun getSome(ids: List<Int>): Single<List<Release>> = apiDataSource
         .getSome(ids)
-        .flatMap { cacheCombiner.putList(it).toSingleDefault(it) }
+        .flatMap { cacheCombiner.insert(it).toSingleDefault(it) }
         .flatMap { cacheCombiner.getSome(ids.toKeys()) }
 
     fun getOne(id: Int): Single<Release> = apiDataSource
         .getOne(id)
-        .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
+        .flatMap { cacheCombiner.insert(listOf(it)).toSingleDefault(it) }
         .flatMap { cacheCombiner.getOne(id.toKey()) }
 
     fun getList(page: Int): Single<List<Release>> = apiDataSource
@@ -39,7 +39,7 @@ class ReleaseRepository(
             if (page == 1) {
                 cacheCombiner.clear().toSingleDefault(it)
             } else {
-                cacheCombiner.putList(it.items).toSingleDefault(it)
+                cacheCombiner.insert(it.items).toSingleDefault(it)
             }
         }
         .flatMap { cacheCombiner.getList() }
@@ -57,7 +57,7 @@ class ReleaseRepository(
             } else {
                 apiDataSource
                     .getOne(releaseCode = code)
-                    .flatMap { cacheCombiner.putList(listOf(it)).toSingleDefault(it) }
+                    .flatMap { cacheCombiner.insert(listOf(it)).toSingleDefault(it) }
                     .map { it.id }
             }
         }

@@ -2,6 +2,8 @@ package anilibria.tv.db.impl.converters
 
 import anilibria.tv.db.impl.entity.episode.EpisodeDb
 import anilibria.tv.db.impl.entity.torrent.TorrentDb
+import anilibria.tv.domain.entity.common.keys.EpisodeKey
+import anilibria.tv.domain.entity.common.keys.TorrentKey
 import anilibria.tv.domain.entity.episode.Episode
 import anilibria.tv.domain.entity.torrent.Torrent
 import org.junit.Assert
@@ -98,8 +100,8 @@ class TorrentConverterTest {
         converter.toDbKey(10, 1).also {
             assertEquals("10_1", it)
         }
-        converter.toDbKey(listOf(10 to 1, 10 to 2)).also {
-            assertEquals(listOf("10_1", "10_2"), it)
+        converter.toDbKey(listOf(TorrentKey(10, 1), TorrentKey(10, 2), TorrentKey(20, null))).also {
+            assertEquals(listOf("10_1", "10_2", "20_null"), it)
         }
     }
 }

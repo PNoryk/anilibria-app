@@ -41,7 +41,7 @@ class EpisodeCacheImpl(
                 .andThen(memoryDataSource.getSome(keys))
         }
 
-    override fun putList(items: List<Episode>): Completable = getSome(items.toKeys())
+    override fun insert(items: List<Episode>): Completable = getSome(items.toKeys())
         .map { episodeMerger.filterSame(it, items) }
         .flatMapCompletable { newItems ->
             if (newItems.isEmpty()) {
@@ -53,9 +53,9 @@ class EpisodeCacheImpl(
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 
-    override fun removeList(keys: List<EpisodeKey>): Completable = dbDataSource
+    override fun remove(keys: List<EpisodeKey>): Completable = dbDataSource
         .remove(keys)
-        .andThen(memoryDataSource.removeList(keys))
+        .andThen(memoryDataSource.remove(keys))
 
     override fun clear(): Completable = dbDataSource
         .clear()

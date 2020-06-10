@@ -94,7 +94,7 @@ class AmazingMemoryDataSourceTest {
 
 
         // Remove
-        dataSource.removeList(deleteItems.toStringKeys()).test().assertComplete()
+        dataSource.remove(deleteItems.toStringKeys()).test().assertComplete()
 
         // Verify remove
         listObserver.assertValueAt(2, afterDeleteItems)
