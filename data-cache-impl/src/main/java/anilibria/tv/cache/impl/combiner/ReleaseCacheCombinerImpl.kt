@@ -95,11 +95,11 @@ class ReleaseCacheCombinerImpl(
             )
         }
 
-    override fun insert(items: List<Release>): Completable {
+    override fun insert(items: List<Release>): Completable = Completable.defer {
         val putEpisodes = episodeCache.insert(items.mapNotNull { it.playlist }.flatten())
         val putTorrents = torrentCache.insert(items.mapNotNull { it.torrents }.flatten())
         val putRelease = releaseCache.insert(items.map { it.copy(playlist = null, torrents = null) })
-        return Completable.concat(listOf(putEpisodes, putTorrents, putRelease))
+        Completable.concat(listOf(putEpisodes, putTorrents, putRelease))
     }
 
     override fun remove(keys: List<ReleaseKey>): Completable = releaseCache.remove(keys)

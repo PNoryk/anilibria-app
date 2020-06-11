@@ -37,10 +37,10 @@ class EpisodeHistoryCacheCombinerImpl(
                 .map(getSourceCombiner(relativeItems))
         }
 
-    override fun insert(items: List<EpisodeHistory>): Completable {
+    override fun insert(items: List<EpisodeHistory>): Completable = Completable.defer {
         val putRelease = episodeCache.insert(items.map { it.episode })
         val putFavorite = episodeHistoryCache.insert(items.map { relativeConverter.toRelative(it) })
-        return Completable.concat(listOf(putRelease, putFavorite))
+        Completable.concat(listOf(putRelease, putFavorite))
     }
 
     override fun remove(keys: List<EpisodeKey>): Completable = episodeHistoryCache.remove(keys)

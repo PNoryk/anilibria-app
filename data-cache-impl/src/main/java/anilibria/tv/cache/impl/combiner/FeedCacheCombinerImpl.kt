@@ -46,11 +46,11 @@ class FeedCacheCombinerImpl(
             )
         }
 
-    override fun insert(items: List<Feed>): Completable {
+    override fun insert(items: List<Feed>): Completable = Completable.defer {
         val putRelease = releaseCache.insert(items.mapNotNull { it.release })
         val putYoutube = youtubeCache.insert(items.mapNotNull { it.youtube })
         val putFeed = feedCache.insert(items.map { relativeConverter.toRelative(it) })
-        return Completable.concat(listOf(putRelease, putYoutube, putFeed))
+        Completable.concat(listOf(putRelease, putYoutube, putFeed))
     }
 
     override fun remove(keys: List<FeedKey>): Completable = feedCache.remove(keys)

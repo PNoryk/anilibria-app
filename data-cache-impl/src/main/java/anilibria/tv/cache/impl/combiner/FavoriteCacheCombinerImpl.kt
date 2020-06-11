@@ -36,10 +36,10 @@ class FavoriteCacheCombinerImpl(
                 .map(getSourceCombiner(relativeItems))
         }
 
-    override fun insert(items: List<Release>): Completable {
+    override fun insert(items: List<Release>): Completable = Completable.defer {
         val putRelease = releaseCache.insert(items)
         val putFavorite = favoriteCache.insert(items.map { relativeConverter.toRelative(it) })
-        return Completable.concat(listOf(putRelease, putFavorite))
+        Completable.concat(listOf(putRelease, putFavorite))
     }
 
     override fun remove(keys: List<ReleaseKey>): Completable = favoriteCache.remove(keys)
