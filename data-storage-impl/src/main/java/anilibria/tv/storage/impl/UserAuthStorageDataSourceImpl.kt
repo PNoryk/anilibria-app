@@ -34,7 +34,7 @@ class UserAuthStorageDataSourceImpl(
         .getValue(KEY)
         .map { gson.fromJson<UserAuthStorage>(it, dataType) }
         .map { converter.toDomain(it) }
-        .switchIfEmpty(Single.just(defaultUser))
+        .switchIfEmpty(Single.fromCallable { defaultUser })
 
     override fun putUser(user: User): Completable = Single
         .fromCallable { converter.toStorage(UserAuth(state = UserAuth.State.AUTH, user = user)) }

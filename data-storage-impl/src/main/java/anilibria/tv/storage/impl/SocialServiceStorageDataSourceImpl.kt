@@ -28,7 +28,7 @@ class SocialServiceStorageDataSourceImpl(
         .getValue(KEY)
         .map { gson.fromJson<List<SocialServiceStorage>>(it, dataType) }
         .map { converter.toDomain(it) }
-        .switchIfEmpty(Single.just(emptyList()))
+        .switchIfEmpty(Single.fromCallable { emptyList<SocialService>() })
 
     override fun putList(items: List<SocialService>): Completable = Single
         .fromCallable { converter.toStorage(items) }

@@ -23,7 +23,7 @@ class YearStorageDataSourceImpl(
     override fun getList(): Single<List<String>> = keyValueStorage
         .getValue(KEY)
         .map { gson.fromJson<List<String>>(it, dataType) }
-        .switchIfEmpty(Single.just(emptyList()))
+        .switchIfEmpty(Single.fromCallable { emptyList<String>() })
 
     override fun putList(items: List<String>): Completable = Single
         .fromCallable { gson.toJson(items, dataType) }

@@ -20,7 +20,7 @@ class UserAuthCacheImpl(
 
     override fun get(): Single<UserAuth> = memoryDataSource
         .getData()
-        .switchIfEmpty(getAndUpdate())
+        .switchIfEmpty(Single.defer { getAndUpdate() })
 
     override fun save(user: User): Completable = storageDataSource
         .putUser(user)

@@ -17,7 +17,7 @@ class DeviceIdStorageDataSourceImpl(
 
     override fun getDeviceId(): Single<String> = keyValueStorage
         .getValue(KEY)
-        .switchIfEmpty(generate())
+        .switchIfEmpty(Single.defer { generate() })
 
     private fun generate(): Single<String> = Single
         .fromCallable { UUID.randomUUID()?.toString() ?: "" }

@@ -68,7 +68,7 @@ class LinkMenuStorageDataSourceImpl(
         .getValue(KEY)
         .map { gson.fromJson<List<LinkMenuStorage>>(it, dataType) }
         .map { converter.toDomain(it) }
-        .switchIfEmpty(Single.just(emptyList()))
+        .switchIfEmpty(Single.fromCallable { emptyList<LinkMenu>() })
 
     override fun putList(items: List<LinkMenu>): Completable = Single
         .fromCallable { converter.toStorage(items) }
