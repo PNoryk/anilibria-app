@@ -153,36 +153,94 @@ class EpisodeCacheTest {
     fun `put new items EXPECT success, put new items`() {
         val oldItems = emptyList<Episode>()
         val newItems = mockEpisodes
+        val filteredItems = newItems
+        val insertKeys = filteredItems.toKeys()
+        val insertKeyValues = filteredItems.toKeyValues()
         val newKeys = newItems.toKeys()
-        val newKeyValues = newItems.toKeyValues()
 
         every { memoryDataSource.getSome(newKeys) } returns Single.just(oldItems)
-        every { episodeMerger.filterSame(oldItems, newItems) } returns newItems
-        every { dbDataSource.insert(newItems) } returns Completable.complete()
-        every { dbDataSource.getSome(newKeys) } returns Single.just(newItems)
-        every { memoryDataSource.insert(newKeyValues) } returns Completable.complete()
+        every { episodeMerger.filterSame(oldItems, newItems) } returns filteredItems
+        every { dbDataSource.insert(filteredItems) } returns Completable.complete()
+        every { dbDataSource.getSome(insertKeys) } returns Single.just(newItems)
+        every { memoryDataSource.insert(insertKeyValues) } returns Completable.complete()
 
-        cache.insert(mockEpisodes).test().assertComplete()
+        cache.insert(newItems).test().assertComplete()
 
-
+        verify { memoryDataSource.getSome(newKeys) }
+        verify { episodeMerger.filterSame(oldItems, newItems) }
+        verify { dbDataSource.insert(filteredItems) }
+        verify { dbDataSource.getSome(insertKeys) }
+        verify { memoryDataSource.insert(insertKeyValues) }
         confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
     @Test
     fun `put exist items EXPECT success, nothing put`() {
+        val oldItems = mockEpisodes
+        val newItems = mockEpisodes
+        val filteredItems = emptyList<Episode>()
+        val newKeys = newItems.toKeys()
+
+        every { memoryDataSource.getSome(newKeys) } returns Single.just(oldItems)
+        every { episodeMerger.filterSame(oldItems, newItems) } returns filteredItems
+
+        cache.insert(newItems).test().assertComplete()
+
+        verify { memoryDataSource.getSome(newKeys) }
+        verify { episodeMerger.filterSame(oldItems, newItems) }
+        confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
     @Test
     fun `put exist & new items EXPECT success, put only new`() {
+        val oldItems = mockEpisodes.take(1)
+        val newItems = mockEpisodes
+        val filteredItems = mockEpisodes.takeLast(1)
+        val insertKeys = filteredItems.toKeys()
+        val newKeys = newItems.toKeys()
+        val newKeyValues = newItems.toKeyValues()
+
+        every { memoryDataSource.getSome(newKeys) } returns Single.just(oldItems)
+        every { episodeMerger.filterSame(oldItems, newItems) } returns filteredItems
+        every { dbDataSource.insert(filteredItems) } returns Completable.complete()
+        every { dbDataSource.getSome(insertKeys) } returns Single.just(newItems)
+        every { memoryDataSource.insert(newKeyValues) } returns Completable.complete()
+
+        cache.insert(newItems).test().assertComplete()
+
+        verify { memoryDataSource.getSome(newKeys) }
+        verify { episodeMerger.filterSame(oldItems, newItems) }
+        verify { dbDataSource.insert(filteredItems) }
+        verify { dbDataSource.getSome(insertKeys) }
+        verify { memoryDataSource.insert(newKeyValues) }
+        confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
     /* remove */
     @Test
     fun `remove items EXPECT success, remove items`() {
+        val keys = mockEpisodes.toKeys()
+
+        every { dbDataSource.remove(keys) } returns Completable.complete()
+        every { memoryDataSource.remove(keys) } returns Completable.complete()
+
+        cache.remove(keys).test().assertComplete()
+
+        verify { dbDataSource.remove(keys) }
+        verify { memoryDataSource.remove(keys) }
+        confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
     @Test
     fun `clear EXPECT success, clear`() {
+        every { dbDataSource.clear() } returns Completable.complete()
+        every { memoryDataSource.clear() } returns Completable.complete()
+
+        cache.clear().test().assertComplete()
+
+        verify { dbDataSource.clear() }
+        verify { memoryDataSource.clear() }
+        confirmVerified(dbDataSource, memoryDataSource, episodeMerger)
     }
 
     private fun List<Episode>.toKeys() = map { EpisodeKey(it.releaseId, it.id) }
