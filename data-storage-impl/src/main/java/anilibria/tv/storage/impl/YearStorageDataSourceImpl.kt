@@ -28,4 +28,6 @@ class YearStorageDataSourceImpl(
     override fun putList(items: List<String>): Completable = Single
         .fromCallable { gson.toJson(items, dataType) }
         .flatMapCompletable { keyValueStorage.putValue(KEY, it) }
+
+    override fun clear(): Completable = keyValueStorage.delete(KEY)
 }

@@ -10,4 +10,6 @@ interface SocialServiceStorageDataSource {
     fun getList(): Single<List<SocialService>>
 
     fun putList(items: List<SocialService>): Completable
+
+    fun clear(): Completable
 }

@@ -11,4 +11,6 @@ interface GenreCache {
     fun getList(): Single<List<String>>
 
     fun putList(items: List<String>): Completable
+
+    fun clear(): Completable
 }

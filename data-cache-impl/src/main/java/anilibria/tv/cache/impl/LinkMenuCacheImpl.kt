@@ -31,4 +31,8 @@ class LinkMenuCacheImpl(
         .putList(items)
         .andThen(storageDataSource.getList())
         .flatMapCompletable { memoryDataSource.insert(it) }
+
+    override fun clear(): Completable = storageDataSource
+        .clear()
+        .andThen(memoryDataSource.clear())
 }

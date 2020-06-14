@@ -9,11 +9,11 @@ import io.reactivex.Single
 
 interface UserAuthCache {
 
-    fun observeUser(): Observable<UserAuth>
+    fun observe(): Observable<UserAuth>
 
-    fun getUser(): Single<UserAuth>
+    fun get(): Single<UserAuth>
 
-    fun putUser(user: User): Completable
+    fun save(user: User): Completable
 
-    fun deleteUser(): Completable
+    fun clear(): Completable
 }

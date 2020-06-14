@@ -22,15 +22,15 @@ class AuthRepository(
     private val userAuthCache: UserAuthCache
 ) {
 
-    fun observeUserAuth(): Observable<UserAuth> = userAuthCache.observeUser()
+    fun observeUserAuth(): Observable<UserAuth> = userAuthCache.observe()
 
     fun observeSocialServices(): Observable<List<SocialService>> = socialServiceCache.observeList()
 
     fun getUserAuth(): Single<UserAuth> = userApiDataSource
         .getSelf()
-        .onErrorResumeNext { userAuthCache.deleteUser().andThen(Single.error(it)) }
-        .flatMapCompletable { userAuthCache.putUser(it) }
-        .andThen(userAuthCache.getUser())
+        .onErrorResumeNext { userAuthCache.clear().andThen(Single.error(it)) }
+        .flatMapCompletable { userAuthCache.save(it) }
+        .andThen(userAuthCache.get())
 
     fun signIn(login: String, password: String, code2fa: String): Single<UserAuth> = authApiDataSource
         .signIn(login, password, code2fa)
@@ -58,5 +58,5 @@ class AuthRepository(
 
     fun signOut(): Completable = authApiDataSource
         .signOut()
-        .andThen(userAuthCache.deleteUser())
+        .andThen(userAuthCache.clear())
 }

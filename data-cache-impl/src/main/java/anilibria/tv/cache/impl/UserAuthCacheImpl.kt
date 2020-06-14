@@ -16,18 +16,18 @@ class UserAuthCacheImpl(
     private val memoryDataSource: UserAuthMemoryDataSource
 ) : UserAuthCache {
 
-    override fun observeUser(): Observable<UserAuth> = memoryDataSource.observeData()
+    override fun observe(): Observable<UserAuth> = memoryDataSource.observeData()
 
-    override fun getUser(): Single<UserAuth> = memoryDataSource
+    override fun get(): Single<UserAuth> = memoryDataSource
         .getData()
         .switchIfEmpty(getAndUpdate())
 
-    override fun putUser(user: User): Completable = storageDataSource
+    override fun save(user: User): Completable = storageDataSource
         .putUser(user)
         .andThen(storageDataSource.getUser())
         .flatMapCompletable { memoryDataSource.insert(it) }
 
-    override fun deleteUser(): Completable = storageDataSource
+    override fun clear(): Completable = storageDataSource
         .delete()
         .andThen(storageDataSource.getUser())
         .flatMapCompletable { memoryDataSource.insert(it) }

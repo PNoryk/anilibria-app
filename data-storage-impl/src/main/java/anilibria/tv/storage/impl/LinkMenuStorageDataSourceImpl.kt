@@ -74,4 +74,6 @@ class LinkMenuStorageDataSourceImpl(
         .fromCallable { converter.toStorage(items) }
         .map { gson.toJson(it, dataType) }
         .flatMapCompletable { keyValueStorage.putValue(KEY, it) }
+
+    override fun clear(): Completable = keyValueStorage.delete(KEY)
 }

@@ -15,7 +15,6 @@ class GenreCacheImpl(
     private val memoryDataSource: GenreMemoryDataSource
 ) : GenreCache {
 
-
     override fun observeList(): Observable<List<String>> = memoryDataSource.observeList()
 
     override fun getList(): Single<List<String>> = memoryDataSource
@@ -31,4 +30,8 @@ class GenreCacheImpl(
         .putList(items)
         .andThen(storageDataSource.getList())
         .flatMapCompletable { memoryDataSource.insert(it) }
+
+    override fun clear(): Completable = storageDataSource
+        .clear()
+        .andThen(memoryDataSource.clear())
 }

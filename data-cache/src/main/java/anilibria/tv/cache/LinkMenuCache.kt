@@ -12,4 +12,6 @@ interface LinkMenuCache {
     fun getList(): Single<List<LinkMenu>>
 
     fun putList(items: List<LinkMenu>): Completable
+
+    fun clear(): Completable
 }
