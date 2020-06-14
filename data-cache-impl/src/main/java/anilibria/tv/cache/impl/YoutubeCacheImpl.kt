@@ -48,8 +48,8 @@ class YoutubeCacheImpl(
                 return@flatMapCompletable Completable.complete()
             }
             dbDataSource
-                .insert(items)
-                .andThen(dbDataSource.getSome(items.toKeys()))
+                .insert(newItems)
+                .andThen(dbDataSource.getSome(newItems.toKeys()))
                 .flatMapCompletable { memoryDataSource.insert(it.toKeyValues()) }
         }
 

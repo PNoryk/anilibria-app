@@ -1,31 +1,29 @@
 package anilibria.tv.cache.impl
 
-import anilibria.tv.cache.impl.memory.EpisodeMemoryDataSource
-import anilibria.tv.domain.entity.common.keys.EpisodeKey
-import anilibria.tv.cache.impl.merger.EpisodeMerger
-import anilibria.tv.db.EpisodeDbDataSource
-import anilibria.tv.domain.entity.episode.Episode
+import anilibria.tv.cache.impl.memory.YoutubeMemoryDataSource
+import anilibria.tv.cache.impl.merger.YoutubeMerger
+import anilibria.tv.db.YoutubeDbDataSource
+import anilibria.tv.domain.entity.common.keys.YoutubeKey
+import anilibria.tv.domain.entity.youtube.Youtube
 import io.mockk.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.junit.Test
 
-class EpisodeCacheTest {
+class YoutubeCacheTest {
 
-    private val dbDataSource = mockk<EpisodeDbDataSource>()
-    private val memoryDataSource = mockk<EpisodeMemoryDataSource>()
-    private val merger = mockk<EpisodeMerger>()
-    private val cache = EpisodeCacheImpl(dbDataSource, memoryDataSource, merger)
+    private val dbDataSource = mockk<YoutubeDbDataSource>()
+    private val memoryDataSource = mockk<YoutubeMemoryDataSource>()
+    private val merger = mockk<YoutubeMerger>()
+    private val cache = YoutubeCacheImpl(dbDataSource, memoryDataSource, merger)
 
-    private val mockItems = listOf<Episode>(
+    private val mockItems = listOf<Youtube>(
         mockk {
-            every { releaseId } returns 10
-            every { id } returns 1
+            every { id } returns 10
         },
         mockk {
-            every { releaseId } returns 20
-            every { id } returns 2
+            every { id } returns 20
         }
     )
 
@@ -54,10 +52,10 @@ class EpisodeCacheTest {
     /* get all list */
     @Test
     fun `get list WHEN db & memory empty EXPECT success empty`() {
-        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
-        val dbResult = listOf<Episode>()
-        val memoryResult = listOf<Episode>()
-        val expectResult = emptyList<Episode>()
+        val insertSlot = slot<List<Pair<YoutubeKey, Youtube>>>()
+        val dbResult = listOf<Youtube>()
+        val memoryResult = listOf<Youtube>()
+        val expectResult = emptyList<Youtube>()
         val insertKeyValues = dbResult.toKeyValues()
 
         every { memoryDataSource.getList() } returns Single.fromCallable {
@@ -76,9 +74,9 @@ class EpisodeCacheTest {
 
     @Test
     fun `get list WHEN db not empty, memory empty EXPECT success update & get memory from db`() {
-        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
+        val insertSlot = slot<List<Pair<YoutubeKey, Youtube>>>()
         val dbResult = mockItems
-        val memoryResult = listOf<Episode>()
+        val memoryResult = listOf<Youtube>()
         val expectResult = dbResult.toList()
         val insertKeyValues = dbResult.toKeyValues()
 
@@ -98,7 +96,7 @@ class EpisodeCacheTest {
 
     @Test
     fun `get list WHEN memory not empty EXPECT success get from memory`() {
-        val memoryResult = listOf<Episode>(mockk(), mockk())
+        val memoryResult = listOf<Youtube>(mockk(), mockk())
         val expectResult = memoryResult.toList()
 
         every { memoryDataSource.getList() } returns Single.just(memoryResult)
@@ -113,10 +111,10 @@ class EpisodeCacheTest {
     /* get by keys */
     @Test
     fun `get by keys WHEN db & memory empty EXPECT success empty`() {
-        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
-        val dbResult = listOf<Episode>()
-        val memoryResult = listOf<Episode>()
-        val expectResult = emptyList<Episode>()
+        val insertSlot = slot<List<Pair<YoutubeKey, Youtube>>>()
+        val dbResult = listOf<Youtube>()
+        val memoryResult = listOf<Youtube>()
+        val expectResult = emptyList<Youtube>()
         val episodeKeys = mockItems.toKeys()
         val insertKeyValues = dbResult.toKeyValues()
 
@@ -136,9 +134,9 @@ class EpisodeCacheTest {
 
     @Test
     fun `get by keys WHEN db not empty, memory empty EXPECT success update & get memory from db`() {
-        val insertSlot = slot<List<Pair<EpisodeKey, Episode>>>()
+        val insertSlot = slot<List<Pair<YoutubeKey, Youtube>>>()
         val dbResult = mockItems
-        val memoryResult = listOf<Episode>()
+        val memoryResult = listOf<Youtube>()
         val expectResult = dbResult.toList()
         val episodeKeys = mockItems.toKeys()
         val insertKeyValues = dbResult.toKeyValues()
@@ -174,7 +172,7 @@ class EpisodeCacheTest {
     /* put */
     @Test
     fun `put new items EXPECT success, put new items`() {
-        val oldItems = emptyList<Episode>()
+        val oldItems = emptyList<Youtube>()
         val newItems = mockItems
         val filteredItems = newItems
         val insertKeys = filteredItems.toKeys()
@@ -201,7 +199,7 @@ class EpisodeCacheTest {
     fun `put exist items EXPECT success, nothing put`() {
         val oldItems = mockItems
         val newItems = mockItems
-        val filteredItems = emptyList<Episode>()
+        val filteredItems = emptyList<Youtube>()
         val newKeys = newItems.toKeys()
 
         every { memoryDataSource.getSome(newKeys) } returns Single.just(oldItems)
@@ -266,8 +264,8 @@ class EpisodeCacheTest {
         confirmVerified(dbDataSource, memoryDataSource, merger)
     }
 
-    private fun List<Episode>.toKeys() = map { EpisodeKey(it.releaseId, it.id) }
+    private fun List<Youtube>.toKeys() = map { YoutubeKey(it.id) }
 
-    private fun List<Episode>.toKeyValues() = map { Pair(EpisodeKey(it.releaseId, it.id), it) }
+    private fun List<Youtube>.toKeyValues() = map { Pair(YoutubeKey(it.id), it) }
 
 }
