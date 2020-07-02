@@ -36,7 +36,7 @@ class ReleaseCacheCombinerImpl(
         }
 
     override fun observeSome(keys: List<ReleaseKey>): Observable<List<Release>> = releaseCache
-        .observeList()
+        .observeSome(keys)
         .switchMap { releaseItems ->
             val episodeKeys = releaseItems.toEpisodeKeys()
             val torrentKeys = releaseItems.toTorrentKeys()
