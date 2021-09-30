@@ -10,6 +10,8 @@ import android.util.Log
 import android.view.View
 import android.webkit.*
 import androidx.core.view.isVisible
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_vk_comments.*
 import moxy.presenter.InjectPresenter
@@ -121,6 +123,13 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
             appThemeHolder
                 .observeTheme()
                 .subscribe {
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        val forceDark = when (it) {
+                            AppThemeHolder.AppTheme.DARK -> WebSettingsCompat.FORCE_DARK_ON
+                            else -> WebSettingsCompat.FORCE_DARK_OFF
+                        }
+                        WebSettingsCompat.setForceDark(webView.settings, forceDark)
+                    }
                     webView?.evalJs("changeStyleType(\"${it.getWebStyleType()}\")")
                 }
         )
@@ -303,7 +312,8 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
                 }
                 var newCss = cssSrc
 
-                val fixCss = if (appThemeHolder.getTheme().isDark()) {
+                val canForceDark = WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)
+                val fixCss = if (!canForceDark && appThemeHolder.getTheme().isDark()) {
                     App.instance.vkCommentCssFixDark
                 } else {
                     App.instance.vkCommentCssFixLight

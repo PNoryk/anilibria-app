@@ -49,5 +49,6 @@ dependencies {
     api "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     api "androidx.palette:palette-ktx:1.0.0"
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    api 'androidx.webkit:webkit:1.2.0'
 }
 
