@@ -1,4 +1,4 @@
-package ru.radiationx.anilibria.ui.activities
+package ru.radiationx.anilibria.ui.activities.player
 
 import android.content.res.Configuration
 import android.util.Log

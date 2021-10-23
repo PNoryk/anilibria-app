@@ -1,4 +1,4 @@
-package ru.radiationx.anilibria.ui.activities
+package ru.radiationx.anilibria.ui.activities.player
 
 import android.annotation.TargetApi
 import android.app.ActivityManager
@@ -39,6 +39,7 @@ import org.michaelbel.bottomsheet.BottomSheet
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getColorFromAttr
 import ru.radiationx.anilibria.extension.isDark
+import ru.radiationx.anilibria.ui.activities.BaseActivity
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
 import ru.radiationx.data.analytics.AnalyticsErrorReporter
 import ru.radiationx.data.analytics.ErrorReporterConstants
