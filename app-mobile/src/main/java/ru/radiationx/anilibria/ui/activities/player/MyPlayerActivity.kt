@@ -2,7 +2,6 @@ package ru.radiationx.anilibria.ui.activities.player
 
 import android.app.ActivityManager
 import android.content.*
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Point
@@ -125,20 +124,14 @@ class MyPlayerActivity : BaseActivity() {
     private val loadingStatistics =
         mutableMapOf<String, MutableList<Pair<AnalyticsQuality, Long>>>()
 
-    private var fullscreenOrientation = false
-
-
-    private var currentOrientation: Int = Configuration.ORIENTATION_UNDEFINED
-
-    private var compositeDisposable = CompositeDisposable()
     private val defaultScale = ScaleType.FIT_CENTER
     private var currentScale = defaultScale
-    private var scaleEnabled = true
 
     private var currentPipControl = PreferencesHolder.PIP_BUTTON
 
     private var pipController: PlayerPipControllerImpl? = null
     private var systemUiController: PlayerSystemUiController? = null
+    private var fullscreenController: PlayerFullscreenController? = null
 
     private val dialogController by lazy {
         SettingDialogController(
@@ -173,20 +166,16 @@ class MyPlayerActivity : BaseActivity() {
             }
     }
 
-    fun Disposable.addToDisposable() {
-        compositeDisposable.add(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
-        currentOrientation = resources.configuration.orientation
         currentPlaySpeed = loadPlaySpeed()
         currentPipControl = loadPIPControl()
         lifecycle.addObserver(useTimeCounter)
         timeToStartCounter.start()
         initPipController()
         initSystemUiController()
+        initFullScreenController()
         systemUiController?.onCreate()
         setContentView(R.layout.activity_myplayer)
 
@@ -298,7 +287,7 @@ class MyPlayerActivity : BaseActivity() {
             }
         }
         handleIntent(intent)
-        updateUiFlags()
+        updateUiConfig()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -318,12 +307,11 @@ class MyPlayerActivity : BaseActivity() {
             videoControls?.hide()
             videoControls?.gone()
             playerAnalytics.pip(getSeekPercent())
-            updateByConfig(newConfig)
         } else {
-            updateByConfig(newConfig)
             player.showControls()
             videoControls?.visible()
         }
+        updateUiConfig()
     }
 
     private fun initPipController() {
@@ -345,6 +333,14 @@ class MyPlayerActivity : BaseActivity() {
         }
     }
 
+    private fun initFullScreenController() {
+        fullscreenController = PlayerFullscreenController(this) {
+            if (it) {
+                playerAnalytics.fullScreen(getSeekPercent())
+            }
+            videoControls?.setFullScreenMode(it)
+        }
+    }
 
     private fun checkSausage(): Boolean {
         val size = windowManager.defaultDisplay.let {
@@ -425,14 +421,9 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun updateScale(scale: ScaleType) {
         val inMultiWindow = getInMultiWindow()
-        Log.d(
-            "MyPlayer",
-            "updateScale $currentScale, $scale, $inMultiWindow, ${pipController?.isActive()}"
-        )
         currentScale = scale
-        scaleEnabled = !inMultiWindow
         if (!inMultiWindow) {
-            saveScale(currentOrientation, currentScale)
+            saveScale(resources.configuration.orientation, currentScale)
         }
         player?.setScaleType(currentScale)
     }
@@ -485,23 +476,42 @@ class MyPlayerActivity : BaseActivity() {
         }
     }
 
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        newConfig.also { config ->
-            updateByConfig(config)
+        updateUiConfig()
+    }
+
+    private fun updateUiConfig() {
+        fullscreenController?.updateConfig()
+        systemUiController?.updateConfig()
+        updatePipRect()
+
+        val currentOrientation = resources.configuration.orientation
+        val scale = loadScale(currentOrientation)
+        val inMultiWindow = getInMultiWindow()
+
+        updateScale(if (inMultiWindow) defaultScale else scale)
+
+        videoControls?.fitSystemWindows(inMultiWindow || currentOrientation != Configuration.ORIENTATION_LANDSCAPE)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes.layoutInDisplayCutoutMode = if (inMultiWindow) {
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT
+            } else {
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            }
+            window.attributes = window.attributes
         }
     }
 
-    private fun updateByConfig(config: Configuration) {
-        val correctOrientation = config.orientation
-        fullscreenOrientation = when (correctOrientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> true
-            else -> false
-        }
-        currentOrientation = correctOrientation
-        updateUiFlags()
-        videoControls?.setFullScreenMode(fullscreenOrientation)
+    private fun updatePipRect() {
+        player
+            ?.findViewById<View>(com.devbrackets.android.exomedia.R.id.exomedia_video_view)
+            ?.also {
+                val rect = Rect()
+                it.getGlobalVisibleRect(rect)
+                pipController?.updateRect(rect)
+            }
     }
 
     private fun saveEpisode(position: Long = player.currentPosition) {
@@ -523,13 +533,13 @@ class MyPlayerActivity : BaseActivity() {
             }
         }
         saveEpisode()
-        compositeDisposable.dispose()
         player.stopPlayback()
         super.onDestroy()
         pipController?.onDestroy()
         systemUiController?.onDestroy()
         pipController = null
         systemUiController = null
+        fullscreenController = null
     }
 
     private fun checkIndex(id: Int): Boolean {
@@ -598,39 +608,6 @@ class MyPlayerActivity : BaseActivity() {
             PlayerQuality.FULL_HD -> episode.urlFullHd
         }
         player.setVideoPath(videoPath)
-    }
-
-
-    private fun updateUiFlags() {
-        val scale = loadScale(currentOrientation)
-        val inMultiWindow = getInMultiWindow()
-
-        updateScale(if (inMultiWindow) defaultScale else scale)
-
-        systemUiController?.onConfigurationChanges()
-
-        videoControls?.fitSystemWindows(inMultiWindow || currentOrientation != Configuration.ORIENTATION_LANDSCAPE)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            window.attributes.layoutInDisplayCutoutMode = if (inMultiWindow) {
-                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT
-            } else {
-                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-            }
-            window.attributes = window.attributes
-        }
-
-        updatePipRect()
-    }
-
-    private fun updatePipRect() {
-        player
-            ?.findViewById<View>(com.devbrackets.android.exomedia.R.id.exomedia_video_view)
-            ?.also {
-                val rect = Rect()
-                it.getGlobalVisibleRect(rect)
-                pipController?.updateRect(rect)
-            }
     }
 
     private fun showSeasonFinishDialog() {
@@ -704,7 +681,6 @@ class MyPlayerActivity : BaseActivity() {
         return player.currentPosition / player.duration.toFloat()
     }
 
-
     private val alibControlListener = object : VideoControlsAlib.AlibControlsListener {
 
         override fun onPIPClick() {
@@ -741,16 +717,7 @@ class MyPlayerActivity : BaseActivity() {
         }
 
         override fun onFullScreenClick() {
-            if (fullscreenOrientation) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            } else {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-            }
-            fullscreenOrientation = !fullscreenOrientation
-            if (fullscreenOrientation) {
-                playerAnalytics.fullScreen(getSeekPercent())
-            }
-            videoControls?.setFullScreenMode(fullscreenOrientation)
+            fullscreenController?.toggle()
         }
 
         override fun onPlaybackStateChanged(isPlaying: Boolean) {

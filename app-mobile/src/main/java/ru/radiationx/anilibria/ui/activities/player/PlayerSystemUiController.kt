@@ -23,7 +23,7 @@ class PlayerSystemUiController(
         exitFullscreen()
     }
 
-    fun onConfigurationChanges() {
+    fun updateConfig() {
         activity.window.decorView.systemUiVisibility = flagsHelper.getFlags(
             activity.resources.configuration.orientation,
             currentFullscreen
@@ -32,12 +32,12 @@ class PlayerSystemUiController(
 
     fun goFullscreen() {
         currentFullscreen = true
-        onConfigurationChanges()
+        updateConfig()
     }
 
     fun exitFullscreen() {
         currentFullscreen = false
-        onConfigurationChanges()
+        updateConfig()
     }
 
     private class FullScreenListener(
