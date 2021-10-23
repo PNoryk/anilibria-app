@@ -1,22 +1,16 @@
 package ru.radiationx.anilibria.ui.activities.player
 
-import android.annotation.TargetApi
 import android.app.ActivityManager
-import android.app.PendingIntent
-import android.app.PictureInPictureParams
-import android.app.RemoteAction
 import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.Rect
-import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.util.Rational
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
@@ -74,14 +68,6 @@ class MyPlayerActivity : BaseActivity() {
         private const val ARG_EPISODE_ID = "episode_id"
         private const val ARG_QUALITY = "quality"
         private const val ARG_PLAY_FLAG = "play_flag"
-
-        private const val ACTION_REMOTE_CONTROL = "action.remote.control"
-        private const val EXTRA_REMOTE_CONTROL = "extra.remote.control"
-
-        private const val REMOTE_CONTROL_PLAY = 1
-        private const val REMOTE_CONTROL_PAUSE = 2
-        private const val REMOTE_CONTROL_PREV = 3
-        private const val REMOTE_CONTROL_NEXT = 4
 
         private const val DEFAULT_EPISODE_ID = -1
         private val DEFAULT_QUALITY = PlayerQuality.SD
@@ -154,6 +140,8 @@ class MyPlayerActivity : BaseActivity() {
 
     private var currentPipControl = PreferencesHolder.PIP_BUTTON
 
+    private var pipController: PlayerPipControllerImpl? = null
+
     private val dialogController by lazy {
         SettingDialogController(
             playerAnalytics = playerAnalytics,
@@ -161,11 +149,9 @@ class MyPlayerActivity : BaseActivity() {
             qualityListener = { updateQuality(it) },
             speedListener = { updatePlaySpeed(it) },
             scaleListener = { updateScale(it) },
-            pipListener = { updatePIPControl(it) }
+            pipListener = { updatePipControl(it) }
         )
     }
-
-    private var pictureInPictureParams: PictureInPictureParams.Builder? = null
 
     private fun getStatisticByDomain(host: String): MutableList<Pair<AnalyticsQuality, Long>> {
         if (!loadingStatistics.contains(host)) {
@@ -196,9 +182,9 @@ class MyPlayerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
+        initPipController()
         lifecycle.addObserver(useTimeCounter)
         timeToStartCounter.start()
-        createPIPParams()
         initUiFlags()
         currentOrientation = resources.configuration.orientation
         goFullscreen()
@@ -210,12 +196,8 @@ class MyPlayerActivity : BaseActivity() {
         player.playbackSpeed = currentPlaySpeed
         player.setOnPreparedListener(playerListener)
         player.setOnCompletionListener(playerListener)
-        player.setOnVideoSizedChangedListener { intrinsicWidth, intrinsicHeight, pixelWidthHeightRatio ->
-            Log.e(
-                "lalka",
-                "setOnVideoSizedChangedListener $intrinsicWidth, $intrinsicHeight, $pixelWidthHeightRatio"
-            )
-            updatePIPRatio(intrinsicWidth, intrinsicHeight)
+        player.setOnVideoSizedChangedListener { _, _, _ ->
+            updatePipRect()
         }
         player.setAnalyticsListener(object : AnalyticsListener {
 
@@ -307,7 +289,7 @@ class MyPlayerActivity : BaseActivity() {
 
         videoControls?.apply {
             setAnalytics(playerAnalytics)
-            updatePIPControl()
+            updatePipControl()
             player.setControls(this as VideoControlsCore)
             setOpeningListener(alibControlListener)
             setVisibilityListener(ControlsVisibilityListener())
@@ -326,12 +308,37 @@ class MyPlayerActivity : BaseActivity() {
         intent?.also { handleIntent(it) }
     }
 
-    private fun checkPipMode(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        pipController?.onModeChanged(isInPictureInPictureMode)
+        Log.d("lalka", "onPictureInPictureModeChanged $isInPictureInPictureMode")
+        saveEpisode()
+        if (isInPictureInPictureMode) {
+            videoControls?.hide()
+            videoControls?.gone()
+            playerAnalytics.pip(getSeekPercent())
+            updateByConfig(newConfig)
+        } else {
+            updateByConfig(newConfig)
+            player.showControls()
+            videoControls?.visible()
         }
-        return false
     }
+
+    private fun initPipController() {
+        if (checkPipFeature()) {
+            pipController = PlayerPipControllerImpl(
+                activity = this,
+                playPauseListener = { controlsListener.onPlayPauseClicked() },
+                prevListener = { controlsListener.onNextClicked() },
+                nextListener = { controlsListener.onPreviousClicked() }
+            )
+        }
+    }
+
 
     private fun checkSausage(): Boolean {
         val size = windowManager.defaultDisplay.let {
@@ -412,7 +419,10 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun updateScale(scale: ScaleType) {
         val inMultiWindow = getInMultiWindow()
-        Log.d("MyPlayer", "updateScale $currentScale, $scale, $inMultiWindow, ${getInPIP()}")
+        Log.d(
+            "MyPlayer",
+            "updateScale $currentScale, $scale, $inMultiWindow, ${pipController?.isActive()}"
+        )
         currentScale = scale
         scaleEnabled = !inMultiWindow
         if (!inMultiWindow) {
@@ -436,16 +446,23 @@ class MyPlayerActivity : BaseActivity() {
         savePlaySpeed()
     }
 
-    private fun updatePIPControl(newPipControl: Int = currentPipControl) {
+    private fun updatePipControl(newPipControl: Int = currentPipControl) {
         currentPipControl = newPipControl
-        val pipCheck = checkPipMode() && newPipControl == PreferencesHolder.PIP_BUTTON
+        val pipCheck = checkPipFeature() && newPipControl == PreferencesHolder.PIP_BUTTON
         videoControls?.setPictureInPictureEnabled(pipCheck)
         savePIPControl()
     }
 
+    private fun checkPipFeature(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+        }
+        return false
+    }
+
     override fun onUserLeaveHint() {
-        if (checkPipMode() && currentPipControl == PreferencesHolder.PIP_AUTO) {
-            enterPipMode()
+        if (checkPipFeature() && currentPipControl == PreferencesHolder.PIP_AUTO) {
+            pipController?.enterPipMode()
         }
     }
 
@@ -462,13 +479,6 @@ class MyPlayerActivity : BaseActivity() {
         }
     }
 
-    private fun getInPIP(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            isInPictureInPictureMode
-        } else {
-            false
-        }
-    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -498,13 +508,6 @@ class MyPlayerActivity : BaseActivity() {
             lastAccess = System.currentTimeMillis()
             isViewed = true
         })
-    }
-
-
-    private val random = Random()
-
-    private fun rand(from: Int, to: Int): Int {
-        return random.nextInt(to - from) + from
     }
 
     override fun onDestroy() {
@@ -625,187 +628,17 @@ class MyPlayerActivity : BaseActivity() {
             window.attributes = window.attributes
         }
 
-        updatePIPRect()
+        updatePipRect()
     }
 
-    private val mReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent?) {
-            if (intent == null || intent.action != ACTION_REMOTE_CONTROL) {
-                return
+    private fun updatePipRect() {
+        player
+            ?.findViewById<View>(com.devbrackets.android.exomedia.R.id.exomedia_video_view)
+            ?.also {
+                val rect = Rect()
+                it.getGlobalVisibleRect(rect)
+                pipController?.updateRect(rect)
             }
-            val remoteControl = intent.getIntExtra(EXTRA_REMOTE_CONTROL, 0)
-            Log.d("lalka", "onReceive $remoteControl")
-            when (remoteControl) {
-                REMOTE_CONTROL_PLAY -> controlsListener.onPlayPauseClicked()
-                REMOTE_CONTROL_PAUSE -> controlsListener.onPlayPauseClicked()
-                REMOTE_CONTROL_PREV -> controlsListener.onPreviousClicked()
-                REMOTE_CONTROL_NEXT -> controlsListener.onNextClicked()
-            }
-        }
-    }
-
-    override fun onPictureInPictureModeChanged(
-        isInPictureInPictureMode: Boolean, newConfig: Configuration
-    ) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        Log.d("lalka", "onPictureInPictureModeChanged $isInPictureInPictureMode")
-        saveEpisode()
-        if (isInPictureInPictureMode) {
-            // Starts receiving events from action items in PiP mode.
-            registerReceiver(mReceiver, IntentFilter(ACTION_REMOTE_CONTROL))
-            //videoControls?.setControlsEnabled(false)
-            videoControls?.hide()
-            videoControls?.gone()
-            updateByConfig(newConfig)
-
-        } else {
-            // We are out of PiP mode. We can stop receiving events from it.
-            try {
-                unregisterReceiver(mReceiver)
-            } catch (ignore: Throwable) {
-            }
-
-            // Show the video controls if the video is not playing
-            /*if (!mMovieView.isPlaying) {
-                mMovieView.showControls()
-            }*/
-            //videoControls?.setControlsEnabled(true)
-
-            updateByConfig(newConfig)
-            player.showControls()
-            videoControls?.visible()
-
-            //player.showControls()
-        }
-        //updateUiFlags()
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun createPIPParams() {
-        if (checkPipMode()) {
-            pictureInPictureParams = PictureInPictureParams.Builder()
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun updatePIPRatio(width: Int, height: Int) {
-        if (checkPipMode()) {
-            pictureInPictureParams?.setAspectRatio(Rational(width, height))
-            updatePIPRect()
-        }
-        updatePictureInPictureParams()
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun updatePIPRect() {
-        if (checkPipMode()) {
-            player?.findViewById<View>(com.devbrackets.android.exomedia.R.id.exomedia_video_view)
-                ?.also {
-                    val rect = Rect(0, 0, 0, 0)
-                    it.getGlobalVisibleRect(rect)
-                    Log.e("lalka", "setSourceRectHint ${rect.flattenToString()}")
-                    pictureInPictureParams?.setSourceRectHint(rect)
-                }
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun updatePictureInPictureParams() {
-        if (checkPipMode()) {
-            val params = pictureInPictureParams ?: return
-            val playState = player?.isPlaying ?: return
-            val actions = mutableListOf<RemoteAction>()
-            val maxActions = maxNumPictureInPictureActions
-
-
-
-
-            if (actions.size < maxActions) {
-                val icRes =
-                    if (playState) R.drawable.ic_pause_remote else R.drawable.ic_play_arrow_remote
-                val actionCode = if (playState) REMOTE_CONTROL_PAUSE else REMOTE_CONTROL_PLAY
-                val title = if (playState) "Пауза" else "Пуск"
-
-                actions.add(
-                    RemoteAction(
-                        Icon.createWithResource(this@MyPlayerActivity, icRes),
-                        title,
-                        title,
-                        PendingIntent.getBroadcast(
-                            this@MyPlayerActivity,
-                            actionCode,
-                            Intent(ACTION_REMOTE_CONTROL).putExtra(
-                                EXTRA_REMOTE_CONTROL,
-                                actionCode
-                            ),
-                            0
-                        )
-                    )
-                )
-            }
-
-            if (actions.size < maxActions) {
-                val icRes = R.drawable.ic_skip_next_remote
-                val actionCode = REMOTE_CONTROL_NEXT
-                val title = "Следующая серия"
-
-                actions.add(
-                    RemoteAction(
-                        Icon.createWithResource(this@MyPlayerActivity, icRes),
-                        title,
-                        title,
-                        PendingIntent.getBroadcast(
-                            this@MyPlayerActivity,
-                            actionCode,
-                            Intent(ACTION_REMOTE_CONTROL).putExtra(
-                                EXTRA_REMOTE_CONTROL,
-                                actionCode
-                            ),
-                            0
-                        )
-                    )
-                )
-            }
-
-            if (actions.size < maxActions) {
-                val icRes = R.drawable.ic_skip_previous_remote
-                val actionCode = REMOTE_CONTROL_PREV
-                val title = "Предыдущая серия"
-
-                actions.add(
-                    0, RemoteAction(
-                        Icon.createWithResource(this@MyPlayerActivity, icRes),
-                        title,
-                        title,
-                        PendingIntent.getBroadcast(
-                            this@MyPlayerActivity,
-                            actionCode,
-                            Intent(ACTION_REMOTE_CONTROL).putExtra(
-                                EXTRA_REMOTE_CONTROL,
-                                actionCode
-                            ),
-                            0
-                        )
-                    )
-                )
-            }
-
-            params.setActions(actions)
-
-            setPictureInPictureParams(params.build())
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun enterPipMode() {
-        if (checkPipMode()) {
-            Log.d("lalka", "enterPictureInPictureMode $maxNumPictureInPictureActions")
-            pictureInPictureParams?.also {
-                playerAnalytics.pip(getSeekPercent())
-                videoControls?.gone()
-                enterPictureInPictureMode(it.build())
-            }
-        }
     }
 
     private fun showSeasonFinishDialog() {
@@ -883,7 +716,7 @@ class MyPlayerActivity : BaseActivity() {
     private val alibControlListener = object : VideoControlsAlib.AlibControlsListener {
 
         override fun onPIPClick() {
-            enterPipMode()
+            pipController?.enterPipMode()
         }
 
         override fun onBackClick() {
@@ -900,7 +733,7 @@ class MyPlayerActivity : BaseActivity() {
                 currentScale = currentScale,
                 currentPipControl = currentPipControl,
                 currentIsSausage = checkSausage(),
-                currentIsPipMode = checkPipMode()
+                currentIsPipMode = checkPipFeature()
             )
         }
 
@@ -929,10 +762,8 @@ class MyPlayerActivity : BaseActivity() {
         }
 
         override fun onPlaybackStateChanged(isPlaying: Boolean) {
-            updatePictureInPictureParams()
+            pipController?.updatePlayingState(isPlaying)
         }
-
-
     }
 
     private val playerListener = object : OnPreparedListener, OnCompletionListener {
