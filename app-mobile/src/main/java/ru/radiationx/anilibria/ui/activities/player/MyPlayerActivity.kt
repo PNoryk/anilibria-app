@@ -82,10 +82,6 @@ class MyPlayerActivity : BaseActivity() {
         const val VAL_QUALITY_HD = 1
         const val VAL_QUALITY_FULL_HD = 2
 
-        const val PLAY_FLAG_DEFAULT = 0
-        const val PLAY_FLAG_FORCE_START = 1
-        const val PLAY_FLAG_FORCE_CONTINUE = 2
-
         const val ACTION_REMOTE_CONTROL = "action.remote.control"
         const val EXTRA_REMOTE_CONTROL = "extra.remote.control"
 
@@ -102,7 +98,7 @@ class MyPlayerActivity : BaseActivity() {
     }
 
     private lateinit var releaseData: ReleaseFull
-    private var playFlag = PLAY_FLAG_DEFAULT
+    private var playFlag: PlayerPlayFlag = PlayerPlayFlag.DEFAULT
     private var currentEpisodeId = NO_ID
 
     //private var currentEpisode = NOT_SELECTED
@@ -355,7 +351,8 @@ class MyPlayerActivity : BaseActivity() {
         val episodeId =
             intent.getIntExtra(ARG_EPISODE_ID, if (release.episodes.size > 0) 0 else NO_ID)
         val quality = intent.getIntExtra(ARG_QUALITY, DEFAULT_QUALITY)
-        val playFlag = intent.getIntExtra(ARG_PLAY_FLAG, PLAY_FLAG_DEFAULT)
+        val playFlag = (intent.getSerializableExtra(ARG_PLAY_FLAG) as PlayerPlayFlag?)
+            ?: PlayerPlayFlag.DEFAULT
 
         this.releaseData = release
         this.currentEpisodeId = episodeId
@@ -544,7 +541,7 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun playEpisode(episode: ReleaseFull.Episode) {
         when (playFlag) {
-            PLAY_FLAG_DEFAULT -> {
+            PlayerPlayFlag.DEFAULT -> {
                 hardPlayEpisode(episode)
                 if (episode.seek > 0) {
                     hardPlayEpisode(episode)
@@ -559,15 +556,15 @@ class MyPlayerActivity : BaseActivity() {
                         .show()
                 }
             }
-            PLAY_FLAG_FORCE_START -> {
+            PlayerPlayFlag.START -> {
                 hardPlayEpisode(episode)
             }
-            PLAY_FLAG_FORCE_CONTINUE -> {
+            PlayerPlayFlag.CONTINUE -> {
                 hardPlayEpisode(episode)
                 player.seekTo(episode.seek)
             }
         }
-        playFlag = PLAY_FLAG_FORCE_CONTINUE
+        playFlag = PlayerPlayFlag.CONTINUE
     }
 
     private fun hardPlayEpisode(episode: ReleaseFull.Episode) {

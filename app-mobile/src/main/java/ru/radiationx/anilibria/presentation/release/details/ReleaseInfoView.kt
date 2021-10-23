@@ -4,6 +4,7 @@ import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
+import ru.radiationx.anilibria.ui.activities.player.PlayerPlayFlag
 import ru.radiationx.data.entity.app.release.ReleaseFull
 import ru.radiationx.data.entity.app.release.SourceEpisode
 import ru.radiationx.data.entity.app.release.TorrentItem
@@ -33,7 +34,7 @@ interface ReleaseInfoView : MvpView {
     fun playEpisode(
         release: ReleaseFull,
         episode: ReleaseFull.Episode,
-        playFlag: Int? = null,
+        playFlag: PlayerPlayFlag? = null,
         quality: Int? = null
     )
 

@@ -8,7 +8,8 @@ import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
-import ru.radiationx.anilibria.ui.activities.toPrefQuality
+import ru.radiationx.anilibria.ui.activities.player.PlayerPlayFlag
+import ru.radiationx.anilibria.ui.activities.player.toPrefQuality
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.analytics.AnalyticsConstants
@@ -276,7 +277,7 @@ class ReleaseInfoPresenter @Inject constructor(
     private fun onOnlineEpisodeClick(
         release: ReleaseFull,
         episode: ReleaseFull.Episode,
-        playFlag: Int? = null,
+        playFlag: PlayerPlayFlag? = null,
         quality: Int? = null
     ) {
         val analyticsQuality =
@@ -287,7 +288,7 @@ class ReleaseInfoPresenter @Inject constructor(
 
     fun onEpisodeClick(
         episodeState: ReleaseEpisodeItemState,
-        playFlag: Int? = null,
+        playFlag: PlayerPlayFlag? = null,
         quality: Int? = null
     ) {
         val release = currentData ?: return

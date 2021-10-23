@@ -26,9 +26,10 @@ import ru.radiationx.anilibria.presentation.release.details.ReleaseDetailScreenS
 import ru.radiationx.anilibria.presentation.release.details.ReleaseEpisodeItemState
 import ru.radiationx.anilibria.presentation.release.details.ReleaseInfoPresenter
 import ru.radiationx.anilibria.presentation.release.details.ReleaseInfoView
-import ru.radiationx.anilibria.ui.activities.MyPlayerActivity
 import ru.radiationx.anilibria.ui.activities.WebPlayerActivity
-import ru.radiationx.anilibria.ui.activities.toPrefQuality
+import ru.radiationx.anilibria.ui.activities.player.MyPlayerActivity
+import ru.radiationx.anilibria.ui.activities.player.PlayerPlayFlag
+import ru.radiationx.anilibria.ui.activities.player.toPrefQuality
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeControlDelegate
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeDelegate
@@ -133,7 +134,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     }
 
     override fun playContinue(release: ReleaseFull, startWith: ReleaseFull.Episode) {
-        playEpisode(release, startWith, MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE)
+        playEpisode(release, startWith, PlayerPlayFlag.CONTINUE)
     }
 
     private fun <T> getUrlByQuality(qualityInfo: QualityInfo<T>, quality: Int): String {
@@ -234,7 +235,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     override fun playEpisode(
         release: ReleaseFull,
         episode: ReleaseFull.Episode,
-        playFlag: Int?,
+        playFlag: PlayerPlayFlag?,
         quality: Int?
     ) {
         val qualityInfo = QualityInfo(episode, episode.urlSd, episode.urlHd, episode.urlFullHd)
@@ -340,7 +341,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         release: ReleaseFull,
         episode: ReleaseFull.Episode,
         quality: Int,
-        playFlag: Int? = null
+        playFlag: PlayerPlayFlag? = null
     ) {
         presenter.submitPlayerOpenAnalytics(
             PreferencesHolder.PLAYER_TYPE_INTERNAL.toAnalyticsPlayer(),
@@ -499,7 +500,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         override fun onClickSd(episode: ReleaseEpisodeItemState) {
             presenter.onEpisodeClick(
                 episode,
-                MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE,
+                PlayerPlayFlag.CONTINUE,
                 MyPlayerActivity.VAL_QUALITY_SD
             )
         }
@@ -507,7 +508,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         override fun onClickHd(episode: ReleaseEpisodeItemState) {
             presenter.onEpisodeClick(
                 episode,
-                MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE,
+                PlayerPlayFlag.CONTINUE,
                 MyPlayerActivity.VAL_QUALITY_HD
             )
         }
@@ -515,13 +516,13 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         override fun onClickFullHd(episode: ReleaseEpisodeItemState) {
             presenter.onEpisodeClick(
                 episode,
-                MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE,
+                PlayerPlayFlag.CONTINUE,
                 MyPlayerActivity.VAL_QUALITY_FULL_HD
             )
         }
 
         override fun onClickEpisode(episode: ReleaseEpisodeItemState) {
-            presenter.onEpisodeClick(episode, MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE)
+            presenter.onEpisodeClick(episode, PlayerPlayFlag.CONTINUE)
         }
 
         override fun onLongClickEpisode(episode: ReleaseEpisodeItemState) {
