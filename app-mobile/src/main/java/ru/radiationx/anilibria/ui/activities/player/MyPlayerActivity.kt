@@ -10,13 +10,11 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Point
-import android.graphics.PorterDuff
 import android.graphics.Rect
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
 import android.util.Rational
 import android.view.Surface
@@ -24,7 +22,6 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.content.ContextCompat
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType
 import com.devbrackets.android.exomedia.listener.*
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore
@@ -45,9 +42,7 @@ import ru.radiationx.data.analytics.AnalyticsErrorReporter
 import ru.radiationx.data.analytics.ErrorReporterConstants
 import ru.radiationx.data.analytics.TimeCounter
 import ru.radiationx.data.analytics.features.PlayerAnalytics
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsPip
 import ru.radiationx.data.analytics.features.mapper.toAnalyticsQuality
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsScale
 import ru.radiationx.data.analytics.features.model.AnalyticsEpisodeFinishAction
 import ru.radiationx.data.analytics.features.model.AnalyticsQuality
 import ru.radiationx.data.analytics.features.model.AnalyticsSeasonFinishAction
@@ -157,7 +152,16 @@ class MyPlayerActivity : BaseActivity() {
 
     private var currentPipControl = PreferencesHolder.PIP_BUTTON
 
-    private val dialogController = SettingDialogController()
+    private val dialogController by lazy {
+        SettingDialogController(
+            playerAnalytics = playerAnalytics,
+            appThemeHolder = appThemeHolder,
+            qualityListener = { updateQuality(it) },
+            speedListener = { updatePlaySpeed(it) },
+            scaleListener = { updateScale(it) },
+            pipListener = { updatePIPControl(it) }
+        )
+    }
 
     private var pictureInPictureParams: PictureInPictureParams.Builder? = null
 
@@ -800,268 +804,6 @@ class MyPlayerActivity : BaseActivity() {
         }
     }
 
-    private inner class SettingDialogController {
-        private val settingQuality = 0
-        private val settingPlaySpeed = 1
-        private val settingScale = 2
-        private val settingPIP = 3
-
-        private var openedDialogs = mutableListOf<BottomSheet>()
-
-        private fun BottomSheet.register() = openedDialogs.add(this)
-
-        fun getQualityTitle(quality: Int) = when (quality) {
-            VAL_QUALITY_SD -> "480p"
-            VAL_QUALITY_HD -> "720p"
-            VAL_QUALITY_FULL_HD -> "1080p"
-            else -> "Вероятнее всего 480p"
-        }
-
-        fun getPlaySpeedTitle(speed: Float) = if (speed == 1.0f) {
-            "Обычная"
-        } else {
-            "${"$speed".trimEnd('0').trimEnd('.').trimEnd(',')}x"
-        }
-
-        fun getScaleTitle(scale: ScaleType) = when (scale) {
-            ScaleType.FIT_CENTER -> "Оптимально"
-            ScaleType.CENTER_CROP -> "Обрезать"
-            ScaleType.FIT_XY -> "Растянуть"
-            else -> "Одному лишь богу известно"
-        }
-
-        fun getPIPTitle(pipControl: Int) = when (pipControl) {
-            PreferencesHolder.PIP_AUTO -> "При скрытии экрана"
-            PreferencesHolder.PIP_BUTTON -> "По кнопке"
-            else -> "Одному лишь богу известно"
-        }
-
-        fun updateSettingsDialog() {
-            if (openedDialogs.isNotEmpty()) {
-                openedDialogs.forEach {
-                    it.dismiss()
-                }
-                openedDialogs.clear()
-                showSettingsDialog()
-            }
-        }
-
-        fun showSettingsDialog() {
-            if (openedDialogs.isNotEmpty()) {
-                updateSettingsDialog()
-                return
-            }
-
-            val qualityValue = getQualityTitle(currentQuality)
-            val speedValue = getPlaySpeedTitle(currentPlaySpeed)
-            val scaleValue = getScaleTitle(currentScale)
-            val pipValue = getPIPTitle(currentPipControl)
-
-            val valuesList = mutableListOf(
-                settingQuality,
-                settingPlaySpeed
-            )
-            if (checkSausage()) {
-                valuesList.add(settingScale)
-            }
-            if (checkPipMode()) {
-                valuesList.add(settingPIP)
-            }
-
-            val titles = valuesList
-                .asSequence()
-                .map {
-                    when (it) {
-                        settingQuality -> "Качество (<b>$qualityValue</b>)"
-                        settingPlaySpeed -> "Скорость (<b>$speedValue</b>)"
-                        settingScale -> "Соотношение сторон (<b>$scaleValue</b>)"
-                        settingPIP -> "Режим окна (<b>$pipValue</b>)"
-                        else -> "Привет"
-                    }
-                }
-                .map { Html.fromHtml(it) }
-                .toList()
-                .toTypedArray()
-
-            val icQualityRes = when (currentQuality) {
-                VAL_QUALITY_SD -> R.drawable.ic_quality_sd_base
-                VAL_QUALITY_HD -> R.drawable.ic_quality_hd_base
-                VAL_QUALITY_FULL_HD -> R.drawable.ic_quality_full_hd_base
-                else -> R.drawable.ic_settings
-            }
-            val icons = valuesList
-                .asSequence()
-                .map {
-                    when (it) {
-                        settingQuality -> icQualityRes
-                        settingPlaySpeed -> R.drawable.ic_play_speed
-                        settingScale -> R.drawable.ic_aspect_ratio
-                        settingPIP -> R.drawable.ic_picture_in_picture_alt
-                        else -> R.drawable.ic_anilibria
-                    }
-                }
-                .map {
-                    ContextCompat.getDrawable(this@MyPlayerActivity, it)
-                }
-                .toList()
-                .toTypedArray()
-
-            BottomSheet.Builder(this@MyPlayerActivity)
-                .setItems(titles, icons) { _, which ->
-                    when (valuesList[which]) {
-                        settingQuality -> {
-                            playerAnalytics.settingsQualityClick()
-                            showQualityDialog()
-                        }
-                        settingPlaySpeed -> {
-                            playerAnalytics.settingsSpeedClick()
-                            showPlaySpeedDialog()
-                        }
-                        settingScale -> {
-                            playerAnalytics.settingsScaleClick()
-                            showScaleDialog()
-                        }
-                        settingPIP -> {
-                            playerAnalytics.settingsPipClick()
-                            showPIPDialog()
-                        }
-                    }
-                }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
-                .setIconTintMode(PorterDuff.Mode.SRC_ATOP)
-                .setIconColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorOnSurface))
-                .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
-                .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
-                .show()
-                .register()
-        }
-
-        fun showPlaySpeedDialog() {
-            val values = arrayOf(
-                0.25f,
-                0.5f,
-                0.75f,
-                1.0f,
-                1.25f,
-                1.5f,
-                1.75f,
-                2.0f
-            )
-            val activeIndex = values.indexOf(currentPlaySpeed)
-            val titles = values
-                .mapIndexed { index, s ->
-                    val stringValue = getPlaySpeedTitle(s)
-                    when (index) {
-                        activeIndex -> "<b>$stringValue</b>"
-                        else -> stringValue
-                    }
-                }
-                .map { Html.fromHtml(it) }
-                .toTypedArray()
-
-            BottomSheet.Builder(this@MyPlayerActivity)
-                .setTitle("Скорость воспроизведения")
-                .setItems(titles) { _, which ->
-                    updatePlaySpeed(values[which])
-                }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
-                .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
-                .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
-                .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
-                .show()
-                .register()
-        }
-
-        fun showQualityDialog() {
-            val qualities = mutableListOf<Int>()
-            if (getEpisode().urlSd != null) qualities.add(VAL_QUALITY_SD)
-            if (getEpisode().urlHd != null) qualities.add(VAL_QUALITY_HD)
-            if (getEpisode().urlFullHd != null) qualities.add(VAL_QUALITY_FULL_HD)
-
-            val values = qualities.toTypedArray()
-
-            val activeIndex = values.indexOf(currentQuality)
-            val titles = values
-                .mapIndexed { index, s ->
-                    val stringValue = getQualityTitle(s)
-                    if (index == activeIndex) "<b>$stringValue</b>" else stringValue
-                }
-                .map { Html.fromHtml(it) }
-                .toTypedArray()
-
-            BottomSheet.Builder(this@MyPlayerActivity)
-                .setTitle("Качество")
-                .setItems(titles) { _, which ->
-                    updateQuality(values[which])
-                }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
-                .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
-                .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
-                .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
-                .show()
-                .register()
-        }
-
-        fun showScaleDialog() {
-            val values = arrayOf(
-                ScaleType.FIT_CENTER,
-                ScaleType.CENTER_CROP,
-                ScaleType.FIT_XY
-            )
-            val activeIndex = values.indexOf(currentScale)
-            val titles = values
-                .mapIndexed { index, s ->
-                    val stringValue = getScaleTitle(s)
-                    if (index == activeIndex) "<b>$stringValue</b>" else stringValue
-                }
-                .map { Html.fromHtml(it) }
-                .toTypedArray()
-
-            BottomSheet.Builder(this@MyPlayerActivity)
-                .setTitle("Соотношение сторон")
-                .setItems(titles) { _, which ->
-                    val newScaleType = values[which]
-                    playerAnalytics.settingsScaleChange(newScaleType.ordinal.toAnalyticsScale())
-                    updateScale(newScaleType)
-                }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
-                .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
-                .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
-                .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
-                .show()
-                .register()
-        }
-
-        fun showPIPDialog() {
-            val values = arrayOf(
-                PreferencesHolder.PIP_AUTO,
-                PreferencesHolder.PIP_BUTTON
-            )
-            val activeIndex = values.indexOf(currentPipControl)
-            val titles = values
-                .mapIndexed { index, s ->
-                    val stringValue = getPIPTitle(s)
-                    if (index == activeIndex) "<b>$stringValue</b>" else stringValue
-                }
-                .map { Html.fromHtml(it) }
-                .toTypedArray()
-
-            BottomSheet.Builder(this@MyPlayerActivity)
-                .setTitle("Режим окна (картинка в картинке)")
-                .setItems(titles) { _, which ->
-                    val newPipControl = values[which]
-                    playerAnalytics.settingsPipChange(newPipControl.toAnalyticsPip())
-                    updatePIPControl(newPipControl)
-                }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
-                .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
-                .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
-                .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
-                .show()
-                .register()
-        }
-    }
-
     private fun showSeasonFinishDialog() {
         playerAnalytics.seasonFinish()
         val titles = arrayOf(
@@ -1146,7 +888,16 @@ class MyPlayerActivity : BaseActivity() {
 
         override fun onSettingsClick() {
             playerAnalytics.settingsClick()
-            dialogController.showSettingsDialog()
+            dialogController.showSettingsDialog(
+                context = this@MyPlayerActivity,
+                episode = getEpisode(),
+                currentQuality = currentQuality,
+                currentPlaySpeed = currentPlaySpeed,
+                currentScale = currentScale,
+                currentPipControl = currentPipControl,
+                currentIsSausage = checkSausage(),
+                currentIsPipMode = checkPipMode()
+            )
         }
 
         private val delta = TimeUnit.SECONDS.toMillis(90)
