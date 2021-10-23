@@ -19,7 +19,7 @@ import ru.radiationx.data.entity.app.release.ReleaseFull
 class SettingDialogController(
     private val playerAnalytics: PlayerAnalytics,
     private val appThemeHolder: AppThemeHolder,
-    private val qualityListener: (Int) -> Unit,
+    private val qualityListener: (PlayerQuality) -> Unit,
     private val speedListener: (Float) -> Unit,
     private val scaleListener: (ScaleType) -> Unit,
     private val pipListener: (Int) -> Unit
@@ -34,11 +34,10 @@ class SettingDialogController(
     private fun BottomSheet.register() = openedDialogs.add(this)
 
     //todo move to smh
-    fun getQualityTitle(quality: Int) = when (quality) {
-        MyPlayerActivity.VAL_QUALITY_SD -> "480p"
-        MyPlayerActivity.VAL_QUALITY_HD -> "720p"
-        MyPlayerActivity.VAL_QUALITY_FULL_HD -> "1080p"
-        else -> "Вероятнее всего 480p"
+    fun getQualityTitle(quality: PlayerQuality) = when (quality) {
+        PlayerQuality.SD -> "480p"
+        PlayerQuality.HD -> "720p"
+        PlayerQuality.FULL_HD -> "1080p"
     }
 
     //todo move to smh
@@ -75,7 +74,7 @@ class SettingDialogController(
     fun showSettingsDialog(
         context: Context,
         episode: ReleaseFull.Episode,
-        currentQuality: Int,
+        currentQuality: PlayerQuality,
         currentPlaySpeed: Float,
         currentScale: ScaleType,
         currentPipControl: Int,
@@ -116,10 +115,9 @@ class SettingDialogController(
             .toTypedArray()
 
         val icQualityRes = when (currentQuality) {
-            MyPlayerActivity.VAL_QUALITY_SD -> R.drawable.ic_quality_sd_base
-            MyPlayerActivity.VAL_QUALITY_HD -> R.drawable.ic_quality_hd_base
-            MyPlayerActivity.VAL_QUALITY_FULL_HD -> R.drawable.ic_quality_full_hd_base
-            else -> R.drawable.ic_settings
+            PlayerQuality.SD -> R.drawable.ic_quality_sd_base
+            PlayerQuality.HD -> R.drawable.ic_quality_hd_base
+            PlayerQuality.FULL_HD -> R.drawable.ic_quality_full_hd_base
         }
         val icons = valuesList
             .asSequence()
@@ -210,12 +208,12 @@ class SettingDialogController(
     fun showQualityDialog(
         context: Context,
         episode: ReleaseFull.Episode,
-        currentQuality: Int
+        currentQuality: PlayerQuality
     ) {
-        val qualities = mutableListOf<Int>()
-        if (episode.urlSd != null) qualities.add(MyPlayerActivity.VAL_QUALITY_SD)
-        if (episode.urlHd != null) qualities.add(MyPlayerActivity.VAL_QUALITY_HD)
-        if (episode.urlFullHd != null) qualities.add(MyPlayerActivity.VAL_QUALITY_FULL_HD)
+        val qualities = mutableListOf<PlayerQuality>()
+        if (episode.urlSd != null) qualities.add(PlayerQuality.SD)
+        if (episode.urlHd != null) qualities.add(PlayerQuality.HD)
+        if (episode.urlFullHd != null) qualities.add(PlayerQuality.FULL_HD)
 
         val values = qualities.toTypedArray()
 

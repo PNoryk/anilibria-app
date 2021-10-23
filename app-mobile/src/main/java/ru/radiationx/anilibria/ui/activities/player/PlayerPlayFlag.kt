@@ -1,7 +1,7 @@
 package ru.radiationx.anilibria.ui.activities.player
 
 enum class PlayerPlayFlag {
-    DEFAULT,
+    ASK,
     START,
     CONTINUE
 }

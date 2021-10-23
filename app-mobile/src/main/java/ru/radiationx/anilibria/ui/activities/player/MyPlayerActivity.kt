@@ -61,11 +61,10 @@ import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 
-fun Int.toPrefQuality() = when (this) {
-    MyPlayerActivity.VAL_QUALITY_SD -> PreferencesHolder.QUALITY_SD
-    MyPlayerActivity.VAL_QUALITY_HD -> PreferencesHolder.QUALITY_HD
-    MyPlayerActivity.VAL_QUALITY_FULL_HD -> PreferencesHolder.QUALITY_FULL_HD
-    else -> PreferencesHolder.QUALITY_NO
+fun PlayerQuality.toPrefQuality() = when (this) {
+    PlayerQuality.SD -> PreferencesHolder.QUALITY_SD
+    PlayerQuality.HD -> PreferencesHolder.QUALITY_HD
+    PlayerQuality.FULL_HD -> PreferencesHolder.QUALITY_FULL_HD
 }
 
 class MyPlayerActivity : BaseActivity() {
@@ -78,10 +77,6 @@ class MyPlayerActivity : BaseActivity() {
         const val ARG_QUALITY = "quality"
         const val ARG_PLAY_FLAG = "play_flag"
 
-        const val VAL_QUALITY_SD = 0
-        const val VAL_QUALITY_HD = 1
-        const val VAL_QUALITY_FULL_HD = 2
-
         const val ACTION_REMOTE_CONTROL = "action.remote.control"
         const val EXTRA_REMOTE_CONTROL = "extra.remote.control"
 
@@ -91,19 +86,18 @@ class MyPlayerActivity : BaseActivity() {
         const val REMOTE_CONTROL_NEXT = 4
 
 
-        //private const val NOT_SELECTED = -1
-        private const val NO_ID = -1
-
-        private const val DEFAULT_QUALITY = VAL_QUALITY_SD
+        private const val DEFAULT_EPISODE_ID = -1
+        private val DEFAULT_QUALITY = PlayerQuality.SD
+        private val DEFAULT_PLAY_FLAG = PlayerPlayFlag.ASK
+        private const val DEFAULT_PLAY_SPEED = 1.0f
     }
 
     private lateinit var releaseData: ReleaseFull
-    private var playFlag: PlayerPlayFlag = PlayerPlayFlag.DEFAULT
-    private var currentEpisodeId = NO_ID
-
-    //private var currentEpisode = NOT_SELECTED
+    private var playFlag: PlayerPlayFlag = DEFAULT_PLAY_FLAG
+    private var currentEpisodeId = DEFAULT_EPISODE_ID
     private var currentQuality = DEFAULT_QUALITY
-    private var currentPlaySpeed = 1.0f
+    private var currentPlaySpeed = DEFAULT_PLAY_SPEED
+
     private var videoControls: VideoControlsAlib? = null
     private val fullScreenListener = FullScreenListener()
 
@@ -349,10 +343,14 @@ class MyPlayerActivity : BaseActivity() {
     private fun handleIntent(intent: Intent) {
         val release = intent.getSerializableExtra(ARG_RELEASE) as ReleaseFull? ?: return
         val episodeId =
-            intent.getIntExtra(ARG_EPISODE_ID, if (release.episodes.size > 0) 0 else NO_ID)
-        val quality = intent.getIntExtra(ARG_QUALITY, DEFAULT_QUALITY)
+            intent.getIntExtra(
+                ARG_EPISODE_ID,
+                if (release.episodes.size > 0) 0 else DEFAULT_EPISODE_ID
+            )
+        val quality =
+            (intent.getSerializableExtra(ARG_QUALITY) as PlayerQuality?) ?: DEFAULT_QUALITY
         val playFlag = (intent.getSerializableExtra(ARG_PLAY_FLAG) as PlayerPlayFlag?)
-            ?: PlayerPlayFlag.DEFAULT
+            ?: PlayerPlayFlag.ASK
 
         this.releaseData = release
         this.currentEpisodeId = episodeId
@@ -411,7 +409,7 @@ class MyPlayerActivity : BaseActivity() {
         player?.setScaleType(currentScale)
     }
 
-    private fun updateQuality(newQuality: Int) {
+    private fun updateQuality(newQuality: PlayerQuality) {
         this.currentQuality = newQuality
         val prefQuality = newQuality.toPrefQuality()
         playerAnalytics.settingsQualityChange(prefQuality.toAnalyticsQuality())
@@ -541,7 +539,7 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun playEpisode(episode: ReleaseFull.Episode) {
         when (playFlag) {
-            PlayerPlayFlag.DEFAULT -> {
+            PlayerPlayFlag.ASK -> {
                 hardPlayEpisode(episode)
                 if (episode.seek > 0) {
                     hardPlayEpisode(episode)
@@ -571,14 +569,11 @@ class MyPlayerActivity : BaseActivity() {
         toolbar.subtitle = "${episode.title} [${dialogController.getQualityTitle(currentQuality)}]"
         currentEpisodeId = getEpisodeId(episode)
         val videoPath = when (currentQuality) {
-            VAL_QUALITY_SD -> episode.urlSd
-            VAL_QUALITY_HD -> episode.urlHd
-            VAL_QUALITY_FULL_HD -> episode.urlFullHd
-            else -> null
+            PlayerQuality.SD -> episode.urlSd
+            PlayerQuality.HD -> episode.urlHd
+            PlayerQuality.FULL_HD -> episode.urlFullHd
         }
-        videoPath?.also {
-            player.setVideoPath(it)
-        }
+        player.setVideoPath(videoPath)
     }
 
     private fun goFullscreen() {
