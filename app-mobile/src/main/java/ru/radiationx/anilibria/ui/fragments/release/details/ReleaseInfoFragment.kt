@@ -347,14 +347,15 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             PreferencesHolder.PLAYER_TYPE_INTERNAL.toAnalyticsPlayer(),
             quality.toPrefQuality().toAnalyticsQuality()
         )
-        startActivity(Intent(context, MyPlayerActivity::class.java).apply {
-            putExtra(MyPlayerActivity.ARG_RELEASE, release)
-            putExtra(MyPlayerActivity.ARG_EPISODE_ID, episode.id)
-            putExtra(MyPlayerActivity.ARG_QUALITY, quality)
-            playFlag?.let {
-                putExtra(MyPlayerActivity.ARG_PLAY_FLAG, it)
-            }
-        })
+        startActivity(
+            MyPlayerActivity.newIntent(
+                requireContext(),
+                release,
+                episode.id,
+                quality,
+                playFlag
+            )
+        )
     }
 
     private fun playExternal(

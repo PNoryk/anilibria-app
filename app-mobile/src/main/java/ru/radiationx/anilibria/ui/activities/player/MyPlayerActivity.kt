@@ -70,26 +70,38 @@ fun PlayerQuality.toPrefQuality() = when (this) {
 class MyPlayerActivity : BaseActivity() {
 
     companion object {
-        const val ARG_RELEASE = "release"
+        private const val ARG_RELEASE = "release"
+        private const val ARG_EPISODE_ID = "episode_id"
+        private const val ARG_QUALITY = "quality"
+        private const val ARG_PLAY_FLAG = "play_flag"
 
-        //const val ARG_CURRENT = "current"
-        const val ARG_EPISODE_ID = "episode_id"
-        const val ARG_QUALITY = "quality"
-        const val ARG_PLAY_FLAG = "play_flag"
+        private const val ACTION_REMOTE_CONTROL = "action.remote.control"
+        private const val EXTRA_REMOTE_CONTROL = "extra.remote.control"
 
-        const val ACTION_REMOTE_CONTROL = "action.remote.control"
-        const val EXTRA_REMOTE_CONTROL = "extra.remote.control"
-
-        const val REMOTE_CONTROL_PLAY = 1
-        const val REMOTE_CONTROL_PAUSE = 2
-        const val REMOTE_CONTROL_PREV = 3
-        const val REMOTE_CONTROL_NEXT = 4
-
+        private const val REMOTE_CONTROL_PLAY = 1
+        private const val REMOTE_CONTROL_PAUSE = 2
+        private const val REMOTE_CONTROL_PREV = 3
+        private const val REMOTE_CONTROL_NEXT = 4
 
         private const val DEFAULT_EPISODE_ID = -1
         private val DEFAULT_QUALITY = PlayerQuality.SD
         private val DEFAULT_PLAY_FLAG = PlayerPlayFlag.ASK
         private const val DEFAULT_PLAY_SPEED = 1.0f
+
+        fun newIntent(
+            context: Context,
+            release: ReleaseFull,
+            episodeId: Int,
+            quality: PlayerQuality,
+            playFlag: PlayerPlayFlag?
+        ): Intent = Intent(context, MyPlayerActivity::class.java).apply {
+            putExtra(ARG_RELEASE, release)
+            putExtra(ARG_EPISODE_ID, episodeId)
+            putExtra(ARG_QUALITY, quality)
+            playFlag?.let {
+                putExtra(ARG_PLAY_FLAG, it)
+            }
+        }
     }
 
     private lateinit var releaseData: ReleaseFull
