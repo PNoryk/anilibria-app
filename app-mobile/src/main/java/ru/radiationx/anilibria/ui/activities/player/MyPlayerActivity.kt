@@ -6,11 +6,9 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.Rect
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Surface
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
@@ -18,11 +16,6 @@ import androidx.appcompat.view.ContextThemeWrapper
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType
 import com.devbrackets.android.exomedia.listener.*
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore
-import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.analytics.AnalyticsListener
-import com.google.android.exoplayer2.source.MediaSourceEventListener
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_myplayer.*
 import kotlinx.android.synthetic.main.view_video_control.*
 import org.michaelbel.bottomsheet.BottomSheet
@@ -32,12 +25,9 @@ import ru.radiationx.anilibria.extension.isDark
 import ru.radiationx.anilibria.ui.activities.BaseActivity
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
 import ru.radiationx.data.analytics.AnalyticsErrorReporter
-import ru.radiationx.data.analytics.ErrorReporterConstants
-import ru.radiationx.data.analytics.TimeCounter
 import ru.radiationx.data.analytics.features.PlayerAnalytics
 import ru.radiationx.data.analytics.features.mapper.toAnalyticsQuality
 import ru.radiationx.data.analytics.features.model.AnalyticsEpisodeFinishAction
-import ru.radiationx.data.analytics.features.model.AnalyticsQuality
 import ru.radiationx.data.analytics.features.model.AnalyticsSeasonFinishAction
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.holders.PreferencesHolder
@@ -47,7 +37,6 @@ import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.analytics.LifecycleTimeCounter
 import ru.radiationx.shared_app.di.injectDependencies
-import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -119,11 +108,6 @@ class MyPlayerActivity : BaseActivity() {
         LifecycleTimeCounter(playerAnalytics::useTime)
     }
 
-    private val timeToStartCounter = TimeCounter()
-
-    private val loadingStatistics =
-        mutableMapOf<String, MutableList<Pair<AnalyticsQuality, Long>>>()
-
     private val defaultScale = ScaleType.FIT_CENTER
     private var currentScale = defaultScale
 
@@ -132,6 +116,7 @@ class MyPlayerActivity : BaseActivity() {
     private var pipController: PlayerPipControllerImpl? = null
     private var systemUiController: PlayerSystemUiController? = null
     private var fullscreenController: PlayerFullscreenController? = null
+    private var playerStatistics: PlayerStatistics? = null
 
     private val dialogController by lazy {
         SettingDialogController(
@@ -144,39 +129,18 @@ class MyPlayerActivity : BaseActivity() {
         )
     }
 
-    private fun getStatisticByDomain(host: String): MutableList<Pair<AnalyticsQuality, Long>> {
-        if (!loadingStatistics.contains(host)) {
-            loadingStatistics[host] = mutableListOf()
-        }
-        return loadingStatistics.getValue(host)
-    }
-
-    private fun putStatistics(uri: Uri, quality: AnalyticsQuality, time: Long) {
-        uri.host?.let { getStatisticByDomain(it) }?.add(quality to time)
-    }
-
-    private fun getAverageStatisticsValues(): Map<String, Map<AnalyticsQuality, Long>> {
-        return loadingStatistics
-            .mapValues { statsMap ->
-                statsMap.value
-                    .groupBy { it.first }
-                    .mapValues { qualityMap ->
-                        qualityMap.value.map { it.second }.average().toLong()
-                    }
-            }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
         currentPlaySpeed = loadPlaySpeed()
         currentPipControl = loadPIPControl()
         lifecycle.addObserver(useTimeCounter)
-        timeToStartCounter.start()
         initPipController()
         initSystemUiController()
         initFullScreenController()
+        initPlayerStatistics()
         systemUiController?.onCreate()
+        playerStatistics?.onCreate()
         setContentView(R.layout.activity_myplayer)
 
         player.setScaleType(currentScale)
@@ -186,91 +150,9 @@ class MyPlayerActivity : BaseActivity() {
         player.setOnVideoSizedChangedListener { _, _, _ ->
             updatePipRect()
         }
-        player.setAnalyticsListener(object : AnalyticsListener {
-
-            private var wasFirstFrame = false
-            private var lastLoadedUri: Uri? = null
-
-
-            private var lastLoadError: Throwable? = null
-            private var lastPlayerError: Throwable? = null
-
-
-            override fun onLoadCanceled(
-                eventTime: AnalyticsListener.EventTime,
-                loadEventInfo: MediaSourceEventListener.LoadEventInfo,
-                mediaLoadData: MediaSourceEventListener.MediaLoadData
-            ) {
-                super.onLoadCanceled(eventTime, loadEventInfo, mediaLoadData)
-                putStatistics(
-                    loadEventInfo.uri,
-                    currentQuality.toPrefQuality().toAnalyticsQuality(),
-                    loadEventInfo.loadDurationMs
-                )
-            }
-
-            override fun onLoadCompleted(
-                eventTime: AnalyticsListener.EventTime,
-                loadEventInfo: MediaSourceEventListener.LoadEventInfo,
-                mediaLoadData: MediaSourceEventListener.MediaLoadData
-            ) {
-                super.onLoadCompleted(eventTime, loadEventInfo, mediaLoadData)
-                lastLoadedUri = loadEventInfo.uri
-                putStatistics(
-                    loadEventInfo.uri,
-                    currentQuality.toPrefQuality().toAnalyticsQuality(),
-                    loadEventInfo.loadDurationMs
-                )
-            }
-
-
-            override fun onRenderedFirstFrame(
-                eventTime: AnalyticsListener.EventTime,
-                surface: Surface?
-            ) {
-                super.onRenderedFirstFrame(eventTime, surface)
-                if (!wasFirstFrame) {
-                    playerAnalytics.timeToStart(
-                        lastLoadedUri?.host.toString(),
-                        currentQuality.toPrefQuality().toAnalyticsQuality(),
-                        timeToStartCounter.elapsed()
-                    )
-                    wasFirstFrame = true
-                }
-            }
-
-            override fun onLoadError(
-                eventTime: AnalyticsListener.EventTime,
-                loadEventInfo: MediaSourceEventListener.LoadEventInfo,
-                mediaLoadData: MediaSourceEventListener.MediaLoadData,
-                error: IOException,
-                wasCanceled: Boolean
-            ) {
-                super.onLoadError(eventTime, loadEventInfo, mediaLoadData, error, wasCanceled)
-                if (lastLoadError?.toString() != error.toString()) {
-                    errorReporter.report(ErrorReporterConstants.group_player, "onLoadError", error)
-                    playerAnalytics.error(error)
-                    lastLoadError = error
-                }
-            }
-
-            override fun onPlayerError(
-                eventTime: AnalyticsListener.EventTime,
-                error: ExoPlaybackException
-            ) {
-                super.onPlayerError(eventTime, error)
-                if (lastPlayerError?.toString() != error.toString()) {
-                    errorReporter.report(
-                        ErrorReporterConstants.group_player,
-                        "onPlayerError",
-                        error
-                    )
-                    playerAnalytics.error(error)
-                    lastLoadError = error
-                }
-            }
-        })
-
+        playerStatistics?.also {
+            player.setAnalyticsListener(it.analyticsListener)
+        }
 
         videoControls = VideoControlsAlib(ContextThemeWrapper(this, this.theme), null, 0)
 
@@ -339,6 +221,12 @@ class MyPlayerActivity : BaseActivity() {
                 playerAnalytics.fullScreen(getSeekPercent())
             }
             videoControls?.setFullScreenMode(it)
+        }
+    }
+
+    private fun initPlayerStatistics() {
+        playerStatistics = PlayerStatistics(playerAnalytics, errorReporter) {
+            currentQuality
         }
     }
 
@@ -527,19 +415,16 @@ class MyPlayerActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        getAverageStatisticsValues().forEach { statsEntry ->
-            statsEntry.value.forEach { qualityEntry ->
-                playerAnalytics.loadTime(statsEntry.key, qualityEntry.key, qualityEntry.value)
-            }
-        }
         saveEpisode()
         player.stopPlayback()
         super.onDestroy()
         pipController?.onDestroy()
         systemUiController?.onDestroy()
+        playerStatistics?.onDestroy()
         pipController = null
         systemUiController = null
         fullscreenController = null
+        playerStatistics = null
     }
 
     private fun checkIndex(id: Int): Boolean {
