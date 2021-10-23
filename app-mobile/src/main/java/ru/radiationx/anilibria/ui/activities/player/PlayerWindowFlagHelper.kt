@@ -16,13 +16,13 @@ object PlayerWindowFlagHelper {
     }
 
 
-    fun getPortraitFlags(fullScreen: Boolean): Int = if (fullScreen) {
+    private fun getPortraitFlags(fullScreen: Boolean): Int = if (fullScreen) {
         getPortraitFullscreenFlags()
     } else {
         getPortraitDefaultFlags()
     }
 
-    fun getPortraitFullscreenFlags(): Int {
+    private fun getPortraitFullscreenFlags(): Int {
 
         Log.d("flaghelper", "getPortraitFullscreenFlags")
         var flags = View.SYSTEM_UI_FLAG_LOW_PROFILE or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -36,12 +36,12 @@ object PlayerWindowFlagHelper {
         return flags
     }
 
-    fun getPortraitDefaultFlags(): Int {
+    private fun getPortraitDefaultFlags(): Int {
         Log.d("flaghelper", "getPortraitDefaultFlags")
         return View.SYSTEM_UI_FLAG_VISIBLE
     }
 
-    fun getLandscapeFlags(): Int {
+    private fun getLandscapeFlags(): Int {
         Log.d("flaghelper", "getLandscapeFlags")
         var flags = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
@@ -53,5 +53,4 @@ object PlayerWindowFlagHelper {
 
         return flags
     }
-
 }

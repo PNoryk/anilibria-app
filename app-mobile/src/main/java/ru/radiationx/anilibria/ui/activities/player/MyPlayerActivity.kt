@@ -97,7 +97,6 @@ class MyPlayerActivity : BaseActivity() {
     private var currentPlaySpeed = DEFAULT_PLAY_SPEED
 
     private var videoControls: VideoControlsAlib? = null
-    private val fullScreenListener = FullScreenListener()
 
     @Inject
     lateinit var releaseInteractor: ReleaseInteractor
@@ -126,11 +125,9 @@ class MyPlayerActivity : BaseActivity() {
     private val loadingStatistics =
         mutableMapOf<String, MutableList<Pair<AnalyticsQuality, Long>>>()
 
-
-    private val flagsHelper = PlayerWindowFlagHelper
     private var fullscreenOrientation = false
 
-    private var currentFullscreen = false
+
     private var currentOrientation: Int = Configuration.ORIENTATION_UNDEFINED
 
     private var compositeDisposable = CompositeDisposable()
@@ -141,6 +138,7 @@ class MyPlayerActivity : BaseActivity() {
     private var currentPipControl = PreferencesHolder.PIP_BUTTON
 
     private var pipController: PlayerPipControllerImpl? = null
+    private var systemUiController: PlayerSystemUiController? = null
 
     private val dialogController by lazy {
         SettingDialogController(
@@ -182,14 +180,14 @@ class MyPlayerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
-        initPipController()
-        lifecycle.addObserver(useTimeCounter)
-        timeToStartCounter.start()
-        initUiFlags()
         currentOrientation = resources.configuration.orientation
-        goFullscreen()
         currentPlaySpeed = loadPlaySpeed()
         currentPipControl = loadPIPControl()
+        lifecycle.addObserver(useTimeCounter)
+        timeToStartCounter.start()
+        initPipController()
+        initSystemUiController()
+        systemUiController?.onCreate()
         setContentView(R.layout.activity_myplayer)
 
         player.setScaleType(currentScale)
@@ -336,6 +334,14 @@ class MyPlayerActivity : BaseActivity() {
                 prevListener = { controlsListener.onNextClicked() },
                 nextListener = { controlsListener.onPreviousClicked() }
             )
+        }
+    }
+
+    private fun initSystemUiController() {
+        systemUiController = PlayerSystemUiController(this) {
+            if (it) {
+                player.showControls()
+            }
         }
     }
 
@@ -520,7 +526,10 @@ class MyPlayerActivity : BaseActivity() {
         compositeDisposable.dispose()
         player.stopPlayback()
         super.onDestroy()
-        exitFullscreen()
+        pipController?.onDestroy()
+        systemUiController?.onDestroy()
+        pipController = null
+        systemUiController = null
     }
 
     private fun checkIndex(id: Int): Boolean {
@@ -591,21 +600,6 @@ class MyPlayerActivity : BaseActivity() {
         player.setVideoPath(videoPath)
     }
 
-    private fun goFullscreen() {
-        currentFullscreen = true
-        updateUiFlags()
-    }
-
-    private fun exitFullscreen() {
-        currentFullscreen = false
-        updateUiFlags()
-    }
-
-    private fun initUiFlags() {
-        window.decorView.also {
-            it.setOnSystemUiVisibilityChangeListener(fullScreenListener)
-        }
-    }
 
     private fun updateUiFlags() {
         val scale = loadScale(currentOrientation)
@@ -613,9 +607,7 @@ class MyPlayerActivity : BaseActivity() {
 
         updateScale(if (inMultiWindow) defaultScale else scale)
 
-        window.decorView.also {
-            it.systemUiVisibility = flagsHelper.getFlags(currentOrientation, currentFullscreen)
-        }
+        systemUiController?.onConfigurationChanges()
 
         videoControls?.fitSystemWindows(inMultiWindow || currentOrientation != Configuration.ORIENTATION_LANDSCAPE)
 
@@ -825,14 +817,6 @@ class MyPlayerActivity : BaseActivity() {
         }
     }
 
-    private inner class FullScreenListener : View.OnSystemUiVisibilityChangeListener {
-        override fun onSystemUiVisibilityChange(visibility: Int) {
-            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                player.showControls()
-            }
-        }
-    }
-
     private inner class ControlsVisibilityListener : VideoControlsVisibilityListener {
         override fun onControlsShown() {
             Log.e("MyPlayer", "onControlsShown $supportActionBar, ${supportActionBar?.isShowing}")
@@ -840,7 +824,7 @@ class MyPlayerActivity : BaseActivity() {
 
         override fun onControlsHidden() {
             Log.e("MyPlayer", "onControlsHidden $supportActionBar")
-            goFullscreen()
+            systemUiController?.goFullscreen()
         }
     }
 }

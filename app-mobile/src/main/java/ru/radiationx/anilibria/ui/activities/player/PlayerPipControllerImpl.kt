@@ -37,6 +37,13 @@ class PlayerPipControllerImpl(
         PipControlsReceiver(playPauseListener, prevListener, nextListener)
     }
 
+    fun onDestroy() {
+        try {
+            activity.unregisterReceiver(controlsReceiver)
+        } catch (ignore: Throwable) {
+        }
+    }
+
     fun onModeChanged(isInPictureInPictureMode: Boolean) {
         if (isInPictureInPictureMode) {
             activity.registerReceiver(controlsReceiver, IntentFilter(ACTION_REMOTE_CONTROL))
