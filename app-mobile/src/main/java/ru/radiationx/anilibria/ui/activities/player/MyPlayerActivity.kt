@@ -118,7 +118,7 @@ class MyPlayerActivity : BaseActivity() {
     private var fullscreenController: PlayerFullscreenController? = null
     private var playerStatistics: PlayerStatistics? = null
 
-    private val dialogController by lazy {
+    private val settingsDialogController by lazy {
         SettingDialogController(
             playerAnalytics = playerAnalytics,
             appThemeHolder = appThemeHolder,
@@ -127,6 +127,10 @@ class MyPlayerActivity : BaseActivity() {
             scaleListener = { updateScale(it) },
             pipListener = { updatePipControl(it) }
         )
+    }
+
+    private val finishDialogController by lazy {
+        FinishDialogController(appThemeHolder)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -485,7 +489,8 @@ class MyPlayerActivity : BaseActivity() {
     }
 
     private fun hardPlayEpisode(episode: ReleaseFull.Episode) {
-        toolbar.subtitle = "${episode.title} [${dialogController.getQualityTitle(currentQuality)}]"
+        toolbar.subtitle =
+            "${episode.title} [${settingsDialogController.getQualityTitle(currentQuality)}]"
         currentEpisodeId = getEpisodeId(episode)
         val videoPath = when (currentQuality) {
             PlayerQuality.SD -> episode.urlSd
@@ -497,65 +502,41 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun showSeasonFinishDialog() {
         playerAnalytics.seasonFinish()
-        val titles = arrayOf(
-            "Начать серию заново",
-            "Начать с первой серии",
-            "Закрыть плеер"
-        )
-        BottomSheet.Builder(this@MyPlayerActivity)
-            .setTitle("Серия полностью просмотрена")
-            .setItems(titles) { _, which ->
-                when (which) {
-                    0 -> {
-                        playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_EPISODE)
-                        saveEpisode(0)
-                        hardPlayEpisode(getEpisode())
-                    }
-                    1 -> {
-                        playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_SEASON)
-                        releaseData.episodes.lastOrNull()?.also {
-                            hardPlayEpisode(it)
-                        }
-                    }
-                    2 -> {
-                        playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.CLOSE_PLAYER)
-                        finish()
-                    }
+
+        finishDialogController.showSeasonFinishDialog(
+            context = this,
+            episodeRestartListener = {
+                playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_EPISODE)
+                saveEpisode(0)
+                hardPlayEpisode(getEpisode())
+            },
+            seasonRestartListener = {
+                playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_SEASON)
+                releaseData.episodes.lastOrNull()?.also {
+                    hardPlayEpisode(it)
                 }
-            }
-            .setDarkTheme(appThemeHolder.getTheme().isDark())
-            .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
-            .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
-            .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
-            .show()
+            },
+            closePlayerListener = {
+                playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.CLOSE_PLAYER)
+                finish()
+            },
+        )
     }
 
     private fun showEpisodeFinishDialog() {
         playerAnalytics.episodesFinish()
-        val titles = arrayOf(
-            "Начать серию заново",
-            "Включить следущую серию"
-        )
-        BottomSheet.Builder(this@MyPlayerActivity)
-            .setTitle("Серия полностью просмотрена")
-            .setItems(titles) { _, which ->
-                when (which) {
-                    0 -> {
-                        playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.RESTART)
-                        saveEpisode(0)
-                        hardPlayEpisode(getEpisode())
-                    }
-                    1 -> {
-                        playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.NEXT)
-                        getNextEpisode()?.also { hardPlayEpisode(it) }
-                    }
-                }
+        finishDialogController.showEpisodeFinishDialog(
+            context = this,
+            episodeRestartListener = {
+                playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.RESTART)
+                saveEpisode(0)
+                hardPlayEpisode(getEpisode())
+            },
+            startNextListener = {
+                playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.NEXT)
+                getNextEpisode()?.also { hardPlayEpisode(it) }
             }
-            .setDarkTheme(appThemeHolder.getTheme().isDark())
-            .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
-            .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
-            .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
-            .show()
+        )
     }
 
     private fun getSeekPercent(): Float {
@@ -578,7 +559,7 @@ class MyPlayerActivity : BaseActivity() {
 
         override fun onSettingsClick() {
             playerAnalytics.settingsClick()
-            dialogController.showSettingsDialog(
+            settingsDialogController.showSettingsDialog(
                 context = this@MyPlayerActivity,
                 episode = getEpisode(),
                 currentQuality = currentQuality,
