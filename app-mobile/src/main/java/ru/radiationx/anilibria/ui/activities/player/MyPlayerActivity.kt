@@ -363,6 +363,7 @@ class MyPlayerActivity : BaseActivity(), PlayerMvpView {
         presenter.saveEpisode(PlaybackPosition(player.currentPosition))
         player.stopPlayback()
         super.onDestroy()
+
         pipController?.onDestroy()
         systemUiController?.onDestroy()
         playerStatistics?.onDestroy()
