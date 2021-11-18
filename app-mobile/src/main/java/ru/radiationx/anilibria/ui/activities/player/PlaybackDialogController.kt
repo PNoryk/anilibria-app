@@ -1,19 +1,19 @@
 package ru.radiationx.anilibria.ui.activities.player
 
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
 import org.michaelbel.bottomsheet.BottomSheet
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getColorFromAttr
 import ru.radiationx.anilibria.extension.isDark
-import ru.radiationx.data.analytics.features.PlayerAnalytics
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 
-class FinishDialogController(
+class PlaybackDialogController(
+    private val context: Context,
     private val appThemeHolder: AppThemeHolder
 ) {
 
     fun showSeasonFinishDialog(
-        context: Context,
         episodeRestartListener: () -> Unit,
         seasonRestartListener: () -> Unit,
         closePlayerListener: () -> Unit,
@@ -36,7 +36,6 @@ class FinishDialogController(
     }
 
     fun showEpisodeFinishDialog(
-        context: Context,
         episodeRestartListener: () -> Unit,
         startNextListener: () -> Unit
     ) {
@@ -53,6 +52,22 @@ class FinishDialogController(
             .setItemTextColor(context.getColorFromAttr(R.attr.textDefault))
             .setTitleTextColor(context.getColorFromAttr(R.attr.textSecond))
             .setBackgroundColor(context.getColorFromAttr(R.attr.colorSurface))
+            .show()
+    }
+
+    fun showAskStartEpisodeDialog(
+        onStartClick: () -> Unit,
+        onContinueClick: () -> Unit
+    ) {
+        val items = arrayOf(
+            "К началу" to onStartClick,
+            "К последней позиции" to onContinueClick
+        )
+        AlertDialog.Builder(context)
+            .setTitle("Перемотать")
+            .setItems(items.map { it.first }.toTypedArray()) { _, which ->
+                items[which].second.invoke()
+            }
             .show()
     }
 }

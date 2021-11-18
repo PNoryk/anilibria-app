@@ -11,24 +11,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType
 import com.devbrackets.android.exomedia.listener.*
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore
 import kotlinx.android.synthetic.main.activity_myplayer.*
 import kotlinx.android.synthetic.main.view_video_control.*
-import org.michaelbel.bottomsheet.BottomSheet
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.extension.getColorFromAttr
-import ru.radiationx.anilibria.extension.isDark
 import ru.radiationx.anilibria.ui.activities.BaseActivity
+import ru.radiationx.anilibria.ui.activities.player.controllers.PlaybackPosition
+import ru.radiationx.anilibria.ui.activities.player.controllers.PlaybackState
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
 import ru.radiationx.data.analytics.AnalyticsErrorReporter
 import ru.radiationx.data.analytics.features.PlayerAnalytics
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsQuality
-import ru.radiationx.data.analytics.features.model.AnalyticsEpisodeFinishAction
-import ru.radiationx.data.analytics.features.model.AnalyticsSeasonFinishAction
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.entity.app.release.ReleaseFull
@@ -49,7 +44,7 @@ fun PlayerQuality.toPrefQuality() = when (this) {
     PlayerQuality.FULL_HD -> PreferencesHolder.QUALITY_FULL_HD
 }
 
-class MyPlayerActivity : BaseActivity() {
+class MyPlayerActivity : BaseActivity(), PlayerMvpView {
 
     companion object {
         private const val ARG_RELEASE = "release"
@@ -104,6 +99,8 @@ class MyPlayerActivity : BaseActivity() {
     @Inject
     lateinit var errorReporter: AnalyticsErrorReporter
 
+    lateinit var presenter: PlayerPresenter
+
     private val useTimeCounter by lazy {
         LifecycleTimeCounter(playerAnalytics::useTime)
     }
@@ -122,7 +119,7 @@ class MyPlayerActivity : BaseActivity() {
         SettingDialogController(
             playerAnalytics = playerAnalytics,
             appThemeHolder = appThemeHolder,
-            qualityListener = { updateQuality(it) },
+            qualityListener = { presenter.updateQuality(it, createPlaybackState()) },
             speedListener = { updatePlaySpeed(it) },
             scaleListener = { updateScale(it) },
             pipListener = { updatePipControl(it) }
@@ -130,14 +127,14 @@ class MyPlayerActivity : BaseActivity() {
     }
 
     private val finishDialogController by lazy {
-        FinishDialogController(appThemeHolder)
+        PlaybackDialogController(appThemeHolder)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
-        currentPlaySpeed = loadPlaySpeed()
-        currentPipControl = loadPIPControl()
+        currentPlaySpeed = presenter.loadPlaySpeed()
+        currentPipControl = presenter.loadPIPControl()
         lifecycle.addObserver(useTimeCounter)
         initPipController()
         initSystemUiController()
@@ -146,6 +143,7 @@ class MyPlayerActivity : BaseActivity() {
         systemUiController?.onCreate()
         playerStatistics?.onCreate()
         setContentView(R.layout.activity_myplayer)
+
 
         player.setScaleType(currentScale)
         player.playbackSpeed = currentPlaySpeed
@@ -188,7 +186,7 @@ class MyPlayerActivity : BaseActivity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         pipController?.onModeChanged(isInPictureInPictureMode)
         Log.d("lalka", "onPictureInPictureModeChanged $isInPictureInPictureMode")
-        saveEpisode()
+        presenter.saveEpisode(PlaybackPosition(player.currentPosition))
         if (isInPictureInPictureMode) {
             videoControls?.hide()
             videoControls?.gone()
@@ -270,76 +268,31 @@ class MyPlayerActivity : BaseActivity() {
         this.currentQuality = quality
         this.playFlag = playFlag
 
-        updateAndPlayRelease()
+        presenter.onNewEpisode(release, episodeId, quality, playFlag)
     }
 
-    private fun updateAndPlayRelease() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(ActivityManager.TaskDescription(releaseData.title))
-        }
-
-        videoControls?.apply {
-            setTitle(releaseData.title)
-        }
-        playEpisode(getEpisode())
-    }
-
-    private fun loadScale(orientation: Int): ScaleType {
-        val scaleOrdinal =
-            defaultPreferences.getInt("video_ratio_$orientation", defaultScale.ordinal)
-        return ScaleType.fromOrdinal(scaleOrdinal)
-    }
-
-    private fun saveScale(orientation: Int, scale: ScaleType) {
-        defaultPreferences.edit().putInt("video_ratio_$orientation", scale.ordinal).apply()
-    }
-
-    private fun savePlaySpeed() {
-        playerAnalytics.settingsSpeedChange(currentPlaySpeed)
-        releaseInteractor.setPlaySpeed(currentPlaySpeed)
-    }
-
-    private fun loadPlaySpeed(): Float {
-        return releaseInteractor.getPlaySpeed()
-    }
-
-    private fun savePIPControl() {
-        releaseInteractor.setPIPControl(currentPipControl)
-    }
-
-    private fun loadPIPControl(): Int {
-        return releaseInteractor.getPIPControl()
-    }
 
     private fun updateScale(scale: ScaleType) {
         val inMultiWindow = getInMultiWindow()
         currentScale = scale
         if (!inMultiWindow) {
-            saveScale(resources.configuration.orientation, currentScale)
+            presenter.saveScale(resources.configuration.orientation, currentScale)
         }
         player?.setScaleType(currentScale)
     }
 
-    private fun updateQuality(newQuality: PlayerQuality) {
-        this.currentQuality = newQuality
-        val prefQuality = newQuality.toPrefQuality()
-        playerAnalytics.settingsQualityChange(prefQuality.toAnalyticsQuality())
-        appPreferences.setQuality(prefQuality)
-        saveEpisode()
-        updateAndPlayRelease()
-    }
 
     private fun updatePlaySpeed(newPlaySpeed: Float) {
         currentPlaySpeed = newPlaySpeed
         player.playbackSpeed = currentPlaySpeed
-        savePlaySpeed()
+        presenter.savePlaySpeed(currentPlaySpeed)
     }
 
     private fun updatePipControl(newPipControl: Int = currentPipControl) {
         currentPipControl = newPipControl
         val pipCheck = checkPipFeature() && newPipControl == PreferencesHolder.PIP_BUTTON
         videoControls?.setPictureInPictureEnabled(pipCheck)
-        savePIPControl()
+        presenter.savePIPControl(currentPipControl)
     }
 
     private fun checkPipFeature(): Boolean {
@@ -379,7 +332,7 @@ class MyPlayerActivity : BaseActivity() {
         updatePipRect()
 
         val currentOrientation = resources.configuration.orientation
-        val scale = loadScale(currentOrientation)
+        val scale = presenter.loadScale(currentOrientation)
         val inMultiWindow = getInMultiWindow()
 
         updateScale(if (inMultiWindow) defaultScale else scale)
@@ -406,20 +359,8 @@ class MyPlayerActivity : BaseActivity() {
             }
     }
 
-    private fun saveEpisode(position: Long = player.currentPosition) {
-        if (position < 0) {
-            return
-        }
-        releaseInteractor.putEpisode(getEpisode().apply {
-            Log.e("SUKA", "Set posistion seek: ${position}")
-            seek = position
-            lastAccess = System.currentTimeMillis()
-            isViewed = true
-        })
-    }
-
     override fun onDestroy() {
-        saveEpisode()
+        presenter.saveEpisode(PlaybackPosition(player.currentPosition))
         player.stopPlayback()
         super.onDestroy()
         pipController?.onDestroy()
@@ -431,113 +372,14 @@ class MyPlayerActivity : BaseActivity() {
         playerStatistics = null
     }
 
-    private fun checkIndex(id: Int): Boolean {
-        val lastId = releaseData.episodes.last().id
-        val firstId = releaseData.episodes.first().id
-        return id in lastId..firstId
-    }
-
-    private fun getNextEpisode(): ReleaseFull.Episode? {
-        val nextId = currentEpisodeId + 1
-        if (checkIndex(nextId)) {
-            Log.e("S_DEF_LOG", "NEXT INDEX $nextId")
-            return getEpisode(nextId)
-        }
-        return null
-    }
-
-    private fun getPrevEpisode(): ReleaseFull.Episode? {
-        val prevId = currentEpisodeId - 1
-        if (checkIndex(prevId)) {
-            Log.e("S_DEF_LOG", "PREV INDEX $prevId")
-            return getEpisode(prevId)
-        }
-        return null
-    }
-
     private fun getEpisode(id: Int = currentEpisodeId) = releaseData.episodes.first { it.id == id }
 
-    private fun getEpisodeId(episode: ReleaseFull.Episode) =
-        releaseData.episodes.first { it == episode }.id
 
-    private fun playEpisode(episode: ReleaseFull.Episode) {
-        when (playFlag) {
-            PlayerPlayFlag.ASK -> {
-                hardPlayEpisode(episode)
-                if (episode.seek > 0) {
-                    hardPlayEpisode(episode)
-                    val titles = arrayOf("К началу", "К последней позиции")
-                    AlertDialog.Builder(this)
-                        .setTitle("Перемотать")
-                        .setItems(titles) { _, which ->
-                            if (which == 1) {
-                                player.seekTo(episode.seek)
-                            }
-                        }
-                        .show()
-                }
-            }
-            PlayerPlayFlag.START -> {
-                hardPlayEpisode(episode)
-            }
-            PlayerPlayFlag.CONTINUE -> {
-                hardPlayEpisode(episode)
-                player.seekTo(episode.seek)
-            }
-        }
-        playFlag = PlayerPlayFlag.CONTINUE
-    }
-
-    private fun hardPlayEpisode(episode: ReleaseFull.Episode) {
-        toolbar.subtitle =
-            "${episode.title} [${settingsDialogController.getQualityTitle(currentQuality)}]"
-        currentEpisodeId = getEpisodeId(episode)
-        val videoPath = when (currentQuality) {
-            PlayerQuality.SD -> episode.urlSd
-            PlayerQuality.HD -> episode.urlHd
-            PlayerQuality.FULL_HD -> episode.urlFullHd
-        }
-        player.setVideoPath(videoPath)
-    }
-
-    private fun showSeasonFinishDialog() {
-        playerAnalytics.seasonFinish()
-
-        finishDialogController.showSeasonFinishDialog(
-            context = this,
-            episodeRestartListener = {
-                playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_EPISODE)
-                saveEpisode(0)
-                hardPlayEpisode(getEpisode())
-            },
-            seasonRestartListener = {
-                playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_SEASON)
-                releaseData.episodes.lastOrNull()?.also {
-                    hardPlayEpisode(it)
-                }
-            },
-            closePlayerListener = {
-                playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.CLOSE_PLAYER)
-                finish()
-            },
-        )
-    }
-
-    private fun showEpisodeFinishDialog() {
-        playerAnalytics.episodesFinish()
-        finishDialogController.showEpisodeFinishDialog(
-            context = this,
-            episodeRestartListener = {
-                playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.RESTART)
-                saveEpisode(0)
-                hardPlayEpisode(getEpisode())
-            },
-            startNextListener = {
-                playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.NEXT)
-                getNextEpisode()?.also { hardPlayEpisode(it) }
-            }
-        )
-    }
+    private fun createPlaybackState(): PlaybackState = PlaybackState(
+        PlaybackPosition(player.currentPosition),
+        PlaybackPosition(player.duration),
+        player.isPlaying
+    )
 
     private fun getSeekPercent(): Float {
         if (player == null) return 0f
@@ -593,51 +435,27 @@ class MyPlayerActivity : BaseActivity() {
 
     private val playerListener = object : OnPreparedListener, OnCompletionListener {
         override fun onPrepared() {
-            val episode = getEpisode()
-            if (episode.seek >= player.duration) {
-                player.stopPlayback()
-                if (getNextEpisode() == null) {
-                    showSeasonFinishDialog()
-                } else {
-                    showEpisodeFinishDialog()
-                }
-            } else {
-                player.start()
-            }
+            presenter.onPrepared(createPlaybackState())
         }
 
         override fun onCompletion() {
-            if (!controlsListener.onNextClicked()) {
-                showSeasonFinishDialog()
-            }
+            presenter.onComplete()
         }
     }
 
     private val controlsListener = object : VideoControlsButtonListener {
         override fun onPlayPauseClicked(): Boolean {
-            if (player.isPlaying) {
-                playerAnalytics.pauseClick()
-                player.pause()
-            } else {
-                playerAnalytics.playClick()
-                player.start()
-            }
+            presenter.onPlayPauseClick(createPlaybackState())
             return true
         }
 
         override fun onNextClicked(): Boolean {
-            playerAnalytics.nextClick(getSeekPercent())
-            saveEpisode()
-            val episode = getNextEpisode() ?: return false
-            playEpisode(episode)
+            presenter.onNextClick(createPlaybackState())
             return true
         }
 
         override fun onPreviousClicked(): Boolean {
-            playerAnalytics.prevClick(getSeekPercent())
-            saveEpisode()
-            val episode = getPrevEpisode() ?: return false
-            playEpisode(episode)
+            presenter.onPrevClick(createPlaybackState())
             return true
         }
 
@@ -659,5 +477,40 @@ class MyPlayerActivity : BaseActivity() {
             Log.e("MyPlayer", "onControlsHidden $supportActionBar")
             systemUiController?.goFullscreen()
         }
+    }
+
+    /* PlayerMvpView */
+
+    override fun setReleaseInfo(releaseTitle: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setTaskDescription(ActivityManager.TaskDescription(releaseTitle))
+        }
+        videoControls?.setTitle(releaseTitle)
+    }
+
+    override fun setEpisodeInfo(episodeTitle: String, quality: PlayerQuality) {
+        val qualityString = settingsDialogController.getQualityTitle(currentQuality)
+        toolbar.subtitle = "$episodeTitle [$qualityString]"
+    }
+
+    override fun startPlayer(url: String, position: PlaybackPosition) {
+        player.setVideoPath(url)
+        player.seekTo(position.position)
+    }
+
+    override fun playPlayer() {
+        player.start()
+    }
+
+    override fun pausePlayer() {
+        player.pause()
+    }
+
+    override fun stopPlayer() {
+        player.stopPlayback()
+    }
+
+    override fun closeScreen() {
+        finish()
     }
 }
