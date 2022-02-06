@@ -1,11 +1,10 @@
 package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONArray
+import ru.radiationx.shared.ktx.android.mapStrings
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
-import tv.anilibria.module.data.network.entity.app.release.GenreItemResponse
-import tv.anilibria.module.data.network.entity.app.release.YearItemResponse
 import tv.anilibria.module.data.network.entity.app.search.SuggestionItemResponse
 import javax.inject.Inject
 
@@ -34,30 +33,12 @@ class SearchParser @Inject constructor(
         return result
     }
 
-    fun years(jsonResponse: JSONArray): List<YearItemResponse> {
-        val result: MutableList<YearItemResponse> = mutableListOf()
-        for (i in 0 until jsonResponse.length()) {
-            val yearText = jsonResponse.getString(i)
-            val genreItem = YearItemResponse().apply {
-                title = yearText
-                value = yearText
-            }
-            result.add(genreItem)
-        }
-        return result
+    fun years(jsonResponse: JSONArray): List<String> {
+        return jsonResponse.mapStrings { it }
     }
 
-    fun genres(jsonResponse: JSONArray): List<GenreItemResponse> {
-        val result: MutableList<GenreItemResponse> = mutableListOf()
-        for (i in 0 until jsonResponse.length()) {
-            val genreText = jsonResponse.getString(i)
-            val genreItem = GenreItemResponse().apply {
-                title = genreText.capitalize()
-                value = genreText
-            }
-            result.add(genreItem)
-        }
-        return result
+    fun genres(jsonResponse: JSONArray): List<String> {
+        return jsonResponse.mapStrings { it }
     }
 
 }

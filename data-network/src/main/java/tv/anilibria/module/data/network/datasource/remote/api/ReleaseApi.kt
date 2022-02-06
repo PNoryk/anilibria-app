@@ -11,7 +11,6 @@ import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.release.RandomReleaseResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
-import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
 import javax.inject.Inject
 
 /* Created by radiationx on 31.10.17. */
@@ -51,7 +50,7 @@ class ReleaseApi @Inject constructor(
             .map { releaseParser.release(it) }
     }
 
-    fun getReleasesByIds(ids: List<Int>): Single<List<ReleaseItem>> {
+    fun getReleasesByIds(ids: List<Int>): Single<List<ReleaseResponse>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "info",
             "id" to ids.joinToString(","),
@@ -63,7 +62,7 @@ class ReleaseApi @Inject constructor(
             .map { releaseParser.releases(it) }
     }
 
-    fun getReleases(page: Int): Single<PaginatedResponse<List<ReleaseItem>>> {
+    fun getReleases(page: Int): Single<PaginatedResponse<List<ReleaseResponse>>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "list",
             "page" to page.toString(),

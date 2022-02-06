@@ -10,9 +10,7 @@ import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.SearchParser
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
-import tv.anilibria.module.data.network.entity.app.release.GenreItemResponse
-import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
-import tv.anilibria.module.data.network.entity.app.release.YearItemResponse
+import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.network.entity.app.search.SuggestionItemResponse
 import javax.inject.Inject
 
@@ -23,7 +21,7 @@ class SearchApi @Inject constructor(
     private val apiConfig: ApiConfig
 ) {
 
-    fun getGenres(): Single<List<GenreItemResponse>> {
+    fun getGenres(): Single<List<String>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "genres"
         )
@@ -32,7 +30,7 @@ class SearchApi @Inject constructor(
             .map { searchParser.genres(it) }
     }
 
-    fun getYears(): Single<List<YearItemResponse>> {
+    fun getYears(): Single<List<String>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "years"
         )
@@ -59,7 +57,7 @@ class SearchApi @Inject constructor(
         sort: String,
         complete: String,
         page: Int
-    ): Single<PaginatedResponse<List<ReleaseItem>>> {
+    ): Single<PaginatedResponse<List<ReleaseResponse>>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "catalog",
             "search" to JSONObject().apply {

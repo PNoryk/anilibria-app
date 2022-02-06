@@ -8,7 +8,7 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
-import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
+import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import javax.inject.Inject
 
 class FavoriteApi @Inject constructor(
@@ -17,7 +17,7 @@ class FavoriteApi @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun getFavorites(page: Int): Single<PaginatedResponse<List<ReleaseItem>>> {
+    fun getFavorites(page: Int): Single<PaginatedResponse<List<ReleaseResponse>>> {
         val args: MutableMap<String, String> = mutableMapOf(
                 "query" to "favorites",
                 "page" to page.toString(),
@@ -29,7 +29,7 @@ class FavoriteApi @Inject constructor(
                 .map { releaseParser.releases(it) }
     }
 
-    fun addFavorite(releaseId: Int): Single<ReleaseItem> {
+    fun addFavorite(releaseId: Int): Single<ReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
                 "query" to "favorites",
                 "action" to "add",
@@ -40,7 +40,7 @@ class FavoriteApi @Inject constructor(
                 .map { releaseParser.release(it) }
     }
 
-    fun deleteFavorite(releaseId: Int): Single<ReleaseItem> {
+    fun deleteFavorite(releaseId: Int): Single<ReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
                 "query" to "favorites",
                 "action" to "delete",
