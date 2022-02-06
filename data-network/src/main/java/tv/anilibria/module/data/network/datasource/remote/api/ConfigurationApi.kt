@@ -79,7 +79,7 @@ class ConfigurationApi @Inject constructor(
             .timeout(10, TimeUnit.SECONDS)
             .compose(ApiResponse.fetchResult<JSONObject>())
             .doOnSuccess { apiConfigStorage.saveJson(it) }
-            .map { configurationParser.parse(it) }
+            .map { configurationParser.parse(it).addresses }
             .doOnSuccess { apiConfig.setAddresses(it) }
     }
 
@@ -92,7 +92,7 @@ class ConfigurationApi @Inject constructor(
         mainClient.get(url, emptyMap())
             .map { JSONObject(it) }
             .doOnSuccess { apiConfigStorage.saveJson(it) }
-            .map { configurationParser.parse(it) }
+            .map { configurationParser.parse(it).addresses }
             .doOnSuccess { apiConfig.setAddresses(it) }
 
 }

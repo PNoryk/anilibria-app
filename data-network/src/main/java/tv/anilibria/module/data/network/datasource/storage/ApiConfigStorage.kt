@@ -29,7 +29,7 @@ class ApiConfigStorage @Inject constructor(
 
     fun get(): List<ApiAddressResponse>? = sharedPreferences
         .getString(KEY_API_CONFIG, null)
-        ?.let { configurationParser.parse(JSONObject(it)) }
+        ?.let { configurationParser.parse(JSONObject(it)).addresses }
         .also {
             Log.e("bobobo", "get saved config: ${it?.size}")
         }

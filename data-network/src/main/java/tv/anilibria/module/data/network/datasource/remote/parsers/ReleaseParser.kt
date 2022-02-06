@@ -4,16 +4,17 @@ import org.json.JSONArray
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.mapObjects
 import ru.radiationx.shared.ktx.android.mapStrings
-import ru.radiationx.shared.ktx.android.nullGet
 import ru.radiationx.shared.ktx.android.nullString
-import tv.anilibria.module.data.network.entity.app.PaginatedResponse
+import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.release.*
 import javax.inject.Inject
 
 /**
  * Created by radiationx on 18.12.17.
  */
-class ReleaseParser @Inject constructor() {
+class ReleaseParser @Inject constructor(
+    private val paginationParser: PaginationParser
+) {
 
     fun parseRandomRelease(jsonItem: JSONObject): RandomReleaseResponse = RandomReleaseResponse(
         jsonItem.getString("code")
@@ -23,16 +24,10 @@ class ReleaseParser @Inject constructor() {
         return jsonItems.mapObjects { parseRelease(it) }
     }
 
-    fun releases(jsonResponse: JSONObject): PaginatedResponse<List<ReleaseResponse>> {
-        val jsonItems = jsonResponse.getJSONArray("items")
-        val resItems = releases(jsonItems)
-        val pagination = PaginatedResponse(resItems)
-        val jsonNav = jsonResponse.getJSONObject("pagination")
-        jsonNav.nullGet("page")?.let { pagination.page = it.toString().toInt() }
-        jsonNav.nullGet("perPage")?.let { pagination.perPage = it.toString().toInt() }
-        jsonNav.nullGet("allPages")?.let { pagination.allPages = it.toString().toInt() }
-        jsonNav.nullGet("allItems")?.let { pagination.allItems = it.toString().toInt() }
-        return pagination
+    fun releases(jsonResponse: JSONObject): PageResponse<ReleaseResponse> {
+        return paginationParser.parse(jsonResponse) {
+            releases(it)
+        }
     }
 
     fun parseRelease(jsonResponse: JSONObject): ReleaseResponse {
