@@ -16,21 +16,21 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 13.01.18.
  */
-class PageApi @Inject constructor(
+class PageRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     private val pagesParser: PagesParser,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : PageRemoteDataSource {
 
-    fun getPage(pagePath: String): Single<PageLibria> {
+    override fun getPage(pagePath: String): Single<PageLibria> {
         return client
             .get("${apiConfig.baseUrl}/$pagePath", emptyMap())
             .map { pagesParser.baseParse(it) }
             .map { it.toDomain() }
     }
 
-    fun getComments(): Single<VkComments> {
+    override fun getComments(): Single<VkComments> {
         val args = mapOf(
             "query" to "vkcomments"
         )

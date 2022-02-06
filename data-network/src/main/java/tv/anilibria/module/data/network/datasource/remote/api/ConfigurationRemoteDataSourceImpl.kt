@@ -15,33 +15,33 @@ import tv.anilibria.module.domain.entity.address.ApiAddress
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ConfigurationApi @Inject constructor(
+class ConfigurationRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     @MainClient private val mainClient: IClient,
     private val apiConfig: ApiConfigProvider,
     private val schedulers: SchedulersProvider,
     private val moshi: Moshi
-) {
+) : ConfigurationRemoteDataSource {
 
-    fun checkAvailable(apiUrl: String): Single<Boolean> = check(mainClient, apiUrl)
+    override fun checkAvailable(apiUrl: String): Single<Boolean> = check(mainClient, apiUrl)
         .timeout(15, TimeUnit.SECONDS)
 
-    fun checkApiAvailable(apiUrl: String): Single<Boolean> = check(client, apiUrl)
+    override fun checkApiAvailable(apiUrl: String): Single<Boolean> = check(client, apiUrl)
         .onErrorReturnItem(false)
         .timeout(15, TimeUnit.SECONDS)
 
-    fun getConfiguration(): Single<List<ApiAddress>> = getMergeConfig()
+    override fun getConfiguration(): Single<List<ApiAddress>> = getMergeConfig()
         .doOnSuccess {
             if (it.isEmpty()) {
                 throw IllegalStateException("Empty config adresses")
             }
         }
 
-    private fun check(client: IClient, apiUrl: String): Single<Boolean> =
+    override fun check(client: IClient, apiUrl: String): Single<Boolean> =
         client.postFull(apiUrl, mapOf("query" to "empty"))
             .map { true }
 
-    private fun getMergeConfig(): Single<List<ApiAddress>> = Single
+    override fun getMergeConfig(): Single<List<ApiAddress>> = Single
         .merge(
             getConfigFromApi()
                 .subscribeOn(schedulers.io())
@@ -53,7 +53,7 @@ class ConfigurationApi @Inject constructor(
         .filter { it.isNotEmpty() }
         .first(emptyList())
 
-    private fun getConfigFromApi(): Single<List<ApiAddress>> {
+    override fun getConfigFromApi(): Single<List<ApiAddress>> {
         val args = mapOf(
             "query" to "config"
         )
@@ -64,12 +64,12 @@ class ConfigurationApi @Inject constructor(
             .map { it.addresses }
     }
 
-    private fun getConfigFromReserve(): Single<List<ApiAddress>> {
+    override fun getConfigFromReserve(): Single<List<ApiAddress>> {
         return getReserve("https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
             .onErrorResumeNext { getReserve("https://bitbucket.org/RadiationX/anilibria-app/raw/master/config.json") }
     }
 
-    private fun getReserve(url: String): Single<List<ApiAddress>> =
+    override fun getReserve(url: String): Single<List<ApiAddress>> =
         mainClient.get(url, emptyMap())
             .mapResponse<ApiConfigResponse>(moshi)
             .map { it.toDomain() }

@@ -6,25 +6,27 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
-import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
+import tv.anilibria.module.data.network.entity.app.PageResponse
+import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
-import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.module.domain.entity.Page
+import tv.anilibria.module.domain.entity.youtube.Youtube
 import javax.inject.Inject
 
-class MenuApi @Inject constructor(
+class YoutubeRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : YoutubeRemoteDataSource {
 
-    fun getMenu(): Single<List<LinkMenuItem>> {
+    override fun getYoutubeList(page: Int): Single<Page<Youtube>> {
         val args = mapOf(
-            "query" to "link_menu"
+            "query" to "youtube",
+            "page" to page.toString()
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse<List<LinkMenuItemResponse>>(moshi)
-            .map { items -> items.map { it.toDomain() } }
+            .mapApiResponse<PageResponse<YoutubeResponse>>(moshi)
+            .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
     }
-
 }

@@ -13,13 +13,13 @@ import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
-class FavoriteApi @Inject constructor(
+class FavoriteRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : FavoriteRemoteDataSource {
 
-    fun getFavorites(page: Int): Single<Page<Release>> {
+    override fun getFavorites(page: Int): Single<Page<Release>> {
         val args = mapOf(
             "query" to "favorites",
             "page" to page.toString(),
@@ -36,7 +36,7 @@ class FavoriteApi @Inject constructor(
             }
     }
 
-    fun addFavorite(releaseId: Int): Single<Release> {
+    override fun addFavorite(releaseId: Int): Single<Release> {
         val args = mapOf(
             "query" to "favorites",
             "action" to "add",
@@ -48,7 +48,7 @@ class FavoriteApi @Inject constructor(
             .map { it.toDomain() }
     }
 
-    fun deleteFavorite(releaseId: Int): Single<Release> {
+    override fun deleteFavorite(releaseId: Int): Single<Release> {
         val args = mapOf(
             "query" to "favorites",
             "action" to "delete",

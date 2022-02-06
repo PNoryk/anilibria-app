@@ -24,14 +24,14 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 30.12.17.
  */
-class AuthApi @Inject constructor(
+class AuthRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     private val authParser: AuthParser,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : AuthRemoteDataSource {
 
-    fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
+    override fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
         val args = mapOf(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
@@ -43,7 +43,7 @@ class AuthApi @Inject constructor(
             .map { it.toDomain() }
     }
 
-    fun acceptOtp(code: String): Completable {
+    override fun acceptOtp(code: String): Completable {
         val args = mapOf(
             "query" to "auth_accept_otp",
             "code" to code
@@ -55,7 +55,7 @@ class AuthApi @Inject constructor(
             .ignoreElement()
     }
 
-    fun signInOtp(code: String, deviceId: String): Completable {
+    override fun signInOtp(code: String, deviceId: String): Completable {
         val args = mapOf(
             "query" to "auth_login_otp",
             "deviceId" to deviceId,
@@ -68,7 +68,7 @@ class AuthApi @Inject constructor(
             .ignoreElement()
     }
 
-    fun signIn(login: String, password: String, code2fa: String): Completable {
+    override fun signIn(login: String, password: String, code2fa: String): Completable {
         val args = mapOf(
             "mail" to login,
             "passwd" to password,
@@ -81,7 +81,7 @@ class AuthApi @Inject constructor(
             .ignoreElement()
     }
 
-    fun loadSocialAuth(): Single<List<SocialAuthService>> {
+    override fun loadSocialAuth(): Single<List<SocialAuthService>> {
         val args = mapOf(
             "query" to "social_auth"
         )
@@ -91,7 +91,7 @@ class AuthApi @Inject constructor(
             .map { items -> items.map { it.toDomain() } }
     }
 
-    fun signInSocial(resultUrl: String, item: SocialAuthService): Completable {
+    override fun signInSocial(resultUrl: String, item: SocialAuthService): Completable {
         val fixedUrl = Uri.parse(apiConfig.baseUrl).host?.let { redirectDomain ->
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
@@ -117,7 +117,7 @@ class AuthApi @Inject constructor(
             .ignoreElement()
     }
 
-    fun signOut(): Single<String> {
+    override fun signOut(): Single<String> {
         return client.post("${apiConfig.baseUrl}/public/logout.php", emptyMap())
     }
 

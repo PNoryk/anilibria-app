@@ -14,14 +14,14 @@ import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
 @InjectConstructor
-class DonationApi(
+class DonationRemoteDataSourceImpl(
     @ApiClient private val client: IClient,
     @MainClient private val mainClient: IClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : DonationRemoteDataSource {
 
-    fun getDonationDetail(): Single<DonationInfo> {
+    override fun getDonationDetail(): Single<DonationInfo> {
         val args = mapOf(
             "query" to "donation_details"
         )
@@ -32,7 +32,7 @@ class DonationApi(
     }
 
     // Doc https://yoomoney.ru/docs/payment-buttons/using-api/forms
-    fun createYooMoneyPayLink(
+    override fun createYooMoneyPayLink(
         amount: Int,
         type: String,
         form: YooMoneyDialog.YooMoneyForm

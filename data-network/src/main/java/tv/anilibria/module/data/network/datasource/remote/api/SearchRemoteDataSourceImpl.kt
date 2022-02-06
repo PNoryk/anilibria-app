@@ -2,65 +2,47 @@ package tv.anilibria.module.data.network.datasource.remote.api
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
+import org.json.JSONObject
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.PageResponse
-import tv.anilibria.module.data.network.entity.app.release.RandomReleaseResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
-import tv.anilibria.module.domain.entity.release.RandomRelease
 import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
-/* Created by radiationx on 31.10.17. */
-
-class ReleaseApi @Inject constructor(
+class SearchRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : SearchRemoteDataSource {
 
-    fun getRandomRelease(): Single<RandomRelease> {
+    override fun getGenres(): Single<List<String>> {
         val args = mapOf(
-            "query" to "random_release"
+            "query" to "genres"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse<RandomReleaseResponse>(moshi)
-            .map { it.toDomain() }
+            .mapApiResponse(moshi)
     }
 
-    fun getRelease(releaseId: Int): Single<Release> {
+    override fun getYears(): Single<List<String>> {
         val args = mapOf(
-            "query" to "release",
-            "id" to releaseId.toString()
+            "query" to "years"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse<ReleaseResponse>(moshi)
-            .map { it.toDomain() }
+            .mapApiResponse(moshi)
     }
 
-    fun getRelease(releaseCode: String): Single<Release> {
+    override fun fastSearch(name: String): Single<List<Release>> {
         val args = mapOf(
-            "query" to "release",
-            "code" to releaseCode
-        )
-        return client
-            .post(apiConfig.apiUrl, args)
-            .mapApiResponse<ReleaseResponse>(moshi)
-            .map { it.toDomain() }
-    }
-
-    fun getReleasesByIds(ids: List<Int>): Single<List<Release>> {
-        val args = mapOf(
-            "query" to "info",
-            "id" to ids.joinToString(","),
-            "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
-            "rm" to "true"
+            "query" to "search",
+            "search" to name,
+            "filter" to "id,code,names,poster"
         )
         return client
             .post(apiConfig.apiUrl, args)
@@ -68,9 +50,24 @@ class ReleaseApi @Inject constructor(
             .map { items -> items.map { it.toDomain() } }
     }
 
-    fun getReleases(page: Int): Single<Page<Release>> {
+    override fun searchReleases(
+        genre: String,
+        year: String,
+        season: String,
+        sort: String,
+        complete: String,
+        page: Int
+    ): Single<Page<Release>> {
         val args = mapOf(
-            "query" to "list",
+            "query" to "catalog",
+            "search" to JSONObject().apply {
+                put("genre", genre)
+                put("year", year)
+                put("season", season)
+            }.toString(),
+            "finish" to complete,
+            "xpage" to "catalog",
+            "sort" to sort,
             "page" to page.toString(),
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"
@@ -80,6 +77,5 @@ class ReleaseApi @Inject constructor(
             .mapApiResponse<PageResponse<ReleaseResponse>>(moshi)
             .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
     }
-}
 
-        
+}

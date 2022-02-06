@@ -6,28 +6,27 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
-import tv.anilibria.module.data.network.entity.app.feed.FeedResponse
+import tv.anilibria.module.data.network.entity.app.other.UserResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
-import tv.anilibria.module.domain.entity.feed.Feed
+import tv.anilibria.module.domain.entity.other.User
 import javax.inject.Inject
 
-class FeedApi @Inject constructor(
+/**
+ * Created by radiationx on 30.12.17.
+ */
+class UserRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : UserRemoteDataSource {
 
-    fun getFeed(page: Int): Single<List<Feed>> {
+    override fun loadUser(): Single<User> {
         val args = mapOf(
-            "query" to "feed",
-            "page" to page.toString(),
-            "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
-            "rm" to "true"
+            "query" to "user"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse<List<FeedResponse>>(moshi)
-            .map { items -> items.map { it.toDomain() } }
+            .mapApiResponse<UserResponse>(moshi)
+            .map { it.toDomain() }
     }
-
 }

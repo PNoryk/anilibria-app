@@ -17,15 +17,15 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 28.01.18.
  */
-class CheckerApi @Inject constructor(
+class CheckerRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     @MainClient private val mainClient: IClient,
     private val apiConfig: ApiConfigProvider,
     private val reserveSources: CheckerReserveSources,
     private val moshi: Moshi
-) {
+) : CheckerRemoteDataSource {
 
-    fun checkUpdate(versionCode: Int): Single<UpdateData> {
+    override fun checkUpdate(versionCode: Int): Single<UpdateData> {
         val args = mapOf(
             "query" to "app_update",
             "current" to versionCode.toString()
@@ -43,7 +43,7 @@ class CheckerApi @Inject constructor(
             .map { it.toDomain() }
     }
 
-    private fun getReserve(url: String): Single<UpdateDataResponse> =
+    override fun getReserve(url: String): Single<UpdateDataResponse> =
         mainClient
             .get(url, emptyMap())
             .mapResponse(moshi)

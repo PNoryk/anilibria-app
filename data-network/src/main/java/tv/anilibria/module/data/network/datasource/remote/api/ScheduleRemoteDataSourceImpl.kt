@@ -6,27 +6,27 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
-import tv.anilibria.module.data.network.entity.app.other.UserResponse
+import tv.anilibria.module.data.network.entity.app.schedule.ScheduleDayResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
-import tv.anilibria.module.domain.entity.other.User
+import tv.anilibria.module.domain.entity.schedule.ScheduleDay
 import javax.inject.Inject
 
-/**
- * Created by radiationx on 30.12.17.
- */
-class UserApi @Inject constructor(
+class ScheduleRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: IClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) {
+) : ScheduleRemoteDataSource {
 
-    fun loadUser(): Single<User> {
+    override fun getSchedule(): Single<List<ScheduleDay>> {
         val args = mapOf(
-            "query" to "user"
+            "query" to "schedule",
+            "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
+            "rm" to "true"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse<UserResponse>(moshi)
-            .map { it.toDomain() }
+            .mapApiResponse<List<ScheduleDayResponse>>(moshi)
+            .map { items -> items.map { it.toDomain() } }
     }
+
 }
