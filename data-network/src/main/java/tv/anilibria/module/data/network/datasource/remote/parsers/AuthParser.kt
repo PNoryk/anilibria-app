@@ -2,13 +2,12 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONArray
 import org.json.JSONObject
+import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.auth.*
 import tv.anilibria.module.data.network.entity.app.other.UserResponse
-import tv.anilibria.module.data.network.entity.common.AuthState
-import ru.radiationx.shared.ktx.android.nullString
 import java.util.*
 import javax.inject.Inject
 
@@ -61,13 +60,13 @@ class AuthParser @Inject constructor(
     }
 
     fun parseUser(responseJson: JSONObject): UserResponse {
-        val user = UserResponse()
-        user.id = responseJson.getInt("id")
-        user.nick = responseJson.nullString("login").orEmpty()
-        user.avatarUrl = responseJson.nullString("avatar")?.let {
-            "${apiConfig.baseImagesUrl}$it"
-        }
-        user.authState = AuthState.AUTH
+        val user = UserResponse(
+            responseJson.getInt("id"),
+            responseJson.nullString("avatar")?.let {
+                "${apiConfig.baseImagesUrl}$it"
+            },
+            responseJson.nullString("login").orEmpty()
+        )
         return user
     }
 
