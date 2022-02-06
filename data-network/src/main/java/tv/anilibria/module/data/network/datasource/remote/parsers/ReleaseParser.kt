@@ -63,7 +63,7 @@ class ReleaseParser @Inject constructor(
         }
 
         val blockedInfo = jsonResponse.optJSONObject("blockedInfo")?.let { jsonBlockedInfo ->
-            BlockedInfo(
+            BlockedInfoResponse(
                 jsonBlockedInfo.getBoolean("blocked"),
                 jsonBlockedInfo.nullString("reason")
             )

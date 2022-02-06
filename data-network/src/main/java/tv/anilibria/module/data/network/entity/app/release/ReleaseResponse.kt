@@ -19,7 +19,7 @@ data class ReleaseResponse(
     val announce: String?,
     val favoriteInfo: FavoriteInfoResponse?,
     val showDonateDialog: Boolean?,
-    val blockedInfo: BlockedInfo?,
+    val blockedInfo: BlockedInfoResponse?,
     val moonwalkLink: String?,
     val episodes: List<EpisodeResponse>?,
     val externalPlaylists: List<ExternalPlaylistResponse>?,
