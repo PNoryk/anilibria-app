@@ -2,7 +2,7 @@ package tv.anilibria.module.data.network.entity.app.other
 
 import tv.anilibria.module.data.network.entity.common.AuthState
 
-class ProfileItem {
+class UserResponse {
 
     companion object {
         const val NO_ID = -1
@@ -18,7 +18,7 @@ class ProfileItem {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ProfileItem
+        other as UserResponse
 
         if (authState != other.authState) return false
         if (avatarUrl != other.avatarUrl) return false

@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import org.json.JSONObject
 import tv.anilibria.module.data.network.DataPreferences
-import tv.anilibria.module.data.network.datasource.remote.address.ApiAddress
+import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.ConfigurationParser
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ class ApiConfigStorage @Inject constructor(
         }
     }
 
-    fun get(): List<ApiAddress>? = sharedPreferences
+    fun get(): List<ApiAddressResponse>? = sharedPreferences
             .getString(KEY_API_CONFIG, null)
             ?.let { configurationParser.parse(JSONObject(it)) }
             .also {

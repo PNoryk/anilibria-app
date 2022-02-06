@@ -7,7 +7,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import tv.anilibria.module.data.network.DataPreferences
 import tv.anilibria.module.data.network.datasource.holders.SocialAuthHolder
-import tv.anilibria.module.data.network.entity.app.auth.SocialAuth
+import tv.anilibria.module.data.network.entity.app.auth.SocialAuthServiceResponse
 import javax.inject.Inject
 
 class SocialAuthStorage @Inject constructor(
@@ -16,11 +16,11 @@ class SocialAuthStorage @Inject constructor(
 
     private val dataRelay = BehaviorRelay.createDefault(getSavedData())
 
-    override fun get(): List<SocialAuth> = dataRelay.value!!
+    override fun get(): List<SocialAuthServiceResponse> = dataRelay.value!!
 
-    override fun observe(): Observable<List<SocialAuth>> = dataRelay.hide()
+    override fun observe(): Observable<List<SocialAuthServiceResponse>> = dataRelay.hide()
 
-    override fun save(items: List<SocialAuth>) {
+    override fun save(items: List<SocialAuthServiceResponse>) {
         saveData(items)
         dataRelay.accept(items)
     }
@@ -30,13 +30,13 @@ class SocialAuthStorage @Inject constructor(
         dataRelay.accept(emptyList())
     }
 
-    private fun getSavedData(): List<SocialAuth> {
-        val resultItems = mutableListOf<SocialAuth>()
+    private fun getSavedData(): List<SocialAuthServiceResponse> {
+        val resultItems = mutableListOf<SocialAuthServiceResponse>()
         sharedPreferences.getString("social_auth", null)?.also {
             val itemsJson = JSONArray(it)
             for (j in 0 until itemsJson.length()) {
                 val jsonItem = itemsJson.getJSONObject(j)
-                resultItems.add(SocialAuth(
+                resultItems.add(SocialAuthServiceResponse(
                         jsonItem.getString("key"),
                         jsonItem.getString("title"),
                         jsonItem.getString("socialUrl"),
@@ -48,7 +48,7 @@ class SocialAuthStorage @Inject constructor(
         return resultItems
     }
 
-    private fun saveData(items: List<SocialAuth>) {
+    private fun saveData(items: List<SocialAuthServiceResponse>) {
         val resultJson = JSONArray()
         items.forEach { item ->
             resultJson.put(JSONObject().apply {

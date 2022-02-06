@@ -7,7 +7,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import tv.anilibria.module.data.network.DataPreferences
 import tv.anilibria.module.data.network.datasource.holders.GenresHolder
-import tv.anilibria.module.data.network.entity.app.release.GenreItem
+import tv.anilibria.module.data.network.entity.app.release.GenreItemResponse
 import javax.inject.Inject
 
 /**
@@ -21,23 +21,23 @@ class GenresStorage @Inject constructor(
         private const val LOCAL_GENRES_KEY = "data.local_genres"
     }
 
-    private val localGenres = mutableListOf<GenreItem>()
+    private val localGenres = mutableListOf<GenreItemResponse>()
     private val localGenresRelay = BehaviorRelay.createDefault(localGenres)
 
     init {
         loadAll()
     }
 
-    override fun observeGenres(): Observable<MutableList<GenreItem>> = localGenresRelay
+    override fun observeGenres(): Observable<MutableList<GenreItemResponse>> = localGenresRelay
 
-    override fun saveGenres(genres: List<GenreItem>) {
+    override fun saveGenres(genres: List<GenreItemResponse>) {
         localGenres.clear()
         localGenres.addAll(genres)
         saveAll()
         localGenresRelay.accept(localGenres)
     }
 
-    override fun getGenres(): List<GenreItem> = localGenres
+    override fun getGenres(): List<GenreItemResponse> = localGenres
 
     private fun saveAll() {
         val jsonGenres = JSONArray()
@@ -59,7 +59,7 @@ class GenresStorage @Inject constructor(
             val jsonGenres = JSONArray(it)
             (0 until jsonGenres.length()).forEach {
                 jsonGenres.getJSONObject(it).let {
-                    localGenres.add(GenreItem().apply {
+                    localGenres.add(GenreItemResponse().apply {
                         title = it.getString("title")
                         value = it.getString("value")
                     })

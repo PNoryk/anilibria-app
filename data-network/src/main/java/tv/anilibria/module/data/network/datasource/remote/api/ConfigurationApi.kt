@@ -8,7 +8,7 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiAddress
+import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ConfigurationParser
 import tv.anilibria.module.data.network.datasource.storage.ApiConfigStorage
@@ -31,7 +31,7 @@ class ConfigurationApi @Inject constructor(
         .onErrorReturnItem(false)
         .timeout(15, TimeUnit.SECONDS)
 
-    fun getConfiguration(): Single<List<ApiAddress>> = getMergeConfig()
+    fun getConfiguration(): Single<List<ApiAddressResponse>> = getMergeConfig()
         .doOnSuccess {
             if (it.isEmpty()) {
                 throw IllegalStateException("Empty config adresses")
@@ -43,7 +43,7 @@ class ConfigurationApi @Inject constructor(
             .map { true }
 
 
-    private fun getMergeConfig(): Single<List<ApiAddress>> = Single
+    private fun getMergeConfig(): Single<List<ApiAddressResponse>> = Single
         .merge(
             getConfigFromApi()
                 .subscribeOn(schedulers.io())
@@ -55,7 +55,7 @@ class ConfigurationApi @Inject constructor(
         .filter { it.isNotEmpty() }
         .first(emptyList())
 
-    private fun getZipConfig(): Single<List<ApiAddress>> = Single
+    private fun getZipConfig(): Single<List<ApiAddressResponse>> = Single
         .zip(
             getConfigFromApi()
                 .subscribeOn(schedulers.io())
@@ -63,7 +63,7 @@ class ConfigurationApi @Inject constructor(
             getConfigFromReserve()
                 .subscribeOn(schedulers.io())
                 .onErrorReturn { emptyList() },
-            BiFunction<List<ApiAddress>, List<ApiAddress>, List<ApiAddress>> { conf1, conf2 ->
+            BiFunction<List<ApiAddressResponse>, List<ApiAddressResponse>, List<ApiAddressResponse>> { conf1, conf2 ->
                 val addresses1 = conf1.takeIf { it.isNotEmpty() }
                 val addresses2 = conf2.takeIf { it.isNotEmpty() }
                 return@BiFunction (addresses1 ?: addresses2).orEmpty()
@@ -71,7 +71,7 @@ class ConfigurationApi @Inject constructor(
         )
 
 
-    private fun getConfigFromApi(): Single<List<ApiAddress>> {
+    private fun getConfigFromApi(): Single<List<ApiAddressResponse>> {
         val args = mapOf(
             "query" to "config"
         )
@@ -83,12 +83,12 @@ class ConfigurationApi @Inject constructor(
             .doOnSuccess { apiConfig.setAddresses(it) }
     }
 
-    private fun getConfigFromReserve(): Single<List<ApiAddress>> {
+    private fun getConfigFromReserve(): Single<List<ApiAddressResponse>> {
         return getReserve("https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
             .onErrorResumeNext { getReserve("https://bitbucket.org/RadiationX/anilibria-app/raw/master/config.json") }
     }
 
-    private fun getReserve(url: String): Single<List<ApiAddress>> = mainClient.get(url, emptyMap())
+    private fun getReserve(url: String): Single<List<ApiAddressResponse>> = mainClient.get(url, emptyMap())
         .map { JSONObject(it) }
         .doOnSuccess { apiConfigStorage.saveJson(it) }
         .map { configurationParser.parse(it) }

@@ -29,7 +29,7 @@ package tv.anilibria.module.data.network.entity.app.updater
     "text":""
 }
 }*/
-class UpdateData {
+class UpdateDataResponse {
     var code: Int = 0
     var build: Int = 0
     var name: String? = null

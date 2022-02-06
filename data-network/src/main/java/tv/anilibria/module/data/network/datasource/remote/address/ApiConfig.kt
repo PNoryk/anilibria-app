@@ -11,7 +11,7 @@ class ApiConfig @Inject constructor(
         private val apiConfigStorage: ApiConfigStorage
 ) {
 
-    private val addresses = mutableListOf<ApiAddress>()
+    private val addresses = mutableListOf<ApiAddressResponse>()
     private var activeAddressTag: String = ""
     private val possibleIps = mutableListOf<String>()
     private val proxyPings = mutableMapOf<String, Float>()
@@ -32,7 +32,7 @@ class ApiConfig @Inject constructor(
         needConfigRelay.accept(needConfig)
     }
 
-    fun updateActiveAddress(address: ApiAddress) {
+    fun updateActiveAddress(address: ApiAddressResponse) {
         activeAddressTag = address.tag
         apiConfigStorage.setActive(activeAddressTag)
         configChanger.onChange()
@@ -44,7 +44,7 @@ class ApiConfig @Inject constructor(
     }
 
     @Synchronized
-    fun setAddresses(items: List<ApiAddress>) {
+    fun setAddresses(items: List<ApiAddressResponse>) {
         addresses.clear()
         /*if (items.find { it.tag == Api.DEFAULT_ADDRESS.tag } == null) {
             addresses.add(Api.DEFAULT_ADDRESS)
@@ -65,12 +65,12 @@ class ApiConfig @Inject constructor(
     }
 
     @Synchronized
-    fun getAddresses(): List<ApiAddress> = addresses.toList()
+    fun getAddresses(): List<ApiAddressResponse> = addresses.toList()
 
     @Synchronized
     fun getPossibleIps(): List<String> = possibleIps.toList()
 
-    val active: ApiAddress
+    val active: ApiAddressResponse
         get() = addresses.firstOrNull { it.tag == activeAddressTag } ?: Api.DEFAULT_ADDRESS
 
     val tag: String

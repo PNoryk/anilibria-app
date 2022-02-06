@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.network.datasource.remote
 
-import tv.anilibria.module.data.network.datasource.remote.address.ApiAddress
+import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
 
 /* Created by radiationx on 31.10.17. */
@@ -16,7 +16,7 @@ object Api {
 
     val STORE_APP_IDS = arrayOf<String>()
 
-    val DEFAULT_ADDRESS = ApiAddress(
+    val DEFAULT_ADDRESS = ApiAddressResponse(
         "default",
         "Стандартный домен",
         "",

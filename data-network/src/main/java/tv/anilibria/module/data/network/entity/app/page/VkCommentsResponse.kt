@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.network.entity.app.page
 
-class VkComments(
+class VkCommentsResponse(
     var baseUrl: String,
     var script: String
 )

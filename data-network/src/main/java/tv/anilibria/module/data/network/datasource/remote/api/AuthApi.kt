@@ -1,7 +1,6 @@
 package tv.anilibria.module.data.network.datasource.remote.api
 
 import android.net.Uri
-import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.json.JSONArray
@@ -12,14 +11,11 @@ import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.AuthParser
-import tv.anilibria.module.data.network.entity.app.auth.OtpInfo
-import tv.anilibria.module.data.network.entity.app.auth.SocialAuth
+import tv.anilibria.module.data.network.entity.app.auth.OtpInfoResponse
+import tv.anilibria.module.data.network.entity.app.auth.SocialAuthServiceResponse
 import tv.anilibria.module.data.network.entity.app.auth.SocialAuthException
-import tv.anilibria.module.data.network.entity.app.other.ProfileItem
+import tv.anilibria.module.data.network.entity.app.other.UserResponse
 import ru.radiationx.shared.ktx.android.nullString
-import java.text.NumberFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -32,7 +28,7 @@ class AuthApi @Inject constructor(
     private val apiConfig: ApiConfig
 ) {
 
-    fun loadUser(): Single<ProfileItem> {
+    fun loadUser(): Single<UserResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "user"
         )
@@ -41,7 +37,7 @@ class AuthApi @Inject constructor(
             .map { authParser.parseUser(it) }
     }
 
-    fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
+    fun loadOtpInfo(deviceId: String): Single<OtpInfoResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
@@ -65,7 +61,7 @@ class AuthApi @Inject constructor(
             .ignoreElement()
     }
 
-    fun signInOtp(code: String, deviceId: String): Single<ProfileItem> {
+    fun signInOtp(code: String, deviceId: String): Single<UserResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "auth_login_otp",
             "deviceId" to deviceId,
@@ -77,7 +73,7 @@ class AuthApi @Inject constructor(
             .flatMap { loadUser() }
     }
 
-    fun signIn(login: String, password: String, code2fa: String): Single<ProfileItem> {
+    fun signIn(login: String, password: String, code2fa: String): Single<UserResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "mail" to login,
             "passwd" to password,
@@ -89,7 +85,7 @@ class AuthApi @Inject constructor(
             .flatMap { loadUser() }
     }
 
-    fun loadSocialAuth(): Single<List<SocialAuth>> {
+    fun loadSocialAuth(): Single<List<SocialAuthServiceResponse>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "social_auth"
         )
@@ -99,7 +95,7 @@ class AuthApi @Inject constructor(
             .map { authParser.parseSocialAuth(it) }
     }
 
-    fun signInSocial(resultUrl: String, item: SocialAuth): Single<ProfileItem> {
+    fun signInSocial(resultUrl: String, item: SocialAuthServiceResponse): Single<UserResponse> {
         val args: MutableMap<String, String> = mutableMapOf()
 
         val fixedUrl = Uri.parse(apiConfig.baseUrl).host?.let { redirectDomain ->

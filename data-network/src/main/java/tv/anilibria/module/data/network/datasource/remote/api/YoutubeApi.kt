@@ -8,7 +8,7 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.YoutubeParser
 import tv.anilibria.module.data.network.entity.app.Paginated
-import tv.anilibria.module.data.network.entity.app.youtube.YoutubeItem
+import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 import javax.inject.Inject
 
 class YoutubeApi @Inject constructor(
@@ -17,7 +17,7 @@ class YoutubeApi @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun getYoutubeList(page: Int): Single<Paginated<List<YoutubeItem>>> {
+    fun getYoutubeList(page: Int): Single<Paginated<List<YoutubeResponse>>> {
         val args: MutableMap<String, String> = mutableMapOf(
                 "query" to "youtube",
                 "page" to page.toString()

@@ -2,7 +2,7 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONObject
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
-import tv.anilibria.module.data.network.datasource.remote.address.ApiAddress
+import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
 import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
@@ -14,8 +14,8 @@ class ConfigurationParser @Inject constructor(
         private val apiUtils: IApiUtils
 ) {
 
-    fun parse(responseJson: JSONObject): List<ApiAddress> {
-        val result = mutableListOf<ApiAddress>()
+    fun parse(responseJson: JSONObject): List<ApiAddressResponse> {
+        val result = mutableListOf<ApiAddressResponse>()
         responseJson.getJSONArray("addresses")?.let {
             for (i in 0 until it.length()) {
                 it.optJSONObject(i)?.let { addressJson ->
@@ -26,7 +26,7 @@ class ConfigurationParser @Inject constructor(
         return result
     }
 
-    private fun parseAddress(addressJson: JSONObject): ApiAddress {
+    private fun parseAddress(addressJson: JSONObject): ApiAddressResponse {
         val ips = mutableListOf<String>()
         addressJson.getJSONArray("ips")?.let {
             for (i in 0 until it.length()) {
@@ -44,7 +44,7 @@ class ConfigurationParser @Inject constructor(
                 }
             }
         }
-        return ApiAddress(
+        return ApiAddressResponse(
                 addressJson.getString("tag"),
                 addressJson.nullString("name"),
                 addressJson.nullString("desc"),

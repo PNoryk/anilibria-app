@@ -6,7 +6,7 @@ import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.auth.*
-import tv.anilibria.module.data.network.entity.app.other.ProfileItem
+import tv.anilibria.module.data.network.entity.app.other.UserResponse
 import tv.anilibria.module.data.network.entity.common.AuthState
 import ru.radiationx.shared.ktx.android.nullString
 import java.util.*
@@ -31,8 +31,8 @@ class AuthParser @Inject constructor(
         error
     }
 
-    fun parseOtp(responseJson: JSONObject): OtpInfo = responseJson.let {
-        OtpInfo(
+    fun parseOtp(responseJson: JSONObject): OtpInfoResponse = responseJson.let {
+        OtpInfoResponse(
             it.getString("code"),
             it.getString("description"),
             Date(it.getInt("expiredAt") * 1000L),
@@ -60,8 +60,8 @@ class AuthParser @Inject constructor(
         return message.orEmpty()
     }
 
-    fun parseUser(responseJson: JSONObject): ProfileItem {
-        val user = ProfileItem()
+    fun parseUser(responseJson: JSONObject): UserResponse {
+        val user = UserResponse()
         user.id = responseJson.getInt("id")
         user.nick = responseJson.nullString("login").orEmpty()
         user.avatarUrl = responseJson.nullString("avatar")?.let {
@@ -71,12 +71,12 @@ class AuthParser @Inject constructor(
         return user
     }
 
-    fun parseSocialAuth(responseJson: JSONArray): List<SocialAuth> {
-        val resultItems = mutableListOf<SocialAuth>()
+    fun parseSocialAuth(responseJson: JSONArray): List<SocialAuthServiceResponse> {
+        val resultItems = mutableListOf<SocialAuthServiceResponse>()
         for (j in 0 until responseJson.length()) {
             val jsonItem = responseJson.getJSONObject(j)
             resultItems.add(
-                SocialAuth(
+                SocialAuthServiceResponse(
                     jsonItem.getString("key"),
                     jsonItem.getString("title"),
                     jsonItem.getString("socialUrl"),

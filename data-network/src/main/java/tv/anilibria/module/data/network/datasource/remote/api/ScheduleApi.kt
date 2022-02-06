@@ -8,7 +8,7 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.ScheduleParser
-import tv.anilibria.module.data.network.entity.app.schedule.ScheduleDay
+import tv.anilibria.module.data.network.entity.app.schedule.ScheduleDayResponse
 import javax.inject.Inject
 
 class ScheduleApi @Inject constructor(
@@ -18,7 +18,7 @@ class ScheduleApi @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun getSchedule(): Single<List<ScheduleDay>> {
+    fun getSchedule(): Single<List<ScheduleDayResponse>> {
         val args: MutableMap<String, String> = mutableMapOf(
                 "query" to "schedule",
                 "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",

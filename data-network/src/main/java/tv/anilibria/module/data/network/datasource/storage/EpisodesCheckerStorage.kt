@@ -8,7 +8,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import tv.anilibria.module.data.network.DataPreferences
 import tv.anilibria.module.data.network.datasource.holders.EpisodesCheckerHolder
-import tv.anilibria.module.data.network.entity.app.release.ReleaseFull
+import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import javax.inject.Inject
 
 /**
@@ -22,20 +22,20 @@ class EpisodesCheckerStorage @Inject constructor(
         private const val LOCAL_EPISODES_KEY = "data.local_episodes"
     }
 
-    private val localEpisodes = mutableListOf<ReleaseFull.Episode>()
+    private val localEpisodes = mutableListOf<ReleaseResponse.Episode>()
     private val localEpisodesRelay = BehaviorRelay.createDefault(localEpisodes)
 
     init {
         loadAll()
     }
 
-    override fun observeEpisodes(): Observable<MutableList<ReleaseFull.Episode>> =
+    override fun observeEpisodes(): Observable<MutableList<ReleaseResponse.Episode>> =
         localEpisodesRelay
 
-    override fun getEpisodes(): Single<List<ReleaseFull.Episode>> =
+    override fun getEpisodes(): Single<List<ReleaseResponse.Episode>> =
         Single.fromCallable { localEpisodesRelay.value!! }
 
-    override fun putEpisode(episode: ReleaseFull.Episode) {
+    override fun putEpisode(episode: ReleaseResponse.Episode) {
         localEpisodes
             .firstOrNull { it.releaseId == episode.releaseId && it.id == episode.id }
             ?.let { localEpisodes.remove(it) }
@@ -44,7 +44,7 @@ class EpisodesCheckerStorage @Inject constructor(
         localEpisodesRelay.accept(localEpisodes)
     }
 
-    override fun putAllEpisode(episodes: List<ReleaseFull.Episode>) {
+    override fun putAllEpisode(episodes: List<ReleaseResponse.Episode>) {
         episodes.forEach { episode ->
             localEpisodes
                 .firstOrNull { it.releaseId == episode.releaseId && it.id == episode.id }
@@ -55,7 +55,7 @@ class EpisodesCheckerStorage @Inject constructor(
         localEpisodesRelay.accept(localEpisodes)
     }
 
-    override fun getEpisodes(releaseId: Int): List<ReleaseFull.Episode> {
+    override fun getEpisodes(releaseId: Int): List<ReleaseResponse.Episode> {
         return localEpisodes.filter { it.releaseId == releaseId }
     }
 
@@ -88,7 +88,7 @@ class EpisodesCheckerStorage @Inject constructor(
             val jsonEpisodes = JSONArray(it)
             (0 until jsonEpisodes.length()).forEach {
                 jsonEpisodes.getJSONObject(it).let {
-                    localEpisodes.add(ReleaseFull.Episode().apply {
+                    localEpisodes.add(ReleaseResponse.Episode().apply {
                         releaseId = it.getInt("releaseId")
                         id = it.getInt("id")
                         seek = it.optLong("seek", 0L)

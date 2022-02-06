@@ -7,8 +7,8 @@ import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.PagesParser
-import tv.anilibria.module.data.network.entity.app.page.PageLibria
-import tv.anilibria.module.data.network.entity.app.page.VkComments
+import tv.anilibria.module.data.network.entity.app.page.PageLibriaResponse
+import tv.anilibria.module.data.network.entity.app.page.VkCommentsResponse
 import javax.inject.Inject
 
 /**
@@ -29,13 +29,13 @@ class PageApi @Inject constructor(
         )
     }
 
-    fun getPage(pagePath: String): Single<PageLibria> {
+    fun getPage(pagePath: String): Single<PageLibriaResponse> {
         val args: Map<String, String> = emptyMap()
         return client.get("${apiConfig.baseUrl}/$pagePath", args)
                 .map { pagesParser.baseParse(it) }
     }
 
-    fun getComments(): Single<VkComments> {
+    fun getComments(): Single<VkCommentsResponse> {
         val args: Map<String, String> = mapOf(
                 "query" to "vkcomments"
         )

@@ -7,7 +7,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import tv.anilibria.module.data.network.DataPreferences
 import tv.anilibria.module.data.network.datasource.holders.YearsHolder
-import tv.anilibria.module.data.network.entity.app.release.YearItem
+import tv.anilibria.module.data.network.entity.app.release.YearItemResponse
 import javax.inject.Inject
 
 /**
@@ -21,23 +21,23 @@ class YearsStorage @Inject constructor(
         private const val LOCAL_YEARS_KEY = "data.local_years"
     }
 
-    private val localYears = mutableListOf<YearItem>()
+    private val localYears = mutableListOf<YearItemResponse>()
     private val localYearsRelay = BehaviorRelay.createDefault(localYears)
 
     init {
         loadAll()
     }
 
-    override fun observeYears(): Observable<MutableList<YearItem>> = localYearsRelay
+    override fun observeYears(): Observable<MutableList<YearItemResponse>> = localYearsRelay
 
-    override fun saveYears(years: List<YearItem>) {
+    override fun saveYears(years: List<YearItemResponse>) {
         localYears.clear()
         localYears.addAll(years)
         saveAll()
         localYearsRelay.accept(localYears)
     }
 
-    override fun getYears(): List<YearItem> = localYears
+    override fun getYears(): List<YearItemResponse> = localYears
 
     private fun saveAll() {
         val jsonYears = JSONArray()
@@ -59,7 +59,7 @@ class YearsStorage @Inject constructor(
             val jsonYears = JSONArray(it)
             (0 until jsonYears.length()).forEach { index ->
                 jsonYears.getJSONObject(index).let {
-                    localYears.add(YearItem().apply {
+                    localYears.add(YearItemResponse().apply {
                         title = it.getString("title")
                         value = it.getString("value")
                     })

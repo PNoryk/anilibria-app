@@ -2,14 +2,14 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONArray
 import org.json.JSONObject
-import tv.anilibria.module.data.network.entity.app.other.LinkMenuItem
+import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
 
 class MenuParser @Inject constructor() {
 
-    fun parse(responseJson: JSONArray): List<LinkMenuItem> {
-        val result = mutableListOf<LinkMenuItem>()
+    fun parse(responseJson: JSONArray): List<LinkMenuItemResponse> {
+        val result = mutableListOf<LinkMenuItemResponse>()
         for (i in 0 until responseJson.length()) {
             responseJson.optJSONObject(i)?.let { addressJson ->
                 result.add(parseItem(addressJson))
@@ -18,7 +18,7 @@ class MenuParser @Inject constructor() {
         return result
     }
 
-    fun parseItem(jsonItem: JSONObject): LinkMenuItem = LinkMenuItem(
+    fun parseItem(jsonItem: JSONObject): LinkMenuItemResponse = LinkMenuItemResponse(
             jsonItem.getString("title"),
             jsonItem.nullString("absoluteLink"),
             jsonItem.getString("sitePagePath"),

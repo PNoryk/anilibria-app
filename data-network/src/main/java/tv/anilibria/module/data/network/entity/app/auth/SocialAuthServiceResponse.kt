@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.network.entity.app.auth
 
-data class SocialAuth(
+data class SocialAuthServiceResponse(
     val key: String,
     val title: String,
     val socialUrl: String,

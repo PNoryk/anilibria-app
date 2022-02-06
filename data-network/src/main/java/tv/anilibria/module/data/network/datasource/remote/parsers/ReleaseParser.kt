@@ -19,7 +19,7 @@ class ReleaseParser @Inject constructor(
     private val apiConfig: ApiConfig
 ) {
 
-    fun parseRandomRelease(jsonItem: JSONObject): RandomRelease = RandomRelease(
+    fun parseRandomRelease(jsonItem: JSONObject): RandomReleaseResponse = RandomReleaseResponse(
         jsonItem.getString("code")
     )
 
@@ -101,9 +101,9 @@ class ReleaseParser @Inject constructor(
         return pagination
     }
 
-    fun release(jsonResponse: JSONObject): ReleaseFull {
+    fun release(jsonResponse: JSONObject): ReleaseResponse {
         val baseRelease = parseRelease(jsonResponse)
-        val release = ReleaseFull(baseRelease)
+        val release = ReleaseResponse(baseRelease)
 
         jsonResponse.optJSONObject("blockedInfo")?.also { jsonBlockedInfo ->
             release.blockedInfo.also {
@@ -117,7 +117,7 @@ class ReleaseParser @Inject constructor(
         val onlineEpisodes = jsonResponse
             .optJSONArray("playlist")
             ?.mapObjects { jsonEpisode ->
-                ReleaseFull.Episode().also {
+                ReleaseResponse.Episode().also {
                     it.releaseId = release.id
                     it.id = jsonEpisode.optInt("id")
                     it.title = jsonEpisode.nullString("title")

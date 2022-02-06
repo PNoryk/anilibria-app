@@ -10,7 +10,7 @@ import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.FeedParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.YoutubeParser
-import tv.anilibria.module.data.network.entity.app.feed.FeedItem
+import tv.anilibria.module.data.network.entity.app.feed.FeedResponse
 import javax.inject.Inject
 
 class FeedApi @Inject constructor(
@@ -21,7 +21,7 @@ class FeedApi @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun getFeed(page: Int): Single<List<FeedItem>> {
+    fun getFeed(page: Int): Single<List<FeedResponse>> {
         val args: MutableMap<String, String> = mutableMapOf(
                 "query" to "feed",
                 "page" to page.toString(),

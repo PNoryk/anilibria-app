@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.network.entity.app.youtube
 
-class YoutubeItem {
+class YoutubeResponse {
     var id: Int = 0
     var title: String? = null
     var image: String? = null
@@ -14,7 +14,7 @@ class YoutubeItem {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is YoutubeItem) return false
+        if (other !is YoutubeResponse) return false
 
         if (id != other.id) return false
         if (title != other.title) return false

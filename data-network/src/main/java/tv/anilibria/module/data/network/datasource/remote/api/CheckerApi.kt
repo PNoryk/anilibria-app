@@ -9,7 +9,7 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.common.CheckerReserveSources
 import tv.anilibria.module.data.network.datasource.remote.parsers.CheckerParser
-import tv.anilibria.module.data.network.entity.app.updater.UpdateData
+import tv.anilibria.module.data.network.entity.app.updater.UpdateDataResponse
 import javax.inject.Inject
 
 /**
@@ -23,7 +23,7 @@ class CheckerApi @Inject constructor(
     private val reserveSources: CheckerReserveSources
 ) {
 
-    fun checkUpdate(versionCode: Int): Single<UpdateData> {
+    fun checkUpdate(versionCode: Int): Single<UpdateDataResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "app_update",
             "current" to versionCode.toString()
@@ -32,7 +32,7 @@ class CheckerApi @Inject constructor(
             .compose(ApiResponse.fetchResult<JSONObject>())
             .map { checkerParser.parse(it) }
             .onErrorResumeNext {
-                var nextSingle: Single<UpdateData> = Single.error(it)
+                var nextSingle: Single<UpdateDataResponse> = Single.error(it)
                 reserveSources.sources.forEach { source ->
                     nextSingle = nextSingle.onErrorResumeNext { getReserve(source) }
                 }
@@ -40,7 +40,7 @@ class CheckerApi @Inject constructor(
             }
     }
 
-    private fun getReserve(url: String): Single<UpdateData> = mainClient.get(url, emptyMap())
+    private fun getReserve(url: String): Single<UpdateDataResponse> = mainClient.get(url, emptyMap())
         .map { JSONObject(it) }
         .map { checkerParser.parse(it) }
 }

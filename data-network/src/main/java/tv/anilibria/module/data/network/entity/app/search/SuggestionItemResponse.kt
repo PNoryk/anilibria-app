@@ -1,13 +1,13 @@
 package tv.anilibria.module.data.network.entity.app.search
 
-class SuggestionItem {
+class SuggestionItemResponse {
     var id: Int = 0
     var code: String? = null
     val names = mutableListOf<String>()
     var poster: String? = null
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is SuggestionItem) return false
+        if (other !is SuggestionItemResponse) return false
 
         if (id != other.id) return false
         if (code != other.code) return false

@@ -3,7 +3,7 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 import org.json.JSONArray
 import org.json.JSONObject
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
-import tv.anilibria.module.data.network.entity.app.feed.FeedItem
+import tv.anilibria.module.data.network.entity.app.feed.FeedResponse
 import ru.radiationx.shared.ktx.android.nullGet
 import javax.inject.Inject
 
@@ -15,18 +15,18 @@ class FeedParser @Inject constructor(
             jsonResponse: JSONArray,
             releaseParser: ReleaseParser,
             youtubeParser: YoutubeParser
-    ): List<FeedItem> {
-        val result = mutableListOf<FeedItem>()
+    ): List<FeedResponse> {
+        val result = mutableListOf<FeedResponse>()
         for (i in 0 until jsonResponse.length()) {
             val jsonItem = jsonResponse.getJSONObject(i)
             val jsonRelease = jsonItem.nullGet("release") as JSONObject?
             val jsonYoutube = jsonItem.nullGet("youtube") as JSONObject?
             val item = when {
                 jsonRelease != null -> {
-                    FeedItem(release = releaseParser.parseRelease(jsonRelease))
+                    FeedResponse(release = releaseParser.parseRelease(jsonRelease))
                 }
                 jsonYoutube != null -> {
-                    FeedItem(youtube = youtubeParser.youtube(jsonYoutube))
+                    FeedResponse(youtube = youtubeParser.youtube(jsonYoutube))
                 }
                 else -> null
             }

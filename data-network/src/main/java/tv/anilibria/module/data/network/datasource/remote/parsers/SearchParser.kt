@@ -3,9 +3,9 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 import org.json.JSONArray
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
-import tv.anilibria.module.data.network.entity.app.release.GenreItem
-import tv.anilibria.module.data.network.entity.app.release.YearItem
-import tv.anilibria.module.data.network.entity.app.search.SuggestionItem
+import tv.anilibria.module.data.network.entity.app.release.GenreItemResponse
+import tv.anilibria.module.data.network.entity.app.release.YearItemResponse
+import tv.anilibria.module.data.network.entity.app.search.SuggestionItemResponse
 import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
 
@@ -14,11 +14,11 @@ class SearchParser @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun fastSearch(jsonResponse: JSONArray): List<SuggestionItem> {
-        val result: MutableList<SuggestionItem> = mutableListOf()
+    fun fastSearch(jsonResponse: JSONArray): List<SuggestionItemResponse> {
+        val result: MutableList<SuggestionItemResponse> = mutableListOf()
         for (i in 0 until jsonResponse.length()) {
             val jsonItem = jsonResponse.getJSONObject(i)
-            val item = SuggestionItem()
+            val item = SuggestionItemResponse()
 
             item.id = jsonItem.getInt("id")
             item.code = jsonItem.getString("code")
@@ -33,11 +33,11 @@ class SearchParser @Inject constructor(
         return result
     }
 
-    fun years(jsonResponse: JSONArray): List<YearItem> {
-        val result: MutableList<YearItem> = mutableListOf()
+    fun years(jsonResponse: JSONArray): List<YearItemResponse> {
+        val result: MutableList<YearItemResponse> = mutableListOf()
         for (i in 0 until jsonResponse.length()) {
             val yearText = jsonResponse.getString(i)
-            val genreItem = YearItem().apply {
+            val genreItem = YearItemResponse().apply {
                 title = yearText
                 value = yearText
             }
@@ -46,11 +46,11 @@ class SearchParser @Inject constructor(
         return result
     }
 
-    fun genres(jsonResponse: JSONArray): List<GenreItem> {
-        val result: MutableList<GenreItem> = mutableListOf()
+    fun genres(jsonResponse: JSONArray): List<GenreItemResponse> {
+        val result: MutableList<GenreItemResponse> = mutableListOf()
         for (i in 0 until jsonResponse.length()) {
             val genreText = jsonResponse.getString(i)
-            val genreItem = GenreItem().apply {
+            val genreItem = GenreItemResponse().apply {
                 title = genreText.capitalize()
                 value = genreText
             }

@@ -7,7 +7,7 @@ import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.MenuParser
-import tv.anilibria.module.data.network.entity.app.other.LinkMenuItem
+import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import javax.inject.Inject
 
 class MenuApi @Inject constructor(
@@ -16,7 +16,7 @@ class MenuApi @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun getMenu(): Single<List<LinkMenuItem>> {
+    fun getMenu(): Single<List<LinkMenuItemResponse>> {
         val args: Map<String, String> = mapOf(
                 "query" to "link_menu"
         )

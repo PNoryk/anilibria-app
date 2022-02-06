@@ -2,8 +2,8 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONObject
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
-import tv.anilibria.module.data.network.entity.app.page.PageLibria
-import tv.anilibria.module.data.network.entity.app.page.VkComments
+import tv.anilibria.module.data.network.entity.app.page.PageLibriaResponse
+import tv.anilibria.module.data.network.entity.app.page.VkCommentsResponse
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -25,8 +25,8 @@ class PagesParser @Inject constructor(
         Pattern.compile(titlePatternSource, Pattern.CASE_INSENSITIVE)
     }
 
-    fun baseParse(httpResponse: String): PageLibria {
-        val result = PageLibria()
+    fun baseParse(httpResponse: String): PageLibriaResponse {
+        val result = PageLibriaResponse()
         var matcher = pagePattern.matcher(httpResponse)
         var content = ""
         while (matcher.find()) {
@@ -40,8 +40,8 @@ class PagesParser @Inject constructor(
         return result
     }
 
-    fun parseVkComments(jsonResponse: JSONObject): VkComments {
-        return VkComments(
+    fun parseVkComments(jsonResponse: JSONObject): VkCommentsResponse {
+        return VkCommentsResponse(
                 jsonResponse.getString("baseUrl"),
                 jsonResponse.getString("script")
         )

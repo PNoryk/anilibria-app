@@ -1,10 +1,10 @@
 package tv.anilibria.module.data.network.datasource.holders
 
 import io.reactivex.Observable
-import tv.anilibria.module.data.network.entity.app.release.YearItem
+import tv.anilibria.module.data.network.entity.app.release.YearItemResponse
 
 interface YearsHolder {
-    fun observeYears(): Observable<MutableList<YearItem>>
-    fun saveYears(genres: List<YearItem>)
-    fun getYears(): List<YearItem>
+    fun observeYears(): Observable<MutableList<YearItemResponse>>
+    fun saveYears(genres: List<YearItemResponse>)
+    fun getYears(): List<YearItemResponse>
 }

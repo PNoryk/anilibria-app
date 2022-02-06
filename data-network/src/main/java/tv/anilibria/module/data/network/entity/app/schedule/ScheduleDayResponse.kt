@@ -3,7 +3,7 @@ package tv.anilibria.module.data.network.entity.app.schedule
 import tv.anilibria.module.data.network.entity.app.feed.ScheduleItem
 import java.util.*
 
-data class ScheduleDay(
+data class ScheduleDayResponse(
         val day: Int,
         val items: List<ScheduleItem>
 ) {

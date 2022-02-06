@@ -4,7 +4,7 @@ import org.json.JSONObject
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.Paginated
-import tv.anilibria.module.data.network.entity.app.youtube.YoutubeItem
+import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 import ru.radiationx.shared.ktx.android.nullGet
 import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
@@ -14,8 +14,8 @@ class YoutubeParser @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun youtube(jsonItem: JSONObject): YoutubeItem {
-        val item = YoutubeItem()
+    fun youtube(jsonItem: JSONObject): YoutubeResponse {
+        val item = YoutubeResponse()
         item.id = jsonItem.getInt("id")
         item.title = apiUtils.escapeHtml(jsonItem.nullString("title"))
         item.image = "${apiConfig.baseImagesUrl}${jsonItem.nullString("image")}"
@@ -26,8 +26,8 @@ class YoutubeParser @Inject constructor(
         return item
     }
 
-    fun parse(jsonResponse: JSONObject): Paginated<List<YoutubeItem>> {
-        val result = mutableListOf<YoutubeItem>()
+    fun parse(jsonResponse: JSONObject): Paginated<List<YoutubeResponse>> {
+        val result = mutableListOf<YoutubeResponse>()
         val jsonItems = jsonResponse.getJSONArray("items")
         for (i in 0 until jsonItems.length()) {
             val jsonItem = jsonItems.getJSONObject(i)

@@ -5,7 +5,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import org.json.JSONObject
 import tv.anilibria.module.data.network.datasource.holders.UserHolder
-import tv.anilibria.module.data.network.entity.app.other.ProfileItem
+import tv.anilibria.module.data.network.entity.app.other.UserResponse
 import tv.anilibria.module.data.network.entity.common.AuthState
 import javax.inject.Inject
 
@@ -18,10 +18,10 @@ class UserStorage @Inject constructor(
 
     private val userRelay = BehaviorRelay.createDefault(getSavedUser())
 
-    override fun getUser(): ProfileItem = userRelay.value!!
+    override fun getUser(): UserResponse = userRelay.value!!
 
-    private fun getSavedUser(): ProfileItem {
-        val user = ProfileItem()
+    private fun getSavedUser(): UserResponse {
+        val user = UserResponse()
         val userSource = sharedPreferences.getString("saved_user", null)
         if (userSource == null) {
             user.authState = AuthState.NO_AUTH
@@ -38,7 +38,7 @@ class UserStorage @Inject constructor(
         return user
     }
 
-    private fun localSaveUser(user: ProfileItem) {
+    private fun localSaveUser(user: UserResponse) {
         val userJson = JSONObject()
         userJson.put("authState", user.authState.toString())
         userJson.put("id", user.id)
@@ -47,9 +47,9 @@ class UserStorage @Inject constructor(
         sharedPreferences.edit().putString("saved_user", userJson.toString()).apply()
     }
 
-    override fun observeUser(): Observable<ProfileItem> = userRelay
+    override fun observeUser(): Observable<UserResponse> = userRelay
 
-    override fun saveUser(user: ProfileItem) {
+    override fun saveUser(user: UserResponse) {
         localSaveUser(user)
         userRelay.accept(user)
     }
@@ -58,9 +58,9 @@ class UserStorage @Inject constructor(
         val user = getUser()
         user.apply {
             authState = AuthState.AUTH_SKIPPED
-            id = ProfileItem.NO_ID
-            nick = ProfileItem.NO_VALUE
-            avatarUrl = ProfileItem.NO_VALUE
+            id = UserResponse.NO_ID
+            nick = UserResponse.NO_VALUE
+            avatarUrl = UserResponse.NO_VALUE
         }
         saveUser(user)
     }

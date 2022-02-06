@@ -2,7 +2,7 @@ package tv.anilibria.module.data.network.entity.app.release
 
 import java.io.Serializable
 
-class ReleaseFull() : ReleaseItem(), Serializable {
+class ReleaseResponse() : ReleaseItem(), Serializable {
 
     constructor(item: ReleaseItem) : this() {
         id = item.id
@@ -85,7 +85,7 @@ class ReleaseFull() : ReleaseItem(), Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is ReleaseFull) return false
+        if (other !is ReleaseResponse) return false
         if (!super.equals(other)) return false
 
         if (showDonateDialog != other.showDonateDialog) return false

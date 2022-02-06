@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.network.datasource.remote.address
 
-data class ApiAddress(
+data class ApiAddressResponse(
         val tag: String,
         val name: String?,
         val desc: String?,

@@ -9,8 +9,8 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.entity.app.Paginated
-import tv.anilibria.module.data.network.entity.app.release.RandomRelease
-import tv.anilibria.module.data.network.entity.app.release.ReleaseFull
+import tv.anilibria.module.data.network.entity.app.release.RandomReleaseResponse
+import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class ReleaseApi @Inject constructor(
     private val apiConfig: ApiConfig
 ) {
 
-    fun getRandomRelease(): Single<RandomRelease> {
+    fun getRandomRelease(): Single<RandomReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "random_release"
         )
@@ -31,7 +31,7 @@ class ReleaseApi @Inject constructor(
             .map { releaseParser.parseRandomRelease(it) }
     }
 
-    fun getRelease(releaseId: Int): Single<ReleaseFull> {
+    fun getRelease(releaseId: Int): Single<ReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "release",
             "id" to releaseId.toString()
@@ -41,7 +41,7 @@ class ReleaseApi @Inject constructor(
             .map { releaseParser.release(it) }
     }
 
-    fun getRelease(releaseCode: String): Single<ReleaseFull> {
+    fun getRelease(releaseCode: String): Single<ReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "release",
             "code" to releaseCode

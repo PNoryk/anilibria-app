@@ -2,9 +2,9 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONObject
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
-import tv.anilibria.module.data.network.datasource.remote.address.ApiAddress
+import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
-import tv.anilibria.module.data.network.entity.app.updater.UpdateData
+import tv.anilibria.module.data.network.entity.app.updater.UpdateDataResponse
 import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
 
@@ -15,8 +15,8 @@ class CheckerParser @Inject constructor(
         private val apiUtils: IApiUtils
 ) {
 
-    fun parseAddresses(responseJson: JSONObject): List<ApiAddress> {
-        val result = mutableListOf<ApiAddress>()
+    fun parseAddresses(responseJson: JSONObject): List<ApiAddressResponse> {
+        val result = mutableListOf<ApiAddressResponse>()
         responseJson.getJSONArray("addresses")?.let {
             for (i in 0 until it.length()) {
                 it.optJSONObject(i)?.let { addressJson ->
@@ -27,7 +27,7 @@ class CheckerParser @Inject constructor(
         return result
     }
 
-    private fun parseAddress(addressJson: JSONObject): ApiAddress {
+    private fun parseAddress(addressJson: JSONObject): ApiAddressResponse {
         val ips = mutableListOf<String>()
         addressJson.getJSONArray("ips")?.let {
             for (i in 0 until it.length()) {
@@ -45,7 +45,7 @@ class CheckerParser @Inject constructor(
                 }
             }
         }
-        return ApiAddress(
+        return ApiAddressResponse(
                 addressJson.getString("tag"),
                 addressJson.nullString("name"),
                 addressJson.nullString("desc"),
@@ -69,8 +69,8 @@ class CheckerParser @Inject constructor(
             proxyJson.nullString("password")
     )
 
-    fun parse(responseJson: JSONObject): UpdateData {
-        val resData = UpdateData()
+    fun parse(responseJson: JSONObject): UpdateDataResponse {
+        val resData = UpdateDataResponse()
         val jsonUpdate = responseJson.getJSONObject("update")
 
         resData.code = jsonUpdate.optInt("version_code", Int.MAX_VALUE)
@@ -81,7 +81,7 @@ class CheckerParser @Inject constructor(
         jsonUpdate.getJSONArray("links")?.let {
             for (i in 0 until it.length()) {
                 it.optJSONObject(i)?.let { linkJson ->
-                    resData.links.add(UpdateData.UpdateLink().apply {
+                    resData.links.add(UpdateDataResponse.UpdateLink().apply {
                         name = linkJson.optString("name", "Unknown")
                         url = linkJson.optString("url", "")
                         type = linkJson.optString("type", "site")

@@ -8,7 +8,7 @@ import org.json.JSONObject
 import tv.anilibria.module.data.network.DataPreferences
 import tv.anilibria.module.data.network.datasource.holders.MenuHolder
 import tv.anilibria.module.data.network.entity.app.other.DataIcons
-import tv.anilibria.module.data.network.entity.app.other.LinkMenuItem
+import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
 
@@ -21,53 +21,53 @@ class MenuStorage @Inject constructor(
     }
 
     private val localMenu = mutableListOf(
-        LinkMenuItem(
+        LinkMenuItemResponse(
             "Группа VK",
             absoluteLink = "https://vk.com/anilibria",
             icon = DataIcons.VK
         ),
-        LinkMenuItem(
+        LinkMenuItemResponse(
             "Канал YouTube",
             absoluteLink = "https://youtube.com/channel/UCuF8ghQWaa7K-28llm-K3Zg",
             icon = DataIcons.YOUTUBE
         ),
-        LinkMenuItem(
+        LinkMenuItemResponse(
             "Patreon",
             absoluteLink = "https://patreon.com/anilibria",
             icon = DataIcons.PATREON
         ),
-        LinkMenuItem(
+        LinkMenuItemResponse(
             "Канал Telegram",
             absoluteLink = "https://t.me/anilibria_tv",
             icon = DataIcons.TELEGRAM
         ),
-        LinkMenuItem(
+        LinkMenuItemResponse(
             "Чат Discord",
             absoluteLink = "https://discord.gg/Kdr5sNw",
             icon = DataIcons.DISCORD
         ),
-        LinkMenuItem(
+        LinkMenuItemResponse(
             "Сайт AniLibria",
             absoluteLink = "https://www.anilibria.tv/",
             icon = DataIcons.ANILIBRIA
         )
     )
-    private val localMenuRelay = BehaviorRelay.createDefault<List<LinkMenuItem>>(localMenu)
+    private val localMenuRelay = BehaviorRelay.createDefault<List<LinkMenuItemResponse>>(localMenu)
 
     init {
         loadAll()
     }
 
-    override fun observe(): Observable<List<LinkMenuItem>> = localMenuRelay.hide()
+    override fun observe(): Observable<List<LinkMenuItemResponse>> = localMenuRelay.hide()
 
-    override fun save(items: List<LinkMenuItem>) {
+    override fun save(items: List<LinkMenuItemResponse>) {
         localMenu.clear()
         localMenu.addAll(items)
         saveAll()
         localMenuRelay.accept(localMenu)
     }
 
-    override fun get(): List<LinkMenuItem> = localMenu
+    override fun get(): List<LinkMenuItemResponse> = localMenu
 
     private fun saveAll() {
         val jsonMenu = JSONArray()
@@ -92,7 +92,7 @@ class MenuStorage @Inject constructor(
             (0 until jsonMenu.length()).forEach { index ->
                 jsonMenu.getJSONObject(index).also {
                     localMenu.add(
-                        LinkMenuItem(
+                        LinkMenuItemResponse(
                             it.getString("title"),
                             it.nullString("absoluteLink"),
                             it.nullString("sitePagePath"),
