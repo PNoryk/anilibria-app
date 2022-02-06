@@ -1,7 +1,7 @@
-package tv.anilibria.module.data.network.entity.mapper
+package tv.anilibria.module.data.network.entity.mapper.donation
 
 import tv.anilibria.module.data.network.entity.app.donation.content_data.YooMoneyDialogResponse
-import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
 fun YooMoneyDialogResponse.toDomain() = YooMoneyDialog(
     title,

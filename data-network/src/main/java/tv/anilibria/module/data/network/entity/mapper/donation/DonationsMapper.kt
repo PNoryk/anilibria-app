@@ -1,11 +1,11 @@
-package tv.anilibria.module.data.network.entity.mapper
+package tv.anilibria.module.data.network.entity.mapper.donation
 
 import tv.anilibria.module.data.network.entity.app.donation.DonationCardResponse
 import tv.anilibria.module.data.network.entity.app.donation.DonationContentItemResponse
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.app.donation.content.*
 import tv.anilibria.module.data.network.entity.app.donation.content_data.DonationDialogResponse
-import tv.anilibria.module.data.network.entity.domain.donation.*
+import tv.anilibria.module.domain.entity.donation.*
 
 fun DonationInfoResponse.toDomain() = DonationInfo(
     cardNewDonations = cards.newDonations?.toDomain(),
