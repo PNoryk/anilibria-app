@@ -2,8 +2,8 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONArray
 import org.json.JSONObject
-import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import ru.radiationx.shared.ktx.android.nullString
+import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import javax.inject.Inject
 
 class MenuParser @Inject constructor() {
@@ -19,10 +19,10 @@ class MenuParser @Inject constructor() {
     }
 
     fun parseItem(jsonItem: JSONObject): LinkMenuItemResponse = LinkMenuItemResponse(
-            jsonItem.getString("title"),
-            jsonItem.nullString("absoluteLink"),
-            jsonItem.getString("sitePagePath"),
-            jsonItem.getString("icon")
+        jsonItem.getString("title"),
+        jsonItem.nullString("absoluteLink"),
+        jsonItem.getString("sitePagePath"),
+        jsonItem.getString("icon")
     )
 
 }

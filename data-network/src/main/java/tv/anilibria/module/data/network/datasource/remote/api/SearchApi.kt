@@ -11,7 +11,6 @@ import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.SearchParser
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
-import tv.anilibria.module.data.network.entity.app.search.SuggestionItemResponse
 import javax.inject.Inject
 
 class SearchApi @Inject constructor(
@@ -39,7 +38,7 @@ class SearchApi @Inject constructor(
             .map { searchParser.years(it) }
     }
 
-    fun fastSearch(name: String): Single<List<SuggestionItemResponse>> {
+    fun fastSearch(name: String): Single<List<ReleaseResponse>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "search",
             "search" to name,
@@ -47,7 +46,7 @@ class SearchApi @Inject constructor(
         )
         return client.post(apiConfig.apiUrl, args)
             .compose(ApiResponse.fetchResult<JSONArray>())
-            .map { searchParser.fastSearch(it) }
+            .map { releaseParser.releases(it) }
     }
 
     fun searchReleases(

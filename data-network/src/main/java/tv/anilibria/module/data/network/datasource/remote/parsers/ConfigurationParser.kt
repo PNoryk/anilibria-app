@@ -1,18 +1,15 @@
 package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONObject
-import tv.anilibria.module.data.network.datasource.remote.IApiUtils
+import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
-import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
 
 /**
  * Created by radiationx on 27.01.18.
  */
-class ConfigurationParser @Inject constructor(
-        private val apiUtils: IApiUtils
-) {
+class ConfigurationParser @Inject constructor() {
 
     fun parse(responseJson: JSONObject): List<ApiAddressResponse> {
         val result = mutableListOf<ApiAddressResponse>()
@@ -45,26 +42,26 @@ class ConfigurationParser @Inject constructor(
             }
         }
         return ApiAddressResponse(
-                addressJson.getString("tag"),
-                addressJson.nullString("name"),
-                addressJson.nullString("desc"),
-                addressJson.getString("widgetsSite"),
-                addressJson.getString("site"),
-                addressJson.getString("baseImages"),
-                addressJson.getString("base"),
-                addressJson.getString("api"),
-                ips,
-                proxies
+            tag = addressJson.getString("tag"),
+            name = addressJson.nullString("name"),
+            desc = addressJson.nullString("desc"),
+            widgetsSite = addressJson.getString("widgetsSite"),
+            site = addressJson.getString("site"),
+            baseImages = addressJson.getString("baseImages"),
+            base = addressJson.getString("base"),
+            api = addressJson.getString("api"),
+            ips = ips,
+            proxies = proxies
         )
     }
 
     private fun parseProxy(proxyJson: JSONObject): ApiProxy = ApiProxy(
-            proxyJson.getString("tag"),
-            proxyJson.nullString("name"),
-            proxyJson.nullString("desc"),
-            proxyJson.getString("ip"),
-            proxyJson.getInt("port"),
-            proxyJson.nullString("user"),
-            proxyJson.nullString("password")
+        proxyJson.getString("tag"),
+        proxyJson.nullString("name"),
+        proxyJson.nullString("desc"),
+        proxyJson.getString("ip"),
+        proxyJson.getInt("port"),
+        proxyJson.nullString("user"),
+        proxyJson.nullString("password")
     )
 }

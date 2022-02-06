@@ -4,8 +4,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.ApiError
-import tv.anilibria.module.data.network.datasource.remote.IApiUtils
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.auth.*
 import tv.anilibria.module.data.network.entity.app.other.UserResponse
 import java.util.*
@@ -14,10 +12,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 31.12.17.
  */
-class AuthParser @Inject constructor(
-    private val apiUtils: IApiUtils,
-    private val apiConfig: ApiConfig
-) {
+class AuthParser @Inject constructor() {
 
     fun checkOtpError(error: Throwable): Throwable = if (error is ApiError) {
         when (error.description) {
@@ -62,10 +57,8 @@ class AuthParser @Inject constructor(
     fun parseUser(responseJson: JSONObject): UserResponse {
         val user = UserResponse(
             responseJson.getInt("id"),
-            responseJson.nullString("avatar")?.let {
-                "${apiConfig.baseImagesUrl}$it"
-            },
-            responseJson.nullString("login").orEmpty()
+            responseJson.nullString("avatar"),
+            responseJson.nullString("login")
         )
         return user
     }

@@ -6,8 +6,6 @@ import ru.radiationx.shared.ktx.android.mapObjects
 import ru.radiationx.shared.ktx.android.mapStrings
 import ru.radiationx.shared.ktx.android.nullGet
 import ru.radiationx.shared.ktx.android.nullString
-import tv.anilibria.module.data.network.datasource.remote.IApiUtils
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.release.*
 import javax.inject.Inject
@@ -15,10 +13,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 18.12.17.
  */
-class ReleaseParser @Inject constructor(
-    private val apiUtils: IApiUtils,
-    private val apiConfig: ApiConfig
-) {
+class ReleaseParser @Inject constructor() {
 
     fun parseRandomRelease(jsonItem: JSONObject): RandomReleaseResponse = RandomReleaseResponse(
         jsonItem.getString("code")
@@ -51,21 +46,17 @@ class ReleaseParser @Inject constructor(
 
     fun release(jsonResponse: JSONObject): ReleaseResponse {
 
-        val names = jsonResponse.getJSONArray("names")?.mapStrings { name ->
-            apiUtils.escapeHtml(name).toString()
-        }
-
         val favoriteInfo = jsonResponse.optJSONObject("favorite")?.let { jsonFavorite ->
             FavoriteInfoResponse(
-                jsonFavorite.getInt("rating"),
-                jsonFavorite.getBoolean("added")
+                rating = jsonFavorite.getInt("rating"),
+                isAdded = jsonFavorite.getBoolean("added")
             )
         }
 
         val blockedInfo = jsonResponse.optJSONObject("blockedInfo")?.let { jsonBlockedInfo ->
             BlockedInfoResponse(
-                jsonBlockedInfo.getBoolean("blocked"),
-                jsonBlockedInfo.nullString("reason")
+                isBlocked = jsonBlockedInfo.getBoolean("blocked"),
+                reason = jsonBlockedInfo.nullString("reason")
             )
         }
 
@@ -73,14 +64,14 @@ class ReleaseParser @Inject constructor(
             .optJSONArray("playlist")
             ?.mapObjects { jsonEpisode ->
                 EpisodeResponse(
-                    jsonEpisode.optInt("id"),
-                    jsonEpisode.nullString("title"),
-                    jsonEpisode.nullString("sd"),
-                    jsonEpisode.nullString("hd"),
-                    jsonEpisode.nullString("fullhd"),
-                    jsonEpisode.nullString("srcSd"),
-                    jsonEpisode.nullString("srcHd"),
-                    jsonEpisode.nullString("srcFullHd")
+                    id = jsonEpisode.optInt("id"),
+                    title = jsonEpisode.nullString("title"),
+                    urlSd = jsonEpisode.nullString("sd"),
+                    urlHd = jsonEpisode.nullString("hd"),
+                    urlFullHd = jsonEpisode.nullString("fullhd"),
+                    srcUrlSd = jsonEpisode.nullString("srcSd"),
+                    srcUrlHd = jsonEpisode.nullString("srcHd"),
+                    srcUrlFullHd = jsonEpisode.nullString("srcFullHd")
                 )
             }
 
@@ -105,43 +96,43 @@ class ReleaseParser @Inject constructor(
 
         val torrents = jsonResponse.getJSONArray("torrents")?.mapObjects { jsonTorrent ->
             TorrentResponse(
-                jsonTorrent.optInt("id"),
-                jsonTorrent.nullString("hash"),
-                jsonTorrent.optInt("leechers"),
-                jsonTorrent.optInt("seeders"),
-                jsonTorrent.optInt("completed"),
-                jsonTorrent.nullString("quality"),
-                jsonTorrent.nullString("series"),
-                jsonTorrent.optLong("size"),
-                "${apiConfig.baseImagesUrl}${jsonTorrent.nullString("url")}"
+                id = jsonTorrent.optInt("id"),
+                hash = jsonTorrent.nullString("hash"),
+                leechers = jsonTorrent.optInt("leechers"),
+                seeders = jsonTorrent.optInt("seeders"),
+                completed = jsonTorrent.optInt("completed"),
+                quality = jsonTorrent.nullString("quality"),
+                series = jsonTorrent.nullString("series"),
+                size = jsonTorrent.optLong("size"),
+                url = jsonTorrent.nullString("url")
             )
         }
 
 
         val release = ReleaseResponse(
-            jsonResponse.getInt("id"),
-            jsonResponse.nullString("code"),
-            names,
-            jsonResponse.nullString("series"),
-            "${apiConfig.baseImagesUrl}${jsonResponse.nullString("poster")}",
-            jsonResponse.nullString("last")?.toIntOrNull(),
-            jsonResponse.nullString("status"),
-            jsonResponse.nullString("statusCode"),
-            jsonResponse.nullString("type"),
-            jsonResponse.optJSONArray("genres")?.mapStrings { it },
-            jsonResponse.optJSONArray("voices")?.mapStrings { it },
-            jsonResponse.nullString("year"),
-            jsonResponse.nullString("season"),
-            jsonResponse.nullString("day"),
-            jsonResponse.nullString("description")?.trim(),
-            jsonResponse.nullString("announce")?.trim(),
-            favoriteInfo,
-            jsonResponse.optBoolean("showDonateDialog"),
-            blockedInfo,
-            jsonResponse.nullString("moon"),
-            onlineEpisodes,
-            externalPlaylists,
-            torrents
+            id = jsonResponse.getInt("id"),
+            code = jsonResponse.nullString("code"),
+            names = jsonResponse.getJSONArray("names")?.mapStrings { it },
+            series = jsonResponse.nullString("series"),
+            poster = jsonResponse.nullString("poster"),
+            torrentUpdate = jsonResponse.nullString("last")?.toIntOrNull(),
+            status = jsonResponse.nullString("status"),
+            statusCode = jsonResponse.nullString("statusCode"),
+            type = jsonResponse.nullString("type"),
+            genres = jsonResponse.optJSONArray("genres")?.mapStrings { it },
+            voices = jsonResponse.optJSONArray("voices")?.mapStrings { it },
+            year = jsonResponse.nullString("year"),
+            season = jsonResponse.nullString("season"),
+            scheduleDay = jsonResponse.nullString("day"),
+            description = jsonResponse.nullString("description")?.trim(),
+            announce = jsonResponse.nullString("announce")?.trim(),
+            favoriteInfo = favoriteInfo,
+            showDonateDialog = jsonResponse.optBoolean("showDonateDialog"),
+            blockedInfo = blockedInfo,
+            moonwalkLink = jsonResponse.nullString("moon"),
+            episodes = onlineEpisodes,
+            externalPlaylists = externalPlaylists,
+            torrents = torrents
         )
         return release
     }

@@ -3,22 +3,17 @@ package tv.anilibria.module.data.network.datasource.remote.parsers
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullGet
 import ru.radiationx.shared.ktx.android.nullString
-import tv.anilibria.module.data.network.datasource.remote.IApiUtils
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 import javax.inject.Inject
 
-class YoutubeParser @Inject constructor(
-    private val apiUtils: IApiUtils,
-    private val apiConfig: ApiConfig
-) {
+class YoutubeParser @Inject constructor() {
 
     fun youtube(jsonItem: JSONObject): YoutubeResponse {
         return YoutubeResponse(
             jsonItem.getInt("id"),
-            apiUtils.escapeHtml(jsonItem.nullString("title")),
-            "${apiConfig.baseImagesUrl}${jsonItem.nullString("image")}",
+            jsonItem.nullString("title"),
+            jsonItem.nullString("image"),
             jsonItem.nullString("vid"),
             jsonItem.getInt("views"),
             jsonItem.getInt("comments"),

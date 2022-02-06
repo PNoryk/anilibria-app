@@ -4,7 +4,6 @@ import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.mapObjects
 import ru.radiationx.shared.ktx.android.mapStrings
 import ru.radiationx.shared.ktx.android.nullString
-import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
 import tv.anilibria.module.data.network.entity.app.updater.UpdateDataResponse
@@ -14,9 +13,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 27.01.18.
  */
-class CheckerParser @Inject constructor(
-    private val apiUtils: IApiUtils
-) {
+class CheckerParser @Inject constructor() {
 
     fun parseAddresses(responseJson: JSONObject): List<ApiAddressResponse> {
         val result = mutableListOf<ApiAddressResponse>()
