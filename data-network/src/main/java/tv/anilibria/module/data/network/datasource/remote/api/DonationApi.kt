@@ -20,7 +20,7 @@ class DonationApi(
 ) {
 
     fun getDonationDetail(): Single<DonationInfoResponse> {
-        val args: Map<String, String> = mapOf(
+        val args = mapOf(
             "query" to "donation_details"
         )
         return client

@@ -30,7 +30,7 @@ class AuthApi @Inject constructor(
 ) {
 
     fun loadUser(): Single<UserResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "user"
         )
         return client
@@ -39,7 +39,7 @@ class AuthApi @Inject constructor(
     }
 
     fun loadOtpInfo(deviceId: String): Single<OtpInfoResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
         )
@@ -50,7 +50,7 @@ class AuthApi @Inject constructor(
     }
 
     fun acceptOtp(code: String): Completable {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "auth_accept_otp",
             "code" to code
         )
@@ -62,7 +62,7 @@ class AuthApi @Inject constructor(
     }
 
     fun signInOtp(code: String, deviceId: String): Single<UserResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "auth_login_otp",
             "deviceId" to deviceId,
             "code" to code
@@ -75,7 +75,7 @@ class AuthApi @Inject constructor(
     }
 
     fun signIn(login: String, password: String, code2fa: String): Single<UserResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "mail" to login,
             "passwd" to password,
             "fa2code" to code2fa
@@ -88,7 +88,7 @@ class AuthApi @Inject constructor(
     }
 
     fun loadSocialAuth(): Single<List<SocialAuthServiceResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "social_auth"
         )
         return client
@@ -97,14 +97,12 @@ class AuthApi @Inject constructor(
     }
 
     fun signInSocial(resultUrl: String, item: SocialAuthServiceResponse): Single<UserResponse> {
-        val args: MutableMap<String, String> = mutableMapOf()
-
         val fixedUrl = Uri.parse(apiConfig.baseUrl).host?.let { redirectDomain ->
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
 
         return client
-            .getFull(fixedUrl, args)
+            .getFull(fixedUrl, emptyMap())
             .doOnSuccess { response ->
                 val matcher = Pattern.compile(item.errorUrlPattern).matcher(response.redirect)
                 if (matcher.find()) {
@@ -125,8 +123,7 @@ class AuthApi @Inject constructor(
     }
 
     fun signOut(): Single<String> {
-        val args = mapOf<String, String>()
-        return client.post("${apiConfig.baseUrl}/public/logout.php", args)
+        return client.post("${apiConfig.baseUrl}/public/logout.php", emptyMap())
     }
 
 }

@@ -16,7 +16,7 @@ class MenuApi @Inject constructor(
 ) {
 
     fun getMenu(): Single<List<LinkMenuItemResponse>> {
-        val args: Map<String, String> = mapOf(
+        val args = mapOf(
             "query" to "link_menu"
         )
         return client

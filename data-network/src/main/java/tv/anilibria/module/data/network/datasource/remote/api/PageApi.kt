@@ -22,14 +22,13 @@ class PageApi @Inject constructor(
 ) {
 
     fun getPage(pagePath: String): Single<PageLibriaResponse> {
-        val args: Map<String, String> = emptyMap()
         return client
-            .get("${apiConfig.baseUrl}/$pagePath", args)
+            .get("${apiConfig.baseUrl}/$pagePath", emptyMap())
             .map { pagesParser.baseParse(it) }
     }
 
     fun getComments(): Single<VkCommentsResponse> {
-        val args: Map<String, String> = mapOf(
+        val args = mapOf(
             "query" to "vkcomments"
         )
         return client

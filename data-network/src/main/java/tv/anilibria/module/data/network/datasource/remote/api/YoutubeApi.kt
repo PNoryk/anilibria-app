@@ -17,7 +17,7 @@ class YoutubeApi @Inject constructor(
 ) {
 
     fun getYoutubeList(page: Int): Single<PageResponse<YoutubeResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "youtube",
             "page" to page.toString()
         )

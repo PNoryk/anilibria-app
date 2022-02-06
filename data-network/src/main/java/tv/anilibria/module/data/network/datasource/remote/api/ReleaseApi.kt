@@ -20,7 +20,7 @@ class ReleaseApi @Inject constructor(
 ) {
 
     fun getRandomRelease(): Single<RandomReleaseResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "random_release"
         )
         return client
@@ -29,7 +29,7 @@ class ReleaseApi @Inject constructor(
     }
 
     fun getRelease(releaseId: Int): Single<ReleaseResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "release",
             "id" to releaseId.toString()
         )
@@ -39,7 +39,7 @@ class ReleaseApi @Inject constructor(
     }
 
     fun getRelease(releaseCode: String): Single<ReleaseResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "release",
             "code" to releaseCode
         )
@@ -49,7 +49,7 @@ class ReleaseApi @Inject constructor(
     }
 
     fun getReleasesByIds(ids: List<Int>): Single<List<ReleaseResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "info",
             "id" to ids.joinToString(","),
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
@@ -61,7 +61,7 @@ class ReleaseApi @Inject constructor(
     }
 
     fun getReleases(page: Int): Single<PageResponse<ReleaseResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "list",
             "page" to page.toString(),
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",

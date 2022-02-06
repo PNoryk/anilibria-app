@@ -16,7 +16,7 @@ class ScheduleApi @Inject constructor(
 ) {
 
     fun getSchedule(): Single<List<ScheduleDayResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "schedule",
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"

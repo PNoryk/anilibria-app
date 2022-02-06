@@ -16,7 +16,7 @@ class FeedApi @Inject constructor(
 ) {
 
     fun getFeed(page: Int): Single<List<FeedResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "feed",
             "page" to page.toString(),
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",

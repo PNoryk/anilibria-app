@@ -24,7 +24,7 @@ class CheckerApi @Inject constructor(
 ) {
 
     fun checkUpdate(versionCode: Int): Single<UpdateDataResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "app_update",
             "current" to versionCode.toString()
         )

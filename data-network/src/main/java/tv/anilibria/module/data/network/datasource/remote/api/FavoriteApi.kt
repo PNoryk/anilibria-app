@@ -17,7 +17,7 @@ class FavoriteApi @Inject constructor(
 ) {
 
     fun getFavorites(page: Int): Single<PageResponse<ReleaseResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "favorites",
             "page" to page.toString(),
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
@@ -29,7 +29,7 @@ class FavoriteApi @Inject constructor(
     }
 
     fun addFavorite(releaseId: Int): Single<ReleaseResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "favorites",
             "action" to "add",
             "id" to releaseId.toString()
@@ -40,7 +40,7 @@ class FavoriteApi @Inject constructor(
     }
 
     fun deleteFavorite(releaseId: Int): Single<ReleaseResponse> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "favorites",
             "action" to "delete",
             "id" to releaseId.toString()

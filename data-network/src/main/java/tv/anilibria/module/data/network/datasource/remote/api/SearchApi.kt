@@ -18,7 +18,7 @@ class SearchApi @Inject constructor(
 ) {
 
     fun getGenres(): Single<List<String>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "genres"
         )
         return client
@@ -27,7 +27,7 @@ class SearchApi @Inject constructor(
     }
 
     fun getYears(): Single<List<String>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "years"
         )
         return client
@@ -36,7 +36,7 @@ class SearchApi @Inject constructor(
     }
 
     fun fastSearch(name: String): Single<List<ReleaseResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "search",
             "search" to name,
             "filter" to "id,code,names,poster"
@@ -54,7 +54,7 @@ class SearchApi @Inject constructor(
         complete: String,
         page: Int
     ): Single<PageResponse<ReleaseResponse>> {
-        val args: MutableMap<String, String> = mutableMapOf(
+        val args = mapOf(
             "query" to "catalog",
             "search" to JSONObject().apply {
                 put("genre", genre)
