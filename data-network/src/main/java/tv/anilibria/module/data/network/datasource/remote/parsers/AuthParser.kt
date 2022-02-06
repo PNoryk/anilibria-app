@@ -6,7 +6,6 @@ import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.entity.app.auth.*
 import tv.anilibria.module.data.network.entity.app.other.UserResponse
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -29,8 +28,8 @@ class AuthParser @Inject constructor() {
         OtpInfoResponse(
             it.getString("code"),
             it.getString("description"),
-            Date(it.getInt("expiredAt") * 1000L),
-            it.getInt("remainingTime") * 1000L
+            it.getInt("expiredAt"),
+            it.getInt("remainingTime")
         )
     }
 

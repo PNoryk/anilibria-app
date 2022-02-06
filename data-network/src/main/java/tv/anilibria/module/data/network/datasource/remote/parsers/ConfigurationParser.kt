@@ -1,8 +1,11 @@
 package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONObject
+import ru.radiationx.shared.ktx.android.mapObjects
+import ru.radiationx.shared.ktx.android.mapStrings
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
 import javax.inject.Inject
 
@@ -11,35 +14,18 @@ import javax.inject.Inject
  */
 class ConfigurationParser @Inject constructor() {
 
-    fun parse(responseJson: JSONObject): List<ApiAddressResponse> {
-        val result = mutableListOf<ApiAddressResponse>()
-        responseJson.getJSONArray("addresses")?.let {
-            for (i in 0 until it.length()) {
-                it.optJSONObject(i)?.let { addressJson ->
-                    result.add(parseAddress(addressJson))
-                }
-            }
-        }
-        return result
+    fun parse(responseJson: JSONObject): ApiConfigResponse {
+        val result = responseJson.getJSONArray("addresses")?.mapObjects { addressJson ->
+            parseAddress(addressJson)
+        }.orEmpty()
+        return ApiConfigResponse(result)
     }
 
     private fun parseAddress(addressJson: JSONObject): ApiAddressResponse {
-        val ips = mutableListOf<String>()
-        addressJson.getJSONArray("ips")?.let {
-            for (i in 0 until it.length()) {
-                it.getString(i)?.also {
-                    ips.add(it)
-                }
-            }
-        }
+        val ips = addressJson.getJSONArray("ips").mapStrings { it }
 
-        val proxies = mutableListOf<ApiProxy>()
-        addressJson.getJSONArray("proxies")?.let {
-            for (i in 0 until it.length()) {
-                it.optJSONObject(i)?.also { proxyJson ->
-                    proxies.add(parseProxy(proxyJson))
-                }
-            }
+        val proxies = addressJson.getJSONArray("proxies").mapObjects { proxyJson ->
+            parseProxy(proxyJson)
         }
         return ApiAddressResponse(
             tag = addressJson.getString("tag"),
@@ -56,12 +42,12 @@ class ConfigurationParser @Inject constructor() {
     }
 
     private fun parseProxy(proxyJson: JSONObject): ApiProxy = ApiProxy(
-        proxyJson.getString("tag"),
-        proxyJson.nullString("name"),
-        proxyJson.nullString("desc"),
-        proxyJson.getString("ip"),
-        proxyJson.getInt("port"),
-        proxyJson.nullString("user"),
-        proxyJson.nullString("password")
+        tag = proxyJson.getString("tag"),
+        name = proxyJson.nullString("name"),
+        desc = proxyJson.nullString("desc"),
+        ip = proxyJson.getString("ip"),
+        port = proxyJson.getInt("port"),
+        user = proxyJson.nullString("user"),
+        password = proxyJson.nullString("password")
     )
 }

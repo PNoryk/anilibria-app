@@ -10,6 +10,7 @@ import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
+import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponseJsonAdapter
 import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoneyDialog
 
 @InjectConstructor
@@ -21,6 +22,7 @@ class DonationApi(
 ) {
 
     private val dataAdapter by lazy {
+        DonationInfoResponseJsonAdapter(moshi)
         moshi.adapter(DonationInfoResponse::class.java)
     }
 

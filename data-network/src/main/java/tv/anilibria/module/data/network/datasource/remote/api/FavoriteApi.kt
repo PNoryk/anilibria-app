@@ -37,7 +37,7 @@ class FavoriteApi @Inject constructor(
         )
         return client.post(apiConfig.apiUrl, args)
             .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.release(it) }
+            .map { releaseParser.parseRelease(it) }
     }
 
     fun deleteFavorite(releaseId: Int): Single<ReleaseResponse> {
@@ -48,7 +48,7 @@ class FavoriteApi @Inject constructor(
         )
         return client.post(apiConfig.apiUrl, args)
             .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.release(it) }
+            .map { releaseParser.parseRelease(it) }
     }
 
 }

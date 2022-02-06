@@ -19,17 +19,8 @@ class ReleaseParser @Inject constructor() {
         jsonItem.getString("code")
     )
 
-    fun parseRelease(jsonResponse: JSONObject): ReleaseResponse {
-        return release(jsonResponse)
-    }
-
     fun releases(jsonItems: JSONArray): List<ReleaseResponse> {
-        val resItems = mutableListOf<ReleaseResponse>()
-        for (i in 0 until jsonItems.length()) {
-            val jsonItem = jsonItems.getJSONObject(i)
-            resItems.add(parseRelease(jsonItem))
-        }
-        return resItems
+        return jsonItems.mapObjects { parseRelease(it) }
     }
 
     fun releases(jsonResponse: JSONObject): PaginatedResponse<List<ReleaseResponse>> {
@@ -44,7 +35,7 @@ class ReleaseParser @Inject constructor() {
         return pagination
     }
 
-    fun release(jsonResponse: JSONObject): ReleaseResponse {
+    fun parseRelease(jsonResponse: JSONObject): ReleaseResponse {
 
         val favoriteInfo = jsonResponse.optJSONObject("favorite")?.let { jsonFavorite ->
             FavoriteInfoResponse(

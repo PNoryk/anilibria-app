@@ -37,7 +37,7 @@ class ReleaseApi @Inject constructor(
         )
         return client.post(apiConfig.apiUrl, args)
             .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.release(it) }
+            .map { releaseParser.parseRelease(it) }
     }
 
     fun getRelease(releaseCode: String): Single<ReleaseResponse> {
@@ -47,7 +47,7 @@ class ReleaseApi @Inject constructor(
         )
         return client.post(apiConfig.apiUrl, args)
             .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.release(it) }
+            .map { releaseParser.parseRelease(it) }
     }
 
     fun getReleasesByIds(ids: List<Int>): Single<List<ReleaseResponse>> {

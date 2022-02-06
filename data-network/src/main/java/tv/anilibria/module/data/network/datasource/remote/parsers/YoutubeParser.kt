@@ -1,6 +1,7 @@
 package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONObject
+import ru.radiationx.shared.ktx.android.mapObjects
 import ru.radiationx.shared.ktx.android.nullGet
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
@@ -22,14 +23,7 @@ class YoutubeParser @Inject constructor() {
     }
 
     fun parse(jsonResponse: JSONObject): PaginatedResponse<List<YoutubeResponse>> {
-        val result = mutableListOf<YoutubeResponse>()
-        val jsonItems = jsonResponse.getJSONArray("items")
-        for (i in 0 until jsonItems.length()) {
-            val jsonItem = jsonItems.getJSONObject(i)
-            val item = youtube(jsonItem)
-            result.add(item)
-        }
-
+        val result = jsonResponse.getJSONArray("items").mapObjects { youtube(it) }
         val pagination = PaginatedResponse(result)
         val jsonNav = jsonResponse.getJSONObject("pagination")
         jsonNav.nullGet("page")?.let { pagination.page = it.toString().toInt() }
