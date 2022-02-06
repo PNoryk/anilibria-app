@@ -2,7 +2,6 @@ package tv.anilibria.module.data.network.datasource.remote.api
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import org.json.JSONObject
 import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
@@ -12,14 +11,12 @@ import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvi
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigResponse
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.mapResponse
-import tv.anilibria.module.data.network.datasource.remote.parsers.ConfigurationParser
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ConfigurationApi @Inject constructor(
     @ApiClient private val client: IClient,
     @MainClient private val mainClient: IClient,
-    private val configurationParser: ConfigurationParser,
     private val apiConfig: ApiConfigProvider,
     private val schedulers: SchedulersProvider,
     private val moshi: Moshi

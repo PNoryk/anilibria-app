@@ -1,11 +1,9 @@
 package tv.anilibria.module.data.network.datasource.remote.parsers
 
-import org.json.JSONArray
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.entity.app.auth.*
-import tv.anilibria.module.data.network.entity.app.other.UserResponse
 import javax.inject.Inject
 
 /**
@@ -22,15 +20,6 @@ class AuthParser @Inject constructor() {
         }
     } else {
         error
-    }
-
-    fun parseOtp(responseJson: JSONObject): OtpInfoResponse = responseJson.let {
-        OtpInfoResponse(
-            it.getString("code"),
-            it.getString("description"),
-            it.getInt("expiredAt"),
-            it.getInt("remainingTime")
-        )
     }
 
     fun authResult(responseText: String): String {
@@ -51,32 +40,6 @@ class AuthParser @Inject constructor() {
             }
         }
         return message.orEmpty()
-    }
-
-    fun parseUser(responseJson: JSONObject): UserResponse {
-        val user = UserResponse(
-            id = responseJson.getInt("id"),
-            avatar = responseJson.nullString("avatar"),
-            login = responseJson.nullString("login")
-        )
-        return user
-    }
-
-    fun parseSocialAuth(responseJson: JSONArray): List<SocialAuthServiceResponse> {
-        val resultItems = mutableListOf<SocialAuthServiceResponse>()
-        for (j in 0 until responseJson.length()) {
-            val jsonItem = responseJson.getJSONObject(j)
-            resultItems.add(
-                SocialAuthServiceResponse(
-                    key = jsonItem.getString("key"),
-                    title = jsonItem.getString("title"),
-                    socialUrl = jsonItem.getString("socialUrl"),
-                    resultPattern = jsonItem.getString("resultPattern"),
-                    errorUrlPattern = jsonItem.getString("errorUrlPattern")
-                )
-            )
-        }
-        return resultItems
     }
 
 }

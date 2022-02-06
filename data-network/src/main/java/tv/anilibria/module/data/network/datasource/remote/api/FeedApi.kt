@@ -6,17 +6,11 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
-import tv.anilibria.module.data.network.datasource.remote.parsers.FeedParser
-import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
-import tv.anilibria.module.data.network.datasource.remote.parsers.YoutubeParser
 import tv.anilibria.module.data.network.entity.app.feed.FeedResponse
 import javax.inject.Inject
 
 class FeedApi @Inject constructor(
     @ApiClient private val client: IClient,
-    private val releaseParser: ReleaseParser,
-    private val youtubeParser: YoutubeParser,
-    private val feedParser: FeedParser,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {

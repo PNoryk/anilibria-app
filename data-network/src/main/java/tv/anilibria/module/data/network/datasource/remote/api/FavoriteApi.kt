@@ -2,20 +2,16 @@ package tv.anilibria.module.data.network.datasource.remote.api
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import org.json.JSONObject
 import tv.anilibria.module.data.network.ApiClient
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
-import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import javax.inject.Inject
 
 class FavoriteApi @Inject constructor(
     @ApiClient private val client: IClient,
-    private val releaseParser: ReleaseParser,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {

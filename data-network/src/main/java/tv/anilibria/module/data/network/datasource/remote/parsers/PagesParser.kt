@@ -1,8 +1,6 @@
 package tv.anilibria.module.data.network.datasource.remote.parsers
 
-import org.json.JSONObject
 import tv.anilibria.module.data.network.entity.app.page.PageLibriaResponse
-import tv.anilibria.module.data.network.entity.app.page.VkCommentsResponse
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -35,12 +33,5 @@ class PagesParser @Inject constructor() {
             title = matcher.group(1)
         }
         return PageLibriaResponse(title, content)
-    }
-
-    fun parseVkComments(jsonResponse: JSONObject): VkCommentsResponse {
-        return VkCommentsResponse(
-            jsonResponse.getString("baseUrl"),
-            jsonResponse.getString("script")
-        )
     }
 }
