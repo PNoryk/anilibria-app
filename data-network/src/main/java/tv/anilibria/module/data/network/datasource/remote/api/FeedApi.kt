@@ -7,6 +7,8 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.feed.FeedResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.feed.Feed
 import javax.inject.Inject
 
 class FeedApi @Inject constructor(
@@ -15,7 +17,7 @@ class FeedApi @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun getFeed(page: Int): Single<List<FeedResponse>> {
+    fun getFeed(page: Int): Single<List<Feed>> {
         val args = mapOf(
             "query" to "feed",
             "page" to page.toString(),
@@ -24,7 +26,8 @@ class FeedApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<List<FeedResponse>>(moshi)
+            .map { items -> items.map { it.toDomain() } }
     }
 
 }

@@ -9,6 +9,9 @@ import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvi
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.Page
+import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
 class SearchApi @Inject constructor(
@@ -35,7 +38,7 @@ class SearchApi @Inject constructor(
             .mapApiResponse(moshi)
     }
 
-    fun fastSearch(name: String): Single<List<ReleaseResponse>> {
+    fun fastSearch(name: String): Single<List<Release>> {
         val args = mapOf(
             "query" to "search",
             "search" to name,
@@ -43,7 +46,8 @@ class SearchApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<List<ReleaseResponse>>(moshi)
+            .map { items -> items.map { it.toDomain() } }
     }
 
     fun searchReleases(
@@ -53,7 +57,7 @@ class SearchApi @Inject constructor(
         sort: String,
         complete: String,
         page: Int
-    ): Single<PageResponse<ReleaseResponse>> {
+    ): Single<Page<Release>> {
         val args = mapOf(
             "query" to "catalog",
             "search" to JSONObject().apply {
@@ -70,7 +74,8 @@ class SearchApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<PageResponse<ReleaseResponse>>(moshi)
+            .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
     }
 
 }

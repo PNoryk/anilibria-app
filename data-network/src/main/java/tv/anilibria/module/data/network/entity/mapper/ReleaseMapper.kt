@@ -3,6 +3,8 @@ package tv.anilibria.module.data.network.entity.mapper
 import tv.anilibria.module.data.network.entity.app.release.*
 import tv.anilibria.module.domain.entity.release.*
 
+fun RandomReleaseResponse.toDomain() = RandomRelease(code = code)
+
 fun ReleaseResponse.toDomain() = Release(
     id = id,
     code = code,

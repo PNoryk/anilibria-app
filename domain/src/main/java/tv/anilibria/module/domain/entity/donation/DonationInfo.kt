@@ -1,6 +1,7 @@
 package tv.anilibria.module.domain.entity.donation
 
-import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+
 
 data class DonationInfo(
     val cardNewDonations: DonationCard?,

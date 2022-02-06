@@ -9,7 +9,9 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
-import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.module.data.network.entity.mapper.donation.toDomain
+import tv.anilibria.module.domain.entity.donation.DonationInfo
+import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
 @InjectConstructor
 class DonationApi(
@@ -19,13 +21,14 @@ class DonationApi(
     private val moshi: Moshi
 ) {
 
-    fun getDonationDetail(): Single<DonationInfoResponse> {
+    fun getDonationDetail(): Single<DonationInfo> {
         val args = mapOf(
             "query" to "donation_details"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<DonationInfoResponse>(moshi)
+            .map { it.toDomain() }
     }
 
     // Doc https://yoomoney.ru/docs/payment-buttons/using-api/forms

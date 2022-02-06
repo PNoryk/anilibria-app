@@ -8,6 +8,9 @@ import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvi
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.Page
+import tv.anilibria.module.domain.entity.youtube.Youtube
 import javax.inject.Inject
 
 class YoutubeApi @Inject constructor(
@@ -16,13 +19,14 @@ class YoutubeApi @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun getYoutubeList(page: Int): Single<PageResponse<YoutubeResponse>> {
+    fun getYoutubeList(page: Int): Single<Page<Youtube>> {
         val args = mapOf(
             "query" to "youtube",
             "page" to page.toString()
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<PageResponse<YoutubeResponse>>(moshi)
+            .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
     }
 }

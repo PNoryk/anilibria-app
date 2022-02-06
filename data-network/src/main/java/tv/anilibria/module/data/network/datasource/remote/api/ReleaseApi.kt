@@ -9,6 +9,10 @@ import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.release.RandomReleaseResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.Page
+import tv.anilibria.module.domain.entity.release.RandomRelease
+import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
 /* Created by radiationx on 31.10.17. */
@@ -19,36 +23,39 @@ class ReleaseApi @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun getRandomRelease(): Single<RandomReleaseResponse> {
+    fun getRandomRelease(): Single<RandomRelease> {
         val args = mapOf(
             "query" to "random_release"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<RandomReleaseResponse>(moshi)
+            .map { it.toDomain() }
     }
 
-    fun getRelease(releaseId: Int): Single<ReleaseResponse> {
+    fun getRelease(releaseId: Int): Single<Release> {
         val args = mapOf(
             "query" to "release",
             "id" to releaseId.toString()
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<ReleaseResponse>(moshi)
+            .map { it.toDomain() }
     }
 
-    fun getRelease(releaseCode: String): Single<ReleaseResponse> {
+    fun getRelease(releaseCode: String): Single<Release> {
         val args = mapOf(
             "query" to "release",
             "code" to releaseCode
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<ReleaseResponse>(moshi)
+            .map { it.toDomain() }
     }
 
-    fun getReleasesByIds(ids: List<Int>): Single<List<ReleaseResponse>> {
+    fun getReleasesByIds(ids: List<Int>): Single<List<Release>> {
         val args = mapOf(
             "query" to "info",
             "id" to ids.joinToString(","),
@@ -57,10 +64,11 @@ class ReleaseApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<List<ReleaseResponse>>(moshi)
+            .map { items -> items.map { it.toDomain() } }
     }
 
-    fun getReleases(page: Int): Single<PageResponse<ReleaseResponse>> {
+    fun getReleases(page: Int): Single<Page<Release>> {
         val args = mapOf(
             "query" to "list",
             "page" to page.toString(),
@@ -69,7 +77,8 @@ class ReleaseApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<PageResponse<ReleaseResponse>>(moshi)
+            .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
     }
 }
 

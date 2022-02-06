@@ -6,11 +6,12 @@ import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigResponse
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.mapResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.address.ApiAddress
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ class ConfigurationApi @Inject constructor(
         .onErrorReturnItem(false)
         .timeout(15, TimeUnit.SECONDS)
 
-    fun getConfiguration(): Single<List<ApiAddressResponse>> = getMergeConfig()
+    fun getConfiguration(): Single<List<ApiAddress>> = getMergeConfig()
         .doOnSuccess {
             if (it.isEmpty()) {
                 throw IllegalStateException("Empty config adresses")
@@ -40,7 +41,7 @@ class ConfigurationApi @Inject constructor(
         client.postFull(apiUrl, mapOf("query" to "empty"))
             .map { true }
 
-    private fun getMergeConfig(): Single<List<ApiAddressResponse>> = Single
+    private fun getMergeConfig(): Single<List<ApiAddress>> = Single
         .merge(
             getConfigFromApi()
                 .subscribeOn(schedulers.io())
@@ -52,23 +53,25 @@ class ConfigurationApi @Inject constructor(
         .filter { it.isNotEmpty() }
         .first(emptyList())
 
-    private fun getConfigFromApi(): Single<List<ApiAddressResponse>> {
+    private fun getConfigFromApi(): Single<List<ApiAddress>> {
         val args = mapOf(
             "query" to "config"
         )
         return client.post(apiConfig.apiUrl, args)
             .timeout(10, TimeUnit.SECONDS)
             .mapApiResponse<ApiConfigResponse>(moshi)
+            .map { it.toDomain() }
             .map { it.addresses }
     }
 
-    private fun getConfigFromReserve(): Single<List<ApiAddressResponse>> {
+    private fun getConfigFromReserve(): Single<List<ApiAddress>> {
         return getReserve("https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
             .onErrorResumeNext { getReserve("https://bitbucket.org/RadiationX/anilibria-app/raw/master/config.json") }
     }
 
-    private fun getReserve(url: String): Single<List<ApiAddressResponse>> =
+    private fun getReserve(url: String): Single<List<ApiAddress>> =
         mainClient.get(url, emptyMap())
             .mapResponse<ApiConfigResponse>(moshi)
+            .map { it.toDomain() }
             .map { it.addresses }
 }

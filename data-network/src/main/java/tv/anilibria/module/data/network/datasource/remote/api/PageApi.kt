@@ -7,8 +7,10 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.PagesParser
-import tv.anilibria.module.data.network.entity.app.page.PageLibriaResponse
 import tv.anilibria.module.data.network.entity.app.page.VkCommentsResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.page.PageLibria
+import tv.anilibria.module.domain.entity.page.VkComments
 import javax.inject.Inject
 
 /**
@@ -21,18 +23,20 @@ class PageApi @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun getPage(pagePath: String): Single<PageLibriaResponse> {
+    fun getPage(pagePath: String): Single<PageLibria> {
         return client
             .get("${apiConfig.baseUrl}/$pagePath", emptyMap())
             .map { pagesParser.baseParse(it) }
+            .map { it.toDomain() }
     }
 
-    fun getComments(): Single<VkCommentsResponse> {
+    fun getComments(): Single<VkComments> {
         val args = mapOf(
             "query" to "vkcomments"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<VkCommentsResponse>(moshi)
+            .map { it.toDomain() }
     }
 }

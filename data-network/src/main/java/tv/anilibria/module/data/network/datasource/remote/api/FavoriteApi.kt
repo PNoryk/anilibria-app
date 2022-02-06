@@ -8,6 +8,9 @@ import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvi
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.Page
+import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
 class FavoriteApi @Inject constructor(
@@ -16,7 +19,7 @@ class FavoriteApi @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun getFavorites(page: Int): Single<PageResponse<ReleaseResponse>> {
+    fun getFavorites(page: Int): Single<Page<Release>> {
         val args = mapOf(
             "query" to "favorites",
             "page" to page.toString(),
@@ -25,10 +28,15 @@ class FavoriteApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<PageResponse<ReleaseResponse>>(moshi)
+            .map { pageResponse ->
+                pageResponse.toDomain {
+                    it.toDomain()
+                }
+            }
     }
 
-    fun addFavorite(releaseId: Int): Single<ReleaseResponse> {
+    fun addFavorite(releaseId: Int): Single<Release> {
         val args = mapOf(
             "query" to "favorites",
             "action" to "add",
@@ -36,10 +44,11 @@ class FavoriteApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<ReleaseResponse>(moshi)
+            .map { it.toDomain() }
     }
 
-    fun deleteFavorite(releaseId: Int): Single<ReleaseResponse> {
+    fun deleteFavorite(releaseId: Int): Single<Release> {
         val args = mapOf(
             "query" to "favorites",
             "action" to "delete",
@@ -47,7 +56,8 @@ class FavoriteApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<ReleaseResponse>(moshi)
+            .map { it.toDomain() }
     }
 
 }

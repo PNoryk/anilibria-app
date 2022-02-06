@@ -10,6 +10,8 @@ import tv.anilibria.module.data.network.datasource.remote.common.CheckerReserveS
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.mapResponse
 import tv.anilibria.module.data.network.entity.app.updater.UpdateDataResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.updater.UpdateData
 import javax.inject.Inject
 
 /**
@@ -23,7 +25,7 @@ class CheckerApi @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun checkUpdate(versionCode: Int): Single<UpdateDataResponse> {
+    fun checkUpdate(versionCode: Int): Single<UpdateData> {
         val args = mapOf(
             "query" to "app_update",
             "current" to versionCode.toString()
@@ -38,6 +40,7 @@ class CheckerApi @Inject constructor(
                 }
                 nextSingle
             }
+            .map { it.toDomain() }
     }
 
     private fun getReserve(url: String): Single<UpdateDataResponse> =

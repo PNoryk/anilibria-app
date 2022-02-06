@@ -15,7 +15,9 @@ import tv.anilibria.module.data.network.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.network.entity.app.auth.OtpInfoResponse
 import tv.anilibria.module.data.network.entity.app.auth.SocialAuthException
 import tv.anilibria.module.data.network.entity.app.auth.SocialAuthServiceResponse
-import tv.anilibria.module.data.network.entity.app.other.UserResponse
+import tv.anilibria.module.data.network.entity.mapper.toDomain
+import tv.anilibria.module.domain.entity.auth.OtpInfo
+import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -29,16 +31,7 @@ class AuthApi @Inject constructor(
     private val moshi: Moshi
 ) {
 
-    fun loadUser(): Single<UserResponse> {
-        val args = mapOf(
-            "query" to "user"
-        )
-        return client
-            .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
-    }
-
-    fun loadOtpInfo(deviceId: String): Single<OtpInfoResponse> {
+    fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
         val args = mapOf(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
@@ -47,6 +40,7 @@ class AuthApi @Inject constructor(
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<OtpInfoResponse>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
+            .map { it.toDomain() }
     }
 
     fun acceptOtp(code: String): Completable {
@@ -61,7 +55,7 @@ class AuthApi @Inject constructor(
             .ignoreElement()
     }
 
-    fun signInOtp(code: String, deviceId: String): Single<UserResponse> {
+    fun signInOtp(code: String, deviceId: String): Completable {
         val args = mapOf(
             "query" to "auth_login_otp",
             "deviceId" to deviceId,
@@ -71,10 +65,10 @@ class AuthApi @Inject constructor(
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<Unit>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
-            .flatMap { loadUser() }
+            .ignoreElement()
     }
 
-    fun signIn(login: String, password: String, code2fa: String): Single<UserResponse> {
+    fun signIn(login: String, password: String, code2fa: String): Completable {
         val args = mapOf(
             "mail" to login,
             "passwd" to password,
@@ -84,19 +78,20 @@ class AuthApi @Inject constructor(
         return client
             .post(url, args)
             .map { authParser.authResult(it) }
-            .flatMap { loadUser() }
+            .ignoreElement()
     }
 
-    fun loadSocialAuth(): Single<List<SocialAuthServiceResponse>> {
+    fun loadSocialAuth(): Single<List<SocialAuthService>> {
         val args = mapOf(
             "query" to "social_auth"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse(moshi)
+            .mapApiResponse<List<SocialAuthServiceResponse>>(moshi)
+            .map { items -> items.map { it.toDomain() } }
     }
 
-    fun signInSocial(resultUrl: String, item: SocialAuthServiceResponse): Single<UserResponse> {
+    fun signInSocial(resultUrl: String, item: SocialAuthService): Completable {
         val fixedUrl = Uri.parse(apiConfig.baseUrl).host?.let { redirectDomain ->
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
@@ -119,7 +114,7 @@ class AuthApi @Inject constructor(
                     throw ApiError(400, message, null)
                 }
             }
-            .flatMap { loadUser() }
+            .ignoreElement()
     }
 
     fun signOut(): Single<String> {
