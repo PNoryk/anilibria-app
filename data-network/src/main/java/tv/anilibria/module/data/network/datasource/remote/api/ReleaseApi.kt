@@ -6,7 +6,7 @@ import org.json.JSONObject
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.release.RandomReleaseResponse
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ReleaseApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val releaseParser: ReleaseParser,
-    private val apiConfig: ApiConfig
+    private val apiConfig: ApiConfigProvider
 ) {
 
     fun getRandomRelease(): Single<RandomReleaseResponse> {

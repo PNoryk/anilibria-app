@@ -5,7 +5,7 @@ import org.json.JSONArray
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.ScheduleParser
 import tv.anilibria.module.data.network.entity.app.schedule.ScheduleDayResponse
@@ -15,7 +15,7 @@ class ScheduleApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val releaseParser: ReleaseParser,
     private val scheduleParser: ScheduleParser,
-    private val apiConfig: ApiConfig
+    private val apiConfig: ApiConfigProvider
 ) {
 
     fun getSchedule(): Single<List<ScheduleDayResponse>> {

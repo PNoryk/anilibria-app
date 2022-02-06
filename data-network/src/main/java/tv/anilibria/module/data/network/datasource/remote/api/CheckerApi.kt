@@ -6,7 +6,7 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.common.CheckerReserveSources
 import tv.anilibria.module.data.network.datasource.remote.parsers.CheckerParser
 import tv.anilibria.module.data.network.entity.app.updater.UpdateDataResponse
@@ -19,7 +19,7 @@ class CheckerApi @Inject constructor(
     @ApiClient private val client: IClient,
     @MainClient private val mainClient: IClient,
     private val checkerParser: CheckerParser,
-    private val apiConfig: ApiConfig,
+    private val apiConfig: ApiConfigProvider,
     private val reserveSources: CheckerReserveSources
 ) {
 

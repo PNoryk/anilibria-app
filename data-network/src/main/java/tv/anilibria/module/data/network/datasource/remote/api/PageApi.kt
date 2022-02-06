@@ -5,7 +5,7 @@ import org.json.JSONObject
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.parsers.PagesParser
 import tv.anilibria.module.data.network.entity.app.page.PageLibriaResponse
 import tv.anilibria.module.data.network.entity.app.page.VkCommentsResponse
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class PageApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val pagesParser: PagesParser,
-    private val apiConfig: ApiConfig
+    private val apiConfig: ApiConfigProvider
 ) {
     companion object {
         const val PAGE_PATH_TEAM = "pages/team.php"

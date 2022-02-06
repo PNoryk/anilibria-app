@@ -10,7 +10,7 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.network.entity.app.auth.OtpInfoResponse
 import tv.anilibria.module.data.network.entity.app.auth.SocialAuthException
@@ -25,7 +25,7 @@ import javax.inject.Inject
 class AuthApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val authParser: AuthParser,
-    private val apiConfig: ApiConfig
+    private val apiConfig: ApiConfigProvider
 ) {
 
     fun loadUser(): Single<UserResponse> {

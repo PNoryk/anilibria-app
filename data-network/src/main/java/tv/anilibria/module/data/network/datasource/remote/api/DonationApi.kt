@@ -8,7 +8,7 @@ import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoneyDialog
 
@@ -16,7 +16,7 @@ import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoney
 class DonationApi(
     @ApiClient private val client: IClient,
     @MainClient private val mainClient: IClient,
-    private val apiConfig: ApiConfig,
+    private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {
 
