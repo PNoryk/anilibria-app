@@ -80,7 +80,7 @@ class ReleaseParser @Inject constructor(
         return item
     }
 
-    fun releases(jsonItems: JSONArray): List<ReleaseItem> {
+    fun releases(jsonItems: JSONArray): List<ReleaseResponse> {
         val resItems = mutableListOf<ReleaseItem>()
         for (i in 0 until jsonItems.length()) {
             val jsonItem = jsonItems.getJSONObject(i)
