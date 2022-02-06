@@ -7,7 +7,7 @@ import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
-import tv.anilibria.module.data.network.entity.app.Paginated
+import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class FavoriteApi @Inject constructor(
         private val apiConfig: ApiConfig
 ) {
 
-    fun getFavorites(page: Int): Single<Paginated<List<ReleaseItem>>> {
+    fun getFavorites(page: Int): Single<PaginatedResponse<List<ReleaseItem>>> {
         val args: MutableMap<String, String> = mutableMapOf(
                 "query" to "favorites",
                 "page" to page.toString(),

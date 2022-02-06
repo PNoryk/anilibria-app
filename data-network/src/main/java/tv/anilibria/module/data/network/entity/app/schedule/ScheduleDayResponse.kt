@@ -1,11 +1,11 @@
 package tv.anilibria.module.data.network.entity.app.schedule
 
-import tv.anilibria.module.data.network.entity.app.feed.ScheduleItem
+import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
 import java.util.*
 
 data class ScheduleDayResponse(
-        val day: Int,
-        val items: List<ScheduleItem>
+    val day: Int,
+    val items: List<ReleaseItem>
 ) {
     companion object {
         const val MONDAY = "1"

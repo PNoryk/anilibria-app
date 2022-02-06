@@ -4,7 +4,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
-import tv.anilibria.module.data.network.entity.app.Paginated
+import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.release.*
 import ru.radiationx.shared.ktx.android.mapObjects
 import ru.radiationx.shared.ktx.android.nullGet
@@ -89,10 +89,10 @@ class ReleaseParser @Inject constructor(
         return resItems
     }
 
-    fun releases(jsonResponse: JSONObject): Paginated<List<ReleaseItem>> {
+    fun releases(jsonResponse: JSONObject): PaginatedResponse<List<ReleaseItem>> {
         val jsonItems = jsonResponse.getJSONArray("items")
         val resItems = releases(jsonItems)
-        val pagination = Paginated(resItems)
+        val pagination = PaginatedResponse(resItems)
         val jsonNav = jsonResponse.getJSONObject("pagination")
         jsonNav.nullGet("page")?.let { pagination.page = it.toString().toInt() }
         jsonNav.nullGet("perPage")?.let { pagination.perPage = it.toString().toInt() }

@@ -18,7 +18,7 @@ class ScheduleParser @Inject constructor(
             val strDay = jsonItem.getString("day")
             val item = ScheduleDayResponse(
                     ScheduleDayResponse.toCalendarDay(strDay),
-                    releases.map { ScheduleItem(it) }
+                    releases
             )
             result.add(item)
         }

@@ -8,7 +8,7 @@ import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
-import tv.anilibria.module.data.network.entity.app.Paginated
+import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.release.RandomReleaseResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
@@ -63,7 +63,7 @@ class ReleaseApi @Inject constructor(
             .map { releaseParser.releases(it) }
     }
 
-    fun getReleases(page: Int): Single<Paginated<List<ReleaseItem>>> {
+    fun getReleases(page: Int): Single<PaginatedResponse<List<ReleaseItem>>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "list",
             "page" to page.toString(),

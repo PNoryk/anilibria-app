@@ -9,7 +9,7 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.SearchParser
-import tv.anilibria.module.data.network.entity.app.Paginated
+import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.release.GenreItemResponse
 import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
 import tv.anilibria.module.data.network.entity.app.release.YearItemResponse
@@ -59,7 +59,7 @@ class SearchApi @Inject constructor(
         sort: String,
         complete: String,
         page: Int
-    ): Single<Paginated<List<ReleaseItem>>> {
+    ): Single<PaginatedResponse<List<ReleaseItem>>> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "catalog",
             "search" to JSONObject().apply {
