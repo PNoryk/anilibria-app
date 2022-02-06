@@ -4,6 +4,6 @@ import tv.anilibria.module.data.network.entity.app.release.ReleaseItem
 import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 
 data class FeedResponse(
-        var release: ReleaseItem? = null,
-        var youtube: YoutubeResponse? = null
+    val release: ReleaseItem? = null,
+    val youtube: YoutubeResponse? = null
 )
