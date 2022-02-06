@@ -9,6 +9,7 @@ import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.feed.FeedResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.feed.Feed
+import tv.anilibria.module.domain.remote.FeedRemoteDataSource
 import javax.inject.Inject
 
 class FeedRemoteDataSourceImpl @Inject constructor(

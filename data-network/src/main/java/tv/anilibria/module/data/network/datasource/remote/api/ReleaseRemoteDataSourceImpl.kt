@@ -13,6 +13,7 @@ import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.RandomRelease
 import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.remote.ReleaseRemoteDataSource
 import javax.inject.Inject
 
 /* Created by radiationx on 31.10.17. */

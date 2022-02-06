@@ -9,6 +9,7 @@ import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.other.UserResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.other.User
+import tv.anilibria.module.domain.remote.UserRemoteDataSource
 import javax.inject.Inject
 
 /**

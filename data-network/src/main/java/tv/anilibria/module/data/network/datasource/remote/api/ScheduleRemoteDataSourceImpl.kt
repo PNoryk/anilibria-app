@@ -9,6 +9,7 @@ import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.schedule.ScheduleDayResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.schedule.ScheduleDay
+import tv.anilibria.module.domain.remote.ScheduleRemoteDataSource
 import javax.inject.Inject
 
 class ScheduleRemoteDataSourceImpl @Inject constructor(

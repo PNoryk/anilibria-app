@@ -11,6 +11,7 @@ import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.youtube.Youtube
+import tv.anilibria.module.domain.remote.YoutubeRemoteDataSource
 import javax.inject.Inject
 
 class YoutubeRemoteDataSourceImpl @Inject constructor(

@@ -12,6 +12,7 @@ import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.mapper.donation.toDomain
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.module.domain.remote.DonationRemoteDataSource
 
 @InjectConstructor
 class DonationRemoteDataSourceImpl(

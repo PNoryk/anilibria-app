@@ -11,6 +11,7 @@ import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.remote.FavoriteRemoteDataSource
 import javax.inject.Inject
 
 class FavoriteRemoteDataSourceImpl @Inject constructor(

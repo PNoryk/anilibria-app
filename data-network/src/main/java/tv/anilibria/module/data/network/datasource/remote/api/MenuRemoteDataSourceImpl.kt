@@ -9,6 +9,7 @@ import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.module.domain.remote.MenuRemoteDataSource
 import javax.inject.Inject
 
 class MenuRemoteDataSourceImpl @Inject constructor(

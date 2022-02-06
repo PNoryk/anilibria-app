@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.network.datasource.remote.api
+package tv.anilibria.module.domain.remote
 
 import io.reactivex.Completable
 import io.reactivex.Single

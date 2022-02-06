@@ -18,6 +18,7 @@ import tv.anilibria.module.data.network.entity.app.auth.SocialAuthServiceRespons
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
+import tv.anilibria.module.domain.remote.AuthRemoteDataSource
 import java.util.regex.Pattern
 import javax.inject.Inject
 

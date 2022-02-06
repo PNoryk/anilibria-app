@@ -12,6 +12,7 @@ import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.mapResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.address.ApiAddress
+import tv.anilibria.module.domain.remote.ConfigurationRemoteDataSource
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -37,11 +38,11 @@ class ConfigurationRemoteDataSourceImpl @Inject constructor(
             }
         }
 
-    override fun check(client: IClient, apiUrl: String): Single<Boolean> =
+    private fun check(client: IClient, apiUrl: String): Single<Boolean> =
         client.postFull(apiUrl, mapOf("query" to "empty"))
             .map { true }
 
-    override fun getMergeConfig(): Single<List<ApiAddress>> = Single
+    private fun getMergeConfig(): Single<List<ApiAddress>> = Single
         .merge(
             getConfigFromApi()
                 .subscribeOn(schedulers.io())
@@ -53,7 +54,7 @@ class ConfigurationRemoteDataSourceImpl @Inject constructor(
         .filter { it.isNotEmpty() }
         .first(emptyList())
 
-    override fun getConfigFromApi(): Single<List<ApiAddress>> {
+    private fun getConfigFromApi(): Single<List<ApiAddress>> {
         val args = mapOf(
             "query" to "config"
         )
@@ -64,12 +65,12 @@ class ConfigurationRemoteDataSourceImpl @Inject constructor(
             .map { it.addresses }
     }
 
-    override fun getConfigFromReserve(): Single<List<ApiAddress>> {
+    private fun getConfigFromReserve(): Single<List<ApiAddress>> {
         return getReserve("https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
             .onErrorResumeNext { getReserve("https://bitbucket.org/RadiationX/anilibria-app/raw/master/config.json") }
     }
 
-    override fun getReserve(url: String): Single<List<ApiAddress>> =
+    private fun getReserve(url: String): Single<List<ApiAddress>> =
         mainClient.get(url, emptyMap())
             .mapResponse<ApiConfigResponse>(moshi)
             .map { it.toDomain() }

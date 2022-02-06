@@ -12,6 +12,7 @@ import tv.anilibria.module.data.network.datasource.remote.mapResponse
 import tv.anilibria.module.data.network.entity.app.updater.UpdateDataResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.updater.UpdateData
+import tv.anilibria.module.domain.remote.CheckerRemoteDataSource
 import javax.inject.Inject
 
 /**
@@ -43,7 +44,7 @@ class CheckerRemoteDataSourceImpl @Inject constructor(
             .map { it.toDomain() }
     }
 
-    override fun getReserve(url: String): Single<UpdateDataResponse> =
+    private fun getReserve(url: String): Single<UpdateDataResponse> =
         mainClient
             .get(url, emptyMap())
             .mapResponse(moshi)
