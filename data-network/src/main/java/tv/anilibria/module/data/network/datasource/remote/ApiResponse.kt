@@ -1,43 +1,34 @@
 package tv.anilibria.module.data.network.datasource.remote
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.JsonClass
 import io.reactivex.Single
 import io.reactivex.SingleTransformer
-import org.json.JSONObject
-import ru.radiationx.shared.ktx.android.nullGet
-import ru.radiationx.shared.ktx.android.nullString
 
-@Suppress("UNCHECKED_CAST")
-open class ApiResponse<T>(
-    jsonString: String
+@JsonClass(generateAdapter = true)
+data class ApiResponse<T>(
+    @Json(name = "status") val status: Boolean?,
+    @Json(name = "data") val data: T?,
+    @Json(name = "error") val error: ApiErrorResponse?
 ) {
-    private var status: Boolean? = null
-    private var data: T? = null
-    private var error: ApiError? = null
 
-    init {
-        val jsonObject = JSONObject(jsonString)
-        status = jsonObject.getBoolean("status")
-        data = jsonObject.nullGet("data") as T?
-        error = (jsonObject.nullGet("error") as JSONObject?)?.let { jsonError ->
-            ApiError(
-                jsonError.optInt("code"),
-                jsonError.nullString("message"),
-                jsonError.nullString("description")
-            )
-        }
-    }
-
-    open fun handleError(): Single<ApiResponse<T>> {
-        return when {
-            status == true && data != null -> Single.just(this)
-            error != null -> Single.error(error)
-            else -> Single.error(Exception("Wrong response"))
-        }
+    fun handleError(): Single<ApiResponse<T>> = when {
+        status == true && data != null -> Single.just(this)
+        error != null -> Single.error(ApiError(error.code, error.message, error.description))
+        else -> Single.error(Exception("Wrong response"))
     }
 
     companion object {
-        fun <T> fetchResult(): SingleTransformer<String, T> = SingleTransformer {
-            it.flatMap { t -> ApiResponse<T>(t).handleError() }.map { t -> t.data }
+        fun <T> fetchResult(
+            adapter: JsonAdapter<ApiResponse<T>>
+        ): SingleTransformer<String, T> = SingleTransformer { inputData ->
+            inputData.flatMap { jsonString ->
+                val response = requireNotNull(adapter.fromJson(jsonString)) {
+                    "ApiResponse can not be null"
+                }
+                response.handleError()
+            }.map { t -> t.data }
         }
     }
 }

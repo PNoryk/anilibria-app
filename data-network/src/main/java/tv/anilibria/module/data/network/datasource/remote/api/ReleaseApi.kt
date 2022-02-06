@@ -1,12 +1,11 @@
 package tv.anilibria.module.data.network.datasource.remote.api
 
+import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import org.json.JSONArray
-import org.json.JSONObject
 import tv.anilibria.module.data.network.ApiClient
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.release.RandomReleaseResponse
@@ -18,16 +17,17 @@ import javax.inject.Inject
 class ReleaseApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val releaseParser: ReleaseParser,
-    private val apiConfig: ApiConfigProvider
+    private val apiConfig: ApiConfigProvider,
+    private val moshi: Moshi
 ) {
 
     fun getRandomRelease(): Single<RandomReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "random_release"
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.parseRandomRelease(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 
     fun getRelease(releaseId: Int): Single<ReleaseResponse> {
@@ -35,9 +35,9 @@ class ReleaseApi @Inject constructor(
             "query" to "release",
             "id" to releaseId.toString()
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.parseRelease(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 
     fun getRelease(releaseCode: String): Single<ReleaseResponse> {
@@ -45,9 +45,9 @@ class ReleaseApi @Inject constructor(
             "query" to "release",
             "code" to releaseCode
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.parseRelease(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 
     fun getReleasesByIds(ids: List<Int>): Single<List<ReleaseResponse>> {
@@ -57,9 +57,9 @@ class ReleaseApi @Inject constructor(
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONArray>())
-            .map { releaseParser.releases(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 
     fun getReleases(page: Int): Single<PageResponse<ReleaseResponse>> {
@@ -69,12 +69,10 @@ class ReleaseApi @Inject constructor(
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { releaseParser.releases(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
-
-
 }
 
         

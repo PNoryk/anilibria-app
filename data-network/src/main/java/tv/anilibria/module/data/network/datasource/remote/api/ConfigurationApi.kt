@@ -1,14 +1,17 @@
 package tv.anilibria.module.data.network.datasource.remote.api
 
+import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigResponse
+import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
+import tv.anilibria.module.data.network.datasource.remote.mapResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.ConfigurationParser
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -18,7 +21,8 @@ class ConfigurationApi @Inject constructor(
     @MainClient private val mainClient: IClient,
     private val configurationParser: ConfigurationParser,
     private val apiConfig: ApiConfigProvider,
-    private val schedulers: SchedulersProvider
+    private val schedulers: SchedulersProvider,
+    private val moshi: Moshi
 ) {
 
     fun checkAvailable(apiUrl: String): Single<Boolean> = check(mainClient, apiUrl)
@@ -57,8 +61,8 @@ class ConfigurationApi @Inject constructor(
         )
         return client.post(apiConfig.apiUrl, args)
             .timeout(10, TimeUnit.SECONDS)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { configurationParser.parse(it).addresses }
+            .mapApiResponse<ApiConfigResponse>(moshi)
+            .map { it.addresses }
     }
 
     private fun getConfigFromReserve(): Single<List<ApiAddressResponse>> {
@@ -68,6 +72,6 @@ class ConfigurationApi @Inject constructor(
 
     private fun getReserve(url: String): Single<List<ApiAddressResponse>> =
         mainClient.get(url, emptyMap())
-            .map { JSONObject(it) }
-            .map { configurationParser.parse(it).addresses }
+            .mapResponse<ApiConfigResponse>(moshi)
+            .map { it.addresses }
 }

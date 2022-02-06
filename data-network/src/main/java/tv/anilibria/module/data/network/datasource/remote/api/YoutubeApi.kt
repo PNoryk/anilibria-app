@@ -1,11 +1,11 @@
 package tv.anilibria.module.data.network.datasource.remote.api
 
+import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import org.json.JSONObject
 import tv.anilibria.module.data.network.ApiClient
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.YoutubeParser
 import tv.anilibria.module.data.network.entity.app.PageResponse
 import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
@@ -14,7 +14,8 @@ import javax.inject.Inject
 class YoutubeApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val youtubeParser: YoutubeParser,
-    private val apiConfig: ApiConfigProvider
+    private val apiConfig: ApiConfigProvider,
+    private val moshi: Moshi
 ) {
 
     fun getYoutubeList(page: Int): Single<PageResponse<YoutubeResponse>> {
@@ -22,8 +23,8 @@ class YoutubeApi @Inject constructor(
             "query" to "youtube",
             "page" to page.toString()
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { youtubeParser.parse(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 }

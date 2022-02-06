@@ -1,16 +1,16 @@
 package tv.anilibria.module.data.network.datasource.remote.api
 
 import android.net.Uri
+import com.squareup.moshi.Moshi
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.json.JSONArray
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.ApiError
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.network.entity.app.auth.OtpInfoResponse
 import tv.anilibria.module.data.network.entity.app.auth.SocialAuthException
@@ -25,16 +25,17 @@ import javax.inject.Inject
 class AuthApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val authParser: AuthParser,
-    private val apiConfig: ApiConfigProvider
+    private val apiConfig: ApiConfigProvider,
+    private val moshi: Moshi
 ) {
 
     fun loadUser(): Single<UserResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
             "query" to "user"
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { authParser.parseUser(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 
     fun loadOtpInfo(deviceId: String): Single<OtpInfoResponse> {
@@ -44,9 +45,8 @@ class AuthApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
+            .mapApiResponse<OtpInfoResponse>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
-            .map { authParser.parseOtp(it) }
     }
 
     fun acceptOtp(code: String): Completable {
@@ -56,7 +56,7 @@ class AuthApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
+            .mapApiResponse<Unit>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
             .ignoreElement()
     }
@@ -67,8 +67,9 @@ class AuthApi @Inject constructor(
             "deviceId" to deviceId,
             "code" to code
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse<Unit>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
             .flatMap { loadUser() }
     }
@@ -80,7 +81,8 @@ class AuthApi @Inject constructor(
             "fa2code" to code2fa
         )
         val url = "${apiConfig.baseUrl}/public/login.php"
-        return client.post(url, args)
+        return client
+            .post(url, args)
             .map { authParser.authResult(it) }
             .flatMap { loadUser() }
     }
@@ -91,8 +93,7 @@ class AuthApi @Inject constructor(
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONArray>())
-            .map { authParser.parseSocialAuth(it) }
+            .mapApiResponse(moshi)
     }
 
     fun signInSocial(resultUrl: String, item: SocialAuthServiceResponse): Single<UserResponse> {

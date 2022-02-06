@@ -2,13 +2,12 @@ package tv.anilibria.module.data.network.datasource.remote.api
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import org.json.JSONObject
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoneyDialog
 
@@ -20,17 +19,13 @@ class DonationApi(
     private val moshi: Moshi
 ) {
 
-    private val dataAdapter by lazy {
-        moshi.adapter(DonationInfoResponse::class.java)
-    }
-
     fun getDonationDetail(): Single<DonationInfoResponse> {
         val args: Map<String, String> = mapOf(
             "query" to "donation_details"
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { dataAdapter.fromJson(it.toString()) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 
     // Doc https://yoomoney.ru/docs/payment-buttons/using-api/forms

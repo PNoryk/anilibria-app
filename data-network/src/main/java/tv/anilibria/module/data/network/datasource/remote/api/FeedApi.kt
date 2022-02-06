@@ -1,12 +1,11 @@
 package tv.anilibria.module.data.network.datasource.remote.api
 
-import android.util.Log
+import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import org.json.JSONArray
 import tv.anilibria.module.data.network.ApiClient
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.FeedParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.ReleaseParser
 import tv.anilibria.module.data.network.datasource.remote.parsers.YoutubeParser
@@ -18,7 +17,8 @@ class FeedApi @Inject constructor(
     private val releaseParser: ReleaseParser,
     private val youtubeParser: YoutubeParser,
     private val feedParser: FeedParser,
-    private val apiConfig: ApiConfigProvider
+    private val apiConfig: ApiConfigProvider,
+    private val moshi: Moshi
 ) {
 
     fun getFeed(page: Int): Single<List<FeedResponse>> {
@@ -28,12 +28,9 @@ class FeedApi @Inject constructor(
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONArray>())
-            .map { feedParser.feed(it, releaseParser, youtubeParser) }
-            .doOnError {
-                Log.e("bobobo", "catch error $it")
-            }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 
 }

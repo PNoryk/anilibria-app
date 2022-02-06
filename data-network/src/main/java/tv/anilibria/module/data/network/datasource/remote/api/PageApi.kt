@@ -1,11 +1,11 @@
 package tv.anilibria.module.data.network.datasource.remote.api
 
+import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import org.json.JSONObject
 import tv.anilibria.module.data.network.ApiClient
-import tv.anilibria.module.data.network.datasource.remote.ApiResponse
 import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.PagesParser
 import tv.anilibria.module.data.network.entity.app.page.PageLibriaResponse
 import tv.anilibria.module.data.network.entity.app.page.VkCommentsResponse
@@ -17,21 +17,14 @@ import javax.inject.Inject
 class PageApi @Inject constructor(
     @ApiClient private val client: IClient,
     private val pagesParser: PagesParser,
-    private val apiConfig: ApiConfigProvider
+    private val apiConfig: ApiConfigProvider,
+    private val moshi: Moshi
 ) {
-    companion object {
-        const val PAGE_PATH_TEAM = "pages/team.php"
-        const val PAGE_PATH_DONATE = "pages/donate.php"
-
-        val PAGE_IDS = listOf(
-            PAGE_PATH_TEAM,
-            PAGE_PATH_DONATE
-        )
-    }
 
     fun getPage(pagePath: String): Single<PageLibriaResponse> {
         val args: Map<String, String> = emptyMap()
-        return client.get("${apiConfig.baseUrl}/$pagePath", args)
+        return client
+            .get("${apiConfig.baseUrl}/$pagePath", args)
             .map { pagesParser.baseParse(it) }
     }
 
@@ -39,8 +32,8 @@ class PageApi @Inject constructor(
         val args: Map<String, String> = mapOf(
             "query" to "vkcomments"
         )
-        return client.post(apiConfig.apiUrl, args)
-            .compose(ApiResponse.fetchResult<JSONObject>())
-            .map { pagesParser.parseVkComments(it) }
+        return client
+            .post(apiConfig.apiUrl, args)
+            .mapApiResponse(moshi)
     }
 }
