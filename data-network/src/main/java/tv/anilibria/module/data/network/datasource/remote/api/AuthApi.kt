@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import org.json.JSONArray
 import org.json.JSONObject
+import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
@@ -12,10 +13,9 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.network.entity.app.auth.OtpInfoResponse
-import tv.anilibria.module.data.network.entity.app.auth.SocialAuthServiceResponse
 import tv.anilibria.module.data.network.entity.app.auth.SocialAuthException
+import tv.anilibria.module.data.network.entity.app.auth.SocialAuthServiceResponse
 import tv.anilibria.module.data.network.entity.app.other.UserResponse
-import ru.radiationx.shared.ktx.android.nullString
 import java.util.regex.Pattern
 import javax.inject.Inject
 

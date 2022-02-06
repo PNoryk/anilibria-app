@@ -3,6 +3,7 @@ package tv.anilibria.module.data.network.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import org.json.JSONObject
+import toothpick.InjectConstructor
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
 import tv.anilibria.module.data.network.datasource.remote.ApiResponse
@@ -10,7 +11,6 @@ import tv.anilibria.module.data.network.datasource.remote.IClient
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.domain.donation.yoomoney.YooMoneyDialog
-import toothpick.InjectConstructor
 
 @InjectConstructor
 class DonationApi(
