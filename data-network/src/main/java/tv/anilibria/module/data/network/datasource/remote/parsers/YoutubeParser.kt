@@ -1,29 +1,29 @@
 package tv.anilibria.module.data.network.datasource.remote.parsers
 
 import org.json.JSONObject
+import ru.radiationx.shared.ktx.android.nullGet
+import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.IApiUtils
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
 import tv.anilibria.module.data.network.entity.app.PaginatedResponse
 import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
-import ru.radiationx.shared.ktx.android.nullGet
-import ru.radiationx.shared.ktx.android.nullString
 import javax.inject.Inject
 
 class YoutubeParser @Inject constructor(
-        private val apiUtils: IApiUtils,
-        private val apiConfig: ApiConfig
+    private val apiUtils: IApiUtils,
+    private val apiConfig: ApiConfig
 ) {
 
     fun youtube(jsonItem: JSONObject): YoutubeResponse {
-        val item = YoutubeResponse()
-        item.id = jsonItem.getInt("id")
-        item.title = apiUtils.escapeHtml(jsonItem.nullString("title"))
-        item.image = "${apiConfig.baseImagesUrl}${jsonItem.nullString("image")}"
-        item.vid = jsonItem.nullString("vid")
-        item.views = jsonItem.getInt("views")
-        item.comments = jsonItem.getInt("comments")
-        item.timestamp = jsonItem.getInt("timestamp")
-        return item
+        return YoutubeResponse(
+            jsonItem.getInt("id"),
+            apiUtils.escapeHtml(jsonItem.nullString("title")),
+            "${apiConfig.baseImagesUrl}${jsonItem.nullString("image")}",
+            jsonItem.nullString("vid"),
+            jsonItem.getInt("views"),
+            jsonItem.getInt("comments"),
+            jsonItem.getInt("timestamp"),
+        )
     }
 
     fun parse(jsonResponse: JSONObject): PaginatedResponse<List<YoutubeResponse>> {
