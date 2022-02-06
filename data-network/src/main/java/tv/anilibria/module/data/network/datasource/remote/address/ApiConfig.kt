@@ -38,7 +38,7 @@ class ApiConfig @Inject constructor(
         configChanger.onChange()
     }
 
-    fun setProxyPing(proxy: ApiProxy, ping: Float) {
+    fun setProxyPing(proxy: ApiProxyResponse, ping: Float) {
         proxyPings[proxy.tag] = ping
         proxy.ping = ping
     }
@@ -101,6 +101,6 @@ class ApiConfig @Inject constructor(
     val ips: List<String>
         get() = active.ips
 
-    val proxies: List<ApiProxy>
+    val proxies: List<ApiProxyResponse>
         get() = active.proxies
 }

@@ -1,14 +1,13 @@
 package tv.anilibria.module.data.network.entity.app.auth
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class SocialAuthServiceResponse(
-    val key: String,
-    val title: String,
-    val socialUrl: String,
-    val resultPattern: String,
-    val errorUrlPattern: String
-) {
-    companion object {
-        const val KEY_VK = "vk"
-        const val KEY_PATREON = "patreon"
-    }
-}
+    @Json(name = "key") val key: String,
+    @Json(name = "title") val title: String,
+    @Json(name = "socialUrl") val socialUrl: String,
+    @Json(name = "resultPattern") val resultPattern: String,
+    @Json(name = "errorUrlPattern") val errorUrlPattern: String
+)

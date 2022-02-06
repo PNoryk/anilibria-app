@@ -1,11 +1,15 @@
 package tv.anilibria.module.data.network.entity.app.youtube
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class YoutubeResponse(
-    val id: Int,
-    val title: String?,
-    val image: String?,
-    val vid: String?,
-    val views: Int,
-    val comments: Int,
-    val timestamp: Int
+    @Json(name = "id") val id: Int,
+    @Json(name = "title") val title: String?,
+    @Json(name = "image") val image: String?,
+    @Json(name = "vid") val vid: String?,
+    @Json(name = "views") val views: Int,
+    @Json(name = "comments") val comments: Int,
+    @Json(name = "timestamp") val timestamp: Int
 ) 

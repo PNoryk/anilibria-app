@@ -1,10 +1,12 @@
 package tv.anilibria.module.data.network.entity.app.auth
 
-import java.util.*
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class OtpInfoResponse(
-    val code: String,
-    val description: String,
-    val expiresAt: Int,
-    val remainingTime: Int
+    @Json(name = "code") val code: String,
+    @Json(name = "description") val description: String,
+    @Json(name = "expiredAt") val expiresAt: Int,
+    @Json(name = "remainingTime") val remainingTime: Int
 )

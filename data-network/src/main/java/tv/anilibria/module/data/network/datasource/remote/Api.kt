@@ -1,7 +1,7 @@
 package tv.anilibria.module.data.network.datasource.remote
 
 import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
-import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
+import tv.anilibria.module.data.network.datasource.remote.address.ApiProxyResponse
 
 /* Created by radiationx on 31.10.17. */
 
@@ -12,7 +12,7 @@ object Api {
     const val BASE_URL = "https://www.anilibria.tv"
     const val API_URL = "https://www.anilibria.tv/public/api/index.php"
     val DEFAULT_IP_ADDRESSES = listOf<String>()
-    val DEFAULT_PROXIES = listOf<ApiProxy>()
+    val DEFAULT_PROXIES = listOf<ApiProxyResponse>()
 
     val STORE_APP_IDS = arrayOf<String>()
 

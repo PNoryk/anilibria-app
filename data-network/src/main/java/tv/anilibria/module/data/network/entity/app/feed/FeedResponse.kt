@@ -1,9 +1,12 @@
 package tv.anilibria.module.data.network.entity.app.feed
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 
+@JsonClass(generateAdapter = true)
 data class FeedResponse(
-    val release: ReleaseResponse? = null,
-    val youtube: YoutubeResponse? = null
+    @Json(name = "release") val release: ReleaseResponse? = null,
+    @Json(name = "youtube") val youtube: YoutubeResponse? = null
 )

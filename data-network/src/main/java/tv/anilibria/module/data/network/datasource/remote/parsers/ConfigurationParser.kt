@@ -6,7 +6,7 @@ import ru.radiationx.shared.ktx.android.mapStrings
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
 import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigResponse
-import tv.anilibria.module.data.network.datasource.remote.address.ApiProxy
+import tv.anilibria.module.data.network.datasource.remote.address.ApiProxyResponse
 import javax.inject.Inject
 
 /**
@@ -41,7 +41,7 @@ class ConfigurationParser @Inject constructor() {
         )
     }
 
-    private fun parseProxy(proxyJson: JSONObject): ApiProxy = ApiProxy(
+    private fun parseProxy(proxyJson: JSONObject): ApiProxyResponse = ApiProxyResponse(
         tag = proxyJson.getString("tag"),
         name = proxyJson.nullString("name"),
         desc = proxyJson.nullString("desc"),

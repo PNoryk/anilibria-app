@@ -13,8 +13,8 @@ class PaginationParser {
         val meta = jsonResponse.getJSONObject("pagination").let { jsonNav ->
             PageMetaResponse(
                 page = jsonNav.nullGet("page")?.toString()?.toInt(),
-                allPages = jsonNav.nullGet("perPage")?.toString()?.toInt(),
-                perPage = jsonNav.nullGet("allPages")?.toString()?.toInt(),
+                perPage = jsonNav.nullGet("perPage")?.toString()?.toInt(),
+                allPages = jsonNav.nullGet("allPages")?.toString()?.toInt(),
                 allItems = jsonNav.nullGet("allItems")?.toString()?.toInt(),
             )
         }

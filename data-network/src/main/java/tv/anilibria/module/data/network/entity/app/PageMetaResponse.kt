@@ -1,15 +1,15 @@
 package tv.anilibria.module.data.network.entity.app
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
 /**
  * Created by radiationx on 04.12.2017.
  */
+@JsonClass(generateAdapter = true)
 data class PageMetaResponse(
-    val page: Int?,
-    var allPages: Int?,
-    var perPage: Int?,
-    var allItems: Int?,
-) {
-    fun isEnd(): Boolean {
-        return page ?: 0 >= allPages ?: 0
-    }
-}
+    @Json(name = "page") val page: Int?,
+    @Json(name = "perPage") val perPage: Int?,
+    @Json(name = "allPages") val allPages: Int?,
+    @Json(name = "allItems") val allItems: Int?,
+) 

@@ -55,9 +55,9 @@ class AuthParser @Inject constructor() {
 
     fun parseUser(responseJson: JSONObject): UserResponse {
         val user = UserResponse(
-            responseJson.getInt("id"),
-            responseJson.nullString("avatar"),
-            responseJson.nullString("login")
+            id = responseJson.getInt("id"),
+            avatar = responseJson.nullString("avatar"),
+            login = responseJson.nullString("login")
         )
         return user
     }
@@ -68,11 +68,11 @@ class AuthParser @Inject constructor() {
             val jsonItem = responseJson.getJSONObject(j)
             resultItems.add(
                 SocialAuthServiceResponse(
-                    jsonItem.getString("key"),
-                    jsonItem.getString("title"),
-                    jsonItem.getString("socialUrl"),
-                    jsonItem.getString("resultPattern"),
-                    jsonItem.getString("errorUrlPattern")
+                    key = jsonItem.getString("key"),
+                    title = jsonItem.getString("title"),
+                    socialUrl = jsonItem.getString("socialUrl"),
+                    resultPattern = jsonItem.getString("resultPattern"),
+                    errorUrlPattern = jsonItem.getString("errorUrlPattern")
                 )
             )
         }

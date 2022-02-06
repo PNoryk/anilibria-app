@@ -1,10 +1,12 @@
 package tv.anilibria.module.data.network.entity.app.release
 
-import java.io.Serializable
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class ExternalPlaylistResponse(
-    val tag: String,
-    val title: String,
-    val actionText: String,
-    val episodes: List<ExternalEpisodeResponse>
-) : Serializable
+    @Json(name = "tag") val tag: String,
+    @Json(name = "title") val title: String,
+    @Json(name = "actionText") val actionText: String,
+    @Json(name = "episodes") val episodes: List<ExternalEpisodeResponse>
+) 
