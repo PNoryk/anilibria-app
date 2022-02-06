@@ -6,7 +6,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.mapper.donation.toDomain

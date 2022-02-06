@@ -6,8 +6,8 @@ import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.MainClient
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigResponse
+import tv.anilibria.module.data.network.datasource.remote.ApiConfigProvider
+import tv.anilibria.module.data.network.entity.app.address.ApiConfigResponse
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.mapResponse
 import tv.anilibria.module.data.network.entity.mapper.toDomain

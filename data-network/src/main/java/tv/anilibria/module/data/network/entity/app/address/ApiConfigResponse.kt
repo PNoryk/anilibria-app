@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.network.datasource.remote.address
+package tv.anilibria.module.data.network.entity.app.address
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

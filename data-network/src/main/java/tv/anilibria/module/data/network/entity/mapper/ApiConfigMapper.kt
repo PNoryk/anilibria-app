@@ -1,9 +1,9 @@
 package tv.anilibria.module.data.network.entity.mapper
 
-import tv.anilibria.module.data.network.datasource.remote.address.ApiAddressResponse
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfig
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigResponse
-import tv.anilibria.module.data.network.datasource.remote.address.ApiProxyResponse
+import tv.anilibria.module.data.network.entity.app.address.ApiAddressResponse
+import tv.anilibria.module.data.network.entity.app.address.ApiConfig
+import tv.anilibria.module.data.network.entity.app.address.ApiConfigResponse
+import tv.anilibria.module.data.network.entity.app.address.ApiProxyResponse
 import tv.anilibria.module.domain.entity.address.ApiAddress
 import tv.anilibria.module.domain.entity.address.ApiProxy
 

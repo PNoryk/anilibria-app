@@ -9,7 +9,7 @@ import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.ApiClient
 import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.address.ApiConfigProvider
+import tv.anilibria.module.data.network.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.network.entity.app.auth.OtpInfoResponse

@@ -1,4 +1,7 @@
-package tv.anilibria.module.data.network.datasource.remote.address
+package tv.anilibria.module.data.network.datasource.remote
+
+import tv.anilibria.module.data.network.entity.app.address.ApiAddressResponse
+import tv.anilibria.module.data.network.entity.app.address.ApiProxyResponse
 
 interface ApiConfigProvider {
     val active: ApiAddressResponse
