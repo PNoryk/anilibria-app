@@ -7,8 +7,8 @@ import tv.anilibria.module.data.network.datasource.storage.ApiConfigStorage
 import javax.inject.Inject
 
 class ApiConfig @Inject constructor(
-        private val configChanger: ApiConfigChanger,
-        private val apiConfigStorage: ApiConfigStorage
+    private val configChanger: ApiConfigChanger,
+    private val apiConfigStorage: ApiConfigStorage
 ) {
 
     private val addresses = mutableListOf<ApiAddressResponse>()
@@ -52,7 +52,8 @@ class ApiConfig @Inject constructor(
         addresses.addAll(items)
 
         possibleIps.clear()
-        val ips = addresses.map { it.ips + it.proxies.map { it.ip } }.reduce { acc, list -> acc.plus(list) }.toSet().toList()
+        val ips = addresses.map { it.ips + it.proxies.map { it.ip } }
+            .reduce { acc, list -> acc.plus(list) }.toSet().toList()
         possibleIps.addAll(ips)
 
         addresses.forEach {

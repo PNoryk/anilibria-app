@@ -88,10 +88,11 @@ class ConfigurationApi @Inject constructor(
             .onErrorResumeNext { getReserve("https://bitbucket.org/RadiationX/anilibria-app/raw/master/config.json") }
     }
 
-    private fun getReserve(url: String): Single<List<ApiAddressResponse>> = mainClient.get(url, emptyMap())
-        .map { JSONObject(it) }
-        .doOnSuccess { apiConfigStorage.saveJson(it) }
-        .map { configurationParser.parse(it) }
-        .doOnSuccess { apiConfig.setAddresses(it) }
+    private fun getReserve(url: String): Single<List<ApiAddressResponse>> =
+        mainClient.get(url, emptyMap())
+            .map { JSONObject(it) }
+            .doOnSuccess { apiConfigStorage.saveJson(it) }
+            .map { configurationParser.parse(it) }
+            .doOnSuccess { apiConfig.setAddresses(it) }
 
 }

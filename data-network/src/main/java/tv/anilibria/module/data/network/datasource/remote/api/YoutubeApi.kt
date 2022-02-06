@@ -12,18 +12,18 @@ import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 import javax.inject.Inject
 
 class YoutubeApi @Inject constructor(
-        @ApiClient private val client: IClient,
-        private val youtubeParser: YoutubeParser,
-        private val apiConfig: ApiConfig
+    @ApiClient private val client: IClient,
+    private val youtubeParser: YoutubeParser,
+    private val apiConfig: ApiConfig
 ) {
 
     fun getYoutubeList(page: Int): Single<PaginatedResponse<List<YoutubeResponse>>> {
         val args: MutableMap<String, String> = mutableMapOf(
-                "query" to "youtube",
-                "page" to page.toString()
+            "query" to "youtube",
+            "page" to page.toString()
         )
         return client.post(apiConfig.apiUrl, args)
-                .compose(ApiResponse.fetchResult<JSONObject>())
-                .map { youtubeParser.parse(it) }
+            .compose(ApiResponse.fetchResult<JSONObject>())
+            .map { youtubeParser.parse(it) }
     }
 }

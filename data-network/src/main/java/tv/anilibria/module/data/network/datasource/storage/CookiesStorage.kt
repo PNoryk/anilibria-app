@@ -13,7 +13,7 @@ import javax.inject.Inject
  * Created by radiationx on 30.12.17.
  */
 class CookiesStorage @Inject constructor(
-        private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences
 ) : CookieHolder {
 
     private val clientCookies = mutableMapOf<String, Cookie>()
@@ -33,7 +33,7 @@ class CookiesStorage @Inject constructor(
     private fun parseCookie(cookieFields: String): Cookie? {
         val fields = cookieFields.split("\\|:\\|".toRegex())
         val httpUrl = HttpUrl.parse(fields[0])
-                ?: throw RuntimeException("Unknown cookie url = ${fields[0]}")
+            ?: throw RuntimeException("Unknown cookie url = ${fields[0]}")
         val cookieString = fields[1]
         return Cookie.parse(httpUrl, cookieString)
     }
@@ -43,20 +43,29 @@ class CookiesStorage @Inject constructor(
     }
 
     override fun getCookies(): Map<String, Cookie> {
-        Log.e("CookiesStorage", "getCookies: ${clientCookies.map { it.value }.joinToString { "${it.name()}=${it.value()}" }}")
+        Log.e(
+            "CookiesStorage",
+            "getCookies: ${
+                clientCookies.map { it.value }.joinToString { "${it.name()}=${it.value()}" }
+            }"
+        )
         return clientCookies
     }
 
     override fun putCookie(url: String, name: String, value: String) {
-        putCookie(url, Cookie.Builder().name(name.trim()).value(value.trim()).domain(Uri.parse(url).host).build())
+        putCookie(
+            url,
+            Cookie.Builder().name(name.trim()).value(value.trim()).domain(Uri.parse(url).host)
+                .build()
+        )
     }
 
     override fun putCookie(url: String, cookie: Cookie) {
         Log.e("CookiesStorage", "putCookie: ${"${cookie.name()}=${cookie.value()}"}")
         sharedPreferences
-                .edit()
-                .putString("cookie_${cookie.name()}", convertCookie(url, cookie))
-                .apply()
+            .edit()
+            .putString("cookie_${cookie.name()}", convertCookie(url, cookie))
+            .apply()
 
         if (!clientCookies.containsKey(cookie.name())) {
             clientCookies.remove(cookie.name())
@@ -66,9 +75,9 @@ class CookiesStorage @Inject constructor(
 
     override fun removeCookie(name: String) {
         sharedPreferences
-                .edit()
-                .remove("cookie_$name")
-                .apply()
+            .edit()
+            .remove("cookie_$name")
+            .apply()
 
         clientCookies.remove(name)
     }

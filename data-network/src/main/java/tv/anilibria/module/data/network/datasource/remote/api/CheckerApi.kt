@@ -40,7 +40,8 @@ class CheckerApi @Inject constructor(
             }
     }
 
-    private fun getReserve(url: String): Single<UpdateDataResponse> = mainClient.get(url, emptyMap())
-        .map { JSONObject(it) }
-        .map { checkerParser.parse(it) }
+    private fun getReserve(url: String): Single<UpdateDataResponse> =
+        mainClient.get(url, emptyMap())
+            .map { JSONObject(it) }
+            .map { checkerParser.parse(it) }
 }

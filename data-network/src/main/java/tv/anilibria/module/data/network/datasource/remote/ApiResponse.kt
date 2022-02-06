@@ -8,7 +8,7 @@ import ru.radiationx.shared.ktx.android.nullString
 
 @Suppress("UNCHECKED_CAST")
 open class ApiResponse<T>(
-        jsonString: String
+    jsonString: String
 ) {
     private var status: Boolean? = null
     private var data: T? = null
@@ -20,9 +20,9 @@ open class ApiResponse<T>(
         data = jsonObject.nullGet("data") as T?
         error = (jsonObject.nullGet("error") as JSONObject?)?.let { jsonError ->
             ApiError(
-                    jsonError.optInt("code"),
-                    jsonError.nullString("message"),
-                    jsonError.nullString("description")
+                jsonError.optInt("code"),
+                jsonError.nullString("message"),
+                jsonError.nullString("description")
             )
         }
     }

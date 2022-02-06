@@ -12,21 +12,21 @@ import tv.anilibria.module.data.network.entity.app.schedule.ScheduleDayResponse
 import javax.inject.Inject
 
 class ScheduleApi @Inject constructor(
-        @ApiClient private val client: IClient,
-        private val releaseParser: ReleaseParser,
-        private val scheduleParser: ScheduleParser,
-        private val apiConfig: ApiConfig
+    @ApiClient private val client: IClient,
+    private val releaseParser: ReleaseParser,
+    private val scheduleParser: ScheduleParser,
+    private val apiConfig: ApiConfig
 ) {
 
     fun getSchedule(): Single<List<ScheduleDayResponse>> {
         val args: MutableMap<String, String> = mutableMapOf(
-                "query" to "schedule",
-                "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
-                "rm" to "true"
+            "query" to "schedule",
+            "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
+            "rm" to "true"
         )
         return client.post(apiConfig.apiUrl, args)
-                .compose(ApiResponse.fetchResult<JSONArray>())
-                .map { scheduleParser.schedule(it, releaseParser) }
+            .compose(ApiResponse.fetchResult<JSONArray>())
+            .map { scheduleParser.schedule(it, releaseParser) }
     }
 
 }

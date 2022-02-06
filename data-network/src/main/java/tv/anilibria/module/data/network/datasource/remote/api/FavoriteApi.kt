@@ -12,43 +12,43 @@ import tv.anilibria.module.data.network.entity.app.release.ReleaseResponse
 import javax.inject.Inject
 
 class FavoriteApi @Inject constructor(
-        @ApiClient private val client: IClient,
-        private val releaseParser: ReleaseParser,
-        private val apiConfig: ApiConfig
+    @ApiClient private val client: IClient,
+    private val releaseParser: ReleaseParser,
+    private val apiConfig: ApiConfig
 ) {
 
     fun getFavorites(page: Int): Single<PaginatedResponse<List<ReleaseResponse>>> {
         val args: MutableMap<String, String> = mutableMapOf(
-                "query" to "favorites",
-                "page" to page.toString(),
-                "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
-                "rm" to "true"
+            "query" to "favorites",
+            "page" to page.toString(),
+            "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
+            "rm" to "true"
         )
         return client.post(apiConfig.apiUrl, args)
-                .compose(ApiResponse.fetchResult<JSONObject>())
-                .map { releaseParser.releases(it) }
+            .compose(ApiResponse.fetchResult<JSONObject>())
+            .map { releaseParser.releases(it) }
     }
 
     fun addFavorite(releaseId: Int): Single<ReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
-                "query" to "favorites",
-                "action" to "add",
-                "id" to releaseId.toString()
+            "query" to "favorites",
+            "action" to "add",
+            "id" to releaseId.toString()
         )
         return client.post(apiConfig.apiUrl, args)
-                .compose(ApiResponse.fetchResult<JSONObject>())
-                .map { releaseParser.release(it) }
+            .compose(ApiResponse.fetchResult<JSONObject>())
+            .map { releaseParser.release(it) }
     }
 
     fun deleteFavorite(releaseId: Int): Single<ReleaseResponse> {
         val args: MutableMap<String, String> = mutableMapOf(
-                "query" to "favorites",
-                "action" to "delete",
-                "id" to releaseId.toString()
+            "query" to "favorites",
+            "action" to "delete",
+            "id" to releaseId.toString()
         )
         return client.post(apiConfig.apiUrl, args)
-                .compose(ApiResponse.fetchResult<JSONObject>())
-                .map { releaseParser.release(it) }
+            .compose(ApiResponse.fetchResult<JSONObject>())
+            .map { releaseParser.release(it) }
     }
 
 }

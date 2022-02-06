@@ -11,18 +11,18 @@ import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import javax.inject.Inject
 
 class MenuApi @Inject constructor(
-        @ApiClient private val client: IClient,
-        private val menuParse: MenuParser,
-        private val apiConfig: ApiConfig
+    @ApiClient private val client: IClient,
+    private val menuParse: MenuParser,
+    private val apiConfig: ApiConfig
 ) {
 
     fun getMenu(): Single<List<LinkMenuItemResponse>> {
         val args: Map<String, String> = mapOf(
-                "query" to "link_menu"
+            "query" to "link_menu"
         )
         return client.post(apiConfig.apiUrl, args)
-                .compose(ApiResponse.fetchResult<JSONArray>())
-                .map { menuParse.parse(it) }
+            .compose(ApiResponse.fetchResult<JSONArray>())
+            .map { menuParse.parse(it) }
     }
 
 }
