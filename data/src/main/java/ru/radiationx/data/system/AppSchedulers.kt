@@ -3,7 +3,7 @@ package ru.radiationx.data.system
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import javax.inject.Inject
 
 class AppSchedulers @Inject constructor() : SchedulersProvider {

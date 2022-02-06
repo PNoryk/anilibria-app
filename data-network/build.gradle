@@ -35,6 +35,9 @@ ext {
 }
 dependencies {
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(":shared-android-ktx")
+
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.squareup.okhttp3:okhttp-urlconnection:${okHttpVersion}"
     implementation "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
@@ -47,9 +50,9 @@ dependencies {
 
     implementation 'org.bsc.util:minitemplator-repackaged:1.2'
 
-    implementation "com.squareup.moshi:moshi:1.12.0"
-    implementation "com.squareup.moshi:moshi-adapters:1.12.0"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+    implementation "com.squareup.moshi:moshi:1.13.0"
+    implementation "com.squareup.moshi:moshi-adapters:1.13.0"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.13.0"
 
     implementation "com.github.stephanenicolas.toothpick:ktp:3.1.0"
     kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:3.1.0"

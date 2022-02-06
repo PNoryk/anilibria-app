@@ -4,7 +4,7 @@ import android.util.Log
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.datasource.remote.api.ScheduleApi
 import ru.radiationx.data.entity.app.feed.ScheduleItem
 import ru.radiationx.data.entity.app.schedule.ScheduleDay
@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ScheduleRepository @Inject constructor(
-        private val schedulers: SchedulersProvider,
-        private val scheduleApi: ScheduleApi
+    private val schedulers: SchedulersProvider,
+    private val scheduleApi: ScheduleApi
 ) {
 
     private val dataRelay = BehaviorRelay.create<List<ScheduleDay>>()

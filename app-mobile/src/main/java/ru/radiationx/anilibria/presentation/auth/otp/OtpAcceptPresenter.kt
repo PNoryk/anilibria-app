@@ -5,8 +5,7 @@ import moxy.InjectViewState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.SchedulersProvider
-import ru.radiationx.data.analytics.TimeCounter
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.analytics.features.AuthDeviceAnalytics
 import ru.radiationx.data.entity.app.auth.OtpAcceptedException
 import ru.radiationx.data.repository.AuthRepository

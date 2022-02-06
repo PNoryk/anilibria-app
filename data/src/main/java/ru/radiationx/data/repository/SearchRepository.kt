@@ -3,7 +3,7 @@ package ru.radiationx.data.repository
 import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.datasource.holders.GenresHolder
 import ru.radiationx.data.datasource.holders.ReleaseUpdateHolder
 import ru.radiationx.data.datasource.holders.YearsHolder

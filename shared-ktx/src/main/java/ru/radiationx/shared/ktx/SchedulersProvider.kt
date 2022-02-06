@@ -1,4 +1,4 @@
-package ru.radiationx.data
+package ru.radiationx.shared.ktx
 
 import io.reactivex.Scheduler
 

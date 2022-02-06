@@ -2,7 +2,7 @@ package ru.radiationx.data.repository
 
 import io.reactivex.Single
 import ru.radiationx.data.MainClient
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.datasource.remote.IClient
 import ru.radiationx.data.datasource.remote.api.PageApi
 import ru.radiationx.data.entity.app.page.PageLibria

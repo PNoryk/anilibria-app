@@ -6,7 +6,7 @@ import com.stealthcopter.networktools.ping.PingOptions
 import com.stealthcopter.networktools.ping.PingResult
 import com.stealthcopter.networktools.ping.PingTools
 import io.reactivex.Single
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.datasource.remote.address.ApiAddress
 import ru.radiationx.data.datasource.remote.api.ConfigurationApi
 import java.net.InetAddress

@@ -4,7 +4,7 @@ import android.util.Log
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.datasource.remote.api.CheckerApi
 import ru.radiationx.data.entity.app.updater.UpdateData
 import javax.inject.Inject

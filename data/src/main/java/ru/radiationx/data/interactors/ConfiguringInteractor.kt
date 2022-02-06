@@ -6,7 +6,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.analytics.features.ConfiguringAnalytics
 import ru.radiationx.data.analytics.TimeCounter
 import ru.radiationx.data.analytics.features.model.AnalyticsConfigState

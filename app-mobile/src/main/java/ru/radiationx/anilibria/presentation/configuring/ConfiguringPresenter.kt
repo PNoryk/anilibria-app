@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.configuring
 import moxy.InjectViewState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
-import ru.radiationx.data.SchedulersProvider
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.interactors.ConfiguringInteractor
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
