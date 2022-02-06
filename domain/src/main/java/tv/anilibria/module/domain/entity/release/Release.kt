@@ -1,0 +1,27 @@
+package tv.anilibria.module.domain.entity.release
+
+data class Release(
+    val id: Int,
+    val code: String?,
+    val names: List<String>?,
+    val series: String?,
+    val poster: String?,
+    val torrentUpdate: Int?,
+    val status: String?,
+    val statusCode: String?,
+    val type: String?,
+    val genres: List<String>?,
+    val voices: List<String>?,
+    val year: String?,
+    val season: String?,
+    val scheduleDay: String?,
+    val description: String?,
+    val announce: String?,
+    val favoriteInfo: FavoriteInfo?,
+    val showDonateDialog: Boolean?,
+    val blockedInfo: BlockedInfo?,
+    val moonwalkLink: String?,
+    val episodes: List<Episode>?,
+    val externalPlaylists: List<ExternalPlaylist>?,
+    val torrents: List<Torrent>?,
+)
