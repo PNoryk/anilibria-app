@@ -8,7 +8,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class TorrentResponse(
-    @Json(name = "id") val id: Int,
+    @Json(name = "id") val id: Long,
     @Json(name = "hash") val hash: String?,
     @Json(name = "leechers") val leechers: Int,
     @Json(name = "seeders") val seeders: Int,

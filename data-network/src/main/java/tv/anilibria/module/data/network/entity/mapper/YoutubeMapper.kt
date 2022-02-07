@@ -5,12 +5,14 @@ import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
 import tv.anilibria.module.domain.entity.common.asHtmlText
 import tv.anilibria.module.domain.entity.common.asRelativeUrl
 import tv.anilibria.module.domain.entity.youtube.Youtube
+import tv.anilibria.module.domain.entity.youtube.YoutubeId
+import tv.anilibria.module.domain.entity.youtube.YoutubeVideoId
 
 fun YoutubeResponse.toDomain() = Youtube(
-    id = id,
+    id = YoutubeId(id),
     title = title?.asHtmlText(),
     image = image?.asRelativeUrl(),
-    vid = vid,
+    vid = vid?.let { YoutubeVideoId(it) },
     views = views,
     comments = comments,
     timestamp = Instant.fromEpochSeconds(timestamp)

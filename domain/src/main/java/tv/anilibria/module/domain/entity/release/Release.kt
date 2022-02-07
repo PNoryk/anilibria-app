@@ -6,9 +6,12 @@ import tv.anilibria.module.domain.entity.common.AbsoluteUrl
 import tv.anilibria.module.domain.entity.common.HtmlText
 import tv.anilibria.module.domain.entity.common.RelativeUrl
 
+data class ReleaseId(val id: Long)
+data class ReleaseCode(val code: String)
+
 data class Release(
-    val id: Int,
-    val code: String?,
+    val id: ReleaseId,
+    val code: ReleaseCode?,
     val names: List<HtmlText>?,
     val series: String?,
     val poster: RelativeUrl?,
