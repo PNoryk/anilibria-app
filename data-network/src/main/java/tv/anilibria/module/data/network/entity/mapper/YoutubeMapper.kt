@@ -2,6 +2,7 @@ package tv.anilibria.module.data.network.entity.mapper
 
 import kotlinx.datetime.Instant
 import tv.anilibria.module.data.network.entity.app.youtube.YoutubeResponse
+import tv.anilibria.module.domain.entity.common.asCount
 import tv.anilibria.module.domain.entity.common.asHtmlText
 import tv.anilibria.module.domain.entity.common.asRelativeUrl
 import tv.anilibria.module.domain.entity.youtube.Youtube
@@ -13,7 +14,7 @@ fun YoutubeResponse.toDomain() = Youtube(
     title = title?.asHtmlText(),
     image = image?.asRelativeUrl(),
     vid = vid?.let { YoutubeVideoId(it) },
-    views = views,
-    comments = comments,
+    views = views.asCount(),
+    comments = comments.asCount(),
     timestamp = Instant.fromEpochSeconds(timestamp)
 )

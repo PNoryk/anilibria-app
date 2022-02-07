@@ -4,13 +4,13 @@ import tv.anilibria.module.data.network.entity.app.donation.content_data.YooMone
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
 fun YooMoneyDialogResponse.toDomain() = YooMoneyDialog(
-    title,
-    help,
-    amounts?.toDomain(),
-    paymentTypes.toDomain(),
-    form.toDomain(),
-    btDonateText,
-    btCancelText
+    title = title,
+    help = help,
+    amounts = amounts?.toDomain(),
+    paymentTypes = paymentTypes.toDomain(),
+    form = form.toDomain(),
+    btDonateText = btDonateText,
+    btCancelText = btCancelText
 )
 
 fun YooMoneyDialogResponse.Amounts.toDomain() = YooMoneyDialog.Amounts(

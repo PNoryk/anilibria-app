@@ -2,10 +2,7 @@ package tv.anilibria.module.data.network.entity.mapper
 
 import kotlinx.datetime.Instant
 import tv.anilibria.module.data.network.entity.app.release.*
-import tv.anilibria.module.domain.entity.common.asAbsoluteUrl
-import tv.anilibria.module.domain.entity.common.asBytes
-import tv.anilibria.module.domain.entity.common.asHtmlText
-import tv.anilibria.module.domain.entity.common.asRelativeUrl
+import tv.anilibria.module.domain.entity.common.*
 import tv.anilibria.module.domain.entity.release.*
 
 fun RandomReleaseResponse.toDomain() = RandomRelease(code = code)
@@ -40,7 +37,7 @@ fun ReleaseResponse.toDomain(): Release {
 }
 
 fun FavoriteInfoResponse.toDomain() = FavoriteInfo(
-    rating = rating,
+    rating = rating.asCount(),
     isAdded = isAdded
 )
 
@@ -78,9 +75,9 @@ fun TorrentResponse.toDomain(releaseId: ReleaseId) = Torrent(
     id = TorrentId(id),
     releaseId = releaseId,
     hash = hash,
-    leechers = leechers,
-    seeders = seeders,
-    completed = completed,
+    leechers = leechers.asCount(),
+    seeders = seeders.asCount(),
+    completed = completed.asCount(),
     quality = quality,
     series = series,
     size = size.asBytes(),

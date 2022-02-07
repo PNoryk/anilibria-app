@@ -1,6 +1,7 @@
 package tv.anilibria.module.domain.entity.youtube
 
 import kotlinx.datetime.Instant
+import tv.anilibria.module.domain.entity.common.Count
 import tv.anilibria.module.domain.entity.common.HtmlText
 import tv.anilibria.module.domain.entity.common.RelativeUrl
 
@@ -13,7 +14,7 @@ data class Youtube(
     val title: HtmlText?,
     val image: RelativeUrl?,
     val vid: YoutubeVideoId?,
-    val views: Long,
-    val comments: Long,
+    val views: Count,
+    val comments: Count,
     val timestamp: Instant
 ) 

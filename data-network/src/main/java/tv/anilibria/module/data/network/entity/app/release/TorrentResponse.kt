@@ -10,9 +10,9 @@ import com.squareup.moshi.JsonClass
 data class TorrentResponse(
     @Json(name = "id") val id: Long,
     @Json(name = "hash") val hash: String?,
-    @Json(name = "leechers") val leechers: Int,
-    @Json(name = "seeders") val seeders: Int,
-    @Json(name = "completed") val completed: Int,
+    @Json(name = "leechers") val leechers: Long,
+    @Json(name = "seeders") val seeders: Long,
+    @Json(name = "completed") val completed: Long,
     @Json(name = "quality") val quality: String?,
     @Json(name = "series") val series: String?,
     @Json(name = "size") val size: Long,
