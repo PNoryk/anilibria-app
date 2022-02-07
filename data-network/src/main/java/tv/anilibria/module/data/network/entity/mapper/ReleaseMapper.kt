@@ -19,13 +19,13 @@ fun ReleaseResponse.toDomain(): Release {
         poster = poster?.asRelativeUrl(),
         torrentUpdate = torrentUpdate?.let { Instant.fromEpochSeconds(it) },
         statusName = status,
-        status = statusCode,
+        status = statusCode?.toReleaseStatus(),
         type = type,
         genres = genres,
         voices = voices,
         year = year,
         season = season,
-        scheduleDay = scheduleDay?.toReleaseDay(),
+        scheduleDay = scheduleDay?.asWeekDay(),
         description = description?.asHtmlText(),
         announce = announce?.asHtmlText(),
         favoriteInfo = favoriteInfo?.toDomain(),
@@ -85,3 +85,12 @@ fun TorrentResponse.toDomain(releaseId: ReleaseId) = Torrent(
     size = size.asBytes(),
     url = url?.asRelativeUrl()
 )
+
+fun String.toReleaseStatus(): ReleaseStatus = when (this) {
+    "1" -> ReleaseStatus.ONGOING
+    "2" -> ReleaseStatus.COMPLETE
+    "3" -> ReleaseStatus.HIDDEN
+    "4" -> ReleaseStatus.NOT_ONGOING
+    else -> ReleaseStatus.UNKNOWN
+}
+

@@ -1,5 +1,6 @@
 package tv.anilibria.module.data.network.entity.mapper
 
+import kotlinx.datetime.DayOfWeek
 import tv.anilibria.module.data.network.entity.app.other.LinkMenuItemResponse
 import tv.anilibria.module.data.network.entity.app.page.PageLibriaResponse
 import tv.anilibria.module.data.network.entity.app.page.VkCommentsResponse
@@ -27,3 +28,10 @@ fun VkCommentsResponse.toDomain() = VkComments(
     baseUrl = baseUrl.asBaseUrl(),
     script = script
 )
+
+fun String.asWeekDay(): DayOfWeek {
+    val intDay = requireNotNull(toIntOrNull()) {
+        "Day is not integer '$this'"
+    }
+    return DayOfWeek(intDay)
+}
