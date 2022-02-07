@@ -1,6 +1,11 @@
 package tv.anilibria.module.data.network.entity.mapper
 
+import kotlinx.datetime.Instant
 import tv.anilibria.module.data.network.entity.app.release.*
+import tv.anilibria.module.domain.entity.common.asAbsoluteUrl
+import tv.anilibria.module.domain.entity.common.asBytes
+import tv.anilibria.module.domain.entity.common.asHtmlText
+import tv.anilibria.module.domain.entity.common.asRelativeUrl
 import tv.anilibria.module.domain.entity.release.*
 
 fun RandomReleaseResponse.toDomain() = RandomRelease(code = code)
@@ -8,24 +13,24 @@ fun RandomReleaseResponse.toDomain() = RandomRelease(code = code)
 fun ReleaseResponse.toDomain() = Release(
     id = id,
     code = code,
-    names = names,
+    names = names?.map { it.asHtmlText() },
     series = series,
-    poster = poster,
-    torrentUpdate = torrentUpdate,
-    status = status,
-    statusCode = statusCode,
+    poster = poster?.asRelativeUrl(),
+    torrentUpdate = torrentUpdate?.let { Instant.fromEpochSeconds(it) },
+    statusName = status,
+    status = statusCode,
     type = type,
     genres = genres,
     voices = voices,
     year = year,
     season = season,
     scheduleDay = scheduleDay,
-    description = description,
-    announce = announce,
+    description = description?.asHtmlText(),
+    announce = announce?.asHtmlText(),
     favoriteInfo = favoriteInfo?.toDomain(),
     showDonateDialog = showDonateDialog,
     blockedInfo = blockedInfo?.toDomain(),
-    moonwalkLink = moonwalkLink,
+    webPlayerUrl = moonwalkLink?.asAbsoluteUrl(),
     episodes = episodes?.map { it.toDomain() },
     externalPlaylists = externalPlaylists?.map { it.toDomain() },
     torrents = torrents?.map { it.toDomain() }
@@ -38,18 +43,18 @@ fun FavoriteInfoResponse.toDomain() = FavoriteInfo(
 
 fun BlockedInfoResponse.toDomain() = BlockedInfo(
     isBlocked = isBlocked,
-    reason = reason
+    reason = reason?.asHtmlText()
 )
 
 fun EpisodeResponse.toDomain() = Episode(
     id = id,
     title = title,
-    urlSd = urlSd,
-    urlHd = urlHd,
-    urlFullHd = urlFullHd,
-    srcUrlSd = srcUrlSd,
-    srcUrlHd = srcUrlHd,
-    srcUrlFullHd = srcUrlFullHd
+    urlSd = urlSd?.asAbsoluteUrl(),
+    urlHd = urlHd?.asAbsoluteUrl(),
+    urlFullHd = urlFullHd?.asAbsoluteUrl(),
+    srcUrlSd = srcUrlSd?.asAbsoluteUrl(),
+    srcUrlHd = srcUrlHd?.asAbsoluteUrl(),
+    srcUrlFullHd = srcUrlFullHd?.asAbsoluteUrl()
 )
 
 fun ExternalPlaylistResponse.toDomain() = ExternalPlaylist(
@@ -62,7 +67,7 @@ fun ExternalPlaylistResponse.toDomain() = ExternalPlaylist(
 fun ExternalEpisodeResponse.toDomain() = ExternalEpisode(
     id = id,
     title = title,
-    url = url
+    url = url?.asAbsoluteUrl()
 )
 
 fun TorrentResponse.toDomain() = Torrent(
@@ -73,6 +78,6 @@ fun TorrentResponse.toDomain() = Torrent(
     completed = completed,
     quality = quality,
     series = series,
-    size = size,
-    url = url
+    size = size.asBytes(),
+    url = url?.asRelativeUrl()
 )

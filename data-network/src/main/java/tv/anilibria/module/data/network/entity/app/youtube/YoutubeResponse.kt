@@ -9,7 +9,7 @@ data class YoutubeResponse(
     @Json(name = "title") val title: String?,
     @Json(name = "image") val image: String?,
     @Json(name = "vid") val vid: String?,
-    @Json(name = "views") val views: Int,
-    @Json(name = "comments") val comments: Int,
-    @Json(name = "timestamp") val timestamp: Int
+    @Json(name = "views") val views: Long,
+    @Json(name = "comments") val comments: Long,
+    @Json(name = "timestamp") val timestamp: Long
 ) 

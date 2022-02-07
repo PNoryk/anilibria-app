@@ -7,6 +7,6 @@ import com.squareup.moshi.JsonClass
 data class OtpInfoResponse(
     @Json(name = "code") val code: String,
     @Json(name = "description") val description: String,
-    @Json(name = "expiredAt") val expiresAt: Int,
-    @Json(name = "remainingTime") val remainingTime: Int
+    @Json(name = "expiredAt") val expiresAt: Long,
+    @Json(name = "remainingTime") val remainingTime: Long
 )

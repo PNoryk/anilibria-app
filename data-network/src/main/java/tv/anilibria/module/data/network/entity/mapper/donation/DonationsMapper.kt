@@ -5,6 +5,8 @@ import tv.anilibria.module.data.network.entity.app.donation.DonationContentItemR
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.app.donation.content.*
 import tv.anilibria.module.data.network.entity.app.donation.content_data.DonationDialogResponse
+import tv.anilibria.module.domain.entity.common.asAbsoluteUrl
+import tv.anilibria.module.domain.entity.common.asHtmlText
 import tv.anilibria.module.domain.entity.donation.*
 
 fun DonationInfoResponse.toDomain() = DonationInfo(
@@ -34,13 +36,13 @@ fun DonationContentItemResponse.toDomain(): DonationContentItem? = when (type) {
 fun DonationContentButtonResponse.toDomain() = DonationContentButton(
     tag = tag,
     text = text,
-    link = link,
+    link = link?.asAbsoluteUrl(),
     brand = brand,
     icon = icon
 )
 
 fun DonationContentCaptionResponse.toDomain() = DonationContentCaption(
-    text = text
+    text = text.asHtmlText()
 )
 
 fun DonationContentDividerResponse.toDomain() = DonationContentDivider(
@@ -53,7 +55,7 @@ fun DonationContentHeaderResponse.toDomain() = DonationContentHeader(
 
 fun DonationContentSectionResponse.toDomain() = DonationContentSection(
     title = title,
-    subtitle = subtitle
+    subtitle = subtitle?.asHtmlText()
 )
 
 fun DonationDialogResponse.toDomain() = DonationDialog(

@@ -4,7 +4,7 @@ import tv.anilibria.module.domain.entity.common.AbsoluteUrl
 
 data class Episode(
     val id: Int,
-    val title: AbsoluteUrl?,
+    val title: String?,
     val urlSd: AbsoluteUrl?,
     val urlHd: AbsoluteUrl?,
     val urlFullHd: AbsoluteUrl?,

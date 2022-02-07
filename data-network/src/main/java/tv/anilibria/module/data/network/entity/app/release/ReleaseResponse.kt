@@ -10,7 +10,7 @@ data class ReleaseResponse(
     @Json(name = "names") val names: List<String>?,
     @Json(name = "series") val series: String?,
     @Json(name = "poster") val poster: String?,
-    @Json(name = "last") val torrentUpdate: Int?,
+    @Json(name = "last") val torrentUpdate: Long?,
     @Json(name = "status") val status: String?,
     @Json(name = "statusCode") val statusCode: String?,
     @Json(name = "type") val type: String?,

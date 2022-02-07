@@ -9,7 +9,7 @@ data class Youtube(
     val title: HtmlText?,
     val image: RelativeUrl?,
     val vid: String?,
-    val views: Int,
-    val comments: Int,
+    val views: Long,
+    val comments: Long,
     val timestamp: Instant
 ) 
