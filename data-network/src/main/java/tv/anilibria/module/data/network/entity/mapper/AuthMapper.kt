@@ -20,5 +20,7 @@ fun SocialAuthServiceResponse.toDomain() = SocialAuthService(
     title = title,
     socialUrl = socialUrl.asAbsoluteUrl(),
     resultPattern = Regex(resultPattern),
-    errorUrlPattern = Regex(errorUrlPattern)
+    errorUrlPattern = Regex(errorUrlPattern),
+    color = key.toDataColor(),
+    icon = key.toDataIcon()
 )

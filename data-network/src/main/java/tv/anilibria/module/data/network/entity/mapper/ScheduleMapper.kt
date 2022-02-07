@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.network.entity.mapper
 
-import kotlinx.datetime.DayOfWeek
 import tv.anilibria.module.data.network.entity.app.schedule.ScheduleDayResponse
 import tv.anilibria.module.domain.entity.schedule.ScheduleDay
 

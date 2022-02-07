@@ -2,6 +2,8 @@ package tv.anilibria.module.domain.entity.donation
 
 import tv.anilibria.module.domain.entity.common.AbsoluteUrl
 import tv.anilibria.module.domain.entity.common.HtmlText
+import tv.anilibria.module.domain.entity.other.DataColor
+import tv.anilibria.module.domain.entity.other.DataIcon
 
 sealed class DonationContentItem
 
@@ -9,8 +11,8 @@ data class DonationContentButton(
     val tag: String?,
     val text: String,
     val link: AbsoluteUrl?,
-    val brand: String?,
-    val icon: String?
+    val color: DataColor?,
+    val icon: DataIcon?
 ) : DonationContentItem()
 
 data class DonationContentCaption(

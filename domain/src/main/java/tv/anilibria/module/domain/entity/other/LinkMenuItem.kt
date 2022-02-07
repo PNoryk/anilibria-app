@@ -7,5 +7,5 @@ data class LinkMenuItem(
     val title: String,
     val absoluteLink: AbsoluteUrl?,
     val sitePagePath: RelativeUrl?,
-    val icon: LinkMenuItemIcon?
+    val icon: DataIcon?
 )

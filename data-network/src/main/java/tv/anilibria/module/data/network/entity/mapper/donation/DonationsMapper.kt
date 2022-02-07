@@ -5,6 +5,8 @@ import tv.anilibria.module.data.network.entity.app.donation.DonationContentItemR
 import tv.anilibria.module.data.network.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.network.entity.app.donation.content.*
 import tv.anilibria.module.data.network.entity.app.donation.content_data.DonationDialogResponse
+import tv.anilibria.module.data.network.entity.mapper.toDataColor
+import tv.anilibria.module.data.network.entity.mapper.toDataIcon
 import tv.anilibria.module.domain.entity.common.asAbsoluteUrl
 import tv.anilibria.module.domain.entity.common.asHtmlText
 import tv.anilibria.module.domain.entity.donation.*
@@ -37,8 +39,8 @@ fun DonationContentButtonResponse.toDomain() = DonationContentButton(
     tag = tag,
     text = text,
     link = link?.asAbsoluteUrl(),
-    brand = brand,
-    icon = icon
+    color = brand?.toDataColor(),
+    icon = icon?.toDataIcon()
 )
 
 fun DonationContentCaptionResponse.toDomain() = DonationContentCaption(

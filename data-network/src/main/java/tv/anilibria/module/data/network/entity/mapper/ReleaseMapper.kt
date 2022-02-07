@@ -64,7 +64,9 @@ fun ExternalPlaylistResponse.toDomain() = ExternalPlaylist(
     tag = tag,
     title = title,
     actionText = actionText,
-    episodes = episodes.map { it.toDomain() }
+    episodes = episodes.map { it.toDomain() },
+    color = tag.toDataColor(),
+    icon = tag.toDataIcon()
 )
 
 fun ExternalEpisodeResponse.toDomain() = ExternalEpisode(
