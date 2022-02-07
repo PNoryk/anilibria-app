@@ -7,9 +7,9 @@ import io.reactivex.Single
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.network.ApiClient
+import tv.anilibria.module.data.network.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.ApiError
 import tv.anilibria.module.data.network.datasource.remote.IClient
-import tv.anilibria.module.data.network.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.network.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.network.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.network.entity.app.auth.OtpInfoResponse
@@ -19,7 +19,6 @@ import tv.anilibria.module.data.network.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.remote.AuthRemoteDataSource
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 /**
@@ -100,8 +99,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         return client
             .getFull(fixedUrl, emptyMap())
             .doOnSuccess { response ->
-                val matcher = Pattern.compile(item.errorUrlPattern).matcher(response.redirect)
-                if (matcher.find()) {
+                if (item.errorUrlPattern.containsMatchIn(response.redirect)) {
                     throw SocialAuthException()
                 }
             }
