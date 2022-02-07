@@ -5,7 +5,9 @@ import tv.anilibria.module.data.network.entity.app.release.*
 import tv.anilibria.module.domain.entity.common.*
 import tv.anilibria.module.domain.entity.release.*
 
-fun RandomReleaseResponse.toDomain() = RandomRelease(code = code)
+fun RandomReleaseResponse.toDomain() = RandomRelease(
+    code = ReleaseCode(code)
+)
 
 fun ReleaseResponse.toDomain(): Release {
     val releaseId = ReleaseId(id)
@@ -23,7 +25,7 @@ fun ReleaseResponse.toDomain(): Release {
         voices = voices,
         year = year,
         season = season,
-        scheduleDay = scheduleDay,
+        scheduleDay = scheduleDay?.toReleaseDay(),
         description = description?.asHtmlText(),
         announce = announce?.asHtmlText(),
         favoriteInfo = favoriteInfo?.toDomain(),
