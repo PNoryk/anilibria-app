@@ -1,5 +1,7 @@
 package tv.anilibria.module.domain.entity.updater
 
+import tv.anilibria.module.domain.entity.common.HtmlText
+
 /**
  * Created by radiationx on 28.01.18.
  */
@@ -9,8 +11,8 @@ data class UpdateData(
     val name: String,
     val date: String,
     val links: List<UpdateLink>,
-    val important: List<String>,
-    val added: List<String>,
-    val fixed: List<String>,
-    val changed: List<String>,
+    val important: List<HtmlText>,
+    val added: List<HtmlText>,
+    val fixed: List<HtmlText>,
+    val changed: List<HtmlText>,
 )
