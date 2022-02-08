@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.datasource.remote.common
+package tv.anilibria.feature.appupdates.data
 
 interface CheckerReserveSources {
 

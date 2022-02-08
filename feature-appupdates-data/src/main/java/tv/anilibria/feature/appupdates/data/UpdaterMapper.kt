@@ -1,12 +1,12 @@
-package tv.anilibria.module.data.restapi.entity.mapper
+package tv.anilibria.feature.appupdates.data
 
-import tv.anilibria.module.data.restapi.entity.app.updater.UpdateDataResponse
-import tv.anilibria.module.data.restapi.entity.app.updater.UpdateLinkResponse
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.core.types.asHtmlText
-import tv.anilibria.module.domain.entity.updater.UpdateData
-import tv.anilibria.module.domain.entity.updater.UpdateLink
-import tv.anilibria.module.domain.entity.updater.UpdateLinkType
+import tv.anilibria.feature.appupdates.data.domain.UpdateData
+import tv.anilibria.feature.appupdates.data.domain.UpdateLink
+import tv.anilibria.feature.appupdates.data.domain.UpdateLinkType
+import tv.anilibria.feature.appupdates.data.response.UpdateDataResponse
+import tv.anilibria.feature.appupdates.data.response.UpdateLinkResponse
 
 fun UpdateDataResponse.toDomain() = UpdateData(
     code = code,

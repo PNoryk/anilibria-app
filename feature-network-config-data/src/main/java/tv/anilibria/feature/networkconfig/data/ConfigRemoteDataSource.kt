@@ -9,7 +9,7 @@ import tv.anilibria.module.data.network.NetworkClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ConfigurationRemoteDataSource @Inject constructor(
+class ConfigRemoteDataSource @Inject constructor(
     private val mainClient: NetworkClient,
     private val schedulers: SchedulersProvider,
     private val moshi: Moshi,
@@ -52,10 +52,14 @@ class ConfigurationRemoteDataSource @Inject constructor(
         }
 
     private fun getConfigFromReserve(): Single<List<ApiAddress>> {
-        val singleSources = reserveSources.sources.map {
-            getReserve(it).onErrorReturn { emptyList() }
+        val singleSources = reserveSources.sources.map { source ->
+            getReserve(source)
+                .map { Result.success(it) }
+                .onErrorReturn { Result.failure(it) }
         }
         return Single.merge(singleSources)
+            .filter { it.isSuccess }
+            .map { it.getOrThrow() }
             .filter { it.isNotEmpty() }
             .firstOrError()
     }

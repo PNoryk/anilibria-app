@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.entity.app.updater
+package tv.anilibria.feature.appupdates.data.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

@@ -14,7 +14,3 @@ inline fun <reified T> getApiResponseAdapter(moshi: Moshi): JsonAdapter<ApiRespo
 inline fun <reified T> Single<String>.mapApiResponse(moshi: Moshi): Single<T> {
     return compose(ApiResponseTransformer(getApiResponseAdapter(moshi)))
 }
-
-inline fun <reified T> Single<String>.mapResponse(moshi: Moshi): Single<T> {
-    return map { moshi.adapter(T::class.java).fromJson(it) }
-}

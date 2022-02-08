@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.updater
+package tv.anilibria.feature.appupdates.data.domain
 
 import tv.anilibria.core.types.AbsoluteUrl
 
