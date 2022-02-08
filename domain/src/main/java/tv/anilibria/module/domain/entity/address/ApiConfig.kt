@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.network.entity.app.address
+package tv.anilibria.module.data.restapi.entity.app.address
 
 import tv.anilibria.module.domain.entity.address.ApiAddress
 
