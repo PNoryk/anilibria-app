@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.MainClient
-import tv.anilibria.module.data.restapi.datasource.remote.IClient
+import tv.anilibria.module.data.network.IClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.common.CheckerReserveSources
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse

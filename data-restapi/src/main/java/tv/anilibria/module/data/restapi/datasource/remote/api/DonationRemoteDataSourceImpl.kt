@@ -5,7 +5,7 @@ import io.reactivex.Single
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.MainClient
-import tv.anilibria.module.data.restapi.datasource.remote.IClient
+import tv.anilibria.module.data.network.IClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.entity.app.donation.DonationInfoResponse
