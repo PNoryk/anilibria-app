@@ -1,3 +1,4 @@
 include ':app-mobile', ':bottomsheet', ':data', ':shared-ktx', ':shared-android-ktx', ':lapism-search', ':app-tv', ':shared-app'
 include ':data-restapi'
 include ':domain'
+include ':data-network'
