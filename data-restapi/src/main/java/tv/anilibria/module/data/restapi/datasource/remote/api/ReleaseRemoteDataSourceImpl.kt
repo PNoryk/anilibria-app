@@ -3,7 +3,7 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.module.data.restapi.ApiClient
-import tv.anilibria.module.data.network.IClient
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.entity.app.PageResponse
@@ -19,7 +19,7 @@ import javax.inject.Inject
 /* Created by radiationx on 31.10.17. */
 
 class ReleaseRemoteDataSourceImpl @Inject constructor(
-    @ApiClient private val client: IClient,
+    @ApiClient private val client: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) : ReleaseRemoteDataSource {

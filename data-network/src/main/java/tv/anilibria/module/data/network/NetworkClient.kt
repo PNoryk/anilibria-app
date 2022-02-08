@@ -3,7 +3,7 @@ package tv.anilibria.module.data.network
 import io.reactivex.Single
 import tv.anilibria.module.data.network.NetworkResponse
 
-interface IClient {
+interface NetworkClient {
 
     fun get(url: String, args: Map<String, String>): Single<String>
     fun post(url: String, args: Map<String, String>): Single<String>

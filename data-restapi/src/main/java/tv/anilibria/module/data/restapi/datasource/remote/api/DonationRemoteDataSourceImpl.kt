@@ -5,7 +5,7 @@ import io.reactivex.Single
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.MainClient
-import tv.anilibria.module.data.network.IClient
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.entity.app.donation.DonationInfoResponse
@@ -16,8 +16,8 @@ import tv.anilibria.module.domain.remote.DonationRemoteDataSource
 
 @InjectConstructor
 class DonationRemoteDataSourceImpl(
-    @ApiClient private val client: IClient,
-    @MainClient private val mainClient: IClient,
+    @ApiClient private val client: NetworkClient,
+    @MainClient private val mainClient: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) : DonationRemoteDataSource {

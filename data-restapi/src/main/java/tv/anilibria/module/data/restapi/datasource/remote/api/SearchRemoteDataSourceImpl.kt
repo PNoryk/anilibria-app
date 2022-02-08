@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import org.json.JSONObject
 import tv.anilibria.module.data.restapi.ApiClient
-import tv.anilibria.module.data.network.IClient
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.entity.app.PageResponse
@@ -16,7 +16,7 @@ import tv.anilibria.module.domain.remote.SearchRemoteDataSource
 import javax.inject.Inject
 
 class SearchRemoteDataSourceImpl @Inject constructor(
-    @ApiClient private val client: IClient,
+    @ApiClient private val client: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) : SearchRemoteDataSource {

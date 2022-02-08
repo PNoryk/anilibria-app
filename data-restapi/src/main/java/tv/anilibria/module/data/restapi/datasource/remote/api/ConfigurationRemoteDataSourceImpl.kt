@@ -5,7 +5,7 @@ import io.reactivex.Single
 import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.MainClient
-import tv.anilibria.module.data.network.IClient
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.entity.app.address.ApiConfigResponse
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ConfigurationRemoteDataSourceImpl @Inject constructor(
-    @ApiClient private val client: IClient,
-    @MainClient private val mainClient: IClient,
+    @ApiClient private val client: NetworkClient,
+    @MainClient private val mainClient: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val schedulers: SchedulersProvider,
     private val moshi: Moshi
@@ -38,7 +38,7 @@ class ConfigurationRemoteDataSourceImpl @Inject constructor(
             }
         }
 
-    private fun check(client: IClient, apiUrl: String): Single<Boolean> =
+    private fun check(client: NetworkClient, apiUrl: String): Single<Boolean> =
         client.postFull(apiUrl, mapOf("query" to "empty"))
             .map { true }
 

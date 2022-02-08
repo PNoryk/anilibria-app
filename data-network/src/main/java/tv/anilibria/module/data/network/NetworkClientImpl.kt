@@ -4,9 +4,9 @@ import io.reactivex.Single
 import okhttp3.*
 import javax.inject.Inject
 
-open class Client @Inject constructor(
-    private val clientWrapper: ClientWrapper,
-) : IClient {
+open class NetworkClientImpl @Inject constructor(
+    private val okHttpClient: DynamicOkHttpClient,
+) : NetworkClient {
 
     companion object {
         private const val METHOD_GET = "GET"
@@ -51,7 +51,7 @@ open class Client @Inject constructor(
                 .url(httpUrl)
                 .method(method, body)
                 .build()
-            clientWrapper.get().newCall(request)
+            okHttpClient.get().newCall(request)
         }
         .flatMap { CallExecuteSingle(it) }
         .map {

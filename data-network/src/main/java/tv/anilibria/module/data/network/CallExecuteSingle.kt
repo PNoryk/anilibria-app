@@ -24,7 +24,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import okhttp3.Call
 import okhttp3.Response
 
-class CallExecuteSingle(private val originalCall: Call) : Single<Response>() {
+internal class CallExecuteSingle(private val originalCall: Call) : Single<Response>() {
 
 
     override fun subscribeActual(observer: SingleObserver<in Response>) {

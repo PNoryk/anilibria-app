@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.MainClient
-import tv.anilibria.module.data.network.IClient
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.common.CheckerReserveSources
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
@@ -19,8 +19,8 @@ import javax.inject.Inject
  * Created by radiationx on 28.01.18.
  */
 class CheckerRemoteDataSourceImpl @Inject constructor(
-    @ApiClient private val client: IClient,
-    @MainClient private val mainClient: IClient,
+    @ApiClient private val client: NetworkClient,
+    @MainClient private val mainClient: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val reserveSources: CheckerReserveSources,
     private val moshi: Moshi

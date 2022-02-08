@@ -9,7 +9,7 @@ import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.ApiError
-import tv.anilibria.module.data.network.IClient
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
@@ -25,7 +25,7 @@ import javax.inject.Inject
  * Created by radiationx on 30.12.17.
  */
 class AuthRemoteDataSourceImpl @Inject constructor(
-    @ApiClient private val client: IClient,
+    @ApiClient private val client: NetworkClient,
     private val authParser: AuthParser,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
