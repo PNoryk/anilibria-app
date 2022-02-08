@@ -13,6 +13,7 @@ class ConfigurationRemoteDataSource @Inject constructor(
     private val mainClient: NetworkClient,
     private val schedulers: SchedulersProvider,
     private val moshi: Moshi,
+    private val reserveSources: ApiConfigReserveSources,
     private val appDataSource: AppConfigRemoteDataSource
 ) {
 
@@ -51,8 +52,12 @@ class ConfigurationRemoteDataSource @Inject constructor(
         }
 
     private fun getConfigFromReserve(): Single<List<ApiAddress>> {
-        return getReserve("https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
-            .onErrorResumeNext { getReserve("https://bitbucket.org/RadiationX/anilibria-app/raw/master/config.json") }
+        val singleSources = reserveSources.sources.map {
+            getReserve(it).onErrorReturn { emptyList() }
+        }
+        return Single.merge(singleSources)
+            .filter { it.isNotEmpty() }
+            .firstOrError()
     }
 
     private fun getReserve(url: String): Single<List<ApiAddress>> =
