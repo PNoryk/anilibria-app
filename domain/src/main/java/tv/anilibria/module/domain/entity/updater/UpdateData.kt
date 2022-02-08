@@ -1,6 +1,6 @@
 package tv.anilibria.module.domain.entity.updater
 
-import tv.anilibria.module.domain.entity.common.HtmlText
+import tv.anilibria.core.types.HtmlText
 
 /**
  * Created by radiationx on 28.01.18.

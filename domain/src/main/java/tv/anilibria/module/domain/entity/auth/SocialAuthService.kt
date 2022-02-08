@@ -1,6 +1,6 @@
 package tv.anilibria.module.domain.entity.auth
 
-import tv.anilibria.module.domain.entity.common.AbsoluteUrl
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.domain.entity.other.DataColor
 import tv.anilibria.module.domain.entity.other.DataIcon
 

@@ -1,6 +1,6 @@
 package tv.anilibria.module.domain.entity.release
 
-import tv.anilibria.module.domain.entity.common.AbsoluteUrl
+import tv.anilibria.core.types.AbsoluteUrl
 
 data class EpisodeId(val id: Long)
 

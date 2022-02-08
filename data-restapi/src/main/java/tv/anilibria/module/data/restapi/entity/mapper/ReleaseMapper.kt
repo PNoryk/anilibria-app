@@ -2,7 +2,7 @@ package tv.anilibria.module.data.restapi.entity.mapper
 
 import kotlinx.datetime.Instant
 import tv.anilibria.module.data.restapi.entity.app.release.*
-import tv.anilibria.module.domain.entity.common.*
+import tv.anilibria.core.types.*
 import tv.anilibria.module.domain.entity.release.*
 
 fun RandomReleaseResponse.toDomain() = RandomRelease(

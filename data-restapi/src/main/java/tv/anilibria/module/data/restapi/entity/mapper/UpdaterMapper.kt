@@ -2,8 +2,8 @@ package tv.anilibria.module.data.restapi.entity.mapper
 
 import tv.anilibria.module.data.restapi.entity.app.updater.UpdateDataResponse
 import tv.anilibria.module.data.restapi.entity.app.updater.UpdateLinkResponse
-import tv.anilibria.module.domain.entity.common.asAbsoluteUrl
-import tv.anilibria.module.domain.entity.common.asHtmlText
+import tv.anilibria.core.types.asAbsoluteUrl
+import tv.anilibria.core.types.asHtmlText
 import tv.anilibria.module.domain.entity.updater.UpdateData
 import tv.anilibria.module.domain.entity.updater.UpdateLink
 import tv.anilibria.module.domain.entity.updater.UpdateLinkType

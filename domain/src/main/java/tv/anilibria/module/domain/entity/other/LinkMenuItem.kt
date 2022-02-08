@@ -1,7 +1,7 @@
 package tv.anilibria.module.domain.entity.other
 
-import tv.anilibria.module.domain.entity.common.AbsoluteUrl
-import tv.anilibria.module.domain.entity.common.RelativeUrl
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.core.types.RelativeUrl
 
 data class LinkMenuItem(
     val title: String,

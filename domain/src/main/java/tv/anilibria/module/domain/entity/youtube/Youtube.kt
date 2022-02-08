@@ -1,9 +1,9 @@
 package tv.anilibria.module.domain.entity.youtube
 
 import kotlinx.datetime.Instant
-import tv.anilibria.module.domain.entity.common.Count
-import tv.anilibria.module.domain.entity.common.HtmlText
-import tv.anilibria.module.domain.entity.common.RelativeUrl
+import tv.anilibria.core.types.Count
+import tv.anilibria.core.types.HtmlText
+import tv.anilibria.core.types.RelativeUrl
 
 data class YoutubeId(val id: Long)
 

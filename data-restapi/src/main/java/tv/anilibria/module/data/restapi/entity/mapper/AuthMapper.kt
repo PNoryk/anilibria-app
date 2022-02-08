@@ -5,7 +5,7 @@ import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
 import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthServiceResponse
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
-import tv.anilibria.module.domain.entity.common.asAbsoluteUrl
+import tv.anilibria.core.types.asAbsoluteUrl
 import kotlin.time.Duration.Companion.seconds
 
 fun OtpInfoResponse.toDomain() = OtpInfo(

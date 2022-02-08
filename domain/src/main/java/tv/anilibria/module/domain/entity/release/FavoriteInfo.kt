@@ -1,6 +1,6 @@
 package tv.anilibria.module.domain.entity.release
 
-import tv.anilibria.module.domain.entity.common.Count
+import tv.anilibria.core.types.Count
 
 /**
  * Created by radiationx on 25.01.18.

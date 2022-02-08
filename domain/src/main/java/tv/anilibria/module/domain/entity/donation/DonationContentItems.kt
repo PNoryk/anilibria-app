@@ -1,7 +1,7 @@
 package tv.anilibria.module.domain.entity.donation
 
-import tv.anilibria.module.domain.entity.common.AbsoluteUrl
-import tv.anilibria.module.domain.entity.common.HtmlText
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.core.types.HtmlText
 import tv.anilibria.module.domain.entity.other.DataColor
 import tv.anilibria.module.domain.entity.other.DataIcon
 

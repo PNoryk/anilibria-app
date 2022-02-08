@@ -2,9 +2,9 @@ package tv.anilibria.module.domain.entity.release
 
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
-import tv.anilibria.module.domain.entity.common.AbsoluteUrl
-import tv.anilibria.module.domain.entity.common.HtmlText
-import tv.anilibria.module.domain.entity.common.RelativeUrl
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.core.types.HtmlText
+import tv.anilibria.core.types.RelativeUrl
 
 data class ReleaseId(val id: Long)
 data class ReleaseCode(val code: String)

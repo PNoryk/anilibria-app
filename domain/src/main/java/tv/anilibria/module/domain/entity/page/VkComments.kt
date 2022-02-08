@@ -1,6 +1,6 @@
 package tv.anilibria.module.domain.entity.page
 
-import tv.anilibria.module.domain.entity.common.BaseUrl
+import tv.anilibria.core.types.BaseUrl
 
 data class VkComments(
     val baseUrl: BaseUrl,

@@ -1,8 +1,8 @@
 package tv.anilibria.module.domain.entity.release
 
-import tv.anilibria.module.domain.entity.common.Bytes
-import tv.anilibria.module.domain.entity.common.Count
-import tv.anilibria.module.domain.entity.common.RelativeUrl
+import tv.anilibria.core.types.Bytes
+import tv.anilibria.core.types.Count
+import tv.anilibria.core.types.RelativeUrl
 
 data class TorrentId(val id: Long)
 

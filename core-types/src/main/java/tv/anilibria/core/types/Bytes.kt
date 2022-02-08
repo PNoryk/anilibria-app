@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.common
+package tv.anilibria.core.types
 
 data class Bytes(val value: Long)
 

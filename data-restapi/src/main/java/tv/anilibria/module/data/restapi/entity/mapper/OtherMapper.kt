@@ -4,10 +4,10 @@ import kotlinx.datetime.DayOfWeek
 import tv.anilibria.module.data.restapi.entity.app.other.LinkMenuItemResponse
 import tv.anilibria.module.data.restapi.entity.app.page.PageLibriaResponse
 import tv.anilibria.module.data.restapi.entity.app.page.VkCommentsResponse
-import tv.anilibria.module.domain.entity.common.asAbsoluteUrl
-import tv.anilibria.module.domain.entity.common.asBaseUrl
-import tv.anilibria.module.domain.entity.common.asHtmlText
-import tv.anilibria.module.domain.entity.common.asRelativeUrl
+import tv.anilibria.core.types.asAbsoluteUrl
+import tv.anilibria.core.types.asBaseUrl
+import tv.anilibria.core.types.asHtmlText
+import tv.anilibria.core.types.asRelativeUrl
 import tv.anilibria.module.domain.entity.other.DataColor
 import tv.anilibria.module.domain.entity.other.DataIcon
 import tv.anilibria.module.domain.entity.other.LinkMenuItem

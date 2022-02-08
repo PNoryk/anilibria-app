@@ -1,6 +1,6 @@
 package tv.anilibria.module.domain.entity.other
 
-import tv.anilibria.module.domain.entity.common.RelativeUrl
+import tv.anilibria.core.types.RelativeUrl
 
 data class UserId(val id: Long)
 
