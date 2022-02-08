@@ -8,12 +8,12 @@ import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullString
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
-import tv.anilibria.module.data.restapi.datasource.remote.ApiError
+import tv.anilibria.module.data.restapi.datasource.remote.ApiException
 import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
-import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthException
+import tv.anilibria.module.domain.errors.SocialAuthException
 import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthServiceResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.auth.OtpInfo
@@ -100,7 +100,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             .getFull(fixedUrl, emptyMap())
             .doOnSuccess { response ->
                 if (item.errorUrlPattern.containsMatchIn(response.redirect)) {
-                    throw SocialAuthException()
+                    throw SocialAuthException("Social auth result not matched by pattern")
                 }
             }
             .doOnSuccess {
@@ -110,7 +110,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
                     null
                 }
                 if (message != null) {
-                    throw ApiError(400, message, null)
+                    throw ApiException(400, message, null)
                 }
             }
             .ignoreElement()

@@ -12,7 +12,7 @@ data class ApiResponse<T>(
 
     fun handleError(): ApiResponse<T> = when {
         status == true && data != null -> this
-        error != null -> throw ApiError(error.code, error.message, error.description)
+        error != null -> throw ApiException(error.code, error.message, error.description)
         else -> throw IllegalArgumentException("Wrong response")
     }
 }

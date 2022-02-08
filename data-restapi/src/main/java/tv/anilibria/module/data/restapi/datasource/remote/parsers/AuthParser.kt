@@ -2,8 +2,8 @@ package tv.anilibria.module.data.restapi.datasource.remote.parsers
 
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullString
-import tv.anilibria.module.data.restapi.datasource.remote.ApiError
-import tv.anilibria.module.data.restapi.entity.app.auth.*
+import tv.anilibria.module.data.restapi.datasource.remote.ApiException
+import tv.anilibria.module.domain.errors.*
 import javax.inject.Inject
 
 /**
@@ -11,11 +11,12 @@ import javax.inject.Inject
  */
 class AuthParser @Inject constructor() {
 
-    fun checkOtpError(error: Throwable): Throwable = if (error is ApiError) {
+    fun checkOtpError(error: Throwable): Throwable = if (error is ApiException) {
+        val exceptionMessage = error.message.orEmpty()
         when (error.description) {
-            "otpNotFound" -> OtpNotFoundException(error.message.orEmpty())
-            "otpAccepted" -> OtpAcceptedException(error.message.orEmpty())
-            "otpNotAccepted" -> OtpNotAcceptedException(error.message.orEmpty())
+            "otpNotFound" -> OtpNotFoundException(exceptionMessage)
+            "otpAccepted" -> OtpAcceptedException(exceptionMessage)
+            "otpNotAccepted" -> OtpNotAcceptedException(exceptionMessage)
             else -> error
         }
     } else {
@@ -28,15 +29,15 @@ class AuthParser @Inject constructor() {
         val message = responseJson.nullString("mes")
         val key = responseJson.nullString("key")
         if (error != "ok" && key != "authorized") {
-            val apiError = ApiError(400, message ?: key, null)
+            val exceptionMessage = (message ?: key).orEmpty()
             throw when (key) {
-                "authorized" -> AlreadyAuthorizedException(apiError)
-                "empty" -> EmptyFieldException(apiError)
-                "wrongUserAgent" -> WrongUserAgentException(apiError)
-                "invalidUser" -> InvalidUserException(apiError)
-                "wrong2FA" -> Wrong2FaCodeException(apiError)
-                "wrongPasswd" -> WrongPasswordException(apiError)
-                else -> apiError
+                "authorized" -> AlreadyAuthorizedException(exceptionMessage)
+                "empty" -> EmptyFieldException(exceptionMessage)
+                "wrongUserAgent" -> WrongUserAgentException(exceptionMessage)
+                "invalidUser" -> InvalidUserException(exceptionMessage)
+                "wrong2FA" -> Wrong2FaCodeException(exceptionMessage)
+                "wrongPasswd" -> WrongPasswordException(exceptionMessage)
+                else -> ApiException(400, exceptionMessage, null)
             }
         }
         return message.orEmpty()
