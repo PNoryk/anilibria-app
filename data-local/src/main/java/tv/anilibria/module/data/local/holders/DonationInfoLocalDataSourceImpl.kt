@@ -9,7 +9,7 @@ import tv.anilibria.module.domain.entity.donation.DonationInfo
 
 class DonationInfoLocalDataSourceImpl : DonationInfoLocalDataSource {
 
-    private val observableData by lazy { ObservableData<DonationInfo>() }
+    private val observableData = ObservableData<DonationInfo>()
 
     override fun observe(): Observable<DataWrapper<DonationInfo>> = observableData.observe()
 

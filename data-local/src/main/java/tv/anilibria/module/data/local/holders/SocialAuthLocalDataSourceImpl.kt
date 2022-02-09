@@ -9,7 +9,7 @@ import tv.anilibria.module.domain.entity.auth.SocialAuthService
 
 class SocialAuthLocalDataSourceImpl : SocialAuthLocalDataSource {
 
-    private val observableData by lazy { ObservableData<List<SocialAuthService>>() }
+    private val observableData = ObservableData<List<SocialAuthService>>()
 
     override fun observe(): Observable<List<SocialAuthService>> = observableData
         .observe()

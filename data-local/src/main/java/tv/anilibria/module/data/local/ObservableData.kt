@@ -1,6 +1,9 @@
 package tv.anilibria.module.data.local
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.jakewharton.rxrelay2.PublishRelay
+import com.squareup.moshi.JsonAdapter
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -12,7 +15,7 @@ interface PersistableData<T> {
     fun save(data: DataWrapper<T>): Completable
 }
 
-class BlockingPersistableData<T>(
+open class BlockingPersistableData<T>(
     private val read: () -> DataWrapper<T>,
     private val write: (DataWrapper<T>) -> Unit,
 ) : PersistableData<T> {
@@ -23,6 +26,33 @@ class BlockingPersistableData<T>(
         write.invoke(data)
     }
 }
+
+class MoshiPreferencesPersistableData<M, T>(
+    private val key: String,
+    private val adapter: JsonAdapter<M>,
+    private val preferences: SharedPreferences,
+    private val read: (M?) -> T?,
+    private val write: (T?) -> M?
+) : SharedPreferencesPersistableData<T>(
+    preferences = preferences,
+    read = {
+        val jsonData = getString(key, null)?.let { adapter.fromJson(it) }
+        read.invoke(jsonData)
+    },
+    write = {
+        val jsonString = write.invoke(it)?.let { jsonData -> adapter.toJson(jsonData) }
+        putString(key, jsonString)
+    }
+)
+
+open class SharedPreferencesPersistableData<T>(
+    private val preferences: SharedPreferences,
+    private val read: SharedPreferences.() -> T?,
+    private val write: SharedPreferences.Editor.(T?) -> Unit,
+) : BlockingPersistableData<T>(
+    read = { DataWrapper(read.invoke(preferences)) },
+    write = { preferences.edit(commit = true) { write.invoke(this, it.data) } }
+)
 
 class AsyncPersistableData<T>(
     private val read: () -> Single<DataWrapper<T>>,

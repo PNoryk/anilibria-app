@@ -11,7 +11,7 @@ import tv.anilibria.module.domain.entity.release.ReleaseId
 
 class EpisodeHistoryLocalDataSourceImpl : EpisodeHistoryLocalDataSource {
 
-    private val observableData by lazy { ObservableData<List<EpisodeVisit>>() }
+    private val observableData = ObservableData<List<EpisodeVisit>>()
 
     override fun observe(): Observable<List<EpisodeVisit>> = observableData
         .observe()

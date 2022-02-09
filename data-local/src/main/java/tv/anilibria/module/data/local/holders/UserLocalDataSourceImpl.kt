@@ -9,7 +9,7 @@ import tv.anilibria.module.domain.entity.other.User
 
 class UserLocalDataSourceImpl : UserLocalDataSource {
 
-    private val observableData by lazy { ObservableData<User>() }
+    private val observableData = ObservableData<User>()
 
     override fun observe(): Observable<DataWrapper<User>> = observableData.observe()
 

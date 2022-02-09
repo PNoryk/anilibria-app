@@ -9,7 +9,7 @@ import tv.anilibria.module.domain.entity.other.LinkMenuItem
 
 class LinkMenuLocalDataSourceImpl : LinkMenuLocalDataSource {
 
-    private val observableData by lazy { ObservableData<List<LinkMenuItem>>() }
+    private val observableData = ObservableData<List<LinkMenuItem>>()
 
     override fun observe(): Observable<List<LinkMenuItem>> = observableData
         .observe()
