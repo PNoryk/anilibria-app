@@ -5,7 +5,6 @@ import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.ReleaseId
 
 data class EpisodeVisit(
-    val releaseId: ReleaseId,
     val id: EpisodeId,
     val playerSeek: Long?,
     val lastOpenAt: Instant?
