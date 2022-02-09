@@ -4,11 +4,13 @@ import tv.anilibria.core.types.Bytes
 import tv.anilibria.core.types.Count
 import tv.anilibria.core.types.RelativeUrl
 
-data class TorrentId(val id: Long)
+data class TorrentId(
+    val id: Long,
+    val releaseId: ReleaseId
+)
 
 data class Torrent(
     val id: TorrentId,
-    val releaseId: ReleaseId,
     val hash: String?,
     val leechers: Count,
     val seeders: Count,

@@ -1,8 +1,8 @@
 package tv.anilibria.module.data.restapi.entity.mapper
 
 import kotlinx.datetime.Instant
-import tv.anilibria.module.data.restapi.entity.app.release.*
 import tv.anilibria.core.types.*
+import tv.anilibria.module.data.restapi.entity.app.release.*
 import tv.anilibria.module.domain.entity.release.*
 
 fun RandomReleaseResponse.toDomain() = RandomRelease(
@@ -49,8 +49,7 @@ fun BlockedInfoResponse.toDomain() = BlockedInfo(
 )
 
 fun EpisodeResponse.toDomain(releaseId: ReleaseId) = Episode(
-    id = EpisodeId(id),
-    releaseId = releaseId,
+    id = EpisodeId(id, releaseId),
     title = title,
     urlSd = urlSd?.asAbsoluteUrl(),
     urlHd = urlHd?.asAbsoluteUrl(),
@@ -76,8 +75,7 @@ fun ExternalEpisodeResponse.toDomain() = ExternalEpisode(
 )
 
 fun TorrentResponse.toDomain(releaseId: ReleaseId) = Torrent(
-    id = TorrentId(id),
-    releaseId = releaseId,
+    id = TorrentId(id, releaseId),
     hash = hash,
     leechers = leechers.asCount(),
     seeders = seeders.asCount(),
