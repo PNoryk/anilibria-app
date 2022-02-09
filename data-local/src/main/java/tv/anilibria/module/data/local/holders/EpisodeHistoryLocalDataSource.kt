@@ -11,6 +11,6 @@ interface EpisodeHistoryLocalDataSource {
     fun observe(): Observable<List<EpisodeVisit>>
     fun get(): Single<List<EpisodeVisit>>
     fun put(data: EpisodeVisit): Completable
-    fun remove(episodeId: EpisodeId)
+    fun remove(episodeId: EpisodeId): Completable
     fun removeByRelease(releaseId: ReleaseId): Completable
 }

@@ -69,6 +69,10 @@ class ObservableData<T>(
         triggerRelay.accept(Unit)
     }
 
+    fun update(callback: (DataWrapper<T>) -> DataWrapper<T>): Completable = get()
+        .map(callback)
+        .flatMapCompletable { put(it) }
+
     private fun getActualData(): Single<DataWrapper<T>> = Single.defer {
         if (needUpdate.compareAndSet(true, false)) {
             persistableData.get()
@@ -80,4 +84,4 @@ class ObservableData<T>(
     }
 }
 
-class DataWrapper<T>(val data: T?)
+data class DataWrapper<T>(val data: T?)
