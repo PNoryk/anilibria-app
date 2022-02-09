@@ -21,7 +21,7 @@ open class DynamicOkHttpClient @Inject constructor(
     @Synchronized
     fun get(): OkHttpClient {
         val oldClient = currentClient
-        if (needUpdate.compareAndSet(false, false) || oldClient == null) {
+        if (needUpdate.compareAndSet(true, false) || oldClient == null) {
             val newClient = provider.get()
             currentClient = newClient
         }
