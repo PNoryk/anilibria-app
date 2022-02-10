@@ -23,10 +23,7 @@ class EpisodeHistoryLocalDataSourceImpl : EpisodeHistoryLocalDataSource {
 
     override fun put(data: EpisodeVisit): Completable = observableData.update { currentData ->
         val items = currentData.data.orEmpty().toMutableList()
-        val currentVisitIndex = items.indexOfFirst { it.id == data.id }
-        if (currentVisitIndex != -1) {
-            items.removeAt(currentVisitIndex)
-        }
+        items.removeAll { it.id == data.id }
         items.add(data)
         DataWrapper(items)
     }
