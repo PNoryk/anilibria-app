@@ -1,7 +1,11 @@
 package tv.anilibria.module.data.local.entity
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class UserLocal(
-    val id: Long,
-    val avatar: String?,
-    val login: String?
+    @Json(name = "id") val id : Long,
+    @Json(name = "avatar") val avatar : String?,
+    @Json(name = "login") val login : String?
 )

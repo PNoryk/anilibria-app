@@ -1,7 +1,11 @@
 package tv.anilibria.module.data.local.entity
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class ReleaseVisitLocal(
-    val id: Long,
-    val lastKnownUpdateAt: Long,
-    val lastOpenAt: Long,
+    @Json(name = "id") val id : Long,
+    @Json(name = "lastKnownUpdateAt") val lastKnownUpdateAt : Long,
+    @Json(name = "lastOpenAt") val lastOpenAt : Long,
 )
