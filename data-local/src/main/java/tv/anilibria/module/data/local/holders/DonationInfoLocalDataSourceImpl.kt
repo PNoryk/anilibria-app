@@ -3,8 +3,8 @@ package tv.anilibria.module.data.local.holders
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.ObservableData
+import tv.anilibria.plugin.data.storage.DataWrapper
+import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 
 class DonationInfoLocalDataSourceImpl {

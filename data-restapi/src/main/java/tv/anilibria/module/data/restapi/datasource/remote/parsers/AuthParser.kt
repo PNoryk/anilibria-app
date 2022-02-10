@@ -1,9 +1,9 @@
 package tv.anilibria.module.data.restapi.datasource.remote.parsers
 
 import org.json.JSONObject
-import ru.radiationx.shared.ktx.android.nullString
-import tv.anilibria.module.data.restapi.datasource.remote.ApiException
+import tv.anilibria.module.data.restapi.datasource.remote.nullString
 import tv.anilibria.module.domain.errors.*
+import tv.anilibria.plugin.data.restapi.ApiException
 import javax.inject.Inject
 
 /**

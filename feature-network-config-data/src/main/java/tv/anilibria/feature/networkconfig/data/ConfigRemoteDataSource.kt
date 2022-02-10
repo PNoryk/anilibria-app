@@ -5,7 +5,7 @@ import io.reactivex.Single
 import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.feature.networkconfig.data.response.ApiConfigResponse
-import tv.anilibria.module.data.network.NetworkClient
+import tv.anilibria.plugin.data.network.NetworkClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

@@ -6,9 +6,9 @@ import com.squareup.moshi.Types
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.MoshiPreferencesPersistentDataStore
-import tv.anilibria.module.data.local.ObservableData
+import tv.anilibria.plugin.data.storage.DataWrapper
+import tv.anilibria.plugin.data.storage.MoshiPreferencesPersistentDataStore
+import tv.anilibria.plugin.data.storage.ObservableData
 
 class GenresLocalDataSourceImpl(
     private val preferences: SharedPreferences,

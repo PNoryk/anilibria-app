@@ -5,12 +5,8 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.json.JSONObject
-import ru.radiationx.shared.ktx.android.nullString
-import tv.anilibria.module.data.network.NetworkClient
-import tv.anilibria.module.data.restapi.ApiClient
-import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
-import tv.anilibria.module.data.restapi.datasource.remote.ApiException
-import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
+import tv.anilibria.plugin.data.network.NetworkClient
+import tv.anilibria.module.data.restapi.datasource.remote.nullString
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
 import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthServiceResponse
@@ -18,6 +14,10 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
+import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiConfigProvider
+import tv.anilibria.plugin.data.restapi.ApiException
+import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
 /**

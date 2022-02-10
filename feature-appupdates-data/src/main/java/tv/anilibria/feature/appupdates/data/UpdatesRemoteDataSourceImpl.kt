@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.feature.appupdates.data.response.UpdateDataResponse
-import tv.anilibria.module.data.network.NetworkClient
+import tv.anilibria.plugin.data.network.NetworkClient
 import javax.inject.Inject
 
 class UpdatesRemoteDataSourceImpl @Inject constructor(

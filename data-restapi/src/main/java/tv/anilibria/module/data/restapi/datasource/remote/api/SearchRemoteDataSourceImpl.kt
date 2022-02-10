@@ -3,15 +3,15 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import org.json.JSONObject
-import tv.anilibria.module.data.network.NetworkClient
-import tv.anilibria.module.data.restapi.ApiClient
-import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
-import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
+import tv.anilibria.plugin.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.entity.app.PageResponse
 import tv.anilibria.module.data.restapi.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiConfigProvider
+import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
 class SearchRemoteDataSourceImpl @Inject constructor(
