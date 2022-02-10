@@ -2,8 +2,8 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.network.NetworkClient
+import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.entity.app.PageResponse
@@ -13,7 +13,6 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.RandomRelease
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.remote.ReleaseRemoteDataSource
 import javax.inject.Inject
 
 /* Created by radiationx on 31.10.17. */
@@ -22,9 +21,9 @@ class ReleaseRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) : ReleaseRemoteDataSource {
+) {
 
-    override fun getRandomRelease(): Single<RandomRelease> {
+    fun getRandomRelease(): Single<RandomRelease> {
         val args = mapOf(
             "query" to "random_release"
         )
@@ -34,7 +33,7 @@ class ReleaseRemoteDataSourceImpl @Inject constructor(
             .map { it.toDomain() }
     }
 
-    override fun getRelease(releaseId: Int): Single<Release> {
+    fun getRelease(releaseId: Int): Single<Release> {
         val args = mapOf(
             "query" to "release",
             "id" to releaseId.toString()
@@ -45,7 +44,7 @@ class ReleaseRemoteDataSourceImpl @Inject constructor(
             .map { it.toDomain() }
     }
 
-    override fun getRelease(releaseCode: String): Single<Release> {
+    fun getRelease(releaseCode: String): Single<Release> {
         val args = mapOf(
             "query" to "release",
             "code" to releaseCode
@@ -56,7 +55,7 @@ class ReleaseRemoteDataSourceImpl @Inject constructor(
             .map { it.toDomain() }
     }
 
-    override fun getReleasesByIds(ids: List<Int>): Single<List<Release>> {
+    fun getReleasesByIds(ids: List<Int>): Single<List<Release>> {
         val args = mapOf(
             "query" to "info",
             "id" to ids.joinToString(","),
@@ -69,7 +68,7 @@ class ReleaseRemoteDataSourceImpl @Inject constructor(
             .map { items -> items.map { it.toDomain() } }
     }
 
-    override fun getReleases(page: Int): Single<Page<Release>> {
+    fun getReleases(page: Int): Single<Page<Release>> {
         val args = mapOf(
             "query" to "list",
             "page" to page.toString(),

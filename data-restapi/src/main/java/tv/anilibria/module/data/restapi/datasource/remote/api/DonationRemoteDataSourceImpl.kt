@@ -3,16 +3,15 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.MainClient
-import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.restapi.entity.mapper.donation.toDomain
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
-import tv.anilibria.module.domain.remote.DonationRemoteDataSource
 
 @InjectConstructor
 class DonationRemoteDataSourceImpl(
@@ -20,9 +19,9 @@ class DonationRemoteDataSourceImpl(
     @MainClient private val mainClient: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) : DonationRemoteDataSource {
+) {
 
-    override fun getDonationDetail(): Single<DonationInfo> {
+    fun getDonationDetail(): Single<DonationInfo> {
         val args = mapOf(
             "query" to "donation_details"
         )
@@ -33,7 +32,7 @@ class DonationRemoteDataSourceImpl(
     }
 
     // Doc https://yoomoney.ru/docs/payment-buttons/using-api/forms
-    override fun createYooMoneyPayLink(
+    fun createYooMoneyPayLink(
         amount: Int,
         type: String,
         form: YooMoneyDialog.YooMoneyForm

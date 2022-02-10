@@ -6,19 +6,18 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import org.json.JSONObject
 import ru.radiationx.shared.ktx.android.nullString
+import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.ApiException
-import tv.anilibria.module.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
-import tv.anilibria.module.domain.errors.SocialAuthException
 import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthServiceResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
-import tv.anilibria.module.domain.remote.AuthRemoteDataSource
+import tv.anilibria.module.domain.errors.SocialAuthException
 import javax.inject.Inject
 
 /**
@@ -29,9 +28,9 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     private val authParser: AuthParser,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) : AuthRemoteDataSource {
+) {
 
-    override fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
+    fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
         val args = mapOf(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
@@ -43,7 +42,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             .map { it.toDomain() }
     }
 
-    override fun acceptOtp(code: String): Completable {
+    fun acceptOtp(code: String): Completable {
         val args = mapOf(
             "query" to "auth_accept_otp",
             "code" to code
@@ -55,7 +54,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             .ignoreElement()
     }
 
-    override fun signInOtp(code: String, deviceId: String): Completable {
+    fun signInOtp(code: String, deviceId: String): Completable {
         val args = mapOf(
             "query" to "auth_login_otp",
             "deviceId" to deviceId,
@@ -68,7 +67,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             .ignoreElement()
     }
 
-    override fun signIn(login: String, password: String, code2fa: String): Completable {
+    fun signIn(login: String, password: String, code2fa: String): Completable {
         val args = mapOf(
             "mail" to login,
             "passwd" to password,
@@ -81,7 +80,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             .ignoreElement()
     }
 
-    override fun loadSocialAuth(): Single<List<SocialAuthService>> {
+    fun loadSocialAuth(): Single<List<SocialAuthService>> {
         val args = mapOf(
             "query" to "social_auth"
         )
@@ -91,7 +90,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             .map { items -> items.map { it.toDomain() } }
     }
 
-    override fun signInSocial(resultUrl: String, item: SocialAuthService): Completable {
+    fun signInSocial(resultUrl: String, item: SocialAuthService): Completable {
         val fixedUrl = Uri.parse(apiConfig.baseUrl).host?.let { redirectDomain ->
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
@@ -116,7 +115,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             .ignoreElement()
     }
 
-    override fun signOut(): Single<String> {
+    fun signOut(): Single<String> {
         return client.post("${apiConfig.baseUrl}/public/logout.php", emptyMap())
     }
 

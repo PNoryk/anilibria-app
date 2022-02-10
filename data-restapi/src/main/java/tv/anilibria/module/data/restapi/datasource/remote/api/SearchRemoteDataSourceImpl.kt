@@ -3,8 +3,8 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import org.json.JSONObject
-import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.network.NetworkClient
+import tv.anilibria.module.data.restapi.ApiClient
 import tv.anilibria.module.data.restapi.datasource.remote.ApiConfigProvider
 import tv.anilibria.module.data.restapi.datasource.remote.mapApiResponse
 import tv.anilibria.module.data.restapi.entity.app.PageResponse
@@ -12,16 +12,15 @@ import tv.anilibria.module.data.restapi.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.remote.SearchRemoteDataSource
 import javax.inject.Inject
 
 class SearchRemoteDataSourceImpl @Inject constructor(
     @ApiClient private val client: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
-) : SearchRemoteDataSource {
+) {
 
-    override fun getGenres(): Single<List<String>> {
+    fun getGenres(): Single<List<String>> {
         val args = mapOf(
             "query" to "genres"
         )
@@ -30,7 +29,7 @@ class SearchRemoteDataSourceImpl @Inject constructor(
             .mapApiResponse(moshi)
     }
 
-    override fun getYears(): Single<List<String>> {
+    fun getYears(): Single<List<String>> {
         val args = mapOf(
             "query" to "years"
         )
@@ -39,7 +38,7 @@ class SearchRemoteDataSourceImpl @Inject constructor(
             .mapApiResponse(moshi)
     }
 
-    override fun fastSearch(name: String): Single<List<Release>> {
+    fun fastSearch(name: String): Single<List<Release>> {
         val args = mapOf(
             "query" to "search",
             "search" to name,
@@ -51,7 +50,7 @@ class SearchRemoteDataSourceImpl @Inject constructor(
             .map { items -> items.map { it.toDomain() } }
     }
 
-    override fun searchReleases(
+    fun searchReleases(
         genre: String,
         year: String,
         season: String,
