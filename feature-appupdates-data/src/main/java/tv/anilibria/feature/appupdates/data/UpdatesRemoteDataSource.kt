@@ -29,7 +29,8 @@ class UpdatesRemoteDataSource @Inject constructor(
             "current" to versionCode.toString()
         )
         return apiClient.post(apiConfig.apiUrl, args)
-            .mapApiResponse<UpdateData>(moshi)
+            .mapApiResponse<UpdateDataResponse>(moshi)
+            .map { it.toDomain() }
             .onErrorResumeNext { getUpdatesFromReserve() }
     }
 
