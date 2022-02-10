@@ -3,29 +3,27 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.plugin.data.network.NetworkClient
-import tv.anilibria.module.data.restapi.entity.app.schedule.ScheduleDayResponse
+import tv.anilibria.module.data.restapi.entity.app.other.LinkMenuItemResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
-import tv.anilibria.module.domain.entity.schedule.ScheduleDay
+import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import tv.anilibria.plugin.data.restapi.ApiClient
 import tv.anilibria.plugin.data.restapi.ApiConfigProvider
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
-class ScheduleRemoteDataSourceImpl @Inject constructor(
+class MenuRemoteDataSource @Inject constructor(
     @ApiClient private val client: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {
 
-    fun getSchedule(): Single<List<ScheduleDay>> {
+    fun getMenu(): Single<List<LinkMenuItem>> {
         val args = mapOf(
-            "query" to "schedule",
-            "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
-            "rm" to "true"
+            "query" to "link_menu"
         )
         return client
             .post(apiConfig.apiUrl, args)
-            .mapApiResponse<List<ScheduleDayResponse>>(moshi)
+            .mapApiResponse<List<LinkMenuItemResponse>>(moshi)
             .map { items -> items.map { it.toDomain() } }
     }
 

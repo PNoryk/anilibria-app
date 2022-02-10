@@ -10,7 +10,7 @@ import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiPreferencesPersistentDataStore
 import tv.anilibria.plugin.data.storage.ObservableData
 
-class GenresLocalDataSourceImpl(
+class YearsLocalDataSource(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
 ) {
@@ -21,7 +21,7 @@ class GenresLocalDataSourceImpl(
     }
 
     private val persistableData = MoshiPreferencesPersistentDataStore<List<String>, List<String>>(
-        key = "refactor.genres",
+        key = "refactor.years",
         adapter = adapter,
         preferences = preferences,
         read = { it },
@@ -30,14 +30,14 @@ class GenresLocalDataSourceImpl(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Observable<List<String>> = observableData
+     fun observe(): Observable<List<String>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    fun get(): Single<List<String>> = observableData
+     fun get(): Single<List<String>> = observableData
         .get()
         .map { it.data.orEmpty() }
 
-    fun put(data: List<String>): Completable = observableData
+     fun put(data: List<String>): Completable = observableData
         .put(DataWrapper(data))
 }

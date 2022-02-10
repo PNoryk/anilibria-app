@@ -14,7 +14,7 @@ import tv.anilibria.plugin.data.restapi.ApiConfigProvider
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
-class SearchRemoteDataSourceImpl @Inject constructor(
+class SearchRemoteDataSource @Inject constructor(
     @ApiClient private val client: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi

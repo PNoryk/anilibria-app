@@ -13,7 +13,7 @@ import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiPreferencesPersistentDataStore
 import tv.anilibria.plugin.data.storage.ObservableData
 
-class UserLocalDataSourceImpl(
+class UserLocalDataSource(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
 ) {

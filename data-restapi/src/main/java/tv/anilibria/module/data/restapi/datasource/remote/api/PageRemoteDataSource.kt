@@ -16,7 +16,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 13.01.18.
  */
-class PageRemoteDataSourceImpl @Inject constructor(
+class PageRemoteDataSource @Inject constructor(
     @ApiClient private val client: NetworkClient,
     private val pagesParser: PagesParser,
     private val apiConfig: ApiConfigProvider,

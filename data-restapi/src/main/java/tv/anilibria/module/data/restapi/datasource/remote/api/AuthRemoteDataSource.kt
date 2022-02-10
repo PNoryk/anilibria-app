@@ -23,7 +23,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 30.12.17.
  */
-class AuthRemoteDataSourceImpl @Inject constructor(
+class AuthRemoteDataSource @Inject constructor(
     @ApiClient private val client: NetworkClient,
     private val authParser: AuthParser,
     private val apiConfig: ApiConfigProvider,

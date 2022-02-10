@@ -14,7 +14,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 30.12.17.
  */
-class UserRemoteDataSourceImpl @Inject constructor(
+class UserRemoteDataSource @Inject constructor(
     @ApiClient private val client: NetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi

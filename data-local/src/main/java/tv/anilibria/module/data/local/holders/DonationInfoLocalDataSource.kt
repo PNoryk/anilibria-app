@@ -7,7 +7,7 @@ import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 
-class DonationInfoLocalDataSourceImpl {
+class DonationInfoLocalDataSource {
 
     private val observableData = ObservableData<DonationInfo>()
 

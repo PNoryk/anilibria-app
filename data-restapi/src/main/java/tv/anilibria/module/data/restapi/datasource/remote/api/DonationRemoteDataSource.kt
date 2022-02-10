@@ -14,7 +14,7 @@ import tv.anilibria.plugin.data.restapi.MainClient
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 
 @InjectConstructor
-class DonationRemoteDataSourceImpl(
+class DonationRemoteDataSource(
     @ApiClient private val client: NetworkClient,
     @MainClient private val mainClient: NetworkClient,
     private val apiConfig: ApiConfigProvider,
