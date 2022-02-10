@@ -45,14 +45,15 @@ class ReleaseHistoryLocalDataSourceImpl(
         .map { it.data.orEmpty() }
 
     override fun put(data: ReleaseVisit): Completable = observableData.update { currentData ->
-        val items = currentData.data.orEmpty().toMutableList()
-        items.removeAll { it.id == data.id }
-        items.add(data)
+        val items = currentData.data?.toMutableList()?.apply {
+            removeAll { it.id == data.id }
+            add(data)
+        }
         DataWrapper(items)
     }
 
     override fun remove(releaseId: ReleaseId): Completable = observableData.update { currentData ->
-        val items = currentData.data.orEmpty().filter { it.id == releaseId }
+        val items = currentData.data?.filter { it.id == releaseId }
         DataWrapper(items)
     }
 }
