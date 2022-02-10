@@ -38,6 +38,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation project(":shared-android-ktx")
     implementation project(":plugin:data-network")
+    implementation project(":plugin:data-restapi")
     implementation project(":core-types")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
