@@ -10,15 +10,15 @@ import io.reactivex.Single
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-interface PersistableData<T> {
+interface PersistentDataStore<T> {
     fun get(): Single<DataWrapper<T>>
     fun save(data: DataWrapper<T>): Completable
 }
 
-open class BlockingPersistableData<T>(
+open class BlockingPersistentDataStore<T>(
     private val read: () -> DataWrapper<T>,
     private val write: (DataWrapper<T>) -> Unit,
-) : PersistableData<T> {
+) : PersistentDataStore<T> {
 
     override fun get(): Single<DataWrapper<T>> = Single.fromCallable(read)
 
@@ -27,44 +27,38 @@ open class BlockingPersistableData<T>(
     }
 }
 
-class MoshiPreferencesPersistableData<M, T>(
-    private val key: String,
-    private val adapter: JsonAdapter<M>,
-    private val preferences: SharedPreferences,
-    private val read: (M?) -> T?,
-    private val write: (T?) -> M?
-) : SharedPreferencesPersistableData<T>(
-    preferences = preferences,
-    read = {
-        val jsonData = getString(key, null)?.let { adapter.fromJson(it) }
-        read.invoke(jsonData)
-    },
-    write = {
-        val jsonString = write.invoke(it)?.let { jsonData -> adapter.toJson(jsonData) }
-        putString(key, jsonString)
-    }
-)
-
-open class SharedPreferencesPersistableData<T>(
-    private val preferences: SharedPreferences,
-    private val read: SharedPreferences.() -> T?,
-    private val write: SharedPreferences.Editor.(T?) -> Unit,
-) : BlockingPersistableData<T>(
-    read = { DataWrapper(read.invoke(preferences)) },
-    write = { preferences.edit(commit = true) { write.invoke(this, it.data) } }
-)
-
-class AsyncPersistableData<T>(
+open class AsyncPersistentDataStore<T>(
     private val read: () -> Single<DataWrapper<T>>,
     private val write: (DataWrapper<T>) -> Completable,
-) : PersistableData<T> {
+) : PersistentDataStore<T> {
 
     override fun get(): Single<DataWrapper<T>> = read.invoke()
 
     override fun save(data: DataWrapper<T>): Completable = write.invoke(data)
 }
 
-class InMemoryData<T> : PersistableData<T> {
+class MoshiPreferencesPersistentDataStore<M, T>(
+    private val key: String,
+    private val adapter: JsonAdapter<M>,
+    private val preferences: SharedPreferences,
+    private val read: (M?) -> T?,
+    private val write: (T?) -> M?
+) : BlockingPersistentDataStore<T>(
+    read = {
+        preferences.run {
+            val jsonData = getString(key, null)?.let { adapter.fromJson(it) }
+            DataWrapper(read.invoke(jsonData))
+        }
+    },
+    write = {
+        preferences.edit(commit = true) {
+            val jsonString = write.invoke(it.data)?.let { jsonData -> adapter.toJson(jsonData) }
+            putString(key, jsonString)
+        }
+    }
+)
+
+class InMemoryData<T> : PersistentDataStore<T> {
 
     private val atomicReference = AtomicReference<DataWrapper<T>>(DataWrapper(null))
 
@@ -78,7 +72,7 @@ class InMemoryData<T> : PersistableData<T> {
 }
 
 class ObservableData<T>(
-    private val persistableData: PersistableData<T> = InMemoryData()
+    private val persistableData: PersistentDataStore<T> = InMemoryData()
 ) {
 
     private val needUpdate = AtomicBoolean(true)

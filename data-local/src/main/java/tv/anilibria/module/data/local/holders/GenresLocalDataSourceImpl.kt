@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.MoshiPreferencesPersistableData
+import tv.anilibria.module.data.local.MoshiPreferencesPersistentDataStore
 import tv.anilibria.module.data.local.ObservableData
 
 class GenresLocalDataSourceImpl(
@@ -20,7 +20,7 @@ class GenresLocalDataSourceImpl(
         moshi.adapter<List<String>>(type)
     }
 
-    private val persistableData = MoshiPreferencesPersistableData<List<String>, List<String>>(
+    private val persistableData = MoshiPreferencesPersistentDataStore<List<String>, List<String>>(
         key = "refactor.genres",
         adapter = adapter,
         preferences = preferences,
@@ -28,7 +28,7 @@ class GenresLocalDataSourceImpl(
         write = { it }
     )
 
-    private val observableData = ObservableData<List<String>>(persistableData)
+    private val observableData = ObservableData(persistableData)
 
     override fun observe(): Observable<List<String>> = observableData
         .observe()

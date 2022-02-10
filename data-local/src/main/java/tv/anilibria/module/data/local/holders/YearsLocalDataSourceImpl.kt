@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.MoshiPreferencesPersistableData
+import tv.anilibria.module.data.local.MoshiPreferencesPersistentDataStore
 import tv.anilibria.module.data.local.ObservableData
 
 class YearsLocalDataSourceImpl(
@@ -20,7 +20,7 @@ class YearsLocalDataSourceImpl(
         moshi.adapter<List<String>>(type)
     }
 
-    private val persistableData = MoshiPreferencesPersistableData<List<String>, List<String>>(
+    private val persistableData = MoshiPreferencesPersistentDataStore<List<String>, List<String>>(
         key = "refactor.years",
         adapter = adapter,
         preferences = preferences,

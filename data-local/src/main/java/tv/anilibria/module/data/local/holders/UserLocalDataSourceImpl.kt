@@ -6,7 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.MoshiPreferencesPersistableData
+import tv.anilibria.module.data.local.MoshiPreferencesPersistentDataStore
 import tv.anilibria.module.data.local.ObservableData
 import tv.anilibria.module.data.local.entity.UserLocal
 import tv.anilibria.module.data.local.mappers.toDomain
@@ -22,7 +22,7 @@ class UserLocalDataSourceImpl(
         moshi.adapter(UserLocal::class.java)
     }
 
-    private val persistableData = MoshiPreferencesPersistableData<UserLocal, User>(
+    private val persistableData = MoshiPreferencesPersistentDataStore<UserLocal, User>(
         key = "refactor.user",
         adapter = adapter,
         preferences = preferences,

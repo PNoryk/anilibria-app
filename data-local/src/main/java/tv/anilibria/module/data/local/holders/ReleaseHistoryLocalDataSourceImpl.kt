@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.MoshiPreferencesPersistableData
+import tv.anilibria.module.data.local.MoshiPreferencesPersistentDataStore
 import tv.anilibria.module.data.local.ObservableData
 import tv.anilibria.module.data.local.entity.ReleaseVisitLocal
 import tv.anilibria.module.data.local.mappers.toDomain
@@ -26,7 +26,7 @@ class ReleaseHistoryLocalDataSourceImpl(
     }
 
     private val persistableData =
-        MoshiPreferencesPersistableData<List<ReleaseVisitLocal>, List<ReleaseVisit>>(
+        MoshiPreferencesPersistentDataStore<List<ReleaseVisitLocal>, List<ReleaseVisit>>(
             key = "refactor.release_history",
             adapter = adapter,
             preferences = preferences,

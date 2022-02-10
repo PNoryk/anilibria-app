@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.MoshiPreferencesPersistableData
+import tv.anilibria.module.data.local.MoshiPreferencesPersistentDataStore
 import tv.anilibria.module.data.local.ObservableData
 import tv.anilibria.module.data.local.entity.EpisodeVisitLocal
 import tv.anilibria.module.data.local.mappers.toDomain
@@ -27,7 +27,7 @@ class EpisodeHistoryLocalDataSourceImpl(
     }
 
     private val persistableData =
-        MoshiPreferencesPersistableData<List<EpisodeVisitLocal>, List<EpisodeVisit>>(
+        MoshiPreferencesPersistentDataStore<List<EpisodeVisitLocal>, List<EpisodeVisit>>(
             key = "refactor.episode_history",
             adapter = adapter,
             preferences = preferences,

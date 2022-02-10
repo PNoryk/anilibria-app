@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import tv.anilibria.module.data.local.DataWrapper
-import tv.anilibria.module.data.local.MoshiPreferencesPersistableData
+import tv.anilibria.module.data.local.MoshiPreferencesPersistentDataStore
 import tv.anilibria.module.data.local.ObservableData
 import tv.anilibria.module.data.local.entity.LinkMenuItemLocal
 import tv.anilibria.module.data.local.mappers.toDomain
@@ -25,7 +25,7 @@ class LinkMenuLocalDataSourceImpl(
     }
 
     private val persistableData =
-        MoshiPreferencesPersistableData<List<LinkMenuItemLocal>, List<LinkMenuItem>>(
+        MoshiPreferencesPersistentDataStore<List<LinkMenuItemLocal>, List<LinkMenuItem>>(
             key = "refactor.link_menu",
             adapter = adapter,
             preferences = preferences,
