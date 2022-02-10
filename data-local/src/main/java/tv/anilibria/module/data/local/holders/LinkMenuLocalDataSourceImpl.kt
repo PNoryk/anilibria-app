@@ -17,7 +17,7 @@ import tv.anilibria.module.domain.entity.other.LinkMenuItem
 class LinkMenuLocalDataSourceImpl(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
-) : LinkMenuLocalDataSource {
+) {
 
     private val adapter by lazy {
         val type = Types.newParameterizedType(List::class.java, LinkMenuItemLocal::class.java)
@@ -35,14 +35,14 @@ class LinkMenuLocalDataSourceImpl(
 
     private val observableData = ObservableData(persistableData)
 
-    override fun observe(): Observable<List<LinkMenuItem>> = observableData
+    fun observe(): Observable<List<LinkMenuItem>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    override fun get(): Single<List<LinkMenuItem>> = observableData
+    fun get(): Single<List<LinkMenuItem>> = observableData
         .get()
         .map { it.data.orEmpty() }
 
-    override fun put(data: List<LinkMenuItem>): Completable = observableData
+    fun put(data: List<LinkMenuItem>): Completable = observableData
         .put(DataWrapper(data))
 }

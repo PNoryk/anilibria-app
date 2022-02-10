@@ -16,7 +16,7 @@ import tv.anilibria.module.domain.entity.other.User
 class UserLocalDataSourceImpl(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
-) : UserLocalDataSource {
+) {
 
     private val adapter by lazy {
         moshi.adapter(UserLocal::class.java)
@@ -32,11 +32,11 @@ class UserLocalDataSourceImpl(
 
     private val observableData = ObservableData(persistableData)
 
-    override fun observe(): Observable<DataWrapper<User>> = observableData.observe()
+    fun observe(): Observable<DataWrapper<User>> = observableData.observe()
 
-    override fun get(): Single<DataWrapper<User>> = observableData.get()
+    fun get(): Single<DataWrapper<User>> = observableData.get()
 
-    override fun put(data: User): Completable = observableData.put(DataWrapper(data))
+    fun put(data: User): Completable = observableData.put(DataWrapper(data))
 
-    override fun delete(): Completable = observableData.put(DataWrapper(null))
+    fun delete(): Completable = observableData.put(DataWrapper(null))
 }

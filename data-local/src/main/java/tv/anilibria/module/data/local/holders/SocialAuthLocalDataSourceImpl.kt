@@ -17,7 +17,7 @@ import tv.anilibria.module.domain.entity.auth.SocialAuthService
 class SocialAuthLocalDataSourceImpl(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
-) : SocialAuthLocalDataSource {
+) {
 
     private val adapter by lazy {
         val type = Types.newParameterizedType(List::class.java, SocialAuthServiceLocal::class.java)
@@ -35,14 +35,14 @@ class SocialAuthLocalDataSourceImpl(
 
     private val observableData = ObservableData(persistableData)
 
-    override fun observe(): Observable<List<SocialAuthService>> = observableData
+    fun observe(): Observable<List<SocialAuthService>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    override fun get(): Single<List<SocialAuthService>> = observableData
+    fun get(): Single<List<SocialAuthService>> = observableData
         .get()
         .map { it.data.orEmpty() }
 
-    override fun put(data: List<SocialAuthService>): Completable = observableData
+    fun put(data: List<SocialAuthService>): Completable = observableData
         .put(DataWrapper(data))
 }

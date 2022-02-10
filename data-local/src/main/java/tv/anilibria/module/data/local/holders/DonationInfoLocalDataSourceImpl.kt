@@ -7,13 +7,13 @@ import tv.anilibria.module.data.local.DataWrapper
 import tv.anilibria.module.data.local.ObservableData
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 
-class DonationInfoLocalDataSourceImpl : DonationInfoLocalDataSource {
+class DonationInfoLocalDataSourceImpl {
 
     private val observableData = ObservableData<DonationInfo>()
 
-    override fun observe(): Observable<DataWrapper<DonationInfo>> = observableData.observe()
+    fun observe(): Observable<DataWrapper<DonationInfo>> = observableData.observe()
 
-    override fun get(): Single<DataWrapper<DonationInfo>> = observableData.get()
+    fun get(): Single<DataWrapper<DonationInfo>> = observableData.get()
 
-    override fun put(data: DonationInfo): Completable = observableData.put(DataWrapper(data))
+    fun put(data: DonationInfo): Completable = observableData.put(DataWrapper(data))
 }

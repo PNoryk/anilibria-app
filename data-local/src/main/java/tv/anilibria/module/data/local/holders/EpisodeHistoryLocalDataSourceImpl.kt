@@ -19,7 +19,7 @@ import tv.anilibria.module.domain.entity.release.ReleaseId
 class EpisodeHistoryLocalDataSourceImpl(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
-) : EpisodeHistoryLocalDataSource {
+) {
 
     private val adapter by lazy {
         val type = Types.newParameterizedType(List::class.java, EpisodeVisitLocal::class.java)
@@ -37,15 +37,15 @@ class EpisodeHistoryLocalDataSourceImpl(
 
     private val observableData = ObservableData(persistableData)
 
-    override fun observe(): Observable<List<EpisodeVisit>> = observableData
+    fun observe(): Observable<List<EpisodeVisit>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    override fun get(): Single<List<EpisodeVisit>> = observableData
+    fun get(): Single<List<EpisodeVisit>> = observableData
         .get()
         .map { it.data.orEmpty() }
 
-    override fun put(data: EpisodeVisit): Completable = observableData.update { currentData ->
+    fun put(data: EpisodeVisit): Completable = observableData.update { currentData ->
         val items = currentData.data?.toMutableList()?.apply {
             removeAll { it.id == data.id }
             add(data)
@@ -53,12 +53,12 @@ class EpisodeHistoryLocalDataSourceImpl(
         DataWrapper(items)
     }
 
-    override fun remove(episodeId: EpisodeId): Completable = observableData.update { currentData ->
+    fun remove(episodeId: EpisodeId): Completable = observableData.update { currentData ->
         val items = currentData.data?.filter { it.id == episodeId }
         DataWrapper(items)
     }
 
-    override fun removeByRelease(releaseId: ReleaseId): Completable =
+    fun removeByRelease(releaseId: ReleaseId): Completable =
         observableData.update { currentData ->
             val items = currentData.data?.filter { it.id.releaseId == releaseId }
             DataWrapper(items)

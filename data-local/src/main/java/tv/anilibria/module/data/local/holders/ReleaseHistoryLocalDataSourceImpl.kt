@@ -18,7 +18,7 @@ import tv.anilibria.module.domain.entity.release.ReleaseId
 class ReleaseHistoryLocalDataSourceImpl(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
-) : ReleaseHistoryLocalDataSource {
+) {
 
     private val adapter by lazy {
         val type = Types.newParameterizedType(List::class.java, ReleaseVisitLocal::class.java)
@@ -36,15 +36,15 @@ class ReleaseHistoryLocalDataSourceImpl(
 
     private val observableData = ObservableData(persistableData)
 
-    override fun observe(): Observable<List<ReleaseVisit>> = observableData
+    fun observe(): Observable<List<ReleaseVisit>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    override fun get(): Single<List<ReleaseVisit>> = observableData
+    fun get(): Single<List<ReleaseVisit>> = observableData
         .get()
         .map { it.data.orEmpty() }
 
-    override fun put(data: ReleaseVisit): Completable = observableData.update { currentData ->
+    fun put(data: ReleaseVisit): Completable = observableData.update { currentData ->
         val items = currentData.data?.toMutableList()?.apply {
             removeAll { it.id == data.id }
             add(data)
@@ -52,7 +52,7 @@ class ReleaseHistoryLocalDataSourceImpl(
         DataWrapper(items)
     }
 
-    override fun remove(releaseId: ReleaseId): Completable = observableData.update { currentData ->
+    fun remove(releaseId: ReleaseId): Completable = observableData.update { currentData ->
         val items = currentData.data?.filter { it.id == releaseId }
         DataWrapper(items)
     }

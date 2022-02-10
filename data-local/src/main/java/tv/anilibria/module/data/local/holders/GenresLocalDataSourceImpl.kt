@@ -13,7 +13,7 @@ import tv.anilibria.module.data.local.ObservableData
 class GenresLocalDataSourceImpl(
     private val preferences: SharedPreferences,
     private val moshi: Moshi
-) : GenresLocalDataSource {
+) {
 
     private val adapter by lazy {
         val type = Types.newParameterizedType(List::class.java, String::class.java)
@@ -30,14 +30,14 @@ class GenresLocalDataSourceImpl(
 
     private val observableData = ObservableData(persistableData)
 
-    override fun observe(): Observable<List<String>> = observableData
+    fun observe(): Observable<List<String>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    override fun get(): Single<List<String>> = observableData
+    fun get(): Single<List<String>> = observableData
         .get()
         .map { it.data.orEmpty() }
 
-    override fun put(data: List<String>): Completable = observableData
+    fun put(data: List<String>): Completable = observableData
         .put(DataWrapper(data))
 }
