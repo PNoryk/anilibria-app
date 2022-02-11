@@ -4,16 +4,15 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.feature.appupdates.data.response.UpdateDataResponse
-import tv.anilibria.plugin.data.network.NetworkClient
-import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiNetworkClient
 import tv.anilibria.plugin.data.restapi.ApiConfigProvider
-import tv.anilibria.plugin.data.restapi.MainClient
+import tv.anilibria.plugin.data.restapi.DefaultNetworkClient
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
 class UpdatesRemoteDataSource @Inject constructor(
-    @ApiClient private val apiClient: NetworkClient,
-    @MainClient private val mainClient: NetworkClient,
+    private val apiClient: ApiNetworkClient,
+    private val mainClient: DefaultNetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi,
     private val reserveSources: CheckerReserveSources
@@ -49,6 +48,6 @@ class UpdatesRemoteDataSource @Inject constructor(
     private fun getReserve(url: String): Single<UpdateData> =
         mainClient
             .get(url, emptyMap())
-            .map { updatesAdapter.fromJson(it) }
+            .map { updatesAdapter.fromJson(it.body) }
             .map { it.toDomain() }
 }

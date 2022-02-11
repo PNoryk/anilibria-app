@@ -5,7 +5,6 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.json.JSONObject
-import tv.anilibria.plugin.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.datasource.remote.nullString
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
@@ -14,7 +13,7 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
-import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiNetworkClient
 import tv.anilibria.plugin.data.restapi.ApiConfigProvider
 import tv.anilibria.plugin.data.restapi.ApiException
 import tv.anilibria.plugin.data.restapi.mapApiResponse
@@ -24,7 +23,7 @@ import javax.inject.Inject
  * Created by radiationx on 30.12.17.
  */
 class AuthRemoteDataSource @Inject constructor(
-    @ApiClient private val client: NetworkClient,
+    private val apiClient: ApiNetworkClient,
     private val authParser: AuthParser,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
@@ -35,7 +34,7 @@ class AuthRemoteDataSource @Inject constructor(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<OtpInfoResponse>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
@@ -47,7 +46,7 @@ class AuthRemoteDataSource @Inject constructor(
             "query" to "auth_accept_otp",
             "code" to code
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<Unit>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
@@ -60,7 +59,7 @@ class AuthRemoteDataSource @Inject constructor(
             "deviceId" to deviceId,
             "code" to code
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<Unit>(moshi)
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
@@ -74,9 +73,9 @@ class AuthRemoteDataSource @Inject constructor(
             "fa2code" to code2fa
         )
         val url = "${apiConfig.baseUrl}/public/login.php"
-        return client
+        return apiClient
             .post(url, args)
-            .map { authParser.authResult(it) }
+            .map { authParser.authResult(it.body) }
             .ignoreElement()
     }
 
@@ -84,7 +83,7 @@ class AuthRemoteDataSource @Inject constructor(
         val args = mapOf(
             "query" to "social_auth"
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<List<SocialAuthServiceResponse>>(moshi)
             .map { items -> items.map { it.toDomain() } }
@@ -95,8 +94,8 @@ class AuthRemoteDataSource @Inject constructor(
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
 
-        return client
-            .getFull(fixedUrl, emptyMap())
+        return apiClient
+            .get(fixedUrl, emptyMap())
             .doOnSuccess { response ->
                 if (item.errorUrlPattern.containsMatchIn(response.redirect)) {
                     throw SocialAuthException("Social auth result not matched by pattern")
@@ -116,7 +115,8 @@ class AuthRemoteDataSource @Inject constructor(
     }
 
     fun signOut(): Single<String> {
-        return client.post("${apiConfig.baseUrl}/public/logout.php", emptyMap())
+        return apiClient.post("${apiConfig.baseUrl}/public/logout.php", emptyMap())
+            .map { it.body }
     }
 
 }

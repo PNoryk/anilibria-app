@@ -6,16 +6,16 @@ import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.feature.networkconfig.data.response.ApiConfigResponse
 import tv.anilibria.plugin.data.network.NetworkClient
-import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiNetworkClient
 import tv.anilibria.plugin.data.restapi.ApiConfigProvider
-import tv.anilibria.plugin.data.restapi.MainClient
+import tv.anilibria.plugin.data.restapi.DefaultNetworkClient
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ConfigRemoteDataSource @Inject constructor(
-    @ApiClient private val apiClient: NetworkClient,
-    @MainClient private val mainClient: NetworkClient,
+    private val apiClient: ApiNetworkClient,
+    private val mainClient: DefaultNetworkClient,
     private val schedulers: SchedulersProvider,
     private val moshi: Moshi,
     private val apiConfig: ApiConfigProvider,
@@ -51,7 +51,7 @@ class ConfigRemoteDataSource @Inject constructor(
         }
 
     private fun check(client: NetworkClient, apiUrl: String): Single<Boolean> =
-        client.postFull(apiUrl, mapOf("query" to "empty"))
+        client.post(apiUrl, mapOf("query" to "empty"))
             .map { true }
 
     private fun getConfigFromApi(): Single<List<ApiAddress>> {
@@ -79,6 +79,6 @@ class ConfigRemoteDataSource @Inject constructor(
 
     private fun getReserve(url: String): Single<List<ApiAddress>> =
         mainClient.get(url, emptyMap())
-            .map { configAdapter.fromJson(it) }
+            .map { configAdapter.fromJson(it.body) }
             .map { it.toDomain().addresses }
 }

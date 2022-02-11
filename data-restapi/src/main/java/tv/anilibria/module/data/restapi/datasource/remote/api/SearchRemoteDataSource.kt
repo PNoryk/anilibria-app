@@ -3,19 +3,18 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import org.json.JSONObject
-import tv.anilibria.plugin.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.entity.app.PageResponse
 import tv.anilibria.module.data.restapi.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiNetworkClient
 import tv.anilibria.plugin.data.restapi.ApiConfigProvider
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
 class SearchRemoteDataSource @Inject constructor(
-    @ApiClient private val client: NetworkClient,
+    private val apiClient: ApiNetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {
@@ -24,7 +23,7 @@ class SearchRemoteDataSource @Inject constructor(
         val args = mapOf(
             "query" to "genres"
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse(moshi)
     }
@@ -33,7 +32,7 @@ class SearchRemoteDataSource @Inject constructor(
         val args = mapOf(
             "query" to "years"
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse(moshi)
     }
@@ -44,7 +43,7 @@ class SearchRemoteDataSource @Inject constructor(
             "search" to name,
             "filter" to "id,code,names,poster"
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<List<ReleaseResponse>>(moshi)
             .map { items -> items.map { it.toDomain() } }
@@ -72,7 +71,7 @@ class SearchRemoteDataSource @Inject constructor(
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<PageResponse<ReleaseResponse>>(moshi)
             .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }

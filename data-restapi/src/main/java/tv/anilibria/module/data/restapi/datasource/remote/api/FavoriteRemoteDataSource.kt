@@ -2,19 +2,18 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import tv.anilibria.plugin.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.entity.app.PageResponse
 import tv.anilibria.module.data.restapi.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiNetworkClient
 import tv.anilibria.plugin.data.restapi.ApiConfigProvider
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
 class FavoriteRemoteDataSource @Inject constructor(
-    @ApiClient private val client: NetworkClient,
+    private val apiClient: ApiNetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {
@@ -26,7 +25,7 @@ class FavoriteRemoteDataSource @Inject constructor(
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<PageResponse<ReleaseResponse>>(moshi)
             .map { pageResponse ->
@@ -42,7 +41,7 @@ class FavoriteRemoteDataSource @Inject constructor(
             "action" to "add",
             "id" to releaseId.toString()
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<ReleaseResponse>(moshi)
             .map { it.toDomain() }
@@ -54,7 +53,7 @@ class FavoriteRemoteDataSource @Inject constructor(
             "action" to "delete",
             "id" to releaseId.toString()
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<ReleaseResponse>(moshi)
             .map { it.toDomain() }

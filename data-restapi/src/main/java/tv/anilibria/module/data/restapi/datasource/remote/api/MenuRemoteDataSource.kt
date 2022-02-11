@@ -2,17 +2,16 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import tv.anilibria.plugin.data.network.NetworkClient
 import tv.anilibria.module.data.restapi.entity.app.other.LinkMenuItemResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
-import tv.anilibria.plugin.data.restapi.ApiClient
+import tv.anilibria.plugin.data.restapi.ApiNetworkClient
 import tv.anilibria.plugin.data.restapi.ApiConfigProvider
 import tv.anilibria.plugin.data.restapi.mapApiResponse
 import javax.inject.Inject
 
 class MenuRemoteDataSource @Inject constructor(
-    @ApiClient private val client: NetworkClient,
+    private val apiClient: ApiNetworkClient,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {
@@ -21,7 +20,7 @@ class MenuRemoteDataSource @Inject constructor(
         val args = mapOf(
             "query" to "link_menu"
         )
-        return client
+        return apiClient
             .post(apiConfig.apiUrl, args)
             .mapApiResponse<List<LinkMenuItemResponse>>(moshi)
             .map { items -> items.map { it.toDomain() } }
