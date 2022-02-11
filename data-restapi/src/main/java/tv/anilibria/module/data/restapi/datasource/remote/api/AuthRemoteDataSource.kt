@@ -1,10 +1,10 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import android.net.Uri
-import com.squareup.moshi.Moshi
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.json.JSONObject
+import retrofit2.HttpException
 import tv.anilibria.module.data.restapi.datasource.remote.nullString
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.AuthParser
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.AuthApi
@@ -13,17 +13,18 @@ import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.*
+import tv.anilibria.plugin.data.restapi.ApiConfigProvider
+import tv.anilibria.plugin.data.restapi.ApiException
+import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 /**
  * Created by radiationx on 30.12.17.
  */
 class AuthRemoteDataSource @Inject constructor(
-    private val apiClient: ApiNetworkClient,
     private val authParser: AuthParser,
     private val apiConfig: ApiConfigProvider,
-    private val moshi: Moshi,
     private val authApi: ApiWrapper<AuthApi>
 ) {
 
@@ -65,15 +66,15 @@ class AuthRemoteDataSource @Inject constructor(
     }
 
     fun signIn(login: String, password: String, code2fa: String): Completable {
-        val args = mapOf(
+        val args = formBodyOf(
             "mail" to login,
             "passwd" to password,
             "fa2code" to code2fa
         )
         val url = "${apiConfig.baseUrl}/public/login.php"
-        return apiClient
-            .post(url, args)
-            .map { authParser.authResult(it.body) }
+        return authApi.proxy()
+            .signIn(url, args)
+            .map { authParser.authResult(it.string()) }
             .ignoreElement()
     }
 
@@ -92,16 +93,22 @@ class AuthRemoteDataSource @Inject constructor(
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
 
-        return apiClient
-            .get(fixedUrl, emptyMap())
+        return authApi.proxy()
+            .signInSocial(fixedUrl)
+            .doOnSuccess {
+                if (it.isSuccessful) {
+                    throw HttpException(it)
+                }
+            }
             .doOnSuccess { response ->
-                if (item.errorUrlPattern.containsMatchIn(response.redirect)) {
+                val redirect = response.raw().request().url().toString()
+                if (item.errorUrlPattern.containsMatchIn(redirect)) {
                     throw SocialAuthException("Social auth result not matched by pattern")
                 }
             }
             .doOnSuccess {
                 val message = try {
-                    JSONObject(it.body).nullString("mes")
+                    JSONObject(it.body()?.string()).nullString("mes")
                 } catch (ignore: Exception) {
                     null
                 }
@@ -112,9 +119,11 @@ class AuthRemoteDataSource @Inject constructor(
             .ignoreElement()
     }
 
-    fun signOut(): Single<String> {
-        return apiClient.post("${apiConfig.baseUrl}/public/logout.php", emptyMap())
-            .map { it.body }
+    fun signOut(): Completable {
+        return authApi
+            .proxy()
+            .signOut("${apiConfig.baseUrl}/public/logout.php")
+            .ignoreElement()
     }
 
 }

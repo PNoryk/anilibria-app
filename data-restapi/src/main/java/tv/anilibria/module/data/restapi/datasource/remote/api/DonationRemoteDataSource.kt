@@ -1,6 +1,7 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import io.reactivex.Single
+import retrofit2.HttpException
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.DonationApi
 import tv.anilibria.module.data.restapi.entity.mapper.donation.toDomain
@@ -8,13 +9,11 @@ import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.ApiWrapper
-import tv.anilibria.plugin.data.restapi.DefaultNetworkClient
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class DonationRemoteDataSource(
-    private val mainClient: DefaultNetworkClient,
-    private val donationApi: ApiWrapper<DonationApi>,
+    private val donationApi: ApiWrapper<DonationApi>
 ) {
 
     fun getDonationDetail(): Single<DonationInfo> {
@@ -39,7 +38,7 @@ class DonationRemoteDataSource(
             YooMoneyDialog.TYPE_ID_MOBILE -> "MC"
             else -> null
         }
-        val params = mapOf(
+        val params = formBodyOf(
             "receiver" to form.receiver,
             "quickpay-form" to "shop",
             "targets" to form.target,
@@ -50,7 +49,13 @@ class DonationRemoteDataSource(
             "label" to form.label.orEmpty()
         )
 
-        return mainClient.post("https://yoomoney.ru/quickpay/confirm.xml", params)
-            .map { it.redirect }
+        return donationApi.direct()
+            .createYooMoneyPayLink("https://yoomoney.ru/quickpay/confirm.xml", params)
+            .doOnSuccess {
+                if (!it.isSuccessful) {
+                    throw HttpException(it)
+                }
+            }
+            .map { it.raw().request().url().toString() }
     }
 }
