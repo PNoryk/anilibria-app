@@ -3,30 +3,30 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.restapi.datasource.remote.retrofit.DonationApi
 import tv.anilibria.module.data.restapi.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.restapi.entity.mapper.donation.toDomain
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
-import tv.anilibria.plugin.data.restapi.ApiNetworkClient
-import tv.anilibria.plugin.data.restapi.ApiConfigProvider
-import tv.anilibria.plugin.data.restapi.DefaultNetworkClient
-import tv.anilibria.plugin.data.restapi.mapApiResponse
+import tv.anilibria.plugin.data.network.formBodyOf
+import tv.anilibria.plugin.data.restapi.*
 
 @InjectConstructor
 class DonationRemoteDataSource(
     private val apiClient: ApiNetworkClient,
     private val mainClient: DefaultNetworkClient,
+    private val donationApi: ApiWrapper<DonationApi>,
     private val apiConfig: ApiConfigProvider,
     private val moshi: Moshi
 ) {
 
     fun getDonationDetail(): Single<DonationInfo> {
-        val args = mapOf(
+        val args = formBodyOf(
             "query" to "donation_details"
         )
-        return apiClient
-            .post(apiConfig.apiUrl, args)
-            .mapApiResponse<DonationInfoResponse>(moshi)
+        return donationApi.proxy()
+            .getDetails(args)
+            .handleApiResponse()
             .map { it.toDomain() }
     }
 
