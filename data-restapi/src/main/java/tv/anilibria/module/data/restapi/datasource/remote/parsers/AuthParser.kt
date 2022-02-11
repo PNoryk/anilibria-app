@@ -9,7 +9,10 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 31.12.17.
  */
+
+// todo update handling on retrofit
 class AuthParser @Inject constructor() {
+
 
     fun checkOtpError(error: Throwable): Throwable = if (error is ApiException) {
         val exceptionMessage = error.message.orEmpty()

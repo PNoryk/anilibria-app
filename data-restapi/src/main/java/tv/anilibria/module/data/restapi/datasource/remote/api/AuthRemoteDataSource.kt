@@ -7,16 +7,13 @@ import io.reactivex.Single
 import org.json.JSONObject
 import tv.anilibria.module.data.restapi.datasource.remote.nullString
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.AuthParser
-import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
-import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthServiceResponse
+import tv.anilibria.module.data.restapi.datasource.remote.retrofit.AuthApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
-import tv.anilibria.plugin.data.restapi.ApiNetworkClient
-import tv.anilibria.plugin.data.restapi.ApiConfigProvider
-import tv.anilibria.plugin.data.restapi.ApiException
-import tv.anilibria.plugin.data.restapi.mapApiResponse
+import tv.anilibria.plugin.data.network.formBodyOf
+import tv.anilibria.plugin.data.restapi.*
 import javax.inject.Inject
 
 /**
@@ -26,42 +23,43 @@ class AuthRemoteDataSource @Inject constructor(
     private val apiClient: ApiNetworkClient,
     private val authParser: AuthParser,
     private val apiConfig: ApiConfigProvider,
-    private val moshi: Moshi
+    private val moshi: Moshi,
+    private val authApi: ApiWrapper<AuthApi>
 ) {
 
     fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
-        val args = mapOf(
+        val args = formBodyOf(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
         )
-        return apiClient
-            .post(apiConfig.apiUrl, args)
-            .mapApiResponse<OtpInfoResponse>(moshi)
+        return authApi.proxy()
+            .getOtpInfo(args)
+            .handleApiResponse()
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
             .map { it.toDomain() }
     }
 
     fun acceptOtp(code: String): Completable {
-        val args = mapOf(
+        val args = formBodyOf(
             "query" to "auth_accept_otp",
             "code" to code
         )
-        return apiClient
-            .post(apiConfig.apiUrl, args)
-            .mapApiResponse<Unit>(moshi)
+        return authApi.proxy()
+            .acceptOtp(args)
+            .handleApiResponse()
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
             .ignoreElement()
     }
 
     fun signInOtp(code: String, deviceId: String): Completable {
-        val args = mapOf(
+        val args = formBodyOf(
             "query" to "auth_login_otp",
             "deviceId" to deviceId,
             "code" to code
         )
-        return apiClient
-            .post(apiConfig.apiUrl, args)
-            .mapApiResponse<Unit>(moshi)
+        return authApi.proxy()
+            .signInOtp(args)
+            .handleApiResponse()
             .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
             .ignoreElement()
     }
@@ -80,12 +78,12 @@ class AuthRemoteDataSource @Inject constructor(
     }
 
     fun loadSocialAuth(): Single<List<SocialAuthService>> {
-        val args = mapOf(
+        val args = formBodyOf(
             "query" to "social_auth"
         )
-        return apiClient
-            .post(apiConfig.apiUrl, args)
-            .mapApiResponse<List<SocialAuthServiceResponse>>(moshi)
+        return authApi.proxy()
+            .getSocialAuthServices(args)
+            .handleApiResponse()
             .map { items -> items.map { it.toDomain() } }
     }
 

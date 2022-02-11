@@ -11,10 +11,6 @@ inline fun <reified T> getApiResponseAdapter(moshi: Moshi): JsonAdapter<ApiRespo
     return moshi.adapter(type)
 }
 
-inline fun <reified T> Single<NetworkResponse>.mapApiResponse(moshi: Moshi): Single<T> {
-    return compose(ApiResponseTransformer(getApiResponseAdapter(moshi)))
-}
-
 fun <T> Single<ApiResponse<T>>.handleApiResponse(): Single<T> = map {
     val handledResponse = it.handle()
     requireNotNull(handledResponse.data) {

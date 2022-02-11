@@ -1,23 +1,20 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.DonationApi
-import tv.anilibria.module.data.restapi.entity.app.donation.DonationInfoResponse
 import tv.anilibria.module.data.restapi.entity.mapper.donation.toDomain
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.*
+import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.restapi.DefaultNetworkClient
+import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class DonationRemoteDataSource(
-    private val apiClient: ApiNetworkClient,
     private val mainClient: DefaultNetworkClient,
     private val donationApi: ApiWrapper<DonationApi>,
-    private val apiConfig: ApiConfigProvider,
-    private val moshi: Moshi
 ) {
 
     fun getDonationDetail(): Single<DonationInfo> {

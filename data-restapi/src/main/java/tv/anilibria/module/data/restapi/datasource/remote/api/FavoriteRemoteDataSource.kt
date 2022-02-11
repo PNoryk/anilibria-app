@@ -1,22 +1,17 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.FavoriteApi
-import tv.anilibria.module.data.restapi.entity.app.PageResponse
-import tv.anilibria.module.data.restapi.entity.app.release.ReleaseResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.*
+import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class FavoriteRemoteDataSource @Inject constructor(
-    private val apiClient: ApiNetworkClient,
-    private val apiConfig: ApiConfigProvider,
     private val favoriteApi: ApiWrapper<FavoriteApi>,
-    private val moshi: Moshi
 ) {
 
     fun getFavorites(page: Int): Single<Page<Release>> {
