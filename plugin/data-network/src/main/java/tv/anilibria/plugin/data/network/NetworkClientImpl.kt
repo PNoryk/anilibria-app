@@ -15,28 +15,16 @@ open class NetworkClientImpl @Inject constructor(
         private const val METHOD_DELETE = "DELETE"
     }
 
-    override fun get(url: String, args: Map<String, String>): Single<String> =
-        getFull(url, args).map { it.body }
-
-    override fun post(url: String, args: Map<String, String>): Single<String> =
-        postFull(url, args).map { it.body }
-
-    override fun put(url: String, args: Map<String, String>): Single<String> =
-        putFull(url, args).map { it.body }
-
-    override fun delete(url: String, args: Map<String, String>): Single<String> =
-        deleteFull(url, args).map { it.body }
-
-    override fun getFull(url: String, args: Map<String, String>): Single<NetworkResponse> =
+    override fun get(url: String, args: Map<String, String>): Single<NetworkResponse> =
         request(METHOD_GET, url, args)
 
-    override fun postFull(url: String, args: Map<String, String>): Single<NetworkResponse> =
+    override fun post(url: String, args: Map<String, String>): Single<NetworkResponse> =
         request(METHOD_POST, url, args)
 
-    override fun putFull(url: String, args: Map<String, String>): Single<NetworkResponse> =
+    override fun put(url: String, args: Map<String, String>): Single<NetworkResponse> =
         request(METHOD_PUT, url, args)
 
-    override fun deleteFull(url: String, args: Map<String, String>): Single<NetworkResponse> =
+    override fun delete(url: String, args: Map<String, String>): Single<NetworkResponse> =
         request(METHOD_DELETE, url, args)
 
     private fun request(
@@ -55,17 +43,17 @@ open class NetworkClientImpl @Inject constructor(
         }
         .flatMap { CallExecuteSingle(it) }
         .map {
-            NetworkResponse(
+            val response = NetworkResponse(
                 url = getHttpUrl(url, method, args).toString(),
                 code = it.code(),
                 message = it.message() ?: "Unknown http status message",
                 redirect = it.request().url().toString(),
                 body = it.body()?.string().orEmpty(),
             )
-        }
-        .doOnSuccess {
             if (!it.isSuccessful) {
-                throw HttpException(it)
+                throw HttpException(response)
+            } else {
+                response
             }
         }
 

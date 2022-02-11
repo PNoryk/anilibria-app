@@ -6,6 +6,4 @@ data class NetworkResponse(
     val message: String,
     val redirect: String,
     val body: String,
-) {
-    val isSuccessful = (200..299).contains(code)
-}
+)
