@@ -1,35 +1,24 @@
 package tv.anilibria.feature.networkconfig.data
 
-import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
-import tv.anilibria.feature.networkconfig.data.response.ApiConfigResponse
-import tv.anilibria.plugin.data.network.NetworkClient
-import tv.anilibria.plugin.data.restapi.ApiNetworkClient
-import tv.anilibria.plugin.data.restapi.ApiConfigProvider
-import tv.anilibria.plugin.data.restapi.DefaultNetworkClient
-import tv.anilibria.plugin.data.restapi.mapApiResponse
+import tv.anilibria.plugin.data.network.formBodyOf
+import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.restapi.handleApiResponse
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ConfigRemoteDataSource @Inject constructor(
-    private val apiClient: ApiNetworkClient,
-    private val mainClient: DefaultNetworkClient,
+    private val configApi: ApiWrapper<ConfigApi>,
     private val schedulers: SchedulersProvider,
-    private val moshi: Moshi,
-    private val apiConfig: ApiConfigProvider,
     private val reserveSources: ApiConfigReserveSources
 ) {
 
-    private val configAdapter by lazy {
-        moshi.adapter(ApiConfigResponse::class.java)
-    }
-
-    fun checkAvailable(apiUrl: String): Single<Boolean> = check(mainClient, apiUrl)
+    fun checkAvailable(apiUrl: String): Single<Boolean> = check(configApi.direct(), apiUrl)
         .timeout(15, TimeUnit.SECONDS)
 
-    fun checkApiAvailable(apiUrl: String): Single<Boolean> = check(apiClient, apiUrl)
+    fun checkApiAvailable(apiUrl: String): Single<Boolean> = check(configApi.proxy(), apiUrl)
         .onErrorReturnItem(false)
         .timeout(15, TimeUnit.SECONDS)
 
@@ -50,17 +39,17 @@ class ConfigRemoteDataSource @Inject constructor(
             }
         }
 
-    private fun check(client: NetworkClient, apiUrl: String): Single<Boolean> =
-        client.post(apiUrl, mapOf("query" to "empty"))
+    private fun check(client: ConfigApi, apiUrl: String): Single<Boolean> =
+        client
+            .checkAvailable(apiUrl, formBodyOf("query" to "empty"))
             .map { true }
 
     private fun getConfigFromApi(): Single<List<ApiAddress>> {
-        val args = mapOf(
-            "query" to "config"
-        )
-        return apiClient.post(apiConfig.apiUrl, args)
+        val body = formBodyOf("query" to "config")
+        return configApi.proxy()
+            .getConfig(body)
+            .handleApiResponse()
             .timeout(10, TimeUnit.SECONDS)
-            .mapApiResponse<ApiConfigResponse>(moshi)
             .map { it.toDomain().addresses }
     }
 
@@ -78,7 +67,7 @@ class ConfigRemoteDataSource @Inject constructor(
     }
 
     private fun getReserve(url: String): Single<List<ApiAddress>> =
-        mainClient.get(url, emptyMap())
-            .map { configAdapter.fromJson(it.body) }
+        configApi.direct()
+            .getReserveConfig(url)
             .map { it.toDomain().addresses }
 }

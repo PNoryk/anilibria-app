@@ -1,34 +1,24 @@
 package tv.anilibria.feature.appupdates.data
 
-import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
-import tv.anilibria.feature.appupdates.data.response.UpdateDataResponse
-import tv.anilibria.plugin.data.restapi.ApiNetworkClient
-import tv.anilibria.plugin.data.restapi.ApiConfigProvider
-import tv.anilibria.plugin.data.restapi.DefaultNetworkClient
-import tv.anilibria.plugin.data.restapi.mapApiResponse
+import tv.anilibria.plugin.data.network.formBodyOf
+import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class UpdatesRemoteDataSource @Inject constructor(
-    private val apiClient: ApiNetworkClient,
-    private val mainClient: DefaultNetworkClient,
-    private val apiConfig: ApiConfigProvider,
-    private val moshi: Moshi,
+    private val updaterApi: ApiWrapper<UpdaterApi>,
     private val reserveSources: CheckerReserveSources
 ) {
 
-    private val updatesAdapter by lazy {
-        moshi.adapter(UpdateDataResponse::class.java)
-    }
-
     fun checkUpdate(versionCode: Int): Single<UpdateData> {
-        val args = mapOf(
+        val args = formBodyOf(
             "query" to "app_update",
             "current" to versionCode.toString()
         )
-        return apiClient.post(apiConfig.apiUrl, args)
-            .mapApiResponse<UpdateDataResponse>(moshi)
+        return updaterApi.proxy().checkUpdate(args)
+            .handleApiResponse()
             .map { it.toDomain() }
             .onErrorResumeNext { getUpdatesFromReserve() }
     }
@@ -46,8 +36,8 @@ class UpdatesRemoteDataSource @Inject constructor(
     }
 
     private fun getReserve(url: String): Single<UpdateData> =
-        mainClient
-            .get(url, emptyMap())
-            .map { updatesAdapter.fromJson(it.body) }
+        updaterApi
+            .direct()
+            .checkReserve(url)
             .map { it.toDomain() }
 }

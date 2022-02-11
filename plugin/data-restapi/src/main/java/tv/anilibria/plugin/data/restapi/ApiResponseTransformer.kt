@@ -14,6 +14,6 @@ class ApiResponseTransformer<T>(
         val response = requireNotNull(adapter.fromJson(networkResponse.body)) {
             "ApiResponse can not be null"
         }
-        response.handleError().data
+        response.handle().data
     }
 }
