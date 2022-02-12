@@ -8,5 +8,9 @@ fun Map<String, String>.toFormBody(): FormBody {
     return builder.build()
 }
 
-fun formBodyOf(vararg pairs: Pair<String,String>):FormBody = mapOf(*pairs).toFormBody()
+fun formBodyOf(vararg pairs: Pair<String, String>): FormBody {
+    val builder = FormBody.Builder()
+    pairs.forEach { builder.add(it.first, it.second) }
+    return builder.build()
+}
 

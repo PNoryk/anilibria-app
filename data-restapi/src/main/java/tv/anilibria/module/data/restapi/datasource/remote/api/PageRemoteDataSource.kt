@@ -7,7 +7,7 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.page.PageLibria
 import tv.anilibria.module.domain.entity.page.VkComments
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.ApiConfigProvider
+import tv.anilibria.plugin.data.restapi.NetworkUrlProvider
 import tv.anilibria.plugin.data.restapi.ApiWrapper
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
@@ -17,13 +17,13 @@ import javax.inject.Inject
  */
 class PageRemoteDataSource @Inject constructor(
     private val pagesParser: PagesParser,
-    private val apiConfig: ApiConfigProvider,
+    private val urlProvider: NetworkUrlProvider,
     private val otherApi: ApiWrapper<OtherApi>
 ) {
 
     fun getPage(pagePath: String): Single<PageLibria> {
         return otherApi.proxy()
-            .getLibriaPage("${apiConfig.baseUrl}/$pagePath")
+            .getLibriaPage("${urlProvider.baseUrl}/$pagePath")
             .map { pagesParser.baseParse(it.string()) }
             .map { it.toDomain() }
     }

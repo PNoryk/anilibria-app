@@ -13,7 +13,7 @@ import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.ApiConfigProvider
+import tv.anilibria.plugin.data.restapi.NetworkUrlProvider
 import tv.anilibria.plugin.data.restapi.ApiException
 import tv.anilibria.plugin.data.restapi.ApiWrapper
 import tv.anilibria.plugin.data.restapi.handleApiResponse
@@ -24,7 +24,7 @@ import javax.inject.Inject
  */
 class AuthRemoteDataSource @Inject constructor(
     private val authParser: AuthParser,
-    private val apiConfig: ApiConfigProvider,
+    private val urlProvider: NetworkUrlProvider,
     private val authApi: ApiWrapper<AuthApi>
 ) {
 
@@ -71,7 +71,7 @@ class AuthRemoteDataSource @Inject constructor(
             "passwd" to password,
             "fa2code" to code2fa
         )
-        val url = "${apiConfig.baseUrl}/public/login.php"
+        val url = "${urlProvider.baseUrl}/public/login.php"
         return authApi.proxy()
             .signIn(url, args)
             .map { authParser.authResult(it.string()) }
@@ -89,7 +89,7 @@ class AuthRemoteDataSource @Inject constructor(
     }
 
     fun signInSocial(resultUrl: String, item: SocialAuthService): Completable {
-        val fixedUrl = Uri.parse(apiConfig.baseUrl).host?.let { redirectDomain ->
+        val fixedUrl = Uri.parse(urlProvider.baseUrl).host?.let { redirectDomain ->
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
 
@@ -122,7 +122,7 @@ class AuthRemoteDataSource @Inject constructor(
     fun signOut(): Completable {
         return authApi
             .proxy()
-            .signOut("${apiConfig.baseUrl}/public/logout.php")
+            .signOut("${urlProvider.baseUrl}/public/logout.php")
             .ignoreElement()
     }
 
