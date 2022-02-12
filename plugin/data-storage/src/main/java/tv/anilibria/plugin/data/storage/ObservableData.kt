@@ -1,9 +1,9 @@
 package tv.anilibria.plugin.data.storage
 
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ObservableData<T>(
@@ -12,33 +12,34 @@ class ObservableData<T>(
 
     private val needUpdate = AtomicBoolean(true)
 
-    private val triggerRelay = PublishRelay.create<Unit>()
+    private val triggerRelay = MutableSharedFlow<Unit>()
 
     private val inMemoryData = InMemoryDataHolder<T>()
 
-    fun observe(): Observable<DataWrapper<T>> = triggerRelay
-        .startWith(Unit)
-        .switchMapSingle { getActualData() }
+    fun observe(): Flow<DataWrapper<T>> = triggerRelay
+        .onStart { emit(Unit) }
+        .map { getActualData() }
 
-    fun get(): Single<DataWrapper<T>> = getActualData()
+    suspend fun get(): DataWrapper<T> = getActualData()
 
-    fun put(data: DataWrapper<T>): Completable = Completable.fromAction {
+    suspend fun put(data: DataWrapper<T>) {
         persistableData.save(data)
         needUpdate.set(true)
-        triggerRelay.accept(Unit)
+        triggerRelay.emit(Unit)
     }
 
-    fun update(callback: (DataWrapper<T>) -> DataWrapper<T>): Completable = get()
-        .map(callback)
-        .flatMapCompletable { put(it) }
+    suspend fun update(callback: (DataWrapper<T>) -> DataWrapper<T>) {
+        put(callback.invoke(get()))
+    }
 
-    private fun getActualData(): Single<DataWrapper<T>> = Single.defer {
-        if (needUpdate.compareAndSet(true, false)) {
+    private suspend fun getActualData(): DataWrapper<T> {
+        return if (needUpdate.compareAndSet(true, false)) {
             persistableData.get()
-                .flatMapCompletable { inMemoryData.save(it) }
-                .andThen(inMemoryData.get())
+                .also { inMemoryData.save(it) }
+            inMemoryData.get()
         } else {
             inMemoryData.get()
         }
     }
+
 }

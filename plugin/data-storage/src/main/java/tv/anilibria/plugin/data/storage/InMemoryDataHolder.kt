@@ -1,18 +1,16 @@
 package tv.anilibria.plugin.data.storage
 
-import io.reactivex.Completable
-import io.reactivex.Single
 import java.util.concurrent.atomic.AtomicReference
 
 class InMemoryDataHolder<T> : DataHolder<T> {
 
     private val atomicReference = AtomicReference<DataWrapper<T>>(DataWrapper(null))
 
-    override fun get(): Single<DataWrapper<T>> = Single.fromCallable {
-        atomicReference.get()
+    override suspend fun get(): DataWrapper<T> {
+        return atomicReference.get()
     }
 
-    override fun save(data: DataWrapper<T>): Completable = Completable.fromAction {
+    override suspend fun save(data: DataWrapper<T>) {
         atomicReference.lazySet(data)
     }
 }
