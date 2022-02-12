@@ -2,9 +2,8 @@ package tv.anilibria.module.data.local.holders
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import tv.anilibria.module.data.local.entity.SocialAuthServiceLocal
 import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
@@ -35,14 +34,14 @@ class SocialAuthLocalDataSource(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Observable<List<SocialAuthService>> = observableData
+    fun observe(): Flow<List<SocialAuthService>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    fun get(): Single<List<SocialAuthService>> = observableData
+    suspend fun get(): List<SocialAuthService> = observableData
         .get()
-        .map { it.data.orEmpty() }
+        .data.orEmpty()
 
-    fun put(data: List<SocialAuthService>): Completable = observableData
+    suspend fun put(data: List<SocialAuthService>) = observableData
         .put(DataWrapper(data))
 }

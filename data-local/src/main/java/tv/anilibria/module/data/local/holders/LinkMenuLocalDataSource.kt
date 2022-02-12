@@ -2,9 +2,8 @@ package tv.anilibria.module.data.local.holders
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import tv.anilibria.module.data.local.entity.LinkMenuItemLocal
 import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
@@ -35,14 +34,13 @@ class LinkMenuLocalDataSource(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Observable<List<LinkMenuItem>> = observableData
+    fun observe(): Flow<List<LinkMenuItem>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    fun get(): Single<List<LinkMenuItem>> = observableData
+    suspend fun get(): List<LinkMenuItem> = observableData
         .get()
-        .map { it.data.orEmpty() }
+        .data.orEmpty()
 
-    fun put(data: List<LinkMenuItem>): Completable = observableData
-        .put(DataWrapper(data))
+    suspend fun put(data: List<LinkMenuItem>) = observableData.put(DataWrapper(data))
 }

@@ -2,9 +2,8 @@ package tv.anilibria.module.data.local.holders
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
@@ -30,14 +29,13 @@ class YearsLocalDataSource(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Observable<List<String>> = observableData
+    fun observe(): Flow<List<String>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    fun get(): Single<List<String>> = observableData
+    suspend fun get(): List<String> = observableData
         .get()
-        .map { it.data.orEmpty() }
+        .data.orEmpty()
 
-    fun put(data: List<String>): Completable = observableData
-        .put(DataWrapper(data))
+    suspend fun put(data: List<String>) = observableData.put(DataWrapper(data))
 }

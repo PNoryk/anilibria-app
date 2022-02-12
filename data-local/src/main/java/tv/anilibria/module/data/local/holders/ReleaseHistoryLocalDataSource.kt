@@ -2,9 +2,8 @@ package tv.anilibria.module.data.local.holders
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import tv.anilibria.module.data.local.entity.ReleaseVisitLocal
 import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
@@ -36,15 +35,15 @@ class ReleaseHistoryLocalDataSource(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Observable<List<ReleaseVisit>> = observableData
+    fun observe(): Flow<List<ReleaseVisit>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    fun get(): Single<List<ReleaseVisit>> = observableData
+    suspend fun get(): List<ReleaseVisit> = observableData
         .get()
-        .map { it.data.orEmpty() }
+        .data.orEmpty()
 
-    fun put(data: ReleaseVisit): Completable = observableData.update { currentData ->
+    suspend fun put(data: ReleaseVisit) = observableData.update { currentData ->
         val items = currentData.data?.toMutableList()?.apply {
             removeAll { it.id == data.id }
             add(data)
@@ -52,7 +51,7 @@ class ReleaseHistoryLocalDataSource(
         DataWrapper(items)
     }
 
-    fun remove(releaseId: ReleaseId): Completable = observableData.update { currentData ->
+    suspend fun remove(releaseId: ReleaseId) = observableData.update { currentData ->
         val items = currentData.data?.filter { it.id == releaseId }
         DataWrapper(items)
     }

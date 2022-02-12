@@ -1,9 +1,7 @@
 package tv.anilibria.module.data.local.holders
 
 import com.squareup.moshi.Moshi
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import tv.anilibria.module.data.local.entity.UserLocal
 import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
@@ -32,11 +30,11 @@ class UserLocalDataSource(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Observable<DataWrapper<User>> = observableData.observe()
+    fun observe(): Flow<DataWrapper<User>> = observableData.observe()
 
-    fun get(): Single<DataWrapper<User>> = observableData.get()
+    suspend fun get(): DataWrapper<User> = observableData.get()
 
-    fun put(data: User): Completable = observableData.put(DataWrapper(data))
+    suspend fun put(data: User) = observableData.put(DataWrapper(data))
 
-    fun delete(): Completable = observableData.put(DataWrapper(null))
+    suspend fun delete() = observableData.put(DataWrapper(null))
 }

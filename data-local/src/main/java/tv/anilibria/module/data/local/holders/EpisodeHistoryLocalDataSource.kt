@@ -2,9 +2,8 @@ package tv.anilibria.module.data.local.holders
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import tv.anilibria.module.data.local.entity.EpisodeVisitLocal
 import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
@@ -37,15 +36,15 @@ class EpisodeHistoryLocalDataSource(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Observable<List<EpisodeVisit>> = observableData
+    fun observe(): Flow<List<EpisodeVisit>> = observableData
         .observe()
         .map { it.data.orEmpty() }
 
-    fun get(): Single<List<EpisodeVisit>> = observableData
+    suspend fun get(): List<EpisodeVisit> = observableData
         .get()
-        .map { it.data.orEmpty() }
+        .data.orEmpty()
 
-    fun put(data: EpisodeVisit): Completable = observableData.update { currentData ->
+    suspend fun put(data: EpisodeVisit) = observableData.update { currentData ->
         val items = currentData.data?.toMutableList()?.apply {
             removeAll { it.id == data.id }
             add(data)
@@ -53,14 +52,13 @@ class EpisodeHistoryLocalDataSource(
         DataWrapper(items)
     }
 
-    fun remove(episodeId: EpisodeId): Completable = observableData.update { currentData ->
+    suspend fun remove(episodeId: EpisodeId) = observableData.update { currentData ->
         val items = currentData.data?.filter { it.id == episodeId }
         DataWrapper(items)
     }
 
-    fun removeByRelease(releaseId: ReleaseId): Completable =
-        observableData.update { currentData ->
-            val items = currentData.data?.filter { it.id.releaseId == releaseId }
-            DataWrapper(items)
-        }
+    suspend fun removeByRelease(releaseId: ReleaseId) = observableData.update { currentData ->
+        val items = currentData.data?.filter { it.id.releaseId == releaseId }
+        DataWrapper(items)
+    }
 }
