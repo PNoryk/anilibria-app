@@ -40,6 +40,8 @@ dependencies {
     implementation project(":shared-android-ktx")
     implementation project(":plugin:data-network")
     implementation project(":plugin:data-restapi")
+    implementation project(":plugin:data-storage")
+    implementation project(":plugin:data-analytics")
     implementation project(":core-types")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
