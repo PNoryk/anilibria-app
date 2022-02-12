@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.local.holders
 
-import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import io.reactivex.Completable
@@ -10,12 +9,13 @@ import tv.anilibria.module.data.local.entity.LinkMenuItemLocal
 import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.DataWrapper
-import tv.anilibria.plugin.data.storage.MoshiPreferencesPersistentDataStore
+import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
 class LinkMenuLocalDataSource(
-    private val preferences: SharedPreferences,
+    private val storage: DataStorage,
     private val moshi: Moshi
 ) {
 
@@ -25,10 +25,10 @@ class LinkMenuLocalDataSource(
     }
 
     private val persistableData =
-        MoshiPreferencesPersistentDataStore<List<LinkMenuItemLocal>, List<LinkMenuItem>>(
+        MoshiStorageDataHolder<List<LinkMenuItemLocal>, List<LinkMenuItem>>(
             key = "refactor.link_menu",
             adapter = adapter,
-            preferences = preferences,
+            storage = storage,
             read = { data -> data?.map { it.toDomain() } },
             write = { data -> data?.map { it.toLocal() } }
         )

@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.local.holders
 
-import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import io.reactivex.Completable
@@ -12,12 +11,13 @@ import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.DataWrapper
-import tv.anilibria.plugin.data.storage.MoshiPreferencesPersistentDataStore
+import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
 class EpisodeHistoryLocalDataSource(
-    private val preferences: SharedPreferences,
+    private val storage: DataStorage,
     private val moshi: Moshi
 ) {
 
@@ -27,10 +27,10 @@ class EpisodeHistoryLocalDataSource(
     }
 
     private val persistableData =
-        MoshiPreferencesPersistentDataStore<List<EpisodeVisitLocal>, List<EpisodeVisit>>(
+        MoshiStorageDataHolder<List<EpisodeVisitLocal>, List<EpisodeVisit>>(
             key = "refactor.episode_history",
             adapter = adapter,
-            preferences = preferences,
+            storage = storage,
             read = { data -> data?.map { it.toDomain() } },
             write = { data -> data?.map { it.toLocal() } }
         )

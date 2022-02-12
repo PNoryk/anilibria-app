@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.local.holders
 
-import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -9,12 +8,13 @@ import tv.anilibria.module.data.local.entity.UserLocal
 import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.other.User
+import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.DataWrapper
-import tv.anilibria.plugin.data.storage.MoshiPreferencesPersistentDataStore
+import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
 class UserLocalDataSource(
-    private val preferences: SharedPreferences,
+    private val storage: DataStorage,
     private val moshi: Moshi
 ) {
 
@@ -22,10 +22,10 @@ class UserLocalDataSource(
         moshi.adapter(UserLocal::class.java)
     }
 
-    private val persistableData = MoshiPreferencesPersistentDataStore<UserLocal, User>(
+    private val persistableData = MoshiStorageDataHolder<UserLocal, User>(
         key = "refactor.user",
         adapter = adapter,
-        preferences = preferences,
+        storage = storage,
         read = { it?.toDomain() },
         write = { it?.toLocal() }
     )

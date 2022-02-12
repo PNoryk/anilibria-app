@@ -1,7 +1,5 @@
 package tv.anilibria.plugin.data.storage
 
-import android.annotation.SuppressLint
-import android.content.SharedPreferences
 import com.jakewharton.rxrelay2.PublishRelay
 import com.squareup.moshi.JsonAdapter
 import io.reactivex.Completable
@@ -10,56 +8,38 @@ import io.reactivex.Single
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-interface PersistentDataStore<T> {
+interface DataStorage {
+    fun getString(key: String): Single<DataWrapper<String>>
+    fun setString(key: String, value: DataWrapper<String>): Completable
+    fun remove(key: String): Completable
+    fun clear(): Completable
+}
+
+interface DataHolder<T> {
     fun get(): Single<DataWrapper<T>>
     fun save(data: DataWrapper<T>): Completable
 }
 
-open class BlockingPersistentDataStore<T>(
-    private val read: () -> DataWrapper<T>,
-    private val write: (DataWrapper<T>) -> Unit,
-) : PersistentDataStore<T> {
-
-    override fun get(): Single<DataWrapper<T>> = Single.fromCallable(read)
-
-    override fun save(data: DataWrapper<T>): Completable = Completable.fromAction {
-        write.invoke(data)
-    }
-}
-
-open class AsyncPersistentDataStore<T>(
-    private val read: () -> Single<DataWrapper<T>>,
-    private val write: (DataWrapper<T>) -> Completable,
-) : PersistentDataStore<T> {
-
-    override fun get(): Single<DataWrapper<T>> = read.invoke()
-
-    override fun save(data: DataWrapper<T>): Completable = write.invoke(data)
-}
-
-@SuppressLint("ApplySharedPref")
-class MoshiPreferencesPersistentDataStore<M, T>(
+class MoshiStorageDataHolder<M, T>(
     private val key: String,
     private val adapter: JsonAdapter<M>,
-    private val preferences: SharedPreferences,
+    private val storage: DataStorage,
     private val read: (M?) -> T?,
     private val write: (T?) -> M?
-) : BlockingPersistentDataStore<T>(
-    read = {
-        preferences.run {
-            val jsonData = getString(key, null)?.let { adapter.fromJson(it) }
-            DataWrapper(read.invoke(jsonData))
-        }
-    },
-    write = {
-        val jsonString = write.invoke(it.data)?.let { jsonData -> adapter.toJson(jsonData) }
-        preferences.edit()
-            .putString(key, jsonString)
-            .commit()
-    }
-)
+) : DataHolder<T> {
 
-class InMemoryData<T> : PersistentDataStore<T> {
+    override fun get(): Single<DataWrapper<T>> = storage.getString(key).map { jsonString ->
+        val jsonData = jsonString.data?.let { adapter.fromJson(it) }
+        DataWrapper(read.invoke(jsonData))
+    }
+
+    override fun save(data: DataWrapper<T>): Completable = Completable.defer {
+        val jsonString = write.invoke(data.data)?.let { jsonData -> adapter.toJson(jsonData) }
+        storage.setString(key, DataWrapper(jsonString))
+    }
+}
+
+class InMemoryDataHolder<T> : DataHolder<T> {
 
     private val atomicReference = AtomicReference<DataWrapper<T>>(DataWrapper(null))
 
@@ -73,14 +53,14 @@ class InMemoryData<T> : PersistentDataStore<T> {
 }
 
 class ObservableData<T>(
-    private val persistableData: PersistentDataStore<T> = InMemoryData()
+    private val persistableData: DataHolder<T> = InMemoryDataHolder()
 ) {
 
     private val needUpdate = AtomicBoolean(true)
 
     private val triggerRelay = PublishRelay.create<Unit>()
 
-    private val inMemoryData = InMemoryData<T>()
+    private val inMemoryData = InMemoryDataHolder<T>()
 
     fun observe(): Observable<DataWrapper<T>> = triggerRelay
         .startWith(Unit)
