@@ -1,6 +1,5 @@
 package tv.anilibria.feature.appupdates.data
 
-import io.reactivex.Single
 import okhttp3.FormBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -12,12 +11,12 @@ import tv.anilibria.plugin.data.restapi.ApiResponse
 interface UpdaterApi {
 
     @POST
-    fun checkUpdate(
+    suspend fun checkUpdate(
         @Body body: FormBody
-    ): Single<ApiResponse<UpdateDataResponse>>
+    ): ApiResponse<UpdateDataResponse>
 
     @GET
-    fun checkReserve(
+    suspend fun checkReserve(
         @Url url: String
-    ): Single<UpdateDataResponse>
+    ): UpdateDataResponse
 }

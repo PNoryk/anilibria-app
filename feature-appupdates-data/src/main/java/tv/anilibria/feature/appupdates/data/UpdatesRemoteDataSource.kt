@@ -1,6 +1,5 @@
 package tv.anilibria.feature.appupdates.data
 
-import io.reactivex.Single
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.ApiWrapper
@@ -12,32 +11,32 @@ class UpdatesRemoteDataSource @Inject constructor(
     private val reserveSources: CheckerReserveSources
 ) {
 
-    fun checkUpdate(versionCode: Int): Single<UpdateData> {
+    suspend fun checkUpdate(versionCode: Int): UpdateData {
+        return runCatching { getUpdatesFromApi(versionCode) }
+            .getOrNull()
+            ?: getUpdatesFromReserve()
+            ?: throw IllegalStateException("Error while get update data")
+    }
+
+    private suspend fun getUpdatesFromApi(versionCode: Int): UpdateData {
         val args = formBodyOf(
             "query" to "app_update",
             "current" to versionCode.toString()
         )
         return updaterApi.proxy().checkUpdate(args)
             .handleApiResponse()
-            .map { it.toDomain() }
-            .onErrorResumeNext { getUpdatesFromReserve() }
+            .toDomain()
     }
 
-    private fun getUpdatesFromReserve(): Single<UpdateData> {
+    private suspend fun getUpdatesFromReserve(): UpdateData? {
         val singleSources = reserveSources.sources.map { source ->
-            getReserve(source)
-                .map { Result.success(it) }
-                .onErrorReturn { Result.failure(it) }
+            runCatching { getReserve(source) }
         }
-        return Single.merge(singleSources)
-            .filter { it.isSuccess }
-            .map { it.getOrThrow() }
-            .firstOrError()
+        return singleSources
+            .mapNotNull { it.getOrNull() }
+            .firstOrNull()
     }
 
-    private fun getReserve(url: String): Single<UpdateData> =
-        updaterApi
-            .direct()
-            .checkReserve(url)
-            .map { it.toDomain() }
+    private suspend fun getReserve(url: String): UpdateData =
+        updaterApi.direct().checkReserve(url).toDomain()
 }
