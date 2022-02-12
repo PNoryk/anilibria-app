@@ -1,13 +1,15 @@
 package tv.anilibria.feature.networkconfig.data
 
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import ru.radiationx.shared.ktx.SchedulersProvider
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.ApiWrapper
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class ConfigRemoteDataSource @Inject constructor(
     private val configApi: ApiWrapper<ConfigApi>,
@@ -15,59 +17,54 @@ class ConfigRemoteDataSource @Inject constructor(
     private val reserveSources: ApiConfigReserveSources
 ) {
 
-    fun checkAvailable(apiUrl: String): Single<Boolean> = check(configApi.direct(), apiUrl)
-        .timeout(15, TimeUnit.SECONDS)
+    suspend fun checkAvailable(apiUrl: String): Boolean = withTimeout(15L.seconds) {
+        check(configApi.proxy(), apiUrl)
+    }
 
-    fun checkApiAvailable(apiUrl: String): Single<Boolean> = check(configApi.proxy(), apiUrl)
-        .onErrorReturnItem(false)
-        .timeout(15, TimeUnit.SECONDS)
+    suspend fun checkApiAvailable(apiUrl: String): Boolean = withTimeout(15L.seconds) {
+        runCatching { check(configApi.proxy(), apiUrl) }.isSuccess
+    }
 
-    fun getConfiguration(): Single<List<ApiAddress>> = Single
-        .merge(
-            getConfigFromApi()
-                .subscribeOn(schedulers.io())
-                .onErrorReturn { emptyList() },
-            getConfigFromReserve()
-                .subscribeOn(schedulers.io())
-                .onErrorReturn { emptyList() }
-        )
-        .filter { it.isNotEmpty() }
-        .first(emptyList())
-        .doOnSuccess {
-            if (it.isEmpty()) {
-                throw IllegalStateException("Empty config adresses")
-            }
+    suspend fun getConfiguration(): List<ApiAddress> {
+        val fromApi = withContext(Dispatchers.IO) {
+            runCatching { getConfigFromApi() }
+                .getOrNull()
+                .orEmpty()
         }
+        val fromReserve = withContext(Dispatchers.IO) {
+            runCatching { getConfigFromReserve() }
+                .getOrNull()
+                .orEmpty()
+        }
+        return listOf(fromApi, fromReserve)
+            .firstOrNull { it.isNotEmpty() }
+            ?: throw IllegalStateException("Empty config adresses")
+    }
 
-    private fun check(client: ConfigApi, apiUrl: String): Single<Boolean> =
-        client
-            .checkAvailable(apiUrl, formBodyOf("query" to "empty"))
-            .map { true }
+    private suspend fun check(client: ConfigApi, apiUrl: String): Boolean {
+        client.checkAvailable(apiUrl, formBodyOf("query" to "empty"))
+        return true
+    }
 
-    private fun getConfigFromApi(): Single<List<ApiAddress>> {
+    private suspend fun getConfigFromApi(): List<ApiAddress> = withTimeout(10L.seconds) {
         val body = formBodyOf("query" to "config")
-        return configApi.proxy()
+        configApi.proxy()
             .getConfig(body)
             .handleApiResponse()
-            .timeout(10, TimeUnit.SECONDS)
-            .map { it.toDomain().addresses }
+            .toDomain().addresses
     }
 
-    private fun getConfigFromReserve(): Single<List<ApiAddress>> {
+    private suspend fun getConfigFromReserve(): List<ApiAddress> {
         val singleSources = reserveSources.sources.map { source ->
-            getReserve(source)
-                .map { Result.success(it) }
-                .onErrorReturn { Result.failure(it) }
+            runCatching { getReserve(source) }
         }
-        return Single.merge(singleSources)
-            .filter { it.isSuccess }
-            .map { it.getOrThrow() }
-            .filter { it.isNotEmpty() }
-            .firstOrError()
+        return singleSources
+            .map { it.getOrNull() }
+            .firstOrNull { it != null }
+            .orEmpty()
     }
 
-    private fun getReserve(url: String): Single<List<ApiAddress>> =
-        configApi.direct()
-            .getReserveConfig(url)
-            .map { it.toDomain().addresses }
+    private suspend fun getReserve(url: String): List<ApiAddress> {
+        return configApi.direct().getReserveConfig(url).toDomain().addresses
+    }
 }

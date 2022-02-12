@@ -1,8 +1,6 @@
 package tv.anilibria.feature.networkconfig.data
 
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.DataWrapper
@@ -16,15 +14,15 @@ class ConfigLocalDataStorage(
 
     private val observableActive = ObservableData<String>()
 
-    fun observe(): Observable<DataWrapper<List<ApiAddress>>> = observableData.observe()
+    fun observe(): Flow<DataWrapper<List<ApiAddress>>> = observableData.observe()
 
-    fun set(data: List<ApiAddress>): Completable = observableData.put(DataWrapper(data))
+    suspend fun set(data: List<ApiAddress>) = observableData.put(DataWrapper(data))
 
-    fun get(): Single<DataWrapper<List<ApiAddress>>> = observableData.get()
+    suspend fun get(): DataWrapper<List<ApiAddress>> = observableData.get()
 
-    fun observeActive(): Observable<DataWrapper<String>> = observableActive.observe()
+    fun observeActive(): Flow<DataWrapper<String>> = observableActive.observe()
 
-    fun setActive(tag: String): Completable = observableActive.put(DataWrapper(tag))
+    suspend fun getActive(): DataWrapper<String> = observableActive.get()
 
-    fun getActive(): Single<DataWrapper<String>> = observableActive.get()
+    suspend fun setActive(tag: String) = observableActive.put(DataWrapper(tag))
 }

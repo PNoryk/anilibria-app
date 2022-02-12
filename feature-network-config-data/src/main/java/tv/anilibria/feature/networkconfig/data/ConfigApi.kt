@@ -1,6 +1,5 @@
 package tv.anilibria.feature.networkconfig.data
 
-import io.reactivex.Single
 import okhttp3.FormBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -12,18 +11,18 @@ import tv.anilibria.plugin.data.restapi.ApiResponse
 interface ConfigApi {
 
     @POST
-    fun checkAvailable(
+    suspend fun checkAvailable(
         @Url url: String,
         @Body body: FormBody
-    ): Single<ApiResponse<ApiConfigResponse>>
+    ): ApiResponse<ApiConfigResponse>
 
     @POST
-    fun getConfig(
+    suspend fun getConfig(
         @Body body: FormBody
-    ): Single<ApiResponse<ApiConfigResponse>>
+    ): ApiResponse<ApiConfigResponse>
 
     @GET
-    fun getReserveConfig(
+    suspend fun getReserveConfig(
         @Url url: String
-    ): Single<ApiConfigResponse>
+    ): ApiConfigResponse
 }
