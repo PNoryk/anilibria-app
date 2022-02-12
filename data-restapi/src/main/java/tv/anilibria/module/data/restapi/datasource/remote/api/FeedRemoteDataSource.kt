@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.FeedApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.feed.Feed
@@ -13,7 +12,7 @@ class FeedRemoteDataSource @Inject constructor(
     private val feedApi: ApiWrapper<FeedApi>
 ) {
 
-    fun getFeed(page: Int): Single<List<Feed>> {
+    suspend fun getFeed(page: Int): List<Feed> {
         val args = formBodyOf(
             "query" to "feed",
             "page" to page.toString(),
@@ -23,7 +22,7 @@ class FeedRemoteDataSource @Inject constructor(
         return feedApi.proxy()
             .getFeed(args)
             .handleApiResponse()
-            .map { items -> items.map { it.toDomain() } }
+            .map { it.toDomain() }
     }
 
 }

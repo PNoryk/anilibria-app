@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.OtherApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
@@ -13,14 +12,14 @@ class MenuRemoteDataSource @Inject constructor(
     private val otherApi: ApiWrapper<OtherApi>
 ) {
 
-    fun getMenu(): Single<List<LinkMenuItem>> {
+    suspend fun getMenu(): List<LinkMenuItem> {
         val args = formBodyOf(
             "query" to "link_menu"
         )
         return otherApi.proxy()
             .getMenu(args)
             .handleApiResponse()
-            .map { items -> items.map { it.toDomain() } }
+            .map { it.toDomain() }
     }
 
 }

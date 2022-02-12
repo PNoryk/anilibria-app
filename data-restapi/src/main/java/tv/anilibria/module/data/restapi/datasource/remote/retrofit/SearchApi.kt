@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.retrofit
 
-import io.reactivex.Single
 import okhttp3.FormBody
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -11,22 +10,22 @@ import tv.anilibria.plugin.data.restapi.ApiResponse
 interface SearchApi {
 
     @POST
-    fun getGenres(
+    suspend fun getGenres(
         @Body body: FormBody
-    ): Single<ApiResponse<List<String>>>
+    ): ApiResponse<List<String>>
 
     @POST
-    fun getYears(
+    suspend fun getYears(
         @Body body: FormBody
-    ): Single<ApiResponse<List<String>>>
+    ): ApiResponse<List<String>>
 
     @POST
-    fun fastSearch(
+    suspend fun fastSearch(
         @Body body: FormBody
-    ): Single<ApiResponse<List<ReleaseResponse>>>
+    ): ApiResponse<List<ReleaseResponse>>
 
     @POST
-    fun search(
+    suspend fun search(
         @Body body: FormBody
-    ): Single<ApiResponse<PageResponse<ReleaseResponse>>>
+    ): ApiResponse<PageResponse<ReleaseResponse>>
 }

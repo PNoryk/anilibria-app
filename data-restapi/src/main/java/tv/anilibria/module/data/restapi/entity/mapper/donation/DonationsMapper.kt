@@ -1,5 +1,7 @@
 package tv.anilibria.module.data.restapi.entity.mapper.donation
 
+import tv.anilibria.core.types.asAbsoluteUrl
+import tv.anilibria.core.types.asHtmlText
 import tv.anilibria.module.data.restapi.entity.app.donation.DonationCardResponse
 import tv.anilibria.module.data.restapi.entity.app.donation.DonationContentItemResponse
 import tv.anilibria.module.data.restapi.entity.app.donation.DonationInfoResponse
@@ -7,8 +9,6 @@ import tv.anilibria.module.data.restapi.entity.app.donation.content.*
 import tv.anilibria.module.data.restapi.entity.app.donation.content_data.DonationDialogResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDataColor
 import tv.anilibria.module.data.restapi.entity.mapper.toDataIcon
-import tv.anilibria.core.types.asAbsoluteUrl
-import tv.anilibria.core.types.asHtmlText
 import tv.anilibria.module.domain.entity.donation.*
 
 fun DonationInfoResponse.toDomain() = DonationInfo(

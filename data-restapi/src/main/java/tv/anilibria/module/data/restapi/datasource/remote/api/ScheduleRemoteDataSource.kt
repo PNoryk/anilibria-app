@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.ScheduleApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.schedule.ScheduleDay
@@ -13,7 +12,7 @@ class ScheduleRemoteDataSource @Inject constructor(
     private val scheduleApi: ApiWrapper<ScheduleApi>
 ) {
 
-    fun getSchedule(): Single<List<ScheduleDay>> {
+    suspend fun getSchedule(): List<ScheduleDay> {
         val args = formBodyOf(
             "query" to "schedule",
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
@@ -22,7 +21,7 @@ class ScheduleRemoteDataSource @Inject constructor(
         return scheduleApi.proxy()
             .getSchedule(args)
             .handleApiResponse()
-            .map { items -> items.map { it.toDomain() } }
+            .map { it.toDomain() }
     }
 
 }

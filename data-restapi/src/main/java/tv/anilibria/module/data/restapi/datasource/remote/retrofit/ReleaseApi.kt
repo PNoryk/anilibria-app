@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.retrofit
 
-import io.reactivex.Single
 import okhttp3.FormBody
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -12,22 +11,22 @@ import tv.anilibria.plugin.data.restapi.ApiResponse
 interface ReleaseApi {
 
     @POST
-    fun getRandom(
+    suspend fun getRandom(
         @Body body: FormBody
-    ): Single<ApiResponse<RandomReleaseResponse>>
+    ): ApiResponse<RandomReleaseResponse>
 
     @POST
-    fun getRelease(
+    suspend fun getRelease(
         @Body body: FormBody
-    ): Single<ApiResponse<ReleaseResponse>>
+    ): ApiResponse<ReleaseResponse>
 
     @POST
-    fun getReleases(
+    suspend fun getReleases(
         @Body body: FormBody
-    ): Single<ApiResponse<List<ReleaseResponse>>>
+    ): ApiResponse<List<ReleaseResponse>>
 
     @POST
-    fun getPagesReleases(
+    suspend fun getPagesReleases(
         @Body body: FormBody
-    ): Single<ApiResponse<PageResponse<ReleaseResponse>>>
+    ): ApiResponse<PageResponse<ReleaseResponse>>
 }

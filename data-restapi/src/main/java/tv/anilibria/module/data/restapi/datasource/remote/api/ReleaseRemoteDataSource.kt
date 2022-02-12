@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.ReleaseApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
@@ -17,17 +16,17 @@ class ReleaseRemoteDataSource @Inject constructor(
     private val releaseApi: ApiWrapper<ReleaseApi>
 ) {
 
-    fun getRandomRelease(): Single<RandomRelease> {
+    suspend fun getRandomRelease(): RandomRelease {
         val args = formBodyOf(
             "query" to "random_release"
         )
         return releaseApi.proxy()
             .getRandom(args)
             .handleApiResponse()
-            .map { it.toDomain() }
+            .toDomain()
     }
 
-    fun getRelease(releaseId: Int): Single<Release> {
+    suspend fun getRelease(releaseId: Int): Release {
         val args = formBodyOf(
             "query" to "release",
             "id" to releaseId.toString()
@@ -35,10 +34,10 @@ class ReleaseRemoteDataSource @Inject constructor(
         return releaseApi.proxy()
             .getRelease(args)
             .handleApiResponse()
-            .map { it.toDomain() }
+            .toDomain()
     }
 
-    fun getRelease(releaseCode: String): Single<Release> {
+    suspend fun getRelease(releaseCode: String): Release {
         val args = formBodyOf(
             "query" to "release",
             "code" to releaseCode
@@ -46,10 +45,10 @@ class ReleaseRemoteDataSource @Inject constructor(
         return releaseApi.proxy()
             .getRelease(args)
             .handleApiResponse()
-            .map { it.toDomain() }
+            .toDomain()
     }
 
-    fun getReleasesByIds(ids: List<Int>): Single<List<Release>> {
+    suspend fun getReleasesByIds(ids: List<Int>): List<Release> {
         val args = formBodyOf(
             "query" to "info",
             "id" to ids.joinToString(","),
@@ -59,10 +58,10 @@ class ReleaseRemoteDataSource @Inject constructor(
         return releaseApi.proxy()
             .getReleases(args)
             .handleApiResponse()
-            .map { items -> items.map { it.toDomain() } }
+            .map { it.toDomain() }
     }
 
-    fun getReleases(page: Int): Single<Page<Release>> {
+    suspend fun getReleases(page: Int): Page<Release> {
         val args = formBodyOf(
             "query" to "list",
             "page" to page.toString(),
@@ -72,7 +71,7 @@ class ReleaseRemoteDataSource @Inject constructor(
         return releaseApi.proxy()
             .getPagesReleases(args)
             .handleApiResponse()
-            .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
+            .toDomain { it.toDomain() }
     }
 }
 

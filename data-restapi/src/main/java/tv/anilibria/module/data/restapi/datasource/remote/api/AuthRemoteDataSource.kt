@@ -1,8 +1,6 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import android.net.Uri
-import io.reactivex.Completable
-import io.reactivex.Single
 import org.json.JSONObject
 import retrofit2.HttpException
 import tv.anilibria.module.data.restapi.datasource.remote.nullString
@@ -13,9 +11,9 @@ import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.NetworkUrlProvider
 import tv.anilibria.plugin.data.restapi.ApiException
 import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.restapi.NetworkUrlProvider
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
@@ -28,44 +26,45 @@ class AuthRemoteDataSource @Inject constructor(
     private val authApi: ApiWrapper<AuthApi>
 ) {
 
-    fun loadOtpInfo(deviceId: String): Single<OtpInfo> {
+    suspend fun loadOtpInfo(deviceId: String): OtpInfo = try {
         val args = formBodyOf(
             "query" to "auth_get_otp",
             "deviceId" to deviceId
         )
-        return authApi.proxy()
+        authApi.proxy()
             .getOtpInfo(args)
             .handleApiResponse()
-            .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
-            .map { it.toDomain() }
+            .toDomain()
+    } catch (ex: Exception) {
+        throw authParser.checkOtpError(ex)
     }
 
-    fun acceptOtp(code: String): Completable {
+    suspend fun acceptOtp(code: String) = try {
         val args = formBodyOf(
             "query" to "auth_accept_otp",
             "code" to code
         )
-        return authApi.proxy()
+        authApi.proxy()
             .acceptOtp(args)
             .handleApiResponse()
-            .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
-            .ignoreElement()
+    } catch (ex: Exception) {
+        throw authParser.checkOtpError(ex)
     }
 
-    fun signInOtp(code: String, deviceId: String): Completable {
+    suspend fun signInOtp(code: String, deviceId: String) = try {
         val args = formBodyOf(
             "query" to "auth_login_otp",
             "deviceId" to deviceId,
             "code" to code
         )
-        return authApi.proxy()
+        authApi.proxy()
             .signInOtp(args)
             .handleApiResponse()
-            .onErrorResumeNext { Single.error(authParser.checkOtpError(it)) }
-            .ignoreElement()
+    } catch (ex: Exception) {
+        throw authParser.checkOtpError(ex)
     }
 
-    fun signIn(login: String, password: String, code2fa: String): Completable {
+    suspend fun signIn(login: String, password: String, code2fa: String) {
         val args = formBodyOf(
             "mail" to login,
             "passwd" to password,
@@ -74,56 +73,46 @@ class AuthRemoteDataSource @Inject constructor(
         val url = "${urlProvider.baseUrl}/public/login.php"
         return authApi.proxy()
             .signIn(url, args)
-            .map { authParser.authResult(it.string()) }
-            .ignoreElement()
+            .let { authParser.authResult(it.string()) }
     }
 
-    fun loadSocialAuth(): Single<List<SocialAuthService>> {
+    suspend fun loadSocialAuth(): List<SocialAuthService> {
         val args = formBodyOf(
             "query" to "social_auth"
         )
         return authApi.proxy()
             .getSocialAuthServices(args)
             .handleApiResponse()
-            .map { items -> items.map { it.toDomain() } }
+            .map { it.toDomain() }
     }
 
-    fun signInSocial(resultUrl: String, item: SocialAuthService): Completable {
+    suspend fun signInSocial(resultUrl: String, item: SocialAuthService) {
         val fixedUrl = Uri.parse(urlProvider.baseUrl).host?.let { redirectDomain ->
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
 
-        return authApi.proxy()
-            .signInSocial(fixedUrl)
-            .doOnSuccess {
-                if (it.isSuccessful) {
-                    throw HttpException(it)
-                }
-            }
-            .doOnSuccess { response ->
-                val redirect = response.raw().request().url().toString()
-                if (item.errorUrlPattern.containsMatchIn(redirect)) {
-                    throw SocialAuthException("Social auth result not matched by pattern")
-                }
-            }
-            .doOnSuccess {
-                val message = try {
-                    JSONObject(it.body()?.string()).nullString("mes")
-                } catch (ignore: Exception) {
-                    null
-                }
-                if (message != null) {
-                    throw ApiException(400, message, null)
-                }
-            }
-            .ignoreElement()
+        val response = authApi.proxy().signInSocial(fixedUrl)
+        if (response.isSuccessful) {
+            throw HttpException(response)
+        }
+
+        val redirect = response.raw().request().url().toString()
+        if (item.errorUrlPattern.containsMatchIn(redirect)) {
+            throw SocialAuthException("Social auth result not matched by pattern")
+        }
+
+        val message = try {
+            JSONObject(response.body()?.string()).nullString("mes")
+        } catch (ignore: Exception) {
+            null
+        }
+        if (message != null) {
+            throw ApiException(400, message, null)
+        }
     }
 
-    fun signOut(): Completable {
-        return authApi
-            .proxy()
-            .signOut("${urlProvider.baseUrl}/public/logout.php")
-            .ignoreElement()
+    suspend fun signOut() {
+        authApi.proxy().signOut("${urlProvider.baseUrl}/public/logout.php")
     }
 
 }

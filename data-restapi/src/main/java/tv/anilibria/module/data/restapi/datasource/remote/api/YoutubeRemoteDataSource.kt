@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.YoutubeApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
@@ -14,7 +13,7 @@ class YoutubeRemoteDataSource @Inject constructor(
     private val youtubeApi: ApiWrapper<YoutubeApi>
 ) {
 
-    fun getYoutubeList(page: Int): Single<Page<Youtube>> {
+    suspend fun getYoutubeList(page: Int): Page<Youtube> {
         val args = formBodyOf(
             "query" to "youtube",
             "page" to page.toString()
@@ -22,6 +21,6 @@ class YoutubeRemoteDataSource @Inject constructor(
         return youtubeApi.proxy()
             .getYoutube(args)
             .handleApiResponse()
-            .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
+            .toDomain { it.toDomain() }
     }
 }

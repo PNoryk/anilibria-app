@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.retrofit
 
-import io.reactivex.Single
 import okhttp3.FormBody
 import okhttp3.ResponseBody
 import retrofit2.http.Body
@@ -13,17 +12,17 @@ import tv.anilibria.plugin.data.restapi.ApiResponse
 interface OtherApi {
 
     @POST
-    fun getMenu(
+    suspend fun getMenu(
         @Body body: FormBody
-    ): Single<ApiResponse<List<LinkMenuItemResponse>>>
+    ): ApiResponse<List<LinkMenuItemResponse>>
 
     @POST
-    fun getLibriaPage(
+    suspend fun getLibriaPage(
         @Url url: String
-    ): Single<ResponseBody>
+    ): ResponseBody
 
     @POST
-    fun getVkComments(
+    suspend fun getVkComments(
         @Body body: FormBody
-    ): Single<ApiResponse<VkCommentsResponse>>
+    ): ApiResponse<VkCommentsResponse>
 }

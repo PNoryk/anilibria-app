@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.retrofit
 
-import io.reactivex.Single
 import okhttp3.FormBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -14,39 +13,38 @@ import tv.anilibria.plugin.data.restapi.ApiResponse
 interface AuthApi {
 
     @POST
-    fun getOtpInfo(
+    suspend fun getOtpInfo(
         @Body body: FormBody
-    ): Single<ApiResponse<OtpInfoResponse>>
+    ): ApiResponse<OtpInfoResponse>
 
     @POST
-    fun acceptOtp(
+    suspend fun acceptOtp(
         @Body body: FormBody
-    ): Single<ApiResponse<Unit>>
+    ): ApiResponse<Unit>
 
     @POST
-    fun signInOtp(
+    suspend fun signInOtp(
         @Body body: FormBody
-    ): Single<ApiResponse<Unit>>
+    ): ApiResponse<Unit>
 
     @POST
-    fun getSocialAuthServices(
+    suspend fun getSocialAuthServices(
         @Body body: FormBody
-    ): Single<ApiResponse<List<SocialAuthServiceResponse>>>
+    ): ApiResponse<List<SocialAuthServiceResponse>>
 
     @POST
-    fun signIn(
+    suspend fun signIn(
         @Url url: String,
         @Body body: FormBody
-    ): Single<ResponseBody>
+    ): ResponseBody
 
     @POST
-    fun signInSocial(
+    suspend fun signInSocial(
         @Url url: String
-    ): Single<Response<ResponseBody>>
+    ): Response<ResponseBody>
 
     @POST
-    fun signOut(
+    suspend fun signOut(
         @Url url: String
-    ): Single<ResponseBody>
-
+    ): ResponseBody
 }

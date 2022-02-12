@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import retrofit2.HttpException
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.DonationApi
@@ -16,22 +15,22 @@ class DonationRemoteDataSource(
     private val donationApi: ApiWrapper<DonationApi>
 ) {
 
-    fun getDonationDetail(): Single<DonationInfo> {
+    suspend fun getDonationDetail(): DonationInfo {
         val args = formBodyOf(
             "query" to "donation_details"
         )
         return donationApi.proxy()
             .getDetails(args)
             .handleApiResponse()
-            .map { it.toDomain() }
+            .toDomain()
     }
 
     // Doc https://yoomoney.ru/docs/payment-buttons/using-api/forms
-    fun createYooMoneyPayLink(
+    suspend fun createYooMoneyPayLink(
         amount: Int,
         type: String,
         form: YooMoneyDialog.YooMoneyForm
-    ): Single<String> {
+    ): String {
         val yooMoneyType = when (type) {
             YooMoneyDialog.TYPE_ID_ACCOUNT -> "PC"
             YooMoneyDialog.TYPE_ID_CARD -> "AC"
@@ -51,11 +50,11 @@ class DonationRemoteDataSource(
 
         return donationApi.direct()
             .createYooMoneyPayLink("https://yoomoney.ru/quickpay/confirm.xml", params)
-            .doOnSuccess {
+            .also {
                 if (!it.isSuccessful) {
                     throw HttpException(it)
                 }
             }
-            .map { it.raw().request().url().toString() }
+            .raw().request().url().toString()
     }
 }

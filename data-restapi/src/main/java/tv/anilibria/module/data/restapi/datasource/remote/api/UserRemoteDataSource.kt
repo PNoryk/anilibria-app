@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.UserApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.other.User
@@ -16,13 +15,13 @@ class UserRemoteDataSource @Inject constructor(
     private val userApi: ApiWrapper<UserApi>
 ) {
 
-    fun loadUser(): Single<User> {
+    suspend fun loadUser(): User {
         val args = formBodyOf(
             "query" to "user"
         )
         return userApi.proxy()
             .getUser(args)
             .handleApiResponse()
-            .map { it.toDomain() }
+            .toDomain()
     }
 }

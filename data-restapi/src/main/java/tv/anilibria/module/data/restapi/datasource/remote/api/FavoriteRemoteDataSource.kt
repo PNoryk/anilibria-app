@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.FavoriteApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
@@ -14,7 +13,7 @@ class FavoriteRemoteDataSource @Inject constructor(
     private val favoriteApi: ApiWrapper<FavoriteApi>,
 ) {
 
-    fun getFavorites(page: Int): Single<Page<Release>> {
+    suspend fun getFavorites(page: Int): Page<Release> {
         val args = formBodyOf(
             "query" to "favorites",
             "page" to page.toString(),
@@ -24,14 +23,12 @@ class FavoriteRemoteDataSource @Inject constructor(
         return favoriteApi.proxy()
             .getFavorites(args)
             .handleApiResponse()
-            .map { pageResponse ->
-                pageResponse.toDomain {
-                    it.toDomain()
-                }
+            .toDomain {
+                it.toDomain()
             }
     }
 
-    fun addFavorite(releaseId: Int): Single<Release> {
+    suspend fun addFavorite(releaseId: Int): Release {
         val args = formBodyOf(
             "query" to "favorites",
             "action" to "add",
@@ -40,10 +37,10 @@ class FavoriteRemoteDataSource @Inject constructor(
         return favoriteApi.proxy()
             .addFavorite(args)
             .handleApiResponse()
-            .map { it.toDomain() }
+            .toDomain()
     }
 
-    fun deleteFavorite(releaseId: Int): Single<Release> {
+    suspend fun deleteFavorite(releaseId: Int): Release {
         val args = formBodyOf(
             "query" to "favorites",
             "action" to "delete",
@@ -52,7 +49,7 @@ class FavoriteRemoteDataSource @Inject constructor(
         return favoriteApi.proxy()
             .deleteFavorite(args)
             .handleApiResponse()
-            .map { it.toDomain() }
+            .toDomain()
     }
 
 }

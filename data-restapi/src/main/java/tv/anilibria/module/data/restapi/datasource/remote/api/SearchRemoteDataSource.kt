@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
-import io.reactivex.Single
 import org.json.JSONObject
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.SearchApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
@@ -15,7 +14,7 @@ class SearchRemoteDataSource @Inject constructor(
     private val searchApi: ApiWrapper<SearchApi>
 ) {
 
-    fun getGenres(): Single<List<String>> {
+    suspend fun getGenres(): List<String> {
         val args = formBodyOf(
             "query" to "genres"
         )
@@ -24,7 +23,7 @@ class SearchRemoteDataSource @Inject constructor(
             .handleApiResponse()
     }
 
-    fun getYears(): Single<List<String>> {
+    suspend fun getYears(): List<String> {
         val args = formBodyOf(
             "query" to "years"
         )
@@ -33,7 +32,7 @@ class SearchRemoteDataSource @Inject constructor(
             .handleApiResponse()
     }
 
-    fun fastSearch(name: String): Single<List<Release>> {
+    suspend fun fastSearch(name: String): List<Release> {
         val args = formBodyOf(
             "query" to "search",
             "search" to name,
@@ -42,17 +41,17 @@ class SearchRemoteDataSource @Inject constructor(
         return searchApi.proxy()
             .fastSearch(args)
             .handleApiResponse()
-            .map { items -> items.map { it.toDomain() } }
+            .map { it.toDomain() }
     }
 
-    fun searchReleases(
+    suspend fun searchReleases(
         genre: String,
         year: String,
         season: String,
         sort: String,
         complete: String,
         page: Int
-    ): Single<Page<Release>> {
+    ): Page<Release> {
         val args = formBodyOf(
             "query" to "catalog",
             "search" to JSONObject().apply {
@@ -70,7 +69,7 @@ class SearchRemoteDataSource @Inject constructor(
         return searchApi.proxy()
             .search(args)
             .handleApiResponse()
-            .map { pageResponse -> pageResponse.toDomain { it.toDomain() } }
+            .toDomain { it.toDomain() }
     }
 
 }

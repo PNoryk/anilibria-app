@@ -1,13 +1,13 @@
 package tv.anilibria.module.data.restapi.entity.mapper
 
 import kotlinx.datetime.DayOfWeek
-import tv.anilibria.module.data.restapi.entity.app.other.LinkMenuItemResponse
-import tv.anilibria.module.data.restapi.entity.app.page.PageLibriaResponse
-import tv.anilibria.module.data.restapi.entity.app.page.VkCommentsResponse
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.core.types.asBaseUrl
 import tv.anilibria.core.types.asHtmlText
 import tv.anilibria.core.types.asRelativeUrl
+import tv.anilibria.module.data.restapi.entity.app.other.LinkMenuItemResponse
+import tv.anilibria.module.data.restapi.entity.app.page.PageLibriaResponse
+import tv.anilibria.module.data.restapi.entity.app.page.VkCommentsResponse
 import tv.anilibria.module.domain.entity.other.DataColor
 import tv.anilibria.module.domain.entity.other.DataIcon
 import tv.anilibria.module.domain.entity.other.LinkMenuItem

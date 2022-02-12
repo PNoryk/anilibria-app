@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.restapi.datasource.remote.retrofit
 
-import io.reactivex.Single
 import okhttp3.FormBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -13,13 +12,13 @@ import tv.anilibria.plugin.data.restapi.ApiResponse
 interface DonationApi {
 
     @POST
-    fun getDetails(
+    suspend fun getDetails(
         @Body body: FormBody
-    ): Single<ApiResponse<DonationInfoResponse>>
+    ): ApiResponse<DonationInfoResponse>
 
     @POST
-    fun createYooMoneyPayLink(
+    suspend fun createYooMoneyPayLink(
         @Url url: String,
         @Body body: FormBody
-    ): Single<Response<ResponseBody>>
+    ): Response<ResponseBody>
 }
