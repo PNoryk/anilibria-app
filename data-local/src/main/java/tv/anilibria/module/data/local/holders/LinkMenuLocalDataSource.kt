@@ -9,7 +9,6 @@ import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import tv.anilibria.plugin.data.storage.DataStorage
-import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
@@ -36,11 +35,11 @@ class LinkMenuLocalDataSource(
 
     fun observe(): Flow<List<LinkMenuItem>> = observableData
         .observe()
-        .map { it.data.orEmpty() }
+        .map { it.orEmpty() }
 
     suspend fun get(): List<LinkMenuItem> = observableData
         .get()
-        .data.orEmpty()
+        .orEmpty()
 
-    suspend fun put(data: List<LinkMenuItem>) = observableData.put(DataWrapper(data))
+    suspend fun put(data: List<LinkMenuItem>) = observableData.put(data)
 }

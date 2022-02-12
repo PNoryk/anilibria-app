@@ -16,23 +16,23 @@ class ObservableData<T>(
 
     private val inMemoryData = InMemoryDataHolder<T>()
 
-    fun observe(): Flow<DataWrapper<T>> = triggerRelay
+    fun observe(): Flow<T?> = triggerRelay
         .onStart { emit(Unit) }
         .map { getActualData() }
 
-    suspend fun get(): DataWrapper<T> = getActualData()
+    suspend fun get(): T? = getActualData()
 
-    suspend fun put(data: DataWrapper<T>) {
+    suspend fun put(data: T?) {
         persistableData.save(data)
         needUpdate.set(true)
         triggerRelay.emit(Unit)
     }
 
-    suspend fun update(callback: (DataWrapper<T>) -> DataWrapper<T>) {
+    suspend fun update(callback: (T?) -> T?) {
         put(callback.invoke(get()))
     }
 
-    private suspend fun getActualData(): DataWrapper<T> {
+    private suspend fun getActualData(): T? {
         return if (needUpdate.compareAndSet(true, false)) {
             persistableData.get()
                 .also { inMemoryData.save(it) }

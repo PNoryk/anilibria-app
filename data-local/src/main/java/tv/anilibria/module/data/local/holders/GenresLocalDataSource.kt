@@ -5,7 +5,6 @@ import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tv.anilibria.plugin.data.storage.DataStorage
-import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
@@ -31,9 +30,9 @@ class GenresLocalDataSource(
 
     fun observe(): Flow<List<String>> = observableData
         .observe()
-        .map { it.data.orEmpty() }
+        .map { it.orEmpty() }
 
-    suspend fun get(): List<String> = observableData.get().data.orEmpty()
+    suspend fun get(): List<String> = observableData.get().orEmpty()
 
-    suspend fun put(data: List<String>) = observableData.put(DataWrapper(data))
+    suspend fun put(data: List<String>) = observableData.put(data)
 }

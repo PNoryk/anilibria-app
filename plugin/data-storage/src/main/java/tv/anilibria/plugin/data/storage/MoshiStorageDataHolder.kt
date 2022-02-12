@@ -10,15 +10,15 @@ class MoshiStorageDataHolder<M, T>(
     private val write: (T?) -> M?
 ) : DataHolder<T> {
 
-    override suspend fun get(): DataWrapper<T> {
+    override suspend fun get(): T? {
         return storage.getString(key).let { jsonString ->
-            val jsonData = jsonString.data?.let { adapter.fromJson(it) }
-            DataWrapper(read.invoke(jsonData))
+            val jsonData = jsonString?.let { adapter.fromJson(it) }
+            read.invoke(jsonData)
         }
     }
 
-    override suspend fun save(data: DataWrapper<T>) {
-        val jsonString = write.invoke(data.data)?.let { jsonData -> adapter.toJson(jsonData) }
-        storage.setString(key, DataWrapper(jsonString))
+    override suspend fun save(data: T?) {
+        val jsonString = write.invoke(data)?.let { jsonData -> adapter.toJson(jsonData) }
+        storage.setString(key, jsonString)
     }
 }

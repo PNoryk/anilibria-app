@@ -10,7 +10,6 @@ import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.ReleaseVisit
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import tv.anilibria.plugin.data.storage.DataStorage
-import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
@@ -37,22 +36,20 @@ class ReleaseHistoryLocalDataSource(
 
     fun observe(): Flow<List<ReleaseVisit>> = observableData
         .observe()
-        .map { it.data.orEmpty() }
+        .map { it.orEmpty() }
 
     suspend fun get(): List<ReleaseVisit> = observableData
         .get()
-        .data.orEmpty()
+        .orEmpty()
 
     suspend fun put(data: ReleaseVisit) = observableData.update { currentData ->
-        val items = currentData.data?.toMutableList()?.apply {
+        currentData?.toMutableList()?.apply {
             removeAll { it.id == data.id }
             add(data)
         }
-        DataWrapper(items)
     }
 
     suspend fun remove(releaseId: ReleaseId) = observableData.update { currentData ->
-        val items = currentData.data?.filter { it.id == releaseId }
-        DataWrapper(items)
+        currentData?.filter { it.id == releaseId }
     }
 }

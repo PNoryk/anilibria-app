@@ -7,7 +7,6 @@ import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.other.User
 import tv.anilibria.plugin.data.storage.DataStorage
-import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
@@ -30,11 +29,11 @@ class UserLocalDataSource(
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Flow<DataWrapper<User>> = observableData.observe()
+    fun observe(): Flow<User?> = observableData.observe()
 
-    suspend fun get(): DataWrapper<User> = observableData.get()
+    suspend fun get(): User? = observableData.get()
 
-    suspend fun put(data: User) = observableData.put(DataWrapper(data))
+    suspend fun put(data: User) = observableData.put(data)
 
-    suspend fun delete() = observableData.put(DataWrapper(null))
+    suspend fun delete() = observableData.put(null)
 }

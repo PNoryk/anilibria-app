@@ -11,7 +11,6 @@ import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import tv.anilibria.plugin.data.storage.DataStorage
-import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
@@ -38,27 +37,25 @@ class EpisodeHistoryLocalDataSource(
 
     fun observe(): Flow<List<EpisodeVisit>> = observableData
         .observe()
-        .map { it.data.orEmpty() }
+        .map { it.orEmpty() }
 
     suspend fun get(): List<EpisodeVisit> = observableData
         .get()
-        .data.orEmpty()
+        .orEmpty()
 
     suspend fun put(data: EpisodeVisit) = observableData.update { currentData ->
-        val items = currentData.data?.toMutableList()?.apply {
+        currentData?.toMutableList()?.apply {
             removeAll { it.id == data.id }
             add(data)
         }
-        DataWrapper(items)
     }
 
     suspend fun remove(episodeId: EpisodeId) = observableData.update { currentData ->
-        val items = currentData.data?.filter { it.id == episodeId }
-        DataWrapper(items)
+        currentData?.filter { it.id == episodeId }
     }
 
     suspend fun removeByRelease(releaseId: ReleaseId) = observableData.update { currentData ->
-        val items = currentData.data?.filter { it.id.releaseId == releaseId }
-        DataWrapper(items)
+        currentData?.filter { it.id.releaseId == releaseId }
+
     }
 }

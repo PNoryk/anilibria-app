@@ -9,7 +9,6 @@ import tv.anilibria.module.data.local.mappers.toDomain
 import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.plugin.data.storage.DataStorage
-import tv.anilibria.plugin.data.storage.DataWrapper
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
@@ -36,12 +35,12 @@ class SocialAuthLocalDataSource(
 
     fun observe(): Flow<List<SocialAuthService>> = observableData
         .observe()
-        .map { it.data.orEmpty() }
+        .map { it.orEmpty() }
 
     suspend fun get(): List<SocialAuthService> = observableData
         .get()
-        .data.orEmpty()
+        .orEmpty()
 
     suspend fun put(data: List<SocialAuthService>) = observableData
-        .put(DataWrapper(data))
+        .put(data)
 }
