@@ -8,3 +8,7 @@ fun <T> Single<ApiResponse<T>>.handleApiResponse(): Single<T> = map {
         "Data from api response can't be null"
     }
 }
+
+fun <T> ApiResponse<T>.handleApiResponse(): T = requireNotNull(handle().data) {
+    "Data from api response can't be null"
+}
