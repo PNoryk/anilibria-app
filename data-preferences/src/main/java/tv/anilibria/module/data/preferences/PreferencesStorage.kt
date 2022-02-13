@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.onEach
 import tv.anilibria.plugin.data.storage.*
 import javax.inject.Inject
 
-/**
- * Created by radiationx on 03.02.18.
- */
+// todo переделать на нормальную подписку обновлений
 class PreferencesStorage @Inject constructor(
     private val storage: DataStorage
 ) : PreferencesHolder {

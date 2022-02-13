@@ -1,18 +1,18 @@
 package tv.anilibria.module.data.preferences
 
-const val QUALITY_NO = -1
-const val QUALITY_SD = 0
-const val QUALITY_HD = 1
-const val QUALITY_ALWAYS = 2
-const val QUALITY_FULL_HD = 3
+private const val QUALITY_NO = -1
+private const val QUALITY_SD = 0
+private const val QUALITY_HD = 1
+private const val QUALITY_ALWAYS = 2
+private const val QUALITY_FULL_HD = 3
 
-const val PLAYER_TYPE_NO = -1
-const val PLAYER_TYPE_EXTERNAL = 0
-const val PLAYER_TYPE_INTERNAL = 1
-const val PLAYER_TYPE_ALWAYS = 2
+private const val PLAYER_TYPE_NO = -1
+private const val PLAYER_TYPE_EXTERNAL = 0
+private const val PLAYER_TYPE_INTERNAL = 1
+private const val PLAYER_TYPE_ALWAYS = 2
 
-const val PIP_BUTTON = 0
-const val PIP_AUTO = 1
+private const val PIP_BUTTON = 0
+private const val PIP_AUTO = 1
 
 
 fun Int.toPlayerQuality(): PlayerQuality = when (this) {
