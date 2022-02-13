@@ -11,6 +11,7 @@ import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
+import tv.anilibria.plugin.data.storage.storageStringKey
 
 class LinkMenuLocalDataSource(
     private val storage: DataStorage,
@@ -24,7 +25,7 @@ class LinkMenuLocalDataSource(
 
     private val persistableData =
         MoshiStorageDataHolder<List<LinkMenuItemLocal>, List<LinkMenuItem>>(
-            key = "refactor.link_menu",
+            key = storageStringKey("refactor.link_menu"),
             adapter = adapter,
             storage = storage,
             read = { data -> data?.map { it.toDomain() } },

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
+import tv.anilibria.plugin.data.storage.storageStringKey
 
 class GenresLocalDataSource(
     private val storage: DataStorage,
@@ -19,7 +20,7 @@ class GenresLocalDataSource(
     }
 
     private val persistableData = MoshiStorageDataHolder<List<String>, List<String>>(
-        key = "refactor.genres",
+        key = storageStringKey("refactor.genres"),
         adapter = adapter,
         storage = storage,
         read = { it },

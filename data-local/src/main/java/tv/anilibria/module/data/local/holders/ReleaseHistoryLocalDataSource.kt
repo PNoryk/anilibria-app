@@ -12,6 +12,7 @@ import tv.anilibria.module.domain.entity.release.ReleaseId
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
+import tv.anilibria.plugin.data.storage.storageStringKey
 
 class ReleaseHistoryLocalDataSource(
     private val storage: DataStorage,
@@ -25,7 +26,7 @@ class ReleaseHistoryLocalDataSource(
 
     private val persistableData =
         MoshiStorageDataHolder<List<ReleaseVisitLocal>, List<ReleaseVisit>>(
-            key = "refactor.release_history",
+            key = storageStringKey("refactor.release_history"),
             adapter = adapter,
             storage = storage,
             read = { data -> data?.map { it.toDomain() } },

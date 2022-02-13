@@ -1,6 +1,7 @@
 package tv.anilibria.module.data.local.holders
 
 import tv.anilibria.plugin.data.storage.DataStorage
+import tv.anilibria.plugin.data.storage.storageStringKey
 import java.util.*
 
 class DeviceIdLocalDataSource(
@@ -8,15 +9,15 @@ class DeviceIdLocalDataSource(
 ) {
 
     companion object {
-        private const val KEY_DEVICE_UID = "device_uid"
+        private val KEY_DEVICE_UID = storageStringKey("device_uid")
     }
 
     suspend fun get(): String {
-        var uid = storage.getString(KEY_DEVICE_UID)
+        var uid = storage.get(KEY_DEVICE_UID)
 
         if (uid == null) {
             uid = UUID.randomUUID().toString()
-            storage.setString(KEY_DEVICE_UID, uid)
+            storage.set(KEY_DEVICE_UID, uid)
         }
 
         return uid

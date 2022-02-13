@@ -9,6 +9,7 @@ import tv.anilibria.module.domain.entity.other.User
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
+import tv.anilibria.plugin.data.storage.storageStringKey
 
 class UserLocalDataSource(
     private val storage: DataStorage,
@@ -20,7 +21,7 @@ class UserLocalDataSource(
     }
 
     private val persistableData = MoshiStorageDataHolder<UserLocal, User>(
-        key = "refactor.user",
+        key = storageStringKey("refactor.user"),
         adapter = adapter,
         storage = storage,
         read = { it?.toDomain() },

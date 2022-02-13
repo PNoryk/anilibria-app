@@ -1,8 +1,8 @@
 package tv.anilibria.plugin.data.storage
 
-class StorageDataKeyHolder<S, T>(
+class ModelStorageDataHolder<S, T>(
     private val key: StorageKey<S>,
-    private val storage: DataKeyStorage,
+    private val storage: DataStorage,
     private val read: (S?) -> T?,
     private val write: (T?) -> S?
 ) : DataHolder<T> {

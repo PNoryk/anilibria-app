@@ -11,6 +11,7 @@ import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
+import tv.anilibria.plugin.data.storage.storageStringKey
 
 class SocialAuthLocalDataSource(
     private val storage: DataStorage,
@@ -24,7 +25,7 @@ class SocialAuthLocalDataSource(
 
     private val persistableData =
         MoshiStorageDataHolder<List<SocialAuthServiceLocal>, List<SocialAuthService>>(
-            key = "refactor.social_auth_services",
+            key = storageStringKey("refactor.social_auth_services"),
             adapter = adapter,
             storage = storage,
             read = { data -> data?.map { it.toDomain() } },

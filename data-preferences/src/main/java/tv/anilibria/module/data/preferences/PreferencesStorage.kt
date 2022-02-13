@@ -12,7 +12,7 @@ import javax.inject.Inject
  * Created by radiationx on 03.02.18.
  */
 class PreferencesStorage @Inject constructor(
-    private val storage: DataKeyStorage
+    private val storage: DataStorage
 ) : PreferencesHolder {
 
     companion object {
@@ -57,71 +57,80 @@ class PreferencesStorage @Inject constructor(
         observerJob?.cancel()
     }
 
-    private val donationRemindHolder = SimpleStorageDataKeyHolder(
+    private val donationRemindHolder = StorageDataHolder(
         storageBooleanKey(NEW_DONATION_REMIND_KEY),
         storage
     )
 
-    private val releaseRemindHolder = SimpleStorageDataKeyHolder(
+    private val releaseRemindHolder = StorageDataHolder(
         storageBooleanKey(RELEASE_REMIND_KEY),
         storage
     )
 
-    private val searchRemindHolder = SimpleStorageDataKeyHolder(
+    private val searchRemindHolder = StorageDataHolder(
         storageBooleanKey(SEARCH_REMIND_KEY),
         storage
     )
 
-    private val episodesReverseHolder = SimpleStorageDataKeyHolder(
+    private val episodesReverseHolder = StorageDataHolder(
         storageBooleanKey(EPISODES_IS_REVERSE_KEY),
         storage
     )
 
-    private val qualityHolder = StorageDataKeyHolder(
+    private val qualityHolder = ModelStorageDataHolder(
         storageIntKey(QUALITY_KEY),
         storage,
         read = { it?.toPlayerQuality() },
         write = { it?.toPrefs() }
     )
 
-    private val playerTypeHolder = StorageDataKeyHolder(
+    private val playerTypeHolder = ModelStorageDataHolder(
         storageIntKey(PLAYER_TYPE_KEY),
         storage,
         read = { it?.toPlayerType() },
         write = { it?.toPrefs() }
     )
 
-    private val playSpeedHolder = SimpleStorageDataKeyHolder(
+    private val playSpeedHolder = StorageDataHolder(
         storageFloatKey(PLAY_SPEED_KEY),
         storage
     )
 
-    private val pipModeHolder = StorageDataKeyHolder(
+    private val pipModeHolder = ModelStorageDataHolder(
         storageIntKey(PIP_CONTROL_KEY),
         storage,
         read = { it?.toPipMode() },
         write = { it?.toPrefs() }
     )
 
-    private val notificationsAllHolder = SimpleStorageDataKeyHolder(
+    private val notificationsAllHolder = StorageDataHolder(
         storageBooleanKey(NOTIFICATIONS_ALL_KEY),
         storage
     )
 
-    private val notificationsServiceHolder = SimpleStorageDataKeyHolder(
+    private val notificationsServiceHolder = StorageDataHolder(
         storageBooleanKey(NOTIFICATIONS_SERVICE_KEY),
         storage
     )
 
     override val newDonationRemind: ObservableData<Boolean> = ObservableData(donationRemindHolder)
+
     override val releaseRemind: ObservableData<Boolean> = ObservableData(releaseRemindHolder)
+
     override val searchRemind: ObservableData<Boolean> = ObservableData(searchRemindHolder)
+
     override val episodesIsReverse: ObservableData<Boolean> = ObservableData(episodesReverseHolder)
+
     override val quality: ObservableData<PlayerQuality> = ObservableData(qualityHolder)
+
     override val playerType: ObservableData<PlayerType> = ObservableData(playerTypeHolder)
+
     override val playSpeed: ObservableData<Float> = ObservableData(playSpeedHolder)
+
     override val pipControl: ObservableData<PlayerPipMode> = ObservableData(pipModeHolder)
+
     override val notificationsAll: ObservableData<Boolean> = ObservableData(notificationsAllHolder)
+
     override val notificationsService: ObservableData<Boolean> =
         ObservableData(notificationsServiceHolder)
 }

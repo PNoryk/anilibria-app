@@ -4,7 +4,8 @@ import kotlinx.coroutines.runBlocking
 import toothpick.InjectConstructor
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.ObservableData
-import tv.anilibria.plugin.data.storage.StorageDataHolder
+import tv.anilibria.plugin.data.storage.ModelStorageDataHolder
+import tv.anilibria.plugin.data.storage.storageStringKey
 
 @InjectConstructor
 class DownloadsStorage(
@@ -15,8 +16,8 @@ class DownloadsStorage(
         private const val KEY_DOWNLOADS = "data.download_ids"
     }
 
-    private val dataHolder = StorageDataHolder(
-        key = KEY_DOWNLOADS,
+    private val dataHolder = ModelStorageDataHolder(
+        key = storageStringKey(KEY_DOWNLOADS),
         storage = storage,
         read = { string ->
             string?.split(",")
