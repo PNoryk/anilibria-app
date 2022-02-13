@@ -5,8 +5,8 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.RandomRelease
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class ReleaseRemoteDataSource @Inject constructor(
             .toDomain()
     }
 
-    suspend fun getRelease(releaseId: Int): Release {
+    suspend fun getRelease(releaseId: Long): Release {
         val args = formBodyOf(
             "query" to "release",
             "id" to releaseId.toString()
@@ -48,7 +48,7 @@ class ReleaseRemoteDataSource @Inject constructor(
             .toDomain()
     }
 
-    suspend fun getReleasesByIds(ids: List<Int>): List<Release> {
+    suspend fun getReleasesByIds(ids: List<Long>): List<Release> {
         val args = formBodyOf(
             "query" to "info",
             "id" to ids.joinToString(","),

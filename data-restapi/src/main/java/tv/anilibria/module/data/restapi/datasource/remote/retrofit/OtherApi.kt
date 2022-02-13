@@ -3,6 +3,7 @@ package tv.anilibria.module.data.restapi.datasource.remote.retrofit
 import okhttp3.FormBody
 import okhttp3.ResponseBody
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Url
 import tv.anilibria.module.data.restapi.entity.app.other.LinkMenuItemResponse
@@ -25,4 +26,9 @@ interface OtherApi {
     suspend fun getVkComments(
         @Body body: FormBody
     ): ApiResponse<VkCommentsResponse>
+
+    @GET
+    suspend fun checkVkBlocked(
+        @Url url: String
+    )
 }

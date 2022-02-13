@@ -6,6 +6,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ReleaseVisitLocal(
     @Json(name = "id") val id : Long,
-    @Json(name = "lastKnownUpdateAt") val lastKnownUpdateAt : Long,
     @Json(name = "lastOpenAt") val lastOpenAt : Long,
 )
