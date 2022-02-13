@@ -1,9 +1,8 @@
-package tv.anilibria.plugin.data.restapi
+package tv.anilibria.plugin.data.network
 
 import javax.inject.Provider
 
-
-class ApiWrapper<T>(
+class NetworkWrapper<T>(
     private val proxyProvider: Provider<T>,
     private val directProvider: Provider<T>,
 ) {

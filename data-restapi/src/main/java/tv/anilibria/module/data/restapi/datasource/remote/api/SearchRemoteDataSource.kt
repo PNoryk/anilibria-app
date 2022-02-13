@@ -6,12 +6,12 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class SearchRemoteDataSource @Inject constructor(
-    private val searchApi: ApiWrapper<SearchApi>
+    private val searchApi: NetworkWrapper<SearchApi>
 ) {
 
     suspend fun getGenres(): List<String> {

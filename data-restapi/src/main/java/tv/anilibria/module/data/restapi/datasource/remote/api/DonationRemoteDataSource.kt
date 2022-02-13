@@ -7,12 +7,12 @@ import tv.anilibria.module.data.restapi.entity.mapper.donation.toDomain
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class DonationRemoteDataSource(
-    private val donationApi: ApiWrapper<DonationApi>
+    private val donationApi: NetworkWrapper<DonationApi>
 ) {
 
     suspend fun getDonationDetail(): DonationInfo {

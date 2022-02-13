@@ -6,8 +6,8 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.page.PageLibria
 import tv.anilibria.module.domain.entity.page.VkComments
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.ApiWrapper
-import tv.anilibria.plugin.data.restapi.NetworkUrlProvider
+import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class PageRemoteDataSource @Inject constructor(
     private val pagesParser: PagesParser,
     private val urlProvider: NetworkUrlProvider,
-    private val otherApi: ApiWrapper<OtherApi>
+    private val otherApi: NetworkWrapper<OtherApi>
 ) {
 
     suspend fun getPage(pagePath: String): PageLibria {

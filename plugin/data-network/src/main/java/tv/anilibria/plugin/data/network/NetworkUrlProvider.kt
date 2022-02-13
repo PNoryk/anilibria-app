@@ -1,4 +1,4 @@
-package tv.anilibria.plugin.data.restapi
+package tv.anilibria.plugin.data.network
 
 interface NetworkUrlProvider {
     val baseUrl: String

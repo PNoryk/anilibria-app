@@ -5,12 +5,12 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.youtube.Youtube
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class YoutubeRemoteDataSource @Inject constructor(
-    private val youtubeApi: ApiWrapper<YoutubeApi>
+    private val youtubeApi: NetworkWrapper<YoutubeApi>
 ) {
 
     suspend fun getYoutubeList(page: Int): Page<Youtube> {

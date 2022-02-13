@@ -6,14 +6,14 @@ import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.RandomRelease
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.plugin.data.network.formBodyOf
-import tv.anilibria.plugin.data.restapi.ApiWrapper
+import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 /* Created by radiationx on 31.10.17. */
 
 class ReleaseRemoteDataSource @Inject constructor(
-    private val releaseApi: ApiWrapper<ReleaseApi>
+    private val releaseApi: NetworkWrapper<ReleaseApi>
 ) {
 
     suspend fun getRandomRelease(): RandomRelease {
