@@ -12,11 +12,11 @@ class ObservableData<T>(
 
     private val needUpdate = AtomicBoolean(true)
 
-    private val triggerRelay = MutableSharedFlow<Unit>()
+    private val triggerFlow = MutableSharedFlow<Unit>()
 
     private val inMemoryData = InMemoryDataHolder<T>()
 
-    fun observe(): Flow<T?> = triggerRelay
+    fun observe(): Flow<T?> = triggerFlow
         .onStart { emit(Unit) }
         .map { getActualData() }
 
@@ -25,21 +25,25 @@ class ObservableData<T>(
     suspend fun put(data: T?) {
         persistableData.save(data)
         needUpdate.set(true)
-        triggerRelay.emit(Unit)
+        triggerFlow.emit(Unit)
     }
 
     suspend fun update(callback: (T?) -> T?) {
         put(callback.invoke(get()))
     }
 
+    fun triggerUpdate() {
+        needUpdate.set(true)
+        triggerFlow.tryEmit(Unit)
+    }
+
     private suspend fun getActualData(): T? {
-        return if (needUpdate.compareAndSet(true, false)) {
-            persistableData.get()
-                .also { inMemoryData.save(it) }
-            inMemoryData.get()
-        } else {
-            inMemoryData.get()
+        if (needUpdate.compareAndSet(true, false)) {
+            persistableData.get().also {
+                inMemoryData.save(it)
+            }
         }
+        return inMemoryData.get()
     }
 
 }
