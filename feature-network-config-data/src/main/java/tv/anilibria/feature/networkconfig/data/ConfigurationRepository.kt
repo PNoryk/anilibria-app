@@ -3,7 +3,6 @@ package tv.anilibria.feature.networkconfig.data
 import com.stealthcopter.networktools.ping.PingOptions
 import com.stealthcopter.networktools.ping.PingResult
 import com.stealthcopter.networktools.ping.PingTools
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withTimeout
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import java.net.InetAddress
@@ -11,9 +10,9 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 class ConfigurationRepository @Inject constructor(
-    private val configurationApi: ConfigRemoteDataSource
+    private val configurationApi: ConfigRemoteDataSource,
+    private val pingCache: ConfigPingCache
 ) {
-    private val pingRelay = MutableStateFlow(mapOf<String, PingResult>())
 
     suspend fun checkAvailable(apiUrl: String): Boolean = configurationApi
         .checkAvailable(apiUrl)
@@ -28,9 +27,13 @@ class ConfigurationRepository @Inject constructor(
         val result = withTimeout(15L.seconds) {
             PingTools.doNativePing(InetAddress.getByName(host), PingOptions())
         }
-        val map = pingRelay.value.toMutableMap()
-        map[host] = result
-        pingRelay.value = map
+        pingCache.proxies.update {
+            it?.toMutableMap()?.apply {
+                if (!result.hasError()) {
+                    put(host, result.getTimeTaken().toLong())
+                }
+            }
+        }
         return result
     }
 }
