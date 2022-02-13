@@ -1,12 +1,10 @@
-package ru.radiationx.data.datasource.remote.address
+package tv.anilibria.feature.networkconfig.data.address
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import tv.anilibria.feature.networkconfig.data.ConfigLocalDataStorage
-import tv.anilibria.feature.networkconfig.data.address.Api
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
-import tv.anilibria.feature.networkconfig.data.domain.ApiProxy
 import javax.inject.Inject
 
 class ApiConfig @Inject constructor(
@@ -40,5 +38,7 @@ class ApiConfig @Inject constructor(
         val activeByTag = apiConfigStorage.get()?.find { it.tag == activeTag }
         return activeByTag ?: Api.DEFAULT_ADDRESS
     }
+
+    suspend fun getTag() = getActive().tag
 
 }
