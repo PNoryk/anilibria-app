@@ -51,10 +51,6 @@ class ApiConfig @Inject constructor(
         }*/
         addresses.addAll(items)
 
-        possibleIps.clear()
-        val ips = addresses.map { it.ips + it.proxies.map { it.ip } }.reduce { acc, list -> acc.plus(list) }.toSet().toList()
-        possibleIps.addAll(ips)
-
         addresses.forEach {
             it.proxies.forEach { proxy ->
                 proxyPings[it.tag]?.also {
@@ -66,9 +62,6 @@ class ApiConfig @Inject constructor(
 
     @Synchronized
     fun getAddresses(): List<ApiAddress> = addresses.toList()
-
-    @Synchronized
-    fun getPossibleIps(): List<String> = possibleIps.toList()
 
     val active: ApiAddress
         get() = addresses.firstOrNull { it.tag == activeAddressTag } ?: Api.DEFAULT_ADDRESS
