@@ -45,6 +45,9 @@ dependencies {
     implementation project(":data-local")
     implementation project(":plugin:shared-appinfo")
     implementation project(":plugin:data-storage")
+    implementation project(":feature-network-config-data")
+    implementation project(":feature-appupdates-data")
+    implementation project(":feature-downloads-data")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.squareup.okhttp3:okhttp-urlconnection:${okHttpVersion}"
