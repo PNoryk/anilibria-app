@@ -2,7 +2,7 @@ package tv.anilibria.module.data.repos
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
-import tv.anilibria.module.data.ReleaseUpdateHolder
+import tv.anilibria.module.data.local.ReleaseUpdateHelper
 import tv.anilibria.module.data.restapi.datasource.remote.api.ScheduleRemoteDataSource
 import tv.anilibria.module.domain.entity.schedule.ScheduleDay
 import tv.anilibria.plugin.data.storage.ObservableData
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class ScheduleRepository @Inject constructor(
     private val scheduleApi: ScheduleRemoteDataSource,
-    private val releaseUpdateHolder: ReleaseUpdateHolder
+    private val releaseUpdateHolder: ReleaseUpdateHelper
 ) {
 
     private val dataRelay = ObservableData<List<ScheduleDay>>()

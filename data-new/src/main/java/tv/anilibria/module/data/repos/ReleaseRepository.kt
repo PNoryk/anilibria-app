@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.repos
 
-import tv.anilibria.module.data.ReleaseUpdateHolder
+import tv.anilibria.module.data.local.ReleaseUpdateHelper
 import tv.anilibria.module.data.restapi.datasource.remote.api.ReleaseRemoteDataSource
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.RandomRelease
@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 class ReleaseRepository @Inject constructor(
     private val releaseApi: ReleaseRemoteDataSource,
-    private val releaseUpdateHolder: ReleaseUpdateHolder
+    private val releaseUpdateHolder: ReleaseUpdateHelper
 ) {
 
     suspend fun getRandomRelease(): RandomRelease {
