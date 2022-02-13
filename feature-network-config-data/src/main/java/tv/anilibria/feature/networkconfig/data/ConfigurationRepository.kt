@@ -28,7 +28,7 @@ class ConfigurationRepository @Inject constructor(
             PingTools.doNativePing(InetAddress.getByName(host), PingOptions())
         }
         pingCache.proxies.update {
-            it?.toMutableMap()?.apply {
+            it.toMutableMap().apply {
                 if (!result.hasError()) {
                     put(host, result.getTimeTaken().toLong())
                 }

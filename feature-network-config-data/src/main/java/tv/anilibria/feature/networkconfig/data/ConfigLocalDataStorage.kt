@@ -5,6 +5,7 @@ import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.ObservableData
 
+//todo добавить сохранение
 class ConfigLocalDataStorage(
     private val storage: DataStorage,
 ) {
@@ -15,13 +16,13 @@ class ConfigLocalDataStorage(
 
     fun observe(): Flow<List<ApiAddress>?> = observableData.observe()
 
-    suspend fun set(data: List<ApiAddress>?) = observableData.put(data)
+    suspend fun set(data: List<ApiAddress>) = observableData.put(data)
 
-    suspend fun get(): List<ApiAddress>? = observableData.get()
+    suspend fun get(): List<ApiAddress> = observableData.get()
 
     fun observeActive(): Flow<String?> = observableActive.observe()
 
-    suspend fun getActive(): String? = observableActive.get()
+    suspend fun getActive(): String = observableActive.get()
 
-    suspend fun setActive(tag: String?) = observableActive.put(tag)
+    suspend fun setActive(tag: String) = observableActive.put(tag)
 }

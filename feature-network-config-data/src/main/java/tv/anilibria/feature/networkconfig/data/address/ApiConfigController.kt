@@ -35,7 +35,7 @@ class ApiConfigController @Inject constructor(
 
     suspend fun getActive(): ApiAddress {
         val activeTag = apiConfigStorage.getActive()
-        val activeByTag = apiConfigStorage.get()?.find { it.tag == activeTag }
+        val activeByTag = apiConfigStorage.get().find { it.tag == activeTag }
         return activeByTag ?: Api.DEFAULT_ADDRESS
     }
 

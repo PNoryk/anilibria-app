@@ -16,19 +16,19 @@ class ObservableData<T>(
 
     private val inMemoryData = InMemoryDataHolder<T>()
 
-    fun observe(): Flow<T?> = triggerFlow
+    fun observe(): Flow<T> = triggerFlow
         .onStart { emit(Unit) }
         .map { getActualData() }
 
-    suspend fun get(): T? = getActualData()
+    suspend fun get(): T = getActualData()
 
-    suspend fun put(data: T?) {
+    suspend fun put(data: T) {
         persistableData.save(data)
         needUpdate.set(true)
         triggerFlow.emit(Unit)
     }
 
-    suspend fun update(callback: (T?) -> T?) {
+    suspend fun update(callback: (T) -> T) {
         put(callback.invoke(get()))
     }
 
@@ -37,7 +37,7 @@ class ObservableData<T>(
         triggerFlow.tryEmit(Unit)
     }
 
-    private suspend fun getActualData(): T? {
+    private suspend fun getActualData(): T {
         if (needUpdate.compareAndSet(true, false)) {
             persistableData.get().also {
                 inMemoryData.save(it)

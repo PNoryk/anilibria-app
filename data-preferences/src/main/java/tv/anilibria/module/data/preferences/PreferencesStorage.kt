@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import tv.anilibria.plugin.data.storage.*
 import javax.inject.Inject
@@ -56,58 +57,58 @@ class PreferencesStorage @Inject constructor(
     }
 
     private val donationRemindHolder = StorageDataHolder(
-        storageBooleanKey(NEW_DONATION_REMIND_KEY),
+        storageBooleanKey(NEW_DONATION_REMIND_KEY, true),
         storage
     )
 
     private val releaseRemindHolder = StorageDataHolder(
-        storageBooleanKey(RELEASE_REMIND_KEY),
+        storageBooleanKey(RELEASE_REMIND_KEY, true),
         storage
     )
 
     private val searchRemindHolder = StorageDataHolder(
-        storageBooleanKey(SEARCH_REMIND_KEY),
+        storageBooleanKey(SEARCH_REMIND_KEY, true),
         storage
     )
 
     private val episodesReverseHolder = StorageDataHolder(
-        storageBooleanKey(EPISODES_IS_REVERSE_KEY),
+        storageBooleanKey(EPISODES_IS_REVERSE_KEY, false),
         storage
     )
 
     private val qualityHolder = ModelStorageDataHolder(
-        storageIntKey(QUALITY_KEY),
+        storageIntKey(QUALITY_KEY, PrefsConstants.QUALITY_NO),
         storage,
-        read = { it?.toPlayerQuality() },
-        write = { it?.toPrefs() }
+        read = { it.toPlayerQuality() },
+        write = { it.toPrefs() }
     )
 
     private val playerTypeHolder = ModelStorageDataHolder(
-        storageIntKey(PLAYER_TYPE_KEY),
+        storageIntKey(PLAYER_TYPE_KEY, PrefsConstants.PLAYER_TYPE_NO),
         storage,
-        read = { it?.toPlayerType() },
-        write = { it?.toPrefs() }
+        read = { it.toPlayerType() },
+        write = { it.toPrefs() }
     )
 
     private val playSpeedHolder = StorageDataHolder(
-        storageFloatKey(PLAY_SPEED_KEY),
+        storageFloatKey(PLAY_SPEED_KEY, PrefsConstants.DEFAULT_PLAYER_SPEED),
         storage
     )
 
     private val pipModeHolder = ModelStorageDataHolder(
-        storageIntKey(PIP_CONTROL_KEY),
+        storageIntKey(PIP_CONTROL_KEY, PrefsConstants.PIP_BUTTON),
         storage,
-        read = { it?.toPipMode() },
-        write = { it?.toPrefs() }
+        read = { it.toPipMode() },
+        write = { it.toPrefs() }
     )
 
     private val notificationsAllHolder = StorageDataHolder(
-        storageBooleanKey(NOTIFICATIONS_ALL_KEY),
+        storageBooleanKey(NOTIFICATIONS_ALL_KEY, true),
         storage
     )
 
     private val notificationsServiceHolder = StorageDataHolder(
-        storageBooleanKey(NOTIFICATIONS_SERVICE_KEY),
+        storageBooleanKey(NOTIFICATIONS_SERVICE_KEY, true),
         storage
     )
 

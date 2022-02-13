@@ -6,11 +6,11 @@ class InMemoryDataHolder<T> : DataHolder<T> {
 
     private val atomicReference = AtomicReference<T>(null)
 
-    override suspend fun get(): T? {
+    override suspend fun get(): T {
         return atomicReference.get()
     }
 
-    override suspend fun save(data: T?) {
+    override suspend fun save(data: T) {
         atomicReference.lazySet(data)
     }
 }

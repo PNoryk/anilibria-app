@@ -8,7 +8,7 @@ class MoshiStorageDataHolder<M, T>(
     private val storage: DataStorage,
     private val read: (M?) -> T?,
     private val write: (T?) -> M?
-) : DataHolder<T> {
+) : DataHolder<T?> {
 
     override suspend fun get(): T? {
         return storage.get(key).let { jsonString ->
