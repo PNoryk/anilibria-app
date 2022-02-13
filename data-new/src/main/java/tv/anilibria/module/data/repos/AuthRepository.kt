@@ -1,7 +1,7 @@
 package tv.anilibria.module.data.repos
 
 import kotlinx.coroutines.flow.Flow
-import tv.anilibria.module.data.AuthHolder
+import tv.anilibria.module.data.local.holders.DeviceIdLocalDataSource
 import tv.anilibria.module.data.local.holders.SocialAuthLocalDataSource
 import tv.anilibria.module.data.restapi.datasource.remote.api.AuthRemoteDataSource
 import tv.anilibria.module.domain.entity.auth.OtpInfo
@@ -14,11 +14,11 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val authApi: AuthRemoteDataSource,
     private val authLocalDataSource: SocialAuthLocalDataSource,
-    private val authHolder: AuthHolder
+    private val deviceIdLocalDataSource: DeviceIdLocalDataSource
 ) {
 
     suspend fun getOtpInfo(): OtpInfo {
-        return authApi.loadOtpInfo(authHolder.getDeviceId())
+        return authApi.loadOtpInfo(deviceIdLocalDataSource.get())
     }
 
     suspend fun acceptOtp(code: String) {
@@ -26,7 +26,7 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun signInOtp(code: String) {
-        authApi.signInOtp(code, authHolder.getDeviceId())
+        authApi.signInOtp(code, deviceIdLocalDataSource.get())
     }
 
     suspend fun signIn(login: String, password: String, code2fa: String) {
