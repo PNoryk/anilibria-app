@@ -1,17 +1,16 @@
 package tv.anilibria.module.data.network
 
-import okhttp3.OkHttpClient
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Provider
 
-open class DynamicOkHttpClient @Inject constructor(
-    private val provider: Provider<OkHttpClient>
-) {
+class NetworkAwareProvider<T> @Inject constructor(
+    private val provider: Provider<T>
+) : Provider<T> {
 
     private val needUpdate = AtomicBoolean(true)
 
-    private var currentClient: OkHttpClient? = null
+    private var currentValue: T? = null
 
     @Synchronized
     fun update() {
@@ -19,13 +18,13 @@ open class DynamicOkHttpClient @Inject constructor(
     }
 
     @Synchronized
-    fun get(): OkHttpClient {
-        val oldClient = currentClient
-        if (needUpdate.compareAndSet(true, false) || oldClient == null) {
+    override fun get(): T {
+        val oldValue = currentValue
+        if (needUpdate.compareAndSet(true, false) || oldValue == null) {
             val newClient = provider.get()
-            currentClient = newClient
+            currentValue = newClient
         }
-        return requireNotNull(currentClient) {
+        return requireNotNull(currentValue) {
             "DynamicOkHttpClient can not return null"
         }
     }
