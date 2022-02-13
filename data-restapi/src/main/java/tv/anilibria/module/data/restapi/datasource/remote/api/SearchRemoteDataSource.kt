@@ -4,9 +4,10 @@ import org.json.JSONObject
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.SearchApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
+import tv.anilibria.module.domain.entity.SearchForm
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
@@ -45,23 +46,28 @@ class SearchRemoteDataSource @Inject constructor(
     }
 
     suspend fun searchReleases(
-        genre: String,
-        year: String,
-        season: String,
-        sort: String,
-        complete: String,
+        form: SearchForm,
         page: Int
     ): Page<Release> {
+        val yearsQuery = form.years?.joinToString(",") { it }.orEmpty()
+        val seasonsQuery = form.seasons?.joinToString(",") { it }.orEmpty()
+        val genresQuery = form.genres?.joinToString(",") { it }.orEmpty()
+        val sortStr = when (form.sort) {
+            SearchForm.Sort.RATING -> "2"
+            SearchForm.Sort.DATE -> "1"
+        }
+        val onlyCompletedStr = if (form.onlyCompleted) "2" else "1"
+
         val args = formBodyOf(
             "query" to "catalog",
             "search" to JSONObject().apply {
-                put("genre", genre)
-                put("year", year)
-                put("season", season)
+                put("genre", genresQuery)
+                put("year", yearsQuery)
+                put("season", seasonsQuery)
             }.toString(),
-            "finish" to complete,
+            "finish" to onlyCompletedStr,
             "xpage" to "catalog",
-            "sort" to sort,
+            "sort" to sortStr,
             "page" to page.toString(),
             "filter" to "id,torrents,playlist,favorite,moon,blockedInfo",
             "rm" to "true"
