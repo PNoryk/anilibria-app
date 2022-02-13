@@ -1,6 +1,7 @@
 package tv.anilibria.module.data.network
 
 import okhttp3.logging.HttpLoggingInterceptor
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 
 object Temp {
     fun httpLoggingInterceptor(sharedBuildConfig: SharedBuildConfig) =

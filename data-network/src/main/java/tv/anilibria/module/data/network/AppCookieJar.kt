@@ -10,11 +10,16 @@ class AppCookieJar @Inject constructor(
     private val userHolder: UserHolder
 ) : CookieJar {
 
+    companion object {
+        private const val SESSION_COOKIE = "PHPSESSID"
+        private const val COOKIE_DELETED = "deleted"
+    }
+
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         var authDestroyed = false
         for (cookie in cookies) {
-            if (cookie.value() == "deleted") {
-                if (cookie.name() == CookieHolder.PHPSESSID) {
+            if (cookie.value() == COOKIE_DELETED) {
+                if (cookie.name() == SESSION_COOKIE) {
                     authDestroyed = true
                 }
                 cookieHolder.removeCookie(cookie.name())
