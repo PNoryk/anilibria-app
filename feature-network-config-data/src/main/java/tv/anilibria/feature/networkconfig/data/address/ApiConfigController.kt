@@ -7,7 +7,7 @@ import tv.anilibria.feature.networkconfig.data.ConfigLocalDataStorage
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import javax.inject.Inject
 
-class ApiConfig @Inject constructor(
+class ApiConfigController @Inject constructor(
     private val configChanger: ApiConfigChanger,
     private val apiConfigStorage: ConfigLocalDataStorage
 ) {

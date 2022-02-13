@@ -3,12 +3,12 @@ package tv.anilibria.feature.networkconfig.data.okhttp
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import tv.anilibria.feature.networkconfig.data.ConfigPingCache
-import tv.anilibria.feature.networkconfig.data.address.ApiConfig
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import java.net.InetSocketAddress
 import java.net.Proxy
 
 class OkHttpProxyAppender(
-    private val apiConfig: ApiConfig,
+    private val apiConfig: ApiConfigController,
     private val pingCache: ConfigPingCache
 ) {
 

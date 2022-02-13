@@ -1,4 +1,4 @@
-package tv.anilibria.plugin.data.network
+package tv.anilibria.module.data.network
 
 import okhttp3.OkHttpClient
 import java.util.concurrent.atomic.AtomicBoolean
