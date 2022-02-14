@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import tv.anilibria.plugin.data.storage.*
 import javax.inject.Inject
@@ -12,7 +11,7 @@ import javax.inject.Inject
 // todo переделать на нормальную подписку обновлений
 class PreferencesStorage @Inject constructor(
     private val storage: DataStorage
-) : PreferencesHolder {
+) {
 
     companion object {
         private const val NEW_DONATION_REMIND_KEY = "new_donation_remind"
@@ -25,6 +24,7 @@ class PreferencesStorage @Inject constructor(
         private const val PIP_CONTROL_KEY = "pip_control"
         private const val NOTIFICATIONS_ALL_KEY = "notifications.all"
         private const val NOTIFICATIONS_SERVICE_KEY = "notifications.service"
+        private const val APP_THEME_KEY = "app_theme_dark"
     }
 
     private val observerScope = CoroutineScope(SupervisorJob())
@@ -112,26 +112,34 @@ class PreferencesStorage @Inject constructor(
         storage
     )
 
-    override val newDonationRemind: ObservableData<Boolean> = ObservableData(donationRemindHolder)
+    private val appThemeHolder = ModelStorageDataHolder(
+        storageBooleanKey(APP_THEME_KEY, false),
+        storage,
+        read = { if (it) AppTheme.DARK else AppTheme.LIGHT },
+        write = { it == AppTheme.DARK }
+    )
 
-    override val releaseRemind: ObservableData<Boolean> = ObservableData(releaseRemindHolder)
+    val newDonationRemind = ObservableData(donationRemindHolder)
 
-    override val searchRemind: ObservableData<Boolean> = ObservableData(searchRemindHolder)
+    val releaseRemind = ObservableData(releaseRemindHolder)
 
-    override val episodesIsReverse: ObservableData<Boolean> = ObservableData(episodesReverseHolder)
+    val searchRemind = ObservableData(searchRemindHolder)
 
-    override val quality: ObservableData<PlayerQuality> = ObservableData(qualityHolder)
+    val episodesIsReverse = ObservableData(episodesReverseHolder)
 
-    override val playerType: ObservableData<PlayerType> = ObservableData(playerTypeHolder)
+    val quality = ObservableData(qualityHolder)
 
-    override val playSpeed: ObservableData<Float> = ObservableData(playSpeedHolder)
+    val playerType = ObservableData(playerTypeHolder)
 
-    override val pipControl: ObservableData<PlayerPipMode> = ObservableData(pipModeHolder)
+    val playSpeed = ObservableData(playSpeedHolder)
 
-    override val notificationsAll: ObservableData<Boolean> = ObservableData(notificationsAllHolder)
+    val pipControl = ObservableData(pipModeHolder)
 
-    override val notificationsService: ObservableData<Boolean> =
-        ObservableData(notificationsServiceHolder)
+    val notificationsAll = ObservableData(notificationsAllHolder)
+
+    val notificationsService = ObservableData(notificationsServiceHolder)
+
+    val appTheme = ObservableData(appThemeHolder)
 }
 
 
