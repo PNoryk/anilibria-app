@@ -7,5 +7,5 @@ data class UserId(val id: Long)
 data class User(
     val id: UserId,
     val avatar: RelativeUrl?,
-    val login: String?
+    val login: String
 )
