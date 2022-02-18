@@ -5,4 +5,5 @@ interface SharedBuildConfig {
     val versionName: String
     val versionCode: Int
     val debug: Boolean
+    val buildDate: String
 }

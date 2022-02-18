@@ -14,6 +14,9 @@ import ru.terrakok.cicerone.Router
  */
 
 
+val MvpPresenter<*>.viewModelScope
+    get() = CoroutineScope(Dispatchers.Main)
+
 open class BasePresenter<ViewT : MvpView>(private val router: Router) : MvpPresenter<ViewT>() {
 
     private var compositeDisposable = CompositeDisposable()

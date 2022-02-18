@@ -38,10 +38,8 @@ import ru.radiationx.anilibria.ui.fragments.configuring.ConfiguringFragment
 import ru.radiationx.anilibria.utils.DimensionHelper
 import ru.radiationx.anilibria.utils.DimensionsProvider
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import tv.anilibria.module.data.analytics.AnalyticsConstants
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.Api
-import ru.radiationx.data.entity.app.updater.UpdateData
 import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.data.system.LocaleHolder
 import ru.radiationx.shared.ktx.android.gone
@@ -55,6 +53,9 @@ import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Back
 import ru.terrakok.cicerone.commands.Command
 import ru.terrakok.cicerone.commands.Replace
+import tv.anilibria.feature.appupdates.data.domain.UpdateData
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.max
@@ -82,6 +83,9 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
 
     @Inject
     lateinit var appThemeHolder: AppThemeHolder
+
+    @Inject
+    lateinit var sharedBuildConfig: SharedBuildConfig
 
     private val tabsAdapter by lazy { BottomTabsAdapter(tabsListener) }
 
@@ -124,7 +128,7 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
         setTheme(currentAppTheme.getMainStyleRes())
         super.onCreate(savedInstanceState)
 
-        if (Api.STORE_APP_IDS.contains(BuildConfig.APPLICATION_ID) && !LocaleHolder.checkAvail(
+        if (Api.STORE_APP_IDS.contains(sharedBuildConfig.applicationId) && !LocaleHolder.checkAvail(
                 locale.country
             )
         ) {
@@ -178,7 +182,7 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
     override fun setRefreshing(refreshing: Boolean) {}
 
     override fun showUpdateData(update: UpdateData) {
-        val currentVersionCode = BuildConfig.VERSION_CODE
+        val currentVersionCode = sharedBuildConfig.versionCode
 
         if (update.code > currentVersionCode) {
             val context: Context = App.instance

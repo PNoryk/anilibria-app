@@ -2,13 +2,14 @@ package ru.radiationx.anilibria.presentation.checker
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import ru.radiationx.anilibria.BuildConfig
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
-import tv.anilibria.module.data.analytics.TimeCounter
+import ru.radiationx.anilibria.presentation.common.viewModelScope
+import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
-import ru.radiationx.data.repository.CheckerRepository
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
 /**
@@ -16,9 +17,10 @@ import javax.inject.Inject
  */
 @InjectViewState
 class CheckerPresenter @Inject constructor(
-        private val checkerRepository: CheckerRepository,
-        private val errorHandler: IErrorHandler,
-        private val updaterAnalytics: UpdaterAnalytics
+    private val checkerRepository: CheckerRepository,
+    private val errorHandler: IErrorHandler,
+    private val updaterAnalytics: UpdaterAnalytics,
+    private val sharedBuildConfig: SharedBuildConfig
 ) : MvpPresenter<CheckerView>() {
 
     var forceLoad = false
@@ -30,24 +32,26 @@ class CheckerPresenter @Inject constructor(
     }
 
     fun checkUpdate() {
-        checkerRepository
-                .checkUpdate(BuildConfig.VERSION_CODE, forceLoad)
-                .doOnSubscribe { viewState.setRefreshing(true) }
-                .subscribe({
-                    viewState.setRefreshing(false)
-                    viewState.showUpdateData(it)
-                }, {
-                    viewState.setRefreshing(false)
-                    errorHandler.handle(it)
-                })
-                .addToDisposable()
+        viewModelScope.launch {
+
+            runCatching {
+                viewState.setRefreshing(true)
+                checkerRepository.checkUpdate(sharedBuildConfig.versionCode, forceLoad)
+            }.onSuccess {
+                viewState.setRefreshing(false)
+                viewState.showUpdateData(it)
+            }.onFailure {
+                viewState.setRefreshing(false)
+                errorHandler.handle(it)
+            }
+        }
     }
 
-    fun onDownloadClick(){
+    fun onDownloadClick() {
         updaterAnalytics.downloadClick()
     }
 
-    fun onSourceDownloadClick(title:String){
+    fun onSourceDownloadClick(title: String) {
         updaterAnalytics.sourceDownload(title)
     }
 

@@ -3,6 +3,8 @@ package ru.radiationx.anilibria.presentation.feed
 import io.reactivex.Single
 import io.reactivex.disposables.Disposables
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.*
 import ru.radiationx.anilibria.model.loading.DataLoadingController
@@ -19,8 +21,6 @@ import ru.radiationx.anilibria.ui.fragments.feed.FeedScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.SharedBuildConfig
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.*
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.datasource.holders.ReleaseUpdateHolder
 import ru.radiationx.data.entity.app.feed.FeedItem
@@ -28,12 +28,14 @@ import ru.radiationx.data.entity.app.feed.ScheduleItem
 import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.entity.app.youtube.YoutubeItem
 import ru.radiationx.data.interactors.ReleaseInteractor
-import ru.radiationx.data.repository.CheckerRepository
 import ru.radiationx.data.repository.DonationRepository
 import ru.radiationx.data.repository.FeedRepository
 import ru.radiationx.data.repository.ScheduleRepository
 import ru.radiationx.shared.ktx.*
 import ru.terrakok.cicerone.Router
+import tv.anilibria.feature.appupdates.data.CheckerRepository
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.features.*
 import java.util.*
 import javax.inject.Inject
 
@@ -87,11 +89,11 @@ class FeedPresenter @Inject constructor(
 
         checkerRepository
             .observeUpdate()
-            .subscribe {
+            .onEach {
                 hasAppUpdate = it.code > sharedBuildConfig.versionCode
                 updateAppUpdateState()
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
 
         appPreferences
             .observeNewDonationRemind()

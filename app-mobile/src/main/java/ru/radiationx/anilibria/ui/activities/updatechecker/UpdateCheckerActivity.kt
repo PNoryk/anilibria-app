@@ -15,21 +15,24 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
-import ru.radiationx.anilibria.BuildConfig
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.presentation.checker.CheckerPresenter
 import ru.radiationx.anilibria.presentation.checker.CheckerView
 import ru.radiationx.anilibria.ui.activities.BaseActivity
 import ru.radiationx.anilibria.utils.Utils
-import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
 import ru.radiationx.data.datasource.remote.IApiUtils
-import ru.radiationx.data.entity.app.updater.UpdateData
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.analytics.LifecycleTimeCounter
 import ru.radiationx.shared_app.di.getDependency
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.HtmlText
+import tv.anilibria.feature.appupdates.data.domain.UpdateData
+import tv.anilibria.feature.appupdates.data.domain.UpdateLink
+import tv.anilibria.feature.appupdates.data.domain.UpdateLinkType
+import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
 /**
@@ -59,6 +62,9 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
     lateinit var apiUtils: IApiUtils
 
     @Inject
+    lateinit var sharedBuildConfig: SharedBuildConfig
+
+    @Inject
     lateinit var updaterAnalytics: UpdaterAnalytics
 
     @InjectPresenter
@@ -84,11 +90,12 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
         toolbar.setNavigationOnClickListener { finish() }
         toolbar.setNavigationIcon(R.drawable.ic_toolbar_arrow_back)
 
-        currentInfo.text = generateCurrentInfo(BuildConfig.VERSION_NAME, BuildConfig.BUILD_DATE)
+        currentInfo.text =
+            generateCurrentInfo(sharedBuildConfig.versionName, sharedBuildConfig.buildDate)
     }
 
     override fun showUpdateData(update: UpdateData) {
-        val currentVersionCode = BuildConfig.VERSION_CODE
+        val currentVersionCode = sharedBuildConfig.versionCode
 
         if (update.code > currentVersionCode) {
             updateInfo.text = generateCurrentInfo(update.name, update.date)
@@ -135,11 +142,11 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
             .show()
     }
 
-    private fun decideDownload(link: UpdateData.UpdateLink) {
+    private fun decideDownload(link: UpdateLink) {
         when (link.type) {
-            "file" -> systemDownloadWithPermissionCheck(link.url)
-            "site" -> Utils.externalLink(link.url)
-            else -> Utils.externalLink(link.url)
+            UpdateLinkType.FILE -> systemDownloadWithPermissionCheck(link.url.value)
+            UpdateLinkType.SITE -> Utils.externalLink(link.url.value)
+            UpdateLinkType.UNKNOWN -> Utils.externalLink(link.url.value)
         }
     }
 
@@ -166,7 +173,7 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
         divider.gone(isRefreshing)
     }
 
-    private fun addSection(title: String, array: List<String>) {
+    private fun addSection(title: String, array: List<HtmlText>) {
         if (array.isEmpty()) {
             return
         }
@@ -184,7 +191,7 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
         val stringBuilder = StringBuilder()
 
         array.forEachIndexed { index, s ->
-            stringBuilder.append("— ").append(s)
+            stringBuilder.append("— ").append(s.text)
             if (index + 1 < array.size) {
                 stringBuilder.append("<br>")
             }
