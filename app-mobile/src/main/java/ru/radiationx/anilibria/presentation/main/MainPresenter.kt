@@ -1,22 +1,23 @@
 package ru.radiationx.anilibria.presentation.main
 
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.shared.ktx.SchedulersProvider
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.*
-import tv.anilibria.module.data.analytics.profile.AnalyticsProfile
+import ru.radiationx.data.analytics.profile.AnalyticsProfile
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.data.repository.AuthRepository
-import ru.radiationx.data.repository.DonationRepository
 import ru.radiationx.data.system.LocaleHolder
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.Screen
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.features.*
+import tv.anilibria.module.data.repos.DonationRepository
 import javax.inject.Inject
 
 /**
@@ -50,28 +51,28 @@ class MainPresenter @Inject constructor(
         super.onFirstViewAttach()
         analyticsProfile.update()
         appThemeHolder
-                .observeTheme()
-                .subscribe { viewState.changeTheme(it) }
-                .addToDisposable()
+            .observeTheme()
+            .subscribe { viewState.changeTheme(it) }
+            .addToDisposable()
 
         apiConfig
-                .observeNeedConfig()
-                .distinctUntilChanged()
-                .observeOn(schedulers.ui())
-                .subscribe({
-                    if (it) {
-                        viewState.showConfiguring()
-                    } else {
-                        viewState.hideConfiguring()
-                        if (firstLaunch) {
-                            initMain()
-                        }
+            .observeNeedConfig()
+            .distinctUntilChanged()
+            .observeOn(schedulers.ui())
+            .subscribe({
+                if (it) {
+                    viewState.showConfiguring()
+                } else {
+                    viewState.hideConfiguring()
+                    if (firstLaunch) {
+                        initMain()
                     }
-                }, {
-                    it.printStackTrace()
-                    throw it
-                })
-                .addToDisposable()
+                }
+            }, {
+                it.printStackTrace()
+                throw it
+            })
+            .addToDisposable()
 
         if (apiConfig.needConfig) {
             viewState.showConfiguring()
@@ -89,20 +90,23 @@ class MainPresenter @Inject constructor(
 
         selectTab(defaultScreen)
         authRepository
-                .observeUser()
-                .subscribe {
-                    viewState.updateTabs()
-                }
-                .addToDisposable()
+            .observeUser()
+            .subscribe {
+                viewState.updateTabs()
+            }
+            .addToDisposable()
         viewState.onMainLogicCompleted()
         authRepository
-                .loadUser()
-                .subscribe({}, {})
-                .addToDisposable()
-        donationRepository
-            .requestUpdate()
-            .subscribe({}, { it.printStackTrace() })
+            .loadUser()
+            .subscribe({}, {})
             .addToDisposable()
+        viewModelScope.launch {
+            runCatching {
+                donationRepository.requestUpdate()
+            }.onFailure {
+                it.printStackTrace()
+            }
+        }
     }
 
     fun getAuthState() = authRepository.getAuthState()

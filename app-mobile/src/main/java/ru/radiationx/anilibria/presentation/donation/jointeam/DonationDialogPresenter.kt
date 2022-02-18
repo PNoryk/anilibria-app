@@ -1,14 +1,17 @@
 package ru.radiationx.anilibria.presentation.donation.jointeam
 
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.anilibria.utils.Utils
-import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
-import ru.radiationx.data.entity.domain.donation.DonationContentButton
-import ru.radiationx.data.entity.domain.donation.DonationDialog
-import ru.radiationx.data.repository.DonationRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
+import tv.anilibria.module.data.repos.DonationRepository
+import tv.anilibria.module.domain.entity.donation.DonationContentButton
+import tv.anilibria.module.domain.entity.donation.DonationDialog
 
 @InjectConstructor
 class DonationDialogPresenter(
@@ -26,16 +29,17 @@ class DonationDialogPresenter(
         super.onFirstViewAttach()
         donationRepository
             .observerDonationInfo()
-            .subscribe({
+            .onEach {
                 val donationDialog = it.contentDialogs.find { it.tag == argTag }
                 if (donationDialog != null) {
                     currentData = donationDialog
                     viewState.showData(donationDialog)
                 }
-            }, {
+            }
+            .catch {
                 errorHandler.handle(it)
-            })
-            .addToDisposable()
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onLinkClick(url: String) {
@@ -46,7 +50,7 @@ class DonationDialogPresenter(
     fun onButtonClick(button: DonationContentButton) {
         analytics.buttonClick(argTag.toString(), button.text)
         button.link?.also {
-            Utils.externalLink(it)
+            Utils.externalLink(it.value)
         }
     }
 }

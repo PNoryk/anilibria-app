@@ -1,6 +1,8 @@
 package ru.radiationx.anilibria.presentation.release.details
 
 import android.util.Log
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.DonationCardItemState
 import ru.radiationx.anilibria.model.loading.StateController
@@ -11,11 +13,6 @@ import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.activities.toPrefQuality
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.anilibria.utils.Utils
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.*
-import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
-import tv.anilibria.module.data.analytics.features.model.AnalyticsPlayer
-import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.entity.app.release.ExternalEpisode
 import ru.radiationx.data.entity.app.release.ReleaseFull
@@ -24,10 +21,14 @@ import ru.radiationx.data.entity.app.release.SourceEpisode
 import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.data.interactors.ReleaseInteractor
 import ru.radiationx.data.repository.AuthRepository
-import ru.radiationx.data.repository.DonationRepository
 import ru.radiationx.data.repository.FavoriteRepository
 import ru.radiationx.data.repository.HistoryRepository
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.features.*
+import tv.anilibria.module.data.analytics.features.model.AnalyticsPlayer
+import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
+import tv.anilibria.module.data.repos.DonationRepository
 import javax.inject.Inject
 
 @InjectViewState
@@ -79,7 +80,7 @@ class ReleaseInfoPresenter @Inject constructor(
 
         donationRepository
             .observerDonationInfo()
-            .subscribe { info ->
+            .onEach { info ->
                 stateController.updateState { state ->
                     val newCardState = info.cardRelease?.let {
                         DonationCardItemState(
@@ -92,7 +93,7 @@ class ReleaseInfoPresenter @Inject constructor(
                     state.copy(donationCardState = newCardState)
                 }
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
 
         appPreferences
             .observeEpisodesIsReverse()

@@ -1,16 +1,20 @@
 package ru.radiationx.anilibria.presentation.donation.yoomoney
 
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.donation.infra.DonationYooMoneyState
 import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.anilibria.utils.Utils
+import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics
 import tv.anilibria.module.data.analytics.features.model.AnalyticsDonationAmountType
 import tv.anilibria.module.data.analytics.features.model.AnalyticsDonationPaymentType
-import ru.radiationx.data.entity.domain.donation.yoomoney.YooMoneyDialog
-import ru.radiationx.data.repository.DonationRepository
-import ru.terrakok.cicerone.Router
-import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.DonationRepository
+import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
 @InjectConstructor
 class DonationYooMoneyPresenter(
@@ -26,7 +30,7 @@ class DonationYooMoneyPresenter(
         super.onFirstViewAttach()
         donationRepository
             .observerDonationInfo()
-            .subscribe({
+            .onEach {
                 val yooMoneyInfo = it.yooMoneyDialog
                 val newState = currentState.copy(
                     data = yooMoneyInfo,
@@ -35,10 +39,11 @@ class DonationYooMoneyPresenter(
                     selectedPaymentTypeId = yooMoneyInfo?.paymentTypes?.selectedId
                 )
                 tryUpdateState(newState)
-            }, {
+            }
+            .catch {
                 errorHandler.handle(it)
-            })
-            .addToDisposable()
+            }
+            .launchIn(viewModelScope)
     }
 
     fun setSelectedAmount(value: Int?) {
@@ -76,16 +81,19 @@ class DonationYooMoneyPresenter(
             paymentTypeId.toAnalyticsPaymentType()
         )
         viewState.setRefreshing(true)
-        donationRepository
-            .createYooMoneyPayLink(amount, paymentTypeId, form)
-            .doFinally { viewState.setRefreshing(false) }
-            .subscribe({
+        viewModelScope.launch {
+            runCatching {
+                donationRepository.createYooMoneyPayLink(amount, paymentTypeId, form)
+            }.onSuccess {
+                viewState.setRefreshing(false)
                 Utils.externalLink(it)
                 viewState.close()
-            }, {
+
+            }.onFailure {
+                viewState.setRefreshing(false)
                 errorHandler.handle(it)
-            })
-            .addToDisposable()
+            }
+        }
     }
 
     private fun DonationYooMoneyState.withValidation(): DonationYooMoneyState {

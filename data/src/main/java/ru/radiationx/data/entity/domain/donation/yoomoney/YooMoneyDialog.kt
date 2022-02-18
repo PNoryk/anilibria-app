@@ -17,6 +17,7 @@ data class YooMoneyDialog(
         const val TYPE_ID_MOBILE = "mobile"
     }
 
+    @Deprecated("old data")
     data class Amounts(
         val title: String,
         val hint: String,
@@ -24,17 +25,20 @@ data class YooMoneyDialog(
         val items: List<Int>
     )
 
+    @Deprecated("old data")
     data class PaymentTypes(
         val title: String,
         val selectedId: String?,
         val items: List<PaymentType>
     )
 
+    @Deprecated("old data")
     data class PaymentType(
         val id: String,
         val title: String
     )
 
+    @Deprecated("old data")
     data class YooMoneyForm(
         val receiver: String,
         val target: String,

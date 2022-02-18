@@ -1,16 +1,20 @@
 package ru.radiationx.anilibria.presentation.donation.detail
 
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.utils.Utils
+import ru.radiationx.data.entity.domain.donation.DonationContentButton
+import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.DonationDetailAnalytics
 import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
 import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics
-import ru.radiationx.data.entity.domain.donation.DonationContentButton
-import ru.radiationx.data.entity.domain.donation.DonationInfo
-import ru.radiationx.data.repository.DonationRepository
-import ru.terrakok.cicerone.Router
-import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.DonationRepository
+import tv.anilibria.module.domain.entity.donation.DonationInfo
 
 @InjectConstructor
 class DonationDetailPresenter(
@@ -25,21 +29,25 @@ class DonationDetailPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        donationRepository
-            .requestUpdate()
-            .subscribe({}, {
+
+        viewModelScope.launch {
+            runCatching {
+                donationRepository.requestUpdate()
+            }.onFailure {
                 it.printStackTrace()
-            })
-            .addToDisposable()
+            }
+        }
+
         donationRepository
             .observerDonationInfo()
-            .subscribe({
+            .onEach {
                 currentData = it
                 viewState.showData(it)
-            }, {
+            }
+            .catch {
                 it.printStackTrace()
-            })
-            .addToDisposable()
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onLinkClick(url: String) {

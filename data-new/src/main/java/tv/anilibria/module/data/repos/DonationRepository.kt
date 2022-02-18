@@ -13,6 +13,7 @@ class DonationRepository(
     private val donationApi: DonationRemoteDataSource,
     private val donationHolder: DonationInfoLocalDataSource,
 ) {
+
     fun observerDonationInfo(): Flow<DonationInfo> {
         return donationHolder.observe().filterNotNull()
     }

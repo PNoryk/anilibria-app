@@ -3,7 +3,9 @@ package ru.radiationx.anilibria.presentation.feed
 import io.reactivex.Single
 import io.reactivex.disposables.Disposables
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.*
@@ -28,7 +30,6 @@ import ru.radiationx.data.entity.app.feed.ScheduleItem
 import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.entity.app.youtube.YoutubeItem
 import ru.radiationx.data.interactors.ReleaseInteractor
-import ru.radiationx.data.repository.DonationRepository
 import ru.radiationx.data.repository.FeedRepository
 import ru.radiationx.data.repository.ScheduleRepository
 import ru.radiationx.shared.ktx.*
@@ -36,6 +37,8 @@ import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
+import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.module.data.repos.DonationRepository
 import java.util.*
 import javax.inject.Inject
 
@@ -50,6 +53,7 @@ class FeedPresenter @Inject constructor(
     private val sharedBuildConfig: SharedBuildConfig,
     private val releaseUpdateHolder: ReleaseUpdateHolder,
     private val appPreferences: PreferencesHolder,
+    private val preferencesStorage: PreferencesStorage,
     private val donationRepository: DonationRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,
@@ -95,14 +99,15 @@ class FeedPresenter @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        appPreferences
-            .observeNewDonationRemind()
-            .flatMap { enabled ->
+        preferencesStorage
+            .newDonationRemind
+            .observe()
+            .flatMapConcat { enabled ->
                 donationRepository.observerDonationInfo().map {
                     Pair(it.cardNewDonations, enabled)
                 }
             }
-            .subscribe { pair ->
+            .onEach { pair ->
                 val newDonationState = if (pair.second) {
                     pair.first?.let {
                         DonationCardItemState(
@@ -119,7 +124,7 @@ class FeedPresenter @Inject constructor(
                     it.copy(donationCardItemState = newDonationState)
                 }
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
 
         stateController
             .observeState()
