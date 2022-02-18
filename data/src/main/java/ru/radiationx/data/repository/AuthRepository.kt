@@ -70,29 +70,4 @@ class AuthRepository @Inject constructor(
         .subscribeOn(schedulers.io())
         .observeOn(schedulers.ui())
 
-    fun getOtpInfo(): Single<OtpInfo> = authApi
-        .loadOtpInfo(authHolder.getDeviceId())
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun signInOtp(code: String): Single<ProfileItem> = authApi
-        .signInOtp(code, authHolder.getDeviceId())
-        .doOnSuccess { userHolder.saveUser(it) }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun signIn(login: String, password: String, code2fa: String): Single<ProfileItem> = authApi
-        .signIn(login, password, code2fa)
-        .doOnSuccess { userHolder.saveUser(it) }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun signOut(): Single<String> = authApi
-        .signOut()
-        .doOnSuccess {
-            userHolder.delete()
-        }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
 }

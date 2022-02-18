@@ -1,14 +1,16 @@
 package ru.radiationx.anilibria.presentation.auth
 
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
-import ru.radiationx.data.entity.app.auth.WrongPasswordException
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
+import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.module.domain.errors.WrongPasswordException
 import javax.inject.Inject
 
 /**
@@ -20,7 +22,8 @@ class Auth2FaCodePresenter @Inject constructor(
     private val systemMessenger: SystemMessenger,
     private val authRepository: AuthRepository,
     private val errorHandler: IErrorHandler,
-    private val authMainAnalytics: AuthMainAnalytics
+    private val authMainAnalytics: AuthMainAnalytics,
+    private val authStateHolder: AuthStateHolder
 ) : BasePresenter<Auth2FaCodeView>(router) {
 
     var currentLogin = ""
@@ -44,19 +47,21 @@ class Auth2FaCodePresenter @Inject constructor(
 
     fun signIn() {
         viewState.setRefreshing(true)
-        authRepository
-            .signIn(currentLogin, currentPassword, currentCode2fa)
-            .doAfterTerminate { viewState.setRefreshing(false) }
-            .subscribe({ user ->
-                decideWhatToDo(user.authState)
-            }, {
+        viewModelScope.launch {
+            runCatching {
+                authRepository.signIn(currentLogin, currentPassword, currentCode2fa)
+            }.onSuccess {
+                viewState.setRefreshing(false)
+                decideWhatToDo(authStateHolder.get())
+            }.onFailure {
+                viewState.setRefreshing(false)
                 authMainAnalytics.error(it)
                 errorHandler.handle(it)
                 if (it is WrongPasswordException) {
                     router.exit()
                 }
-            })
-            .addToDisposable()
+            }
+        }
     }
 
     private fun decideWhatToDo(state: AuthState) {

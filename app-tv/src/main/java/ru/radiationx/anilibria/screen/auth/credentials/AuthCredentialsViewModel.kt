@@ -1,11 +1,13 @@
 package ru.radiationx.anilibria.screen.auth.credentials
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
-import ru.radiationx.data.repository.AuthRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.AuthRepository
 
 @InjectConstructor
 class AuthCredentialsViewModel(
@@ -21,14 +23,18 @@ class AuthCredentialsViewModel(
         progressState.value = true
         error.value = ""
 
-        authRepository
-            .signIn(login, password, code)
-            .doFinally { progressState.value = false }
-            .lifeSubscribe({
+        viewModelScope.launch {
+            runCatching {
+                authRepository.signIn(login, password, code)
+            }.onSuccess {
+                progressState.value = false
                 guidedRouter.finishGuidedChain()
-            }, {
+            }.onFailure {
+                progressState.value = false
                 it.printStackTrace()
                 error.value = it.message
-            })
+            }
+        }
+
     }
 }

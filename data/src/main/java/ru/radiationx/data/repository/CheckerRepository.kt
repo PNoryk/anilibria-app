@@ -18,29 +18,5 @@ class CheckerRepository @Inject constructor(
     private val checkerApi: CheckerApi
 ) {
 
-    private val currentDataRelay = BehaviorRelay.create<UpdateData>()
-
-    fun observeUpdate(): Observable<UpdateData> = currentDataRelay.hide()
-
-    fun checkUpdate(versionCode: Int, force: Boolean = false): Single<UpdateData> = Single
-        .fromCallable {
-            Log.e("CHECKER", "fromCallable0 $versionCode : $force")
-            return@fromCallable if (!force && currentDataRelay.hasValue())
-                currentDataRelay.value!!
-            else
-                checkerApi.checkUpdate(versionCode).blockingGet()
-        }
-        .doOnSuccess {
-            /*it.links[0].url = "https://github.com/anilibria/anilibria-app/archive/2.4.4.zip"
-            it.links[1].url = "https://github.com/anilibria/anilibria-app/archive/2.4.3.zip"*/
-
-            //it.links[0].url = "https://github.com/anilibria/anilibria-app/archive/2.4.4s.zip"
-        }
-        .doOnSuccess {
-            Log.e("CHECKER", "doOnSuccess $it")
-            currentDataRelay.accept(it)
-        }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
 
 }

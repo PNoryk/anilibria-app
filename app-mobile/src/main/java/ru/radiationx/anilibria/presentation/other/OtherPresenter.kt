@@ -1,5 +1,7 @@
 package ru.radiationx.anilibria.presentation.other
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.asDataIconRes
@@ -12,8 +14,6 @@ import ru.radiationx.anilibria.ui.fragments.other.OtherMenuItemState
 import ru.radiationx.anilibria.ui.fragments.other.ProfileScreenState
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.*
 import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.data.datasource.remote.api.PageApi
 import ru.radiationx.data.entity.app.other.LinkMenuItem
@@ -23,6 +23,8 @@ import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.data.repository.AuthRepository
 import ru.radiationx.data.repository.MenuRepository
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.features.*
 import javax.inject.Inject
 
 @InjectViewState
@@ -30,6 +32,7 @@ class OtherPresenter @Inject constructor(
     private val router: Router,
     private val systemMessenger: SystemMessenger,
     private val authRepository: AuthRepository,
+    private val authRepositoryNew: tv.anilibria.module.data.repos.AuthRepository,
     private val errorHandler: IErrorHandler,
     private val apiConfig: ApiConfig,
     private val menuRepository: MenuRepository,
@@ -111,13 +114,15 @@ class OtherPresenter @Inject constructor(
 
     fun signOut() {
         otherAnalytics.logoutClick()
-        val disposable = authRepository
-            .signOut()
-            .subscribe({
+        GlobalScope.launch {
+            runCatching {
+                authRepositoryNew.signOut()
+            }.onSuccess {
                 systemMessenger.showMessage("Данные авторизации удалены")
-            }, {
+            }.onFailure {
                 errorHandler.handle(it)
-            })
+            }
+        }
     }
 
     fun onMenuClick(item: OtherMenuItemState) {

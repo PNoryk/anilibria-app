@@ -45,6 +45,22 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+
+    implementation project(":data-new")
+    implementation project(":core-types")
+    implementation project(":domain")
+    implementation project(":data-restapi")
+    implementation project(":data-network")
+    implementation project(":data-local")
+    implementation project(":data-preferences")
+    implementation project(":plugin:shared-appinfo")
+    implementation project(":plugin:data-storage")
+    implementation project(":feature-network-config-data")
+    implementation project(":feature-appupdates-data")
+    implementation project(":feature-downloads-data")
+    implementation project(":feature-downloads-data")
+
+
     implementation project(":data")
     implementation project(":shared-android-ktx")
     implementation project(":shared-app")

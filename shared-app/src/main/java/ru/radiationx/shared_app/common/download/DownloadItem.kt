@@ -1,5 +1,6 @@
 package ru.radiationx.shared_app.common.download
 
+@Deprecated("old data")
 data class DownloadItem(
     val downloadId: Long,
     val url: String,

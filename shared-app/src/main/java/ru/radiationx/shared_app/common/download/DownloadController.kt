@@ -3,6 +3,7 @@ package ru.radiationx.shared_app.common.download
 import io.reactivex.Maybe
 import io.reactivex.Observable
 
+@Deprecated("old data")
 interface DownloadController {
 
     fun startDownload(url: String)
