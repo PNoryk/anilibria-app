@@ -6,6 +6,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.ScreenStateAction
@@ -16,9 +17,6 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsScreenState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
-import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import ru.radiationx.data.datasource.holders.AuthHolder
 import ru.radiationx.data.datasource.holders.UserHolder
 import ru.radiationx.data.entity.app.page.VkComments
@@ -26,12 +24,16 @@ import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.interactors.ReleaseInteractor
 import ru.radiationx.data.repository.PageRepository
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
+import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import javax.inject.Inject
 
 @InjectViewState
 class VkCommentsPresenter @Inject constructor(
     private val userHolder: UserHolder,
     private val pageRepository: PageRepository,
+    private val pageRepositoryNew: tv.anilibria.module.data.repos.PageRepository,
     private val releaseInteractor: ReleaseInteractor,
     private val authHolder: AuthHolder,
     private val router: Router,
@@ -91,15 +93,16 @@ class VkCommentsPresenter @Inject constructor(
             }
             .addToDisposable()
 
-        pageRepository
-            .checkVkBlocked()
-            .subscribe({ vkBlocked ->
+        viewModelScope.launch {
+            runCatching {
+                pageRepositoryNew.checkVkBlocked()
+            }.onSuccess { vkBlocked ->
                 hasVkBlockedError = vkBlocked
                 updateVkBlockedState()
-            }, {
+            }.onFailure {
                 it.printStackTrace()
-            })
-            .addToDisposable()
+            }
+        }
 
         loadingController.refresh()
     }

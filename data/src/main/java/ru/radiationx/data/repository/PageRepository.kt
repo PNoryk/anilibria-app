@@ -23,11 +23,6 @@ class PageRepository @Inject constructor(
 
     private var currentComments: VkComments? = null
 
-    fun getPage(pagePath: String): Single<PageLibria> = pageApi
-        .getPage(pagePath)
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
     fun getComments(): Single<VkComments> = Single
         .defer {
             val comments = currentComments
@@ -39,13 +34,5 @@ class PageRepository @Inject constructor(
         }
         .subscribeOn(schedulers.io())
         .observeOn(schedulers.ui())
-
-    fun checkVkBlocked(): Single<Boolean> = mainClient
-        .get("https://vk.com/", emptyMap())
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-        .timeout(15, TimeUnit.SECONDS)
-        .map { false }
-        .onErrorReturn { it !is UnknownHostException }
 
 }
