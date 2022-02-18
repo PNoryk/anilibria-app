@@ -22,7 +22,7 @@ import ru.radiationx.anilibria.presentation.checker.CheckerPresenter
 import ru.radiationx.anilibria.presentation.checker.CheckerView
 import ru.radiationx.anilibria.ui.activities.BaseActivity
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.features.UpdaterAnalytics
+import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
 import ru.radiationx.data.datasource.remote.IApiUtils
 import ru.radiationx.data.entity.app.updater.UpdateData
 import ru.radiationx.shared.ktx.android.gone

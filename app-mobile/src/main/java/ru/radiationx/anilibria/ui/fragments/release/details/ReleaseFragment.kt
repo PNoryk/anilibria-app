@@ -32,7 +32,7 @@ import ru.radiationx.anilibria.ui.widgets.UILImageListener
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.ToolbarHelper
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.features.CommentsAnalytics
+import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.putExtra

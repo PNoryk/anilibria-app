@@ -9,8 +9,8 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleDayState
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleScreenState
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.ReleaseAnalytics
-import ru.radiationx.data.analytics.features.ScheduleAnalytics
+import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.module.data.analytics.features.ScheduleAnalytics
 import ru.radiationx.data.entity.app.schedule.ScheduleDay
 import ru.radiationx.data.repository.ScheduleRepository
 import ru.radiationx.shared.ktx.asDayName

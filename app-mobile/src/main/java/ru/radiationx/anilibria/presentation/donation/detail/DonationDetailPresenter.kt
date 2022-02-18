@@ -3,9 +3,9 @@ package ru.radiationx.anilibria.presentation.donation.detail
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.DonationDetailAnalytics
-import ru.radiationx.data.analytics.features.DonationDialogAnalytics
-import ru.radiationx.data.analytics.features.DonationYooMoneyAnalytics
+import tv.anilibria.module.data.analytics.features.DonationDetailAnalytics
+import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
+import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics
 import ru.radiationx.data.entity.domain.donation.DonationContentButton
 import ru.radiationx.data.entity.domain.donation.DonationInfo
 import ru.radiationx.data.repository.DonationRepository

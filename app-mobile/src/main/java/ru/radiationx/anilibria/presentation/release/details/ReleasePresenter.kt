@@ -6,8 +6,8 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.release.details.ReleasePagerState
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.CommentsAnalytics
-import ru.radiationx.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.module.data.analytics.features.CommentsAnalytics
+import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import ru.radiationx.data.entity.app.release.ReleaseFull
 import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.interactors.ReleaseInteractor

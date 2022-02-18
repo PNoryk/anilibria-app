@@ -21,7 +21,7 @@ import ru.radiationx.anilibria.di.AppModule
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.analytics.TimeCounter
-import ru.radiationx.data.analytics.features.AppAnalytics
+import tv.anilibria.module.data.analytics.features.AppAnalytics
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.di.DataModule
 import ru.radiationx.data.migration.MigrationDataSource

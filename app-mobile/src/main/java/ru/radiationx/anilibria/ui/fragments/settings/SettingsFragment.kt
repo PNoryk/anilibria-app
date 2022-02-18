@@ -13,11 +13,11 @@ import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.SettingsAnalytics
-import ru.radiationx.data.analytics.features.UpdaterAnalytics
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsPlayer
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsQuality
-import ru.radiationx.data.analytics.features.model.AnalyticsAppTheme
+import tv.anilibria.module.data.analytics.features.SettingsAnalytics
+import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
+import tv.anilibria.module.data.analytics.features.model.AnalyticsAppTheme
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.datasource.remote.Api
 import ru.radiationx.data.datasource.remote.address.ApiConfig

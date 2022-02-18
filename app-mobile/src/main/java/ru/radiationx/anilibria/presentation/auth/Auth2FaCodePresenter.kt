@@ -4,7 +4,7 @@ import moxy.InjectViewState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.analytics.features.AuthMainAnalytics
+import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
 import ru.radiationx.data.entity.app.auth.WrongPasswordException
 import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.data.repository.AuthRepository

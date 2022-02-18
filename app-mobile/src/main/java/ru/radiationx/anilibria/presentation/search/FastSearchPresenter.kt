@@ -13,9 +13,9 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.CatalogAnalytics
-import ru.radiationx.data.analytics.features.FastSearchAnalytics
-import ru.radiationx.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.module.data.analytics.features.CatalogAnalytics
+import tv.anilibria.module.data.analytics.features.FastSearchAnalytics
+import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import ru.radiationx.data.entity.app.search.SuggestionItem
 import ru.radiationx.data.repository.SearchRepository
 import ru.terrakok.cicerone.Router

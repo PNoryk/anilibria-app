@@ -10,8 +10,8 @@ import ru.radiationx.anilibria.ui.fragments.history.HistoryScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.HistoryAnalytics
-import ru.radiationx.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.module.data.analytics.features.HistoryAnalytics
+import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.repository.HistoryRepository
 import ru.terrakok.cicerone.Router

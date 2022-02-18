@@ -17,8 +17,8 @@ import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsScreenState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.AuthVkAnalytics
-import ru.radiationx.data.analytics.features.CommentsAnalytics
+import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
+import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import ru.radiationx.data.datasource.holders.AuthHolder
 import ru.radiationx.data.datasource.holders.UserHolder
 import ru.radiationx.data.entity.app.page.VkComments

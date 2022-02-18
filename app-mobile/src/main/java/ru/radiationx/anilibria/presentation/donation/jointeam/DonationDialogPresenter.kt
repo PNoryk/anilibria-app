@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.donation.jointeam
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.features.DonationDialogAnalytics
+import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
 import ru.radiationx.data.entity.domain.donation.DonationContentButton
 import ru.radiationx.data.entity.domain.donation.DonationDialog
 import ru.radiationx.data.repository.DonationRepository

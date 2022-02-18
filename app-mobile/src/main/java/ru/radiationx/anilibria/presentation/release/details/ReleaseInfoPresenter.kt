@@ -12,10 +12,10 @@ import ru.radiationx.anilibria.ui.activities.toPrefQuality
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.*
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsQuality
-import ru.radiationx.data.analytics.features.model.AnalyticsPlayer
-import ru.radiationx.data.analytics.features.model.AnalyticsQuality
+import tv.anilibria.module.data.analytics.features.*
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
+import tv.anilibria.module.data.analytics.features.model.AnalyticsPlayer
+import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.entity.app.release.ExternalEpisode
 import ru.radiationx.data.entity.app.release.ReleaseFull

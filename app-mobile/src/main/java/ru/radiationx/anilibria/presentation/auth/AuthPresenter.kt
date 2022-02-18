@@ -9,8 +9,8 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.AuthMainAnalytics
-import ru.radiationx.data.analytics.features.AuthSocialAnalytics
+import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
+import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
 import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.data.entity.app.auth.EmptyFieldException
 import ru.radiationx.data.entity.common.AuthState

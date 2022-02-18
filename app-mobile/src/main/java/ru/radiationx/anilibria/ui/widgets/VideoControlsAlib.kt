@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.view_video_control.view.*
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatDrawable
 import ru.radiationx.anilibria.ui.widgets.gestures.VideoGestureEventsListener
-import ru.radiationx.data.analytics.features.PlayerAnalytics
+import tv.anilibria.module.data.analytics.features.PlayerAnalytics
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared.ktx.asTimeSecString

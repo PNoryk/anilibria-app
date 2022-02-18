@@ -20,7 +20,7 @@ import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.SharedBuildConfig
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.*
+import tv.anilibria.module.data.analytics.features.*
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.datasource.holders.ReleaseUpdateHolder
 import ru.radiationx.data.entity.app.feed.FeedItem

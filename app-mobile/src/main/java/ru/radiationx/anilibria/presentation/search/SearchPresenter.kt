@@ -16,10 +16,10 @@ import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.analytics.AnalyticsConstants
 import ru.radiationx.data.analytics.TimeCounter
-import ru.radiationx.data.analytics.features.CatalogAnalytics
-import ru.radiationx.data.analytics.features.CatalogFilterAnalytics
-import ru.radiationx.data.analytics.features.FastSearchAnalytics
-import ru.radiationx.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.module.data.analytics.features.CatalogAnalytics
+import tv.anilibria.module.data.analytics.features.CatalogFilterAnalytics
+import tv.anilibria.module.data.analytics.features.FastSearchAnalytics
+import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.datasource.holders.ReleaseUpdateHolder
 import ru.radiationx.data.entity.app.release.ReleaseItem

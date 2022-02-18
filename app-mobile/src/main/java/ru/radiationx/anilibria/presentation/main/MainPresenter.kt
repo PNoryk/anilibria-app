@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.features.*
+import tv.anilibria.module.data.analytics.features.*
 import ru.radiationx.data.analytics.profile.AnalyticsProfile
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.address.ApiConfig

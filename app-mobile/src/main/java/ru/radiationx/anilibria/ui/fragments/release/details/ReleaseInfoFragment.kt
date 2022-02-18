@@ -35,8 +35,8 @@ import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeDelegate
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseHeadDelegate
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsPlayer
-import ru.radiationx.data.analytics.features.mapper.toAnalyticsQuality
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.entity.app.release.ReleaseFull
 import ru.radiationx.data.entity.app.release.SourceEpisode
