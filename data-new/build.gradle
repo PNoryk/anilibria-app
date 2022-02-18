@@ -47,6 +47,7 @@ dependencies {
     implementation project(":data-preferences")
     implementation project(":plugin:shared-appinfo")
     implementation project(":plugin:data-storage")
+    implementation project(":plugin:data-analytics")
     implementation project(":feature-network-config-data")
     implementation project(":feature-appupdates-data")
     implementation project(":feature-downloads-data")
