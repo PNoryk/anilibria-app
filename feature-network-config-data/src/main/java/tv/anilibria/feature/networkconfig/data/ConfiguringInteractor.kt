@@ -29,6 +29,7 @@ class ConfiguringInteractor @Inject constructor(
 
     fun observeScreenState(): Flow<ConfigScreenState> = subject
 
+    // todo error handling in presentation
     suspend fun initCheck() {
         startAddressTag = apiConfig.getTag()
         fullTimeCounter.start()
@@ -37,23 +38,27 @@ class ConfiguringInteractor @Inject constructor(
         doByState()
     }
 
+    // todo error handling in presentation
     suspend fun repeatCheck() {
         analytics.onRepeatClick(currentState.toAnalyticsState())
         doByState()
     }
 
+    // todo error handling in presentation
     suspend fun nextCheck() {
         analytics.onNextStepClick(currentState.toAnalyticsState())
         val nextState = getNextState() ?: State.CHECK_LAST
         doByState(nextState)
     }
 
+    // todo error handling in presentation
     suspend fun skipCheck() {
         isFullSuccess = false
         analytics.onSkipClick(currentState.toAnalyticsState())
         apiConfig.updateNeedConfig(false)
     }
 
+    // todo error handling in presentation
     suspend fun finishCheck() {
         fullTimeCounter.pause()
         analytics.checkFull(
