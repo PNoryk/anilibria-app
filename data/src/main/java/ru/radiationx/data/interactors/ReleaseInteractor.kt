@@ -19,6 +19,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 17.02.18.
  */
+@Deprecated("old data")
 class ReleaseInteractor @Inject constructor(
     private val releaseRepository: ReleaseRepository,
     private val episodesCheckerStorage: EpisodesCheckerHolder,

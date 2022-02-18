@@ -5,6 +5,7 @@ import ru.radiationx.data.entity.app.release.GenreItem
 import ru.radiationx.data.entity.app.release.SeasonItem
 import ru.radiationx.data.entity.app.release.YearItem
 
+@Deprecated("old data")
 data class SearchForm(
     val years: List<YearItem>? = null,
     val seasons: List<SeasonItem>? = null,

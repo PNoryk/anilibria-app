@@ -14,6 +14,7 @@ import ru.radiationx.data.entity.app.search.SearchForm
 import ru.radiationx.data.entity.app.search.SuggestionItem
 import javax.inject.Inject
 
+@Deprecated("old data")
 class SearchRepository @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val searchApi: SearchApi,

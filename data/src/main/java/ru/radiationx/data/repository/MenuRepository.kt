@@ -8,6 +8,7 @@ import ru.radiationx.data.datasource.remote.api.MenuApi
 import ru.radiationx.data.entity.app.other.LinkMenuItem
 import javax.inject.Inject
 
+@Deprecated("old data")
 class MenuRepository @Inject constructor(
     private val menuHolder: MenuHolder,
     private val menuApi: MenuApi,

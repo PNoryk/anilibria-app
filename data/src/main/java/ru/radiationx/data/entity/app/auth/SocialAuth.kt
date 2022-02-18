@@ -1,5 +1,6 @@
 package ru.radiationx.data.entity.app.auth
 
+@Deprecated("old data")
 data class SocialAuth(
     val key: String,
     val title: String,

@@ -22,6 +22,7 @@ import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 import javax.net.ssl.*
 
+@Deprecated("old data")
 class ConfiguringInteractor @Inject constructor(
     private val apiConfig: ApiConfig,
     private val configurationRepository: ConfigurationRepository,

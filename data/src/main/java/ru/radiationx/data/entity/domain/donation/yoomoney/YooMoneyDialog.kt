@@ -1,5 +1,6 @@
 package ru.radiationx.data.entity.domain.donation.yoomoney
 
+@Deprecated("old data")
 data class YooMoneyDialog(
     val title: String,
     val help: String?,

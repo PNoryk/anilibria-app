@@ -14,6 +14,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 13.01.18.
  */
+@Deprecated("old data")
 class PageRepository @Inject constructor(
     @MainClient private val mainClient: IClient,
     private val schedulers: SchedulersProvider,

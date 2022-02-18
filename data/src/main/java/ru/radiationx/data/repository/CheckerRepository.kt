@@ -12,6 +12,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 28.01.18.
  */
+@Deprecated("old data")
 class CheckerRepository @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val checkerApi: CheckerApi

@@ -6,6 +6,7 @@ import ru.radiationx.data.datasource.remote.Api
 import ru.radiationx.data.datasource.storage.ApiConfigStorage
 import javax.inject.Inject
 
+@Deprecated("old data")
 class ApiConfig @Inject constructor(
         private val configChanger: ApiConfigChanger,
         private val apiConfigStorage: ApiConfigStorage

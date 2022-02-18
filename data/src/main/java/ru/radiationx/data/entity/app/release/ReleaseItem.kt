@@ -4,6 +4,7 @@ import java.io.Serializable
 
 /* Created by radiationx on 31.10.17. */
 
+@Deprecated("old data")
 open class ReleaseItem : Serializable {
     var id: Int = -1
     var code: String? = null

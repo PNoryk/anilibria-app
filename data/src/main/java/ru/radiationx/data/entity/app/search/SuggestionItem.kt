@@ -1,5 +1,6 @@
 package ru.radiationx.data.entity.app.search
 
+@Deprecated("old data")
 class SuggestionItem {
     var id: Int = 0
     var code: String? = null

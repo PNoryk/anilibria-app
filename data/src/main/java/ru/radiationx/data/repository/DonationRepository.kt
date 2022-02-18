@@ -13,6 +13,7 @@ import ru.radiationx.data.entity.mapper.toDomain
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class DonationRepository(
     private val donationApi: DonationApi,
     private val donationHolder: DonationHolder,

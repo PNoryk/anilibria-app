@@ -1,5 +1,6 @@
 package ru.radiationx.data.datasource.remote
 
+@Deprecated("old data")
 data class NetworkResponse(
         var url: String,
         var code: Int = 0,

@@ -5,6 +5,7 @@ import okhttp3.Cookie
 /**
  * Created by radiationx on 30.12.17.
  */
+@Deprecated("old data")
 interface CookieHolder {
     companion object {
         const val PHPSESSID = "PHPSESSID"

@@ -2,6 +2,7 @@ package ru.radiationx.data.entity.app.release
 
 import java.io.Serializable
 
+@Deprecated("old data")
 class ReleaseFull() : ReleaseItem(), Serializable {
 
     constructor(item: ReleaseItem) : this() {

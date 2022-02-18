@@ -1,5 +1,6 @@
 package ru.radiationx.data.entity.app.youtube
 
+@Deprecated("old data")
 class YoutubeItem {
     var id: Int = 0
     var title: String? = null

@@ -2,6 +2,7 @@ package ru.radiationx.data.entity.app.release
 
 import java.io.Serializable
 
+@Deprecated("old data")
 data class ExternalPlaylist(
     val tag: String,
     val title: String,

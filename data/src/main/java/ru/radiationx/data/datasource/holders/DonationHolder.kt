@@ -7,6 +7,7 @@ import ru.radiationx.data.entity.app.donation.DonationDetailResponse
 import ru.radiationx.data.entity.app.donation.DonationInfoResponse
 import ru.radiationx.data.entity.domain.donation.DonationInfo
 
+@Deprecated("old data")
 interface DonationHolder {
     fun observe(): Observable<DonationInfoResponse>
     fun get(): Single<DonationInfoResponse>

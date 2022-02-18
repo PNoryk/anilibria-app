@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.entity.app.release.ReleaseFull
 
+@Deprecated("old data")
 interface EpisodesCheckerHolder {
     fun observeEpisodes(): Observable<MutableList<ReleaseFull.Episode>>
     fun getEpisodes(): Single<List<ReleaseFull.Episode>>

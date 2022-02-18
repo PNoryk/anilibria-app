@@ -7,6 +7,7 @@ import ru.radiationx.data.entity.app.Paginated
 import ru.radiationx.data.entity.app.release.ReleaseItem
 import javax.inject.Inject
 
+@Deprecated("old data")
 class FavoriteRepository @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val favoriteApi: FavoriteApi

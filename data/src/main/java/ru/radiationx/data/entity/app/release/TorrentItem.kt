@@ -5,6 +5,7 @@ import java.io.Serializable
 /**
  * Created by radiationx on 30.01.18.
  */
+@Deprecated("old data")
 class TorrentItem : Serializable {
     var id: Int = 0
     var hash: String? = null

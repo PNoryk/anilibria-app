@@ -5,6 +5,7 @@ import io.reactivex.Observable
 /**
  * Created by radiationx on 03.02.18.
  */
+@Deprecated("old data")
 interface PreferencesHolder {
     companion object {
         const val QUALITY_NO = -1

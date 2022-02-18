@@ -3,6 +3,7 @@ package ru.radiationx.data.entity.app.profile
 /**
  * Created by radiationx on 03.01.18.
  */
+@Deprecated("old data")
 class Profile {
     lateinit var nick: String
     lateinit var avatarUrl: String

@@ -3,6 +3,7 @@ package ru.radiationx.data.entity.app.schedule
 import ru.radiationx.data.entity.app.feed.ScheduleItem
 import java.util.*
 
+@Deprecated("old data")
 data class ScheduleDay(
         val day: Int,
         val items: List<ScheduleItem>

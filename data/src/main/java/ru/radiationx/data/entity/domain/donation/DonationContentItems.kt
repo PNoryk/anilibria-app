@@ -1,5 +1,6 @@
 package ru.radiationx.data.entity.domain.donation
 
+@Deprecated("old data")
 sealed class DonationContentItem
 
 data class DonationContentButton(

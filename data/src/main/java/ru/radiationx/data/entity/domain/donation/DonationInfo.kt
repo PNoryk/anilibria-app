@@ -2,6 +2,7 @@ package ru.radiationx.data.entity.domain.donation
 
 import ru.radiationx.data.entity.domain.donation.yoomoney.YooMoneyDialog
 
+@Deprecated("old data")
 data class DonationInfo(
     val cardNewDonations: DonationCard?,
     val cardRelease: DonationCard?,

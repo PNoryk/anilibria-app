@@ -5,6 +5,7 @@ import ru.radiationx.data.datasource.remote.address.ApiProxy
 
 /* Created by radiationx on 31.10.17. */
 
+@Deprecated("old data")
 object Api {
     const val WIDGETS_SITE_URL = "https://www.anilibria.tv"
     const val SITE_URL = "https://www.anilibria.tv"

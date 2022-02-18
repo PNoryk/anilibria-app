@@ -1,5 +1,6 @@
 package ru.radiationx.data.entity.app.other
 
+@Deprecated("old data")
 object DataIcons {
     const val VK = "vk"
     const val YOUTUBE = "youtube"
@@ -17,6 +18,7 @@ object DataIcons {
     const val INFRA = "infra"
 }
 
+@Deprecated("old data")
 object DataColor {
     const val VK = "vk"
     const val YOUTUBE = "youtube"

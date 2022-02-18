@@ -10,6 +10,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 18.02.18.
  */
+@Deprecated("old data")
 class HistoryRepository @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val historyStorage: HistoryHolder

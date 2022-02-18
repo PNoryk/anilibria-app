@@ -19,6 +19,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 30.12.17.
  */
+@Deprecated("old data")
 class AuthRepository @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val authApi: AuthApi,

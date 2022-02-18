@@ -1,5 +1,6 @@
 package ru.radiationx.data.datasource.remote.address
 
+@Deprecated("old data")
 data class ApiProxy(
         val tag: String,
         val name: String?,

@@ -14,6 +14,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@Deprecated("old data")
 class ScheduleRepository @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val scheduleApi: ScheduleApi

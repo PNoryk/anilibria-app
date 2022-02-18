@@ -5,6 +5,7 @@ import io.reactivex.Single
 import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.entity.app.release.ReleaseUpdate
 
+@Deprecated("old data")
 interface ReleaseUpdateHolder {
     fun observeEpisodes(): Observable<MutableList<ReleaseUpdate>>
     fun getReleases(): Single<List<ReleaseUpdate>>

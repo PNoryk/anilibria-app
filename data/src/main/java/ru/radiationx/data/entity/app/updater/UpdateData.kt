@@ -29,6 +29,7 @@ package ru.radiationx.data.entity.app.updater
     "text":""
 }
 }*/
+@Deprecated("old data")
 class UpdateData {
     var code: Int = 0
     var build: Int = 0

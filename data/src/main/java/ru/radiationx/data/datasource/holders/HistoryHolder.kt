@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import ru.radiationx.data.entity.app.release.ReleaseItem
 
+@Deprecated("old data")
 interface HistoryHolder {
     fun getEpisodes(): Single<List<ReleaseItem>>
     fun observeEpisodes(): Observable<MutableList<ReleaseItem>>

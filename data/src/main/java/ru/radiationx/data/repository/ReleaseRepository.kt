@@ -15,6 +15,7 @@ import javax.inject.Inject
 /**
  * Created by radiationx on 17.12.17.
  */
+@Deprecated("old data")
 class ReleaseRepository @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val releaseApi: ReleaseApi,

@@ -9,6 +9,7 @@ import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.entity.app.release.ReleaseUpdate
 import javax.inject.Inject
 
+@Deprecated("old data")
 class FeedRepository @Inject constructor(
     private val feedApi: FeedApi,
     private val schedulers: SchedulersProvider,

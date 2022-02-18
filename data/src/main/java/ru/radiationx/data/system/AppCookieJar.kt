@@ -8,6 +8,7 @@ import ru.radiationx.data.datasource.holders.CookieHolder
 import ru.radiationx.data.datasource.holders.UserHolder
 import javax.inject.Inject
 
+@Deprecated("old data")
 class AppCookieJar @Inject constructor(
         private val cookieHolder: CookieHolder,
         private val userHolder: UserHolder

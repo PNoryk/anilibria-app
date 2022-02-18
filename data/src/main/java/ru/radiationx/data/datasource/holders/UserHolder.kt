@@ -6,6 +6,7 @@ import ru.radiationx.data.entity.app.other.ProfileItem
 /**
  * Created by radiationx on 11.01.18.
  */
+@Deprecated("old data")
 interface UserHolder {
     fun getUser(): ProfileItem
 

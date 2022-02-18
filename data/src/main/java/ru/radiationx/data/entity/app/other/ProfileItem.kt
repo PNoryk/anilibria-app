@@ -2,6 +2,7 @@ package ru.radiationx.data.entity.app.other
 
 import ru.radiationx.data.entity.common.AuthState
 
+@Deprecated("old data")
 class ProfileItem {
 
     companion object {

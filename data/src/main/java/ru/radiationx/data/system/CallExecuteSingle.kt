@@ -24,6 +24,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import okhttp3.Call
 import okhttp3.Response
 
+@Deprecated("old data")
 class CallExecuteSingle(private val originalCall: Call) : Single<Response>() {
 
 

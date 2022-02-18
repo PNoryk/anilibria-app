@@ -13,6 +13,7 @@ import java.net.InetAddress
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@Deprecated("old data")
 class ConfigurationRepository @Inject constructor(
     private val configurationApi: ConfigurationApi,
     private val schedulers: SchedulersProvider
