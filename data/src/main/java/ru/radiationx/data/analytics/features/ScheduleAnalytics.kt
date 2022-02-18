@@ -7,6 +7,7 @@ import ru.radiationx.data.analytics.features.extensions.toPositionParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class ScheduleAnalytics(
     private val sender: AnalyticsSender
 ) {

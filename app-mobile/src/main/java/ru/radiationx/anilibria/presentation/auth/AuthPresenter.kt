@@ -8,7 +8,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
 import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
 import ru.radiationx.data.datasource.remote.address.ApiConfig

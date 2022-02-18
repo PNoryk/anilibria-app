@@ -8,6 +8,7 @@ import ru.radiationx.data.analytics.features.extensions.toTimeParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class AuthDeviceAnalytics(
     private val sender: AnalyticsSender
 ) {

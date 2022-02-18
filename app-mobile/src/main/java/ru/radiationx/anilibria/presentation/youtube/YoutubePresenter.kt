@@ -12,7 +12,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeScreenState
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.YoutubeAnalytics
 import tv.anilibria.module.data.analytics.features.YoutubeVideosAnalytics
 import ru.radiationx.data.entity.app.youtube.YoutubeItem

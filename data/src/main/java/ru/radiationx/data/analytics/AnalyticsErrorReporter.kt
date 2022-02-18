@@ -1,5 +1,6 @@
 package ru.radiationx.data.analytics
 
+@Deprecated("old data")
 interface AnalyticsErrorReporter {
 
     fun report(message: String, error: Throwable)

@@ -8,6 +8,7 @@ import ru.radiationx.data.analytics.features.extensions.toParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class DonationDialogAnalytics(
     private val sender: AnalyticsSender
 ) {

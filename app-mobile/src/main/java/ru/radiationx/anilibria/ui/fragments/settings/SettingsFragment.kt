@@ -12,7 +12,7 @@ import ru.radiationx.anilibria.extension.getCompatDrawable
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.SettingsAnalytics
 import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer

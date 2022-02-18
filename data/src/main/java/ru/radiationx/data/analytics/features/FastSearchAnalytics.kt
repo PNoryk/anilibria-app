@@ -6,6 +6,7 @@ import ru.radiationx.data.analytics.features.extensions.toNavFromParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class FastSearchAnalytics(
     private val sender: AnalyticsSender
 ) {

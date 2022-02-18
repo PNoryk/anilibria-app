@@ -20,7 +20,7 @@ import ru.radiationx.anilibria.presentation.page.PageView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.ui.widgets.ExtendedWebView
 import ru.radiationx.anilibria.utils.ToolbarHelper
-import ru.radiationx.data.analytics.TimeCounter
+import tv.anilibria.module.data.analytics.TimeCounter
 import tv.anilibria.module.data.analytics.features.PageAnalytics
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.address.ApiConfig

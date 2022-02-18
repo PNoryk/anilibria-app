@@ -7,6 +7,7 @@ import ru.radiationx.data.analytics.features.extensions.toPageParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class CatalogAnalytics(
     private val sender: AnalyticsSender
 ) {

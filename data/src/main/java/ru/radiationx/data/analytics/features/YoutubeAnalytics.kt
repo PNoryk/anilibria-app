@@ -8,6 +8,7 @@ import ru.radiationx.data.analytics.features.extensions.toVidParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class YoutubeAnalytics(
     private val sender: AnalyticsSender
 ) {

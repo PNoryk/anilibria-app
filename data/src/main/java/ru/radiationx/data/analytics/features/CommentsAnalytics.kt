@@ -8,6 +8,7 @@ import ru.radiationx.data.analytics.features.extensions.toNavFromParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class CommentsAnalytics(
     private val sender: AnalyticsSender
 ) {

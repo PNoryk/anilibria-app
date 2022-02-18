@@ -40,9 +40,9 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getColorFromAttr
 import ru.radiationx.anilibria.extension.isDark
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
-import ru.radiationx.data.analytics.AnalyticsErrorReporter
-import ru.radiationx.data.analytics.ErrorReporterConstants
-import ru.radiationx.data.analytics.TimeCounter
+import tv.anilibria.module.data.analytics.AnalyticsErrorReporter
+import tv.anilibria.module.data.analytics.ErrorReporterConstants
+import tv.anilibria.module.data.analytics.TimeCounter
 import tv.anilibria.module.data.analytics.features.PlayerAnalytics
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPip
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality

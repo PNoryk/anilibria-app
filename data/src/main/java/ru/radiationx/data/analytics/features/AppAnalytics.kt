@@ -6,6 +6,7 @@ import ru.radiationx.data.analytics.features.extensions.toPreciseTimeParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class AppAnalytics(
     private val sender: AnalyticsSender
 ) {

@@ -2,7 +2,7 @@ package ru.radiationx.anilibria.presentation.donation.detail
 
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.DonationDetailAnalytics
 import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
 import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics

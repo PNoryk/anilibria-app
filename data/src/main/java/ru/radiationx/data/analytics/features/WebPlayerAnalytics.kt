@@ -9,6 +9,7 @@ import ru.radiationx.data.analytics.features.extensions.toTimeParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class WebPlayerAnalytics(
     private val sender: AnalyticsSender
 ) {

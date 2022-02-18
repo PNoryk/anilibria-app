@@ -7,6 +7,7 @@ import ru.radiationx.data.analytics.features.model.AnalyticsConfigState
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class ConfiguringAnalytics(
     private val sender: AnalyticsSender
 ) {

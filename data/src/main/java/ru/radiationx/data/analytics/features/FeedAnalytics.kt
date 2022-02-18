@@ -8,6 +8,7 @@ import ru.radiationx.data.analytics.features.extensions.toPositionParam
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class FeedAnalytics(
     private val sender: AnalyticsSender
 ) {

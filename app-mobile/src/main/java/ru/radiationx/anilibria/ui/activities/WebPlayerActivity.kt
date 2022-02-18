@@ -12,7 +12,7 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.shared_app.di.injectDependencies
 import ru.radiationx.anilibria.extension.generateWithTheme
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.TimeCounter
+import tv.anilibria.module.data.analytics.TimeCounter
 import tv.anilibria.module.data.analytics.features.WebPlayerAnalytics
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.address.ApiConfig

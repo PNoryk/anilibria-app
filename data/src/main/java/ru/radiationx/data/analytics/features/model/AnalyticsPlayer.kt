@@ -1,5 +1,6 @@
 package ru.radiationx.data.analytics.features.model
 
+@Deprecated("old data")
 enum class AnalyticsPlayer(val value: String) {
     NONE("none"),
     EXTERNAL("external"),

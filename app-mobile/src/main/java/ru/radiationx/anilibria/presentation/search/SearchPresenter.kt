@@ -14,8 +14,8 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.AnalyticsConstants
-import ru.radiationx.data.analytics.TimeCounter
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.TimeCounter
 import tv.anilibria.module.data.analytics.features.CatalogAnalytics
 import tv.anilibria.module.data.analytics.features.CatalogFilterAnalytics
 import tv.anilibria.module.data.analytics.features.FastSearchAnalytics

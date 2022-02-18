@@ -2,6 +2,7 @@ package ru.radiationx.data.analytics
 
 import android.os.SystemClock
 
+@Deprecated("old data")
 class TimeCounter {
     private var counted = 0L
     private var lastTime: Long? = null

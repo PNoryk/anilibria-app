@@ -9,6 +9,7 @@ import ru.radiationx.data.analytics.features.model.AnalyticsDonationPaymentType
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class DonationYooMoneyAnalytics(
     private val sender: AnalyticsSender
 ) {

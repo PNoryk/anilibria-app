@@ -1,5 +1,6 @@
 package ru.radiationx.data.analytics.features.model
 
+@Deprecated("old data")
 enum class AnalyticsQuality(val value: String) {
     NONE("none"),
     SD("sd"),

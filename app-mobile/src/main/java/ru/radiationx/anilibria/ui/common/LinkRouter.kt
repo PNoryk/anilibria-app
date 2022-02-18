@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.ui.common
 import ru.radiationx.anilibria.navigation.BaseAppScreen
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
-import ru.radiationx.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import ru.terrakok.cicerone.Router
 import java.util.regex.Pattern

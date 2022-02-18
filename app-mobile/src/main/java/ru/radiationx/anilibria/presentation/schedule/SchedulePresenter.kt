@@ -8,7 +8,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleDayState
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleScreenState
-import ru.radiationx.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.module.data.analytics.features.ScheduleAnalytics
 import ru.radiationx.data.entity.app.schedule.ScheduleDay

@@ -6,7 +6,7 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.radiationx.anilibria.BuildConfig
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
-import ru.radiationx.data.analytics.TimeCounter
+import tv.anilibria.module.data.analytics.TimeCounter
 import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
 import ru.radiationx.data.repository.CheckerRepository
 import javax.inject.Inject

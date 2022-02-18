@@ -8,6 +8,7 @@ import ru.radiationx.data.analytics.features.model.*
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class PlayerAnalytics(
     private val sender: AnalyticsSender
 ) {

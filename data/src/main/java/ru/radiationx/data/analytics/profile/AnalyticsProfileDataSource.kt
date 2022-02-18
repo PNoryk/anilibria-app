@@ -8,6 +8,7 @@ import ru.radiationx.data.migration.MigrationDataSource
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class AnalyticsProfileDataSource(
     private val preferencesHolder: PreferencesHolder,
     private val appThemeHolder: AppThemeHolder,

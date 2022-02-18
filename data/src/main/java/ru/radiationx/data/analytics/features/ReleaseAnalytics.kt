@@ -10,6 +10,7 @@ import ru.radiationx.data.analytics.features.model.AnalyticsQuality
 import toothpick.InjectConstructor
 
 @InjectConstructor
+@Deprecated("old data")
 class ReleaseAnalytics(
     private val sender: AnalyticsSender
 ) {
