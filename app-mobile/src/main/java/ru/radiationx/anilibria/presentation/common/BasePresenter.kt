@@ -2,6 +2,9 @@ package ru.radiationx.anilibria.presentation.common
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import moxy.MvpPresenter
 import moxy.MvpView
 import ru.terrakok.cicerone.Router
@@ -15,7 +18,10 @@ open class BasePresenter<ViewT : MvpView>(private val router: Router) : MvpPrese
 
     private var compositeDisposable = CompositeDisposable()
 
+    val viewModelScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+
     override fun onDestroy() {
+        viewModelScope.cancel()
         compositeDisposable.dispose()
     }
 
