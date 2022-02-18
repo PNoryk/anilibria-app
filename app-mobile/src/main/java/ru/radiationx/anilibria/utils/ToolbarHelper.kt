@@ -52,7 +52,7 @@ object ToolbarHelper {
             toolbarTitleView.isHorizontalFadingEdgeEnabled = true
             toolbarTitleView.setFadingEdgeLength((App.instance.resources.displayMetrics.density * 8).toInt())
         } catch (e: Exception) {
-            Log.e("error", e.message)
+            Log.e("error", e.message.toString())
         }
     }
 

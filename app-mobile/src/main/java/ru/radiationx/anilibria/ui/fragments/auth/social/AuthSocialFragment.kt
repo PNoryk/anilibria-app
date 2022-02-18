@@ -113,7 +113,6 @@ class AuthSocialFragment : BaseFragment(), AuthSocialView {
     }
 
     override fun onDestroyView() {
-        webView.webViewClient = null
         webView.stopLoading()
         super.onDestroyView()
     }

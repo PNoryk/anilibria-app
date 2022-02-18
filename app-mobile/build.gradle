@@ -13,7 +13,7 @@ static def getDateTime() {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "ru.radiationx.anilibria"
@@ -110,6 +110,21 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+
+
+    implementation project(":data-new")
+    implementation project(":core-types")
+    implementation project(":domain")
+    implementation project(":data-restapi")
+    implementation project(":data-network")
+    implementation project(":data-local")
+    implementation project(":data-preferences")
+    implementation project(":plugin:shared-appinfo")
+    implementation project(":plugin:data-storage")
+    implementation project(":feature-network-config-data")
+    implementation project(":feature-appupdates-data")
+    implementation project(":feature-downloads-data")
+    implementation project(":feature-downloads-data")
 
     implementation project(":data")
     implementation project(":shared-android-ktx")

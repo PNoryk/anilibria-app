@@ -87,7 +87,6 @@ class AuthVkFragment : BaseFragment(), AuthVkView {
     }
 
     override fun onDestroyView() {
-        webView.webViewClient = null
         webView.stopLoading()
         super.onDestroyView()
     }

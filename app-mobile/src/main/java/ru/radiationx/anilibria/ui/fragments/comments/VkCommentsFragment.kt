@@ -234,7 +234,7 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
             isUserGesture: Boolean,
             resultMsg: Message
         ): Boolean {
-            val newWebView = WebView(context)
+            val newWebView = WebView(context!!)
             AlertDialog.Builder(context!!)
                 .setView(newWebView)
                 .show()
