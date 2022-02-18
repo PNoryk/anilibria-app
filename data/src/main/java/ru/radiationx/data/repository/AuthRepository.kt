@@ -75,11 +75,6 @@ class AuthRepository @Inject constructor(
         .subscribeOn(schedulers.io())
         .observeOn(schedulers.ui())
 
-    fun acceptOtp(code: String): Completable = authApi
-        .acceptOtp(code)
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
     fun signInOtp(code: String): Single<ProfileItem> = authApi
         .signInOtp(code, authHolder.getDeviceId())
         .doOnSuccess { userHolder.saveUser(it) }
@@ -97,28 +92,6 @@ class AuthRepository @Inject constructor(
         .doOnSuccess {
             userHolder.delete()
         }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun observeSocialAuth(): Observable<List<SocialAuth>> = socialAuthHolder
-        .observe()
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun loadSocialAuth(): Single<List<SocialAuth>> = authApi
-        .loadSocialAuth()
-        .doOnSuccess { socialAuthHolder.save(it) }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun getSocialAuth(key: String): Single<SocialAuth> = Single
-        .just(socialAuthHolder.get().first { it.key == key })
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun signInSocial(resultUrl: String, item: SocialAuth): Single<ProfileItem> = authApi
-        .signInSocial(resultUrl, item)
-        .doOnSuccess { userHolder.saveUser(it) }
         .subscribeOn(schedulers.io())
         .observeOn(schedulers.ui())
 

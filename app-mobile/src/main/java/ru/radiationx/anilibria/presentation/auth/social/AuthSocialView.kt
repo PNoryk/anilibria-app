@@ -5,12 +5,12 @@ import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
 import ru.radiationx.anilibria.ui.fragments.auth.social.AuthSocialScreenState
-import ru.radiationx.data.entity.app.auth.SocialAuth
+import tv.anilibria.module.domain.entity.auth.SocialAuthService
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface AuthSocialView : MvpView {
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun loadPage(data: SocialAuth)
+    fun loadPage(data: SocialAuthService)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun showState(state: AuthSocialScreenState)

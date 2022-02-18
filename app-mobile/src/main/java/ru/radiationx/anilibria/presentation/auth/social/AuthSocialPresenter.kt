@@ -1,16 +1,17 @@
 package ru.radiationx.anilibria.presentation.auth.social
 
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.auth.social.AuthSocialScreenState
-import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
-import ru.radiationx.data.entity.app.auth.SocialAuth
-import ru.radiationx.data.entity.app.auth.SocialAuthException
-import ru.radiationx.data.repository.AuthRepository
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
+import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.module.domain.entity.auth.SocialAuthService
+import tv.anilibria.module.domain.errors.SocialAuthException
 import javax.inject.Inject
 
 @InjectViewState
@@ -23,7 +24,7 @@ class AuthSocialPresenter @Inject constructor(
 
     var argKey: String = ""
 
-    private var currentData: SocialAuth? = null
+    private var currentData: SocialAuthService? = null
 
     private val detector = WebAuthSoFastDetector()
     private var currentSuccessUrl: String? = null
@@ -46,17 +47,18 @@ class AuthSocialPresenter @Inject constructor(
     }
 
     private fun resetPage() {
-        authRepository
-            .getSocialAuth(argKey)
-            .subscribe({
+        viewModelScope.launch {
+            runCatching {
+                authRepository.getSocialAuth(argKey)
+            }.onSuccess {
                 currentData = it
-                detector.loadUrl(it.socialUrl)
+                detector.loadUrl(it.socialUrl.value)
                 viewState.loadPage(it)
-            }, {
+            }.onFailure {
                 authSocialAnalytics.error(it)
                 errorHandler.handle(it)
-            })
-            .addToDisposable()
+            }
+        }
     }
 
     fun onClearDataClick() {
@@ -111,17 +113,19 @@ class AuthSocialPresenter @Inject constructor(
         stateController.updateState {
             it.copy(isAuthProgress = true)
         }
-        authRepository
-            .signInSocial(resultUrl, model)
-            .doFinally {
+        viewModelScope.launch {
+            runCatching {
+                authRepository.signInSocial(resultUrl, model)
+            }.onSuccess {
                 stateController.updateState {
                     it.copy(isAuthProgress = true)
                 }
-            }
-            .subscribe({
                 authSocialAnalytics.success()
                 router.finishChain()
-            }, {
+            }.onFailure {
+                stateController.updateState {
+                    it.copy(isAuthProgress = true)
+                }
                 authSocialAnalytics.error(it)
                 if (it is SocialAuthException) {
                     viewState.showError()
@@ -129,8 +133,8 @@ class AuthSocialPresenter @Inject constructor(
                     errorHandler.handle(it)
                     router.exit()
                 }
-            })
-            .addToDisposable()
+            }
+        }
     }
 
 }

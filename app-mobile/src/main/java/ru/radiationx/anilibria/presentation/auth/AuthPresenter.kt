@@ -1,5 +1,9 @@
 package ru.radiationx.anilibria.presentation.auth
 
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.SocialAuthItemState
 import ru.radiationx.anilibria.model.toState
@@ -8,14 +12,15 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
+import ru.terrakok.cicerone.Router
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
+import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
 import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
-import ru.radiationx.data.datasource.remote.address.ApiConfig
-import ru.radiationx.data.entity.app.auth.EmptyFieldException
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
-import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.module.domain.errors.EmptyFieldException
 import javax.inject.Inject
 
 /**
@@ -29,7 +34,8 @@ class AuthPresenter @Inject constructor(
     private val errorHandler: IErrorHandler,
     private val authMainAnalytics: AuthMainAnalytics,
     private val authSocialAnalytics: AuthSocialAnalytics,
-    private val apiConfig: ApiConfig
+    private val apiConfig: ApiConfigController,
+    private val authStateHolder: AuthStateHolder
 ) : BasePresenter<AuthView>(router) {
 
     private var currentLogin = ""
@@ -38,21 +44,16 @@ class AuthPresenter @Inject constructor(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        authRepository
-            .loadSocialAuth()
-            .subscribe({}, {
-                errorHandler.handle(it)
-            })
-            .addToDisposable()
+        viewModelScope.launch {
+            authRepository.loadSocialAuth()
+        }
 
         authRepository
             .observeSocialAuth()
-            .subscribe({
-                viewState.showSocial(it.map { it.toState() })
-            }, {
-                errorHandler.handle(it)
-            })
-            .addToDisposable()
+            .onEach { viewState.showSocial(it.map { it.toState() }) }
+            .catch { errorHandler.handle(it) }
+            .launchIn(viewModelScope)
+
         updateButtonState()
     }
 
@@ -80,20 +81,23 @@ class AuthPresenter @Inject constructor(
     fun signIn() {
         authMainAnalytics.loginClick()
         viewState.setRefreshing(true)
-        authRepository
-            .signIn(currentLogin, currentPassword, "")
-            .doAfterTerminate { viewState.setRefreshing(false) }
-            .subscribe({ user ->
-                decideWhatToDo(user.authState)
-            }, {
+        viewModelScope.launch {
+            runCatching {
+                authRepository.signIn(currentLogin, currentPassword, "")
+            }.onSuccess {
+                viewState.setRefreshing(false)
+                decideWhatToDo(authStateHolder.get())
+            }.onFailure {
+                viewState.setRefreshing(false)
                 if (isEmpty2FaCode(it)) {
                     router.navigateTo(Screens.Auth2FaCode(currentLogin, currentPassword))
                 } else {
                     authMainAnalytics.error(it)
                     errorHandler.handle(it)
                 }
-            })
-            .addToDisposable()
+            }
+        }
+
     }
 
     private fun isEmpty2FaCode(error: Throwable): Boolean {
@@ -113,9 +117,11 @@ class AuthPresenter @Inject constructor(
     }
 
     fun skip() {
-        authMainAnalytics.skipClick()
-        authRepository.updateUser(AuthState.AUTH_SKIPPED)
-        router.finishChain()
+        viewModelScope.launch {
+            authMainAnalytics.skipClick()
+            authStateHolder.skip()
+            router.finishChain()
+        }
     }
 
     fun registrationClick() {
@@ -125,7 +131,9 @@ class AuthPresenter @Inject constructor(
 
     fun registrationToSiteClick() {
         authMainAnalytics.regToSiteClick()
-        Utils.externalLink("${apiConfig.siteUrl}/pages/login.php")
+        viewModelScope.launch {
+            Utils.externalLink("${apiConfig.getActive().site}/pages/login.php")
+        }
     }
 
     fun submitUseTime(time: Long) {

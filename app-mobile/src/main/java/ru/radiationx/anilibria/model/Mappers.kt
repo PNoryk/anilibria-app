@@ -12,6 +12,7 @@ import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.entity.app.search.SuggestionItem
 import ru.radiationx.data.entity.app.youtube.YoutubeItem
 import ru.radiationx.data.entity.common.AuthState
+import tv.anilibria.module.domain.entity.auth.SocialAuthService
 
 fun ReleaseItem.toState(): ReleaseItemState {
     val title = if (series == null) {
@@ -75,7 +76,7 @@ fun OtherMenuItem.toState() = OtherMenuItemState(
     iconRes = icon
 )
 
-fun SocialAuth.toState(): SocialAuthItemState = SocialAuthItemState(
+fun SocialAuthService.toState(): SocialAuthItemState = SocialAuthItemState(
     key = key,
     title = title,
     iconRes = key.asDataIconRes(),

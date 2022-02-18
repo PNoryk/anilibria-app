@@ -21,10 +21,10 @@ import ru.radiationx.anilibria.ui.fragments.auth.AnalyticsWebViewClient
 import ru.radiationx.anilibria.ui.fragments.auth.AuthPatternWebViewClient
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.datasource.remote.address.ApiConfig
-import ru.radiationx.data.entity.app.auth.SocialAuth
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared_app.analytics.LifecycleTimeCounter
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import javax.inject.Inject
 
 
@@ -117,9 +117,9 @@ class AuthSocialFragment : BaseFragment(), AuthSocialView {
         super.onDestroyView()
     }
 
-    override fun loadPage(data: SocialAuth) {
-        authPatternWebViewClient.resultPattern = data.resultPattern
-        webView.loadUrl(data.socialUrl)
+    override fun loadPage(data: SocialAuthService) {
+        authPatternWebViewClient.resultPattern = data.resultPattern.pattern
+        webView.loadUrl(data.socialUrl.value)
     }
 
     override fun showState(state: AuthSocialScreenState) {
