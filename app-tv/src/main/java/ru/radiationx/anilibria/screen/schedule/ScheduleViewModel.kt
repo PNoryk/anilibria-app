@@ -1,14 +1,18 @@
 package ru.radiationx.anilibria.screen.schedule
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.LifecycleViewModel
-import ru.radiationx.data.repository.ScheduleRepository
 import ru.radiationx.shared.ktx.asDayName
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.ScheduleRepository
 
 @InjectConstructor
 class ScheduleViewModel(
@@ -28,14 +32,13 @@ class ScheduleViewModel(
                 days.map { day ->
                     val title = day.day.asDayName()
                     val cards = day.items.map { item ->
-                        dataConverter.toCard(item.releaseItem)
+                        dataConverter.toCard(item)
                     }
                     Pair(title, cards)
                 }
             }
-            .lifeSubscribe {
-                scheduleRows.value = it
-            }
+            .onEach { scheduleRows.value = it }
+            .launchIn(viewModelScope)
     }
 
     fun onCardClick(card: LibriaCard) {

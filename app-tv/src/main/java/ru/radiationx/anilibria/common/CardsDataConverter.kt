@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.common
 import android.content.Context
 import android.text.format.DateUtils
 import ru.radiationx.data.entity.app.feed.FeedItem
-import ru.radiationx.data.entity.app.release.ReleaseItem
+import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.youtube.Youtube
 import java.util.*
 
@@ -11,21 +11,22 @@ class CardsDataConverter(
     private val context: Context
 ) {
 
-    fun toCard(releaseItem: ReleaseItem) = releaseItem.run {
-        LibriaCard(
-            id,
-            title.orEmpty(),
-            "${seasons.firstOrNull()} год • ${
-                genres.firstOrNull()
-                    ?.capitalize()
-            } • Серии: ${series?.trim() ?: "Не доступно"} • Обновлен ${
-                Date(torrentUpdate * 1000L).relativeDate(context)
-                    .decapitalize()
-            }",
-            poster.orEmpty(),
-            LibriaCard.Type.RELEASE
-        ).apply {
-            rawData = releaseItem
+    fun toCard(releaseItem: Release): LibriaCard {
+        val genreText = releaseItem.genres?.firstOrNull()?.capitalize()
+        val seriesText = releaseItem.series?.trim() ?: "Не доступно"
+        val dateText = releaseItem.torrentUpdate
+            ?.toEpochMilliseconds()
+            ?.let { Date(it).relativeDate(context).decapitalize() }
+        return releaseItem.run {
+            LibriaCard(
+                id.id,
+                names?.firstOrNull()?.text.orEmpty(),
+                "$season год • $genreText • Серии: $seriesText • Обновлен $dateText",
+                poster?.url.orEmpty(),
+                LibriaCard.Type.RELEASE
+            ).apply {
+                rawData = releaseItem
+            }
         }
     }
 

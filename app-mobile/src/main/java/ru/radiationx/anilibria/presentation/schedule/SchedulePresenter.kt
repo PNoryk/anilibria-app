@@ -1,21 +1,27 @@
 package ru.radiationx.anilibria.presentation.schedule
 
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayAt
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.ScheduleItemState
-import ru.radiationx.anilibria.model.toState
+import ru.radiationx.anilibria.model.toScheduleState
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleDayState
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleScreenState
+import ru.radiationx.shared.ktx.asDayName
+import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.module.data.analytics.features.ScheduleAnalytics
-import ru.radiationx.data.entity.app.schedule.ScheduleDay
-import ru.radiationx.data.repository.ScheduleRepository
-import ru.radiationx.shared.ktx.asDayName
-import ru.terrakok.cicerone.Router
-import java.util.*
+import tv.anilibria.module.data.repos.ScheduleRepository
+import tv.anilibria.module.domain.entity.schedule.ScheduleDay
 import javax.inject.Inject
 
 @InjectViewState
@@ -28,7 +34,7 @@ class SchedulePresenter @Inject constructor(
 ) : BasePresenter<ScheduleView>(router) {
 
     private var firstData = true
-    var argDay: Int = -1
+    var argDay: DayOfWeek? = null
 
     private var currentState = ScheduleScreenState()
     private val currentDays = mutableListOf<ScheduleDay>()
@@ -42,16 +48,19 @@ class SchedulePresenter @Inject constructor(
         super.onFirstViewAttach()
         scheduleRepository
             .observeSchedule()
-            .subscribe { scheduleDays ->
+            .onEach { scheduleDays ->
                 currentDays.clear()
                 currentDays.addAll(scheduleDays)
                 val dayStates = scheduleDays.map { scheduleDay ->
-                    val calendarDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+
+                    val currentDate = Clock.System.todayAt(TimeZone.currentSystemDefault())
+                    val calendarDay = currentDate.dayOfWeek
+
                     var dayName = scheduleDay.day.asDayName()
                     if (scheduleDay.day == calendarDay) {
                         dayName += " (сегодня)"
                     }
-                    val items = scheduleDay.items.map { it.toState() }
+                    val items = scheduleDay.items.map { it.toScheduleState() }
                     ScheduleDayState(dayName, items)
                 }
 
@@ -60,16 +69,16 @@ class SchedulePresenter @Inject constructor(
                 }
                 handleFirstData()
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
     }
 
     private fun handleFirstData() {
         if (firstData) {
             firstData = false
-            val currentDay = if (argDay != -1) {
+            val currentDay = if (argDay != null) {
                 argDay
             } else {
-                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+                Clock.System.todayAt(TimeZone.currentSystemDefault()).dayOfWeek
             }
             currentDays
                 .indexOfFirst { it.day == currentDay }
@@ -85,29 +94,30 @@ class SchedulePresenter @Inject constructor(
     fun onItemClick(item: ScheduleItemState, position: Int) {
         val releaseItem = currentDays
             .flatMap { it.items }
-            .find { it.releaseItem.id == item.releaseId }
-            ?.releaseItem ?: return
+            .find { it.id == item.releaseId }
+            ?: return
         scheduleAnalytics.releaseClick(position)
-        releaseAnalytics.open(AnalyticsConstants.screen_schedule, releaseItem.id)
-        router.navigateTo(Screens.ReleaseDetails(releaseItem.id))
+        releaseAnalytics.open(AnalyticsConstants.screen_schedule, releaseItem.id.id)
+        router.navigateTo(Screens.ReleaseDetails(releaseItem.id.id))
     }
 
     fun refresh() {
-        scheduleRepository
-            .loadSchedule()
-            .doOnSubscribe {
-                updateState {
-                    it.copy(refreshing = true)
-                }
+        viewModelScope.launch {
+            updateState {
+                it.copy(refreshing = true)
             }
-            .doFinally {
+            runCatching {
+                scheduleRepository.loadSchedule()
+            }.onSuccess {
                 updateState {
                     it.copy(refreshing = false)
                 }
-            }
-            .subscribe({}, {
+            }.onFailure {
+                updateState {
+                    it.copy(refreshing = false)
+                }
                 errorHandler.handle(it)
-            })
-            .addToDisposable()
+            }
+        }
     }
 }

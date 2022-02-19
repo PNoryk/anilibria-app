@@ -1,18 +1,20 @@
 package ru.radiationx.anilibria.screen.main
 
-import io.reactivex.Single
-import ru.radiationx.anilibria.common.LinkCard
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayAt
 import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
+import ru.radiationx.anilibria.common.LinkCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.ScheduleScreen
-import ru.radiationx.data.interactors.ReleaseInteractor
-import ru.radiationx.data.repository.ScheduleRepository
-import ru.radiationx.shared.ktx.*
+import ru.radiationx.shared.ktx.asDayNameDeclension
+import ru.radiationx.shared.ktx.asDayPretext
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import java.util.*
+import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.repos.ScheduleRepository
 
 @InjectConstructor
 class MainScheduleViewModel(
@@ -34,28 +36,27 @@ class MainScheduleViewModel(
         onRefreshClick()
     }
 
-    override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = scheduleRepository
+    override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = scheduleRepository
         .loadSchedule()
-        .doOnSuccess {
-            val allReleases = it.map { it.items.map { it.releaseItem } }.flatten()
+        .also {
+            val allReleases = it.map { it.items }.flatten()
             releaseInteractor.updateItemsCache(allReleases)
         }
-        .map { schedueDays ->
-            val currentTime = System.currentTimeMillis()
-            val mskTime = System.currentTimeMillis().asMsk()
+        .let { schedueDays ->
+            val mskDay = Clock.System.todayAt(TimeZone.of("MSK")).dayOfWeek
+            val currentDay = Clock.System.todayAt(TimeZone.currentSystemDefault()).dayOfWeek
 
-            val currentDay = currentTime.getDayOfWeek()
-            val mskDay = mskTime.getDayOfWeek()
-
-
-            val dayTitle = if (Date(currentTime).isSameDay(Date(mskTime))) {
+            val dayTitle = if (currentDay == mskDay) {
                 "Ожидается сегодня"
             } else {
-                "Ожидается ${mskDay.asDayPretext()} ${mskDay.asDayNameDeclension().toLowerCase()} (по МСК)"
+                val preText = mskDay.asDayPretext()
+                val dayName = mskDay.asDayNameDeclension().toLowerCase()
+                "Ожидается $preText $dayName (по МСК)"
             }
+
             rowTitle.value = dayTitle
 
-            val items = schedueDays.firstOrNull { it.day == mskDay }?.items?.map { it.releaseItem }.orEmpty()
+            val items = schedueDays.firstOrNull { it.day == mskDay }?.items.orEmpty()
 
             items.map { converter.toCard(it) }
         }

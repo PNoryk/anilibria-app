@@ -20,7 +20,7 @@ class ReleaseAnalytics(
         const val PARAM_EXTERNAL_TAG = "tag"
     }
 
-    fun open(from: String, releaseId: Int?, releaseCode: String? = null) {
+    fun open(from: String, releaseId: Long?, releaseCode: String? = null) {
         sender.send(
             AnalyticsConstants.release_open,
             from.toNavFromParam(),
@@ -29,7 +29,7 @@ class ReleaseAnalytics(
         )
     }
 
-    fun copyLink(from: String, releaseId: Int) {
+    fun copyLink(from: String, releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_copy,
             from.toNavFromParam(),
@@ -37,7 +37,7 @@ class ReleaseAnalytics(
         )
     }
 
-    fun share(from: String, releaseId: Int) {
+    fun share(from: String, releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_share,
             from.toNavFromParam(),
@@ -45,7 +45,7 @@ class ReleaseAnalytics(
         )
     }
 
-    fun shortcut(from: String, releaseId: Int) {
+    fun shortcut(from: String, releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_shortcut,
             from.toNavFromParam(),

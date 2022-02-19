@@ -1,5 +1,6 @@
 package ru.radiationx.shared.ktx
 
+import kotlinx.datetime.DayOfWeek
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,37 +41,34 @@ fun Long.getDayOfWeek() = Calendar.getInstance().also {
     it.timeInMillis = this
 }.get(Calendar.DAY_OF_WEEK)
 
-fun Int.asDayName() = when (this) {
-    Calendar.MONDAY -> "Понедельник"
-    Calendar.TUESDAY -> "Вторник"
-    Calendar.WEDNESDAY -> "Среда"
-    Calendar.THURSDAY -> "Четверг"
-    Calendar.FRIDAY -> "Пятница"
-    Calendar.SATURDAY -> "Суббота"
-    Calendar.SUNDAY -> "Воскресенье"
-    else -> throw Exception("Not found day by int $this")
+fun DayOfWeek.asDayName() = when (this) {
+    DayOfWeek.MONDAY -> "Понедельник"
+    DayOfWeek.TUESDAY -> "Вторник"
+    DayOfWeek.WEDNESDAY -> "Среда"
+    DayOfWeek.THURSDAY -> "Четверг"
+    DayOfWeek.FRIDAY -> "Пятница"
+    DayOfWeek.SATURDAY -> "Суббота"
+    DayOfWeek.SUNDAY -> "Воскресенье"
 }
 
-fun Int.asDayNameDeclension() = when (this) {
-    Calendar.MONDAY -> "Понедельник"
-    Calendar.TUESDAY -> "Вторник"
-    Calendar.WEDNESDAY -> "Среду"
-    Calendar.THURSDAY -> "Четверг"
-    Calendar.FRIDAY -> "Пятницу"
-    Calendar.SATURDAY -> "Субботу"
-    Calendar.SUNDAY -> "Воскресенье"
-    else -> throw Exception("Not found day by int $this")
+fun DayOfWeek.asDayNameDeclension() = when (this) {
+    DayOfWeek.MONDAY -> "Понедельник"
+    DayOfWeek.TUESDAY -> "Вторник"
+    DayOfWeek.WEDNESDAY -> "Среду"
+    DayOfWeek.THURSDAY -> "Четверг"
+    DayOfWeek.FRIDAY -> "Пятницу"
+    DayOfWeek.SATURDAY -> "Субботу"
+    DayOfWeek.SUNDAY -> "Воскресенье"
 }
 
-fun Int.asDayPretext() = when (this) {
-    Calendar.MONDAY -> "в"
-    Calendar.TUESDAY -> "во"
-    Calendar.WEDNESDAY -> "в"
-    Calendar.THURSDAY -> "в"
-    Calendar.FRIDAY -> "в"
-    Calendar.SATURDAY -> "в"
-    Calendar.SUNDAY -> "в"
-    else -> throw Exception("Not found day by int $this")
+fun DayOfWeek.asDayPretext() = when (this) {
+    DayOfWeek.MONDAY -> "в"
+    DayOfWeek.TUESDAY -> "во"
+    DayOfWeek.WEDNESDAY -> "в"
+    DayOfWeek.THURSDAY -> "в"
+    DayOfWeek.FRIDAY -> "в"
+    DayOfWeek.SATURDAY -> "в"
+    DayOfWeek.SUNDAY -> "в"
 }
 
 fun Date.isSameDay(date: Date): Boolean {

@@ -1,32 +1,30 @@
 package ru.radiationx.anilibria.model
 
-import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.ui.fragments.other.OtherMenuItemState
 import ru.radiationx.anilibria.ui.fragments.other.ProfileItemState
-import ru.radiationx.data.entity.app.auth.SocialAuth
-import ru.radiationx.data.entity.app.feed.FeedItem
-import ru.radiationx.data.entity.app.feed.ScheduleItem
 import ru.radiationx.data.entity.app.other.OtherMenuItem
 import ru.radiationx.data.entity.app.other.ProfileItem
-import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.data.entity.app.search.SuggestionItem
-import ru.radiationx.data.entity.app.youtube.YoutubeItem
 import ru.radiationx.data.entity.common.AuthState
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
+import tv.anilibria.module.domain.entity.feed.Feed
+import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.youtube.Youtube
 
-fun ReleaseItem.toState(): ReleaseItemState {
+//todo map isnew
+fun Release.toState(): ReleaseItemState {
+    val rusTitle = names?.firstOrNull()
     val title = if (series == null) {
-        title.toString()
+        rusTitle.toString()
     } else {
-        "$title ($series)"
+        "$rusTitle ($series)"
     }
     return ReleaseItemState(
         id = id,
         title = title,
-        description = description.orEmpty(),
-        posterUrl = poster.orEmpty(),
-        isNew = isNew
+        description = description?.text.orEmpty(),
+        posterUrl = poster?.url.orEmpty(),
+        isNew = false
     )
 }
 
@@ -38,15 +36,16 @@ fun Youtube.toState() = YoutubeItemState(
     comments = comments.value.toString()
 )
 
-fun FeedItem.toState() = FeedItemState(
+fun Feed.toState() = FeedItemState(
     release = release?.toState(),
     youtube = youtube?.toState()
 )
 
-fun ScheduleItem.toState() = ScheduleItemState(
-    releaseId = releaseItem.id,
-    posterUrl = releaseItem.poster.orEmpty(),
-    isCompleted = completed
+//todo map iscompleted
+fun Release.toScheduleState() = ScheduleItemState(
+    releaseId = id,
+    posterUrl = poster?.url.orEmpty(),
+    isCompleted = true
 )
 
 fun ProfileItem.toState(): ProfileItemState {

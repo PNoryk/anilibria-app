@@ -1,6 +1,7 @@
 package tv.anilibria.module.domain.entity.youtube
 
 import kotlinx.datetime.Instant
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.Count
 import tv.anilibria.core.types.HtmlText
 import tv.anilibria.core.types.RelativeUrl
@@ -18,4 +19,7 @@ data class Youtube(
     val views: Count,
     val comments: Count,
     val timestamp: Instant
-) 
+) {
+    // todo link
+    val link:AbsoluteUrl?= TODO()
+}

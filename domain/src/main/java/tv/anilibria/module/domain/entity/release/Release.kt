@@ -33,4 +33,8 @@ data class Release(
     val episodes: List<Episode>?,
     val externalPlaylists: List<ExternalPlaylist>?,
     val torrents: List<Torrent>?,
-)
+) {
+
+    // todo create link
+    val link: AbsoluteUrl? = TODO()
+}
