@@ -23,6 +23,7 @@ import ru.radiationx.anilibria.ui.fragments.release.details.ReleaseFragment
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleFragment
 import ru.radiationx.anilibria.ui.fragments.search.SearchCatalogFragment
 import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeFragment
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseCode
 import tv.anilibria.module.domain.entity.release.ReleaseId
@@ -75,7 +76,7 @@ object Screens {
         override fun getFragment() = FavoritesFragment()
     }
 
-    class StaticPage(val pagePath: String, val title: String? = null) : BaseAppScreen() {
+    class StaticPage(val pagePath: RelativeUrl, val title: String? = null) : BaseAppScreen() {
         override fun getFragment() = PageFragment.newInstance(pagePath)
     }
 

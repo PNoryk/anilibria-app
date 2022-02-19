@@ -1,7 +1,7 @@
 package ru.radiationx.anilibria.ui.fragments.donation.adapter
 
 import ru.radiationx.anilibria.ui.adapters.ListItem
-import ru.radiationx.data.entity.domain.donation.*
+import tv.anilibria.module.domain.entity.donation.*
 
 data class DonationHeaderListItem(val data: DonationContentHeader) : ListItem(data.text)
 data class DonationCaptionListItem(val data: DonationContentCaption) : ListItem(data.text)

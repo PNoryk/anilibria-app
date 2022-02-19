@@ -78,8 +78,8 @@ fun OtherMenuItem.toState() = OtherMenuItemState(
 fun SocialAuthService.toState(): SocialAuthItemState = SocialAuthItemState(
     key = key,
     title = title,
-    iconRes = key.asDataIconRes(),
-    colorRes = key.asDataColorRes()
+    iconRes = icon.asDataIconRes(),
+    colorRes = color.asDataColorRes()
 )
 
 fun Release.toSuggestionState(query: String): SuggestionItemState {

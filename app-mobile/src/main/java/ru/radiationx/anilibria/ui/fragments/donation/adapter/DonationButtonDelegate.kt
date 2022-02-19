@@ -13,7 +13,7 @@ import ru.radiationx.anilibria.model.asDataColorRes
 import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.anilibria.ui.adapters.ListItem
 import ru.radiationx.anilibria.ui.common.adapters.AppAdapterDelegate
-import ru.radiationx.data.entity.domain.donation.DonationContentButton
+import tv.anilibria.module.domain.entity.donation.DonationContentButton
 
 class DonationButtonDelegate(
     private val clickListener: (DonationContentButton) -> Unit
@@ -35,7 +35,7 @@ class DonationButtonDelegate(
             btAction.text = data.text
             btAction.setOnClickListener { clickListener.invoke(data) }
 
-            val textColor = data.brand?.asDataColorRes()
+            val textColor = data.color?.asDataColorRes()
                 ?.let { btAction.getCompatColor(it) }
                 ?: btAction.context.getColorFromAttr(R.attr.colorAccent)
 

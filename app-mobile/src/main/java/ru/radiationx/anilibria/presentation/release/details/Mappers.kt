@@ -147,8 +147,8 @@ fun ExternalEpisode.toState(
     tag = playlist.tag,
     actionTitle = playlist.actionText,
     hasActionUrl = url != null,
-    actionIconRes = playlist.tag.asDataIconRes(),
-    actionColorRes = playlist.tag.asDataColorRes()
+    actionIconRes = playlist.icon.asDataIconRes(),
+    actionColorRes = playlist.color.asDataColorRes()
 )
 
 fun Episode.toSourceState(): ReleaseEpisodeItemState = ReleaseEpisodeItemState(

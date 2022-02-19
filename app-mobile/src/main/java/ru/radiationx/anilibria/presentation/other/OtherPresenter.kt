@@ -1,6 +1,8 @@
 package ru.radiationx.anilibria.presentation.other
 
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.R
@@ -15,16 +17,15 @@ import ru.radiationx.anilibria.ui.fragments.other.ProfileScreenState
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.data.datasource.remote.address.ApiConfig
-import ru.radiationx.data.datasource.remote.api.PageApi
-import ru.radiationx.data.entity.app.other.LinkMenuItem
-import ru.radiationx.data.entity.app.other.OtherMenuItem
 import ru.radiationx.data.entity.app.other.ProfileItem
 import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.data.repository.AuthRepository
-import ru.radiationx.data.repository.MenuRepository
 import ru.terrakok.cicerone.Router
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
+import tv.anilibria.module.data.repos.MenuRepository
+import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import javax.inject.Inject
 
 @InjectViewState
@@ -51,6 +52,9 @@ class OtherPresenter @Inject constructor(
         const val MENU_DONATE = 2
         const val MENU_SETTINGS = 3
         const val MENU_OTP_CODE = 4
+
+        val PAGE_PATH_TEAM = RelativeUrl("pages/team.php")
+        val PAGE_PATH_DONATE = RelativeUrl("pages/donate.php")
     }
 
     private val stateController = StateController(ProfileScreenState())
@@ -59,9 +63,9 @@ class OtherPresenter @Inject constructor(
     private var currentLinkMenuItems = mutableListOf<LinkMenuItem>()
     private var linksMap = mutableMapOf<Int, LinkMenuItem>()
 
-    private val allMainMenu = mutableListOf<OtherMenuItem>()
-    private val allSystemMenu = mutableListOf<OtherMenuItem>()
-    private val allLinkMenu = mutableListOf<OtherMenuItem>()
+    private val allMainMenu = mutableListOf<OtherMenuItemState>()
+    private val allSystemMenu = mutableListOf<OtherMenuItemState>()
+    private val allLinkMenu = mutableListOf<OtherMenuItemState>()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -71,25 +75,33 @@ class OtherPresenter @Inject constructor(
             .subscribe { viewState.showState(it) }
             .addToDisposable()
 
-        allMainMenu.add(OtherMenuItem(MENU_HISTORY, "История", R.drawable.ic_history))
-        allMainMenu.add(OtherMenuItem(MENU_TEAM, "Список команды", R.drawable.ic_account_multiple))
-        allMainMenu.add(OtherMenuItem(MENU_DONATE, "Поддержать", R.drawable.ic_gift))
+        allMainMenu.add(OtherMenuItemState(MENU_HISTORY, "История", R.drawable.ic_history))
         allMainMenu.add(
-            OtherMenuItem(
+            OtherMenuItemState(
+                MENU_TEAM,
+                "Список команды",
+                R.drawable.ic_account_multiple
+            )
+        )
+        allMainMenu.add(OtherMenuItemState(MENU_DONATE, "Поддержать", R.drawable.ic_gift))
+        allMainMenu.add(
+            OtherMenuItemState(
                 MENU_OTP_CODE,
                 "Привязать устройство",
                 R.drawable.ic_devices_other
             )
         )
 
-        allSystemMenu.add(OtherMenuItem(MENU_SETTINGS, "Настройки", R.drawable.ic_settings))
+        allSystemMenu.add(OtherMenuItemState(MENU_SETTINGS, "Настройки", R.drawable.ic_settings))
 
-        menuRepository
-            .getMenu()
-            .subscribe({}, {
+        viewModelScope.launch {
+            runCatching {
+                menuRepository.getMenu()
+            }.onFailure {
                 it.printStackTrace()
-            })
-            .addToDisposable()
+            }
+        }
+
         subscribeUpdate()
         updateMenuItems()
     }
@@ -134,8 +146,8 @@ class OtherPresenter @Inject constructor(
             }
             MENU_TEAM -> {
                 otherAnalytics.teamClick()
-                pageAnalytics.open(AnalyticsConstants.screen_other, PageApi.PAGE_PATH_TEAM)
-                router.navigateTo(Screens.StaticPage(PageApi.PAGE_PATH_TEAM))
+                pageAnalytics.open(AnalyticsConstants.screen_other, PAGE_PATH_TEAM.url)
+                router.navigateTo(Screens.StaticPage(PAGE_PATH_TEAM))
             }
             MENU_DONATE -> {
                 otherAnalytics.donateClick()
@@ -158,9 +170,9 @@ class OtherPresenter @Inject constructor(
                     val absoluteLink = linkItem.absoluteLink
                     val pagePath = linkItem.sitePagePath
                     when {
-                        absoluteLink != null -> Utils.externalLink(absoluteLink)
+                        absoluteLink != null -> Utils.externalLink(absoluteLink.value)
                         pagePath != null -> {
-                            pageAnalytics.open(AnalyticsConstants.screen_other, pagePath)
+                            pageAnalytics.open(AnalyticsConstants.screen_other, pagePath.url)
                             router.navigateTo(Screens.StaticPage(pagePath))
                         }
                     }
@@ -180,22 +192,22 @@ class OtherPresenter @Inject constructor(
 
         menuRepository
             .observeMenu()
-            .subscribe { linkItems ->
+            .onEach { linkItems ->
                 currentLinkMenuItems.clear()
                 currentLinkMenuItems.addAll(linkItems)
                 allLinkMenu.clear()
                 allLinkMenu.addAll(linkItems.map {
-                    OtherMenuItem(
+                    OtherMenuItemState(
                         id = it.hashCode(),
                         title = it.title,
-                        icon = it.icon?.asDataIconRes() ?: R.drawable.ic_link
+                        iconRes = it.icon?.asDataIconRes() ?: R.drawable.ic_link
                     )
                 })
                 linksMap.clear()
                 linksMap.putAll(linkItems.associateBy { it.hashCode() })
                 updateMenuItems()
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
     }
 
     private fun updateMenuItems() {
@@ -209,11 +221,7 @@ class OtherPresenter @Inject constructor(
         }
 
         val profileState = currentProfileItem.toState()
-        val menuState = listOf(mainMenu, systemMenu, linkMenu)
-            .filter { it.isNotEmpty() }
-            .map { itemsGroup ->
-                itemsGroup.map { it.toState() }
-            }
+        val menuState = listOf(mainMenu, systemMenu, linkMenu).filter { it.isNotEmpty() }
         stateController.updateState {
             it.copy(profile = profileState, menuItems = menuState)
         }
