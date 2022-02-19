@@ -1,13 +1,12 @@
 package ru.radiationx.anilibria.screen.main
 
-import io.reactivex.Single
 import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
-import ru.radiationx.data.entity.app.youtube.YoutubeItem
-import ru.radiationx.data.repository.YoutubeRepository
 import ru.radiationx.shared_app.common.SystemUtils
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.YoutubeRepository
+import tv.anilibria.module.domain.entity.youtube.Youtube
 
 @InjectConstructor
 class MainYouTubeViewModel(
@@ -25,14 +24,14 @@ class MainYouTubeViewModel(
         onRefreshClick()
     }
 
-    override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = youtubeRepository
+    override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = youtubeRepository
         .getYoutubeList(requestPage)
-        .map { youtubeItems ->
-            youtubeItems.data.map { converter.toCard(it) }
+        .let { youtubeItems ->
+            youtubeItems.items.map { converter.toCard(it) }
         }
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        val youtubeItem = card.rawData as YoutubeItem
-        systemUtils.externalLink(youtubeItem.link)
+        val youtubeItem = card.rawData as Youtube
+        systemUtils.externalLink("https://www.youtube.com/watch?v=${youtubeItem.vid?.id}")
     }
 }

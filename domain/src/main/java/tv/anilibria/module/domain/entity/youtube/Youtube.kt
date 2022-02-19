@@ -13,6 +13,7 @@ data class Youtube(
     val id: YoutubeId,
     val title: HtmlText?,
     val image: RelativeUrl?,
+    // todo что-нибудь придумать с ссылками
     val vid: YoutubeVideoId?,
     val views: Count,
     val comments: Count,

@@ -53,9 +53,18 @@ abstract class BaseCardsViewModel : LifecycleViewModel() {
 
     open fun onLibriaCardClick(card: LibriaCard) {}
 
-    protected abstract fun getLoader(requestPage: Int): Single<List<LibriaCard>>
+    protected open fun getLoader(requestPage: Int): Single<List<LibriaCard>>{
+        throw NotImplementedError()
+    }
 
-    protected open fun hasMoreCards(newCards: List<LibriaCard>, allCards: List<LibriaCard>): Boolean =
+    protected open suspend fun getCoLoader(requestPage: Int): List<LibriaCard>{
+        throw NotImplementedError()
+    }
+
+    protected open fun hasMoreCards(
+        newCards: List<LibriaCard>,
+        allCards: List<LibriaCard>
+    ): Boolean =
         newCards.size >= 10 && newCards.isNotEmpty()
 
     protected open fun getErrorCard(error: Throwable) = LoadingCard(

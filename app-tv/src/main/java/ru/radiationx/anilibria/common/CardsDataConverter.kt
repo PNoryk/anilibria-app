@@ -4,7 +4,7 @@ import android.content.Context
 import android.text.format.DateUtils
 import ru.radiationx.data.entity.app.feed.FeedItem
 import ru.radiationx.data.entity.app.release.ReleaseItem
-import ru.radiationx.data.entity.app.youtube.YoutubeItem
+import tv.anilibria.module.domain.entity.youtube.Youtube
 import java.util.*
 
 class CardsDataConverter(
@@ -15,9 +15,13 @@ class CardsDataConverter(
         LibriaCard(
             id,
             title.orEmpty(),
-            "${seasons.firstOrNull()} год • ${genres.firstOrNull()
-                ?.capitalize()} • Серии: ${series?.trim() ?: "Не доступно"} • Обновлен ${Date(torrentUpdate * 1000L).relativeDate(context)
-                .decapitalize()}",
+            "${seasons.firstOrNull()} год • ${
+                genres.firstOrNull()
+                    ?.capitalize()
+            } • Серии: ${series?.trim() ?: "Не доступно"} • Обновлен ${
+                Date(torrentUpdate * 1000L).relativeDate(context)
+                    .decapitalize()
+            }",
             poster.orEmpty(),
             LibriaCard.Type.RELEASE
         ).apply {
@@ -25,12 +29,12 @@ class CardsDataConverter(
         }
     }
 
-    fun toCard(youtubeItem: YoutubeItem) = youtubeItem.run {
+    fun toCard(youtubeItem: Youtube) = youtubeItem.run {
         LibriaCard(
-            id,
-            title.orEmpty(),
-            "Вышел ${Date(timestamp * 1000L).relativeDate(context).decapitalize()}",
-            image.orEmpty(),
+            id.id,
+            title?.text.orEmpty(),
+            "Вышел ${Date(timestamp.toEpochMilliseconds()).relativeDate(context).decapitalize()}",
+            image?.url.orEmpty(),
             LibriaCard.Type.YOUTUBE
         ).apply {
             rawData = youtubeItem

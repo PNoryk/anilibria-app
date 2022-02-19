@@ -8,4 +8,8 @@ data class PageMeta(
     val perPage: Int?,
     val allPages: Int?,
     val allItems: Int?,
-) 
+) {
+    fun isEnd(): Boolean {
+        return page ?: 0 >= allPages ?: 0
+    }
+}

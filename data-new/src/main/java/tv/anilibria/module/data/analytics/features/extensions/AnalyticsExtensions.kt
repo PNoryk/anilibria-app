@@ -16,6 +16,8 @@ fun Int?.toPageParam(name: String = "page") = Pair(name, this.toString())
 
 fun Int?.toIdParam(name: String = "id") = Pair(name, this.toString())
 
+fun Long?.toIdParam(name: String = "id") = Pair(name, this.toString())
+
 fun String?.toVidParam(name: String = "vid") = Pair(name, this.toString())
 
 fun Int?.toPositionParam(name: String = "position") = Pair(name, this.toString())

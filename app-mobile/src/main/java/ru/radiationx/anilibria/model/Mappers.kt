@@ -13,6 +13,7 @@ import ru.radiationx.data.entity.app.search.SuggestionItem
 import ru.radiationx.data.entity.app.youtube.YoutubeItem
 import ru.radiationx.data.entity.common.AuthState
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
+import tv.anilibria.module.domain.entity.youtube.Youtube
 
 fun ReleaseItem.toState(): ReleaseItemState {
     val title = if (series == null) {
@@ -29,12 +30,12 @@ fun ReleaseItem.toState(): ReleaseItemState {
     )
 }
 
-fun YoutubeItem.toState() = YoutubeItemState(
+fun Youtube.toState() = YoutubeItemState(
     id = id,
-    title = title.orEmpty(),
-    image = image.orEmpty(),
-    views = views.toString(),
-    comments = comments.toString()
+    title = title?.text.orEmpty(),
+    image = image?.url.orEmpty(),
+    views = views.value.toString(),
+    comments = comments.value.toString()
 )
 
 fun FeedItem.toState() = FeedItemState(

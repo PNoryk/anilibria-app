@@ -5,6 +5,106 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class CoDataLoadingController<T>(
+    private val coroutineScope: CoroutineScope,
+    private val firstPage: Int = 1,
+    private val dataSource: suspend (PageLoadParams) -> ScreenStateAction.Data<T>
+) {
+
+    private val stateRelay = MutableStateFlow(DataLoadingState<T>())
+
+    private var currentPage = firstPage
+
+    private var dataDisposable: Job? = null
+
+    var currentState: DataLoadingState<T>
+        get() = requireNotNull(stateRelay.value)
+        private set(value) {
+            stateRelay.value = value
+        }
+
+    fun observeState(): StateFlow<DataLoadingState<T>> {
+        return stateRelay.asStateFlow()
+    }
+
+    fun refresh() {
+        loadPage(firstPage)
+    }
+
+    fun loadMore() {
+        if (currentState.hasMorePages) {
+            loadPage(currentPage + 1)
+        }
+    }
+
+    fun release() {
+        dataDisposable?.cancel()
+    }
+
+    fun modifyData(data: T?) {
+        val action = ScreenStateAction.DataModify(data)
+        updateStateByAction(action)
+    }
+
+    private fun loadPage(page: Int) {
+        if (dataDisposable?.isActive == true) {
+            return
+        }
+
+        val params = createPageLoadParams(page)
+
+        val startLoadingAction: ScreenStateAction<T>? = when {
+            params.isEmptyLoading -> ScreenStateAction.EmptyLoading()
+            params.isRefreshLoading -> ScreenStateAction.Refresh()
+            params.isMoreLoading -> ScreenStateAction.MoreLoading()
+            else -> null
+        }
+        if (startLoadingAction != null) {
+            updateStateByAction(startLoadingAction)
+        }
+
+        dataDisposable = coroutineScope.launch {
+            runCatching {
+                dataSource.invoke(params)
+            }.onSuccess { dataAction ->
+                updateStateByAction(dataAction)
+                currentPage = page
+            }.onFailure {
+                updateStateByAction(ScreenStateAction.Error(it))
+            }
+        }
+    }
+
+    private fun createPageLoadParams(page: Int): PageLoadParams {
+        val isFirstPage = page == firstPage
+        val isEmptyData = stateRelay.value.data == null
+        return PageLoadParams(
+            page = page,
+            isFirstPage = isFirstPage,
+            isDataEmpty = isEmptyData,
+            isEmptyLoading = isFirstPage && isEmptyData,
+            isRefreshLoading = isFirstPage && !isEmptyData,
+            isMoreLoading = !isFirstPage
+        )
+    }
+
+    private fun updateState(block: (DataLoadingState<T>) -> DataLoadingState<T>) {
+        currentState = block.invoke(currentState)
+    }
+
+    private fun updateStateByAction(action: ScreenStateAction<T>) {
+        updateState {
+            it.applyAction(action)
+        }
+    }
+}
 
 class DataLoadingController<T>(
     private val firstPage: Int = 1,
