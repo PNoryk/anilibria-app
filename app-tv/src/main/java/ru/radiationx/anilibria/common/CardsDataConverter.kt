@@ -12,7 +12,8 @@ class CardsDataConverter(
 ) {
 
     fun toCard(releaseItem: Release): LibriaCard {
-        val genreText = releaseItem.genres?.firstOrNull()?.capitalize()
+        val seasonText = releaseItem.season?.value
+        val genreText = releaseItem.genres?.firstOrNull()?.value?.capitalize()
         val seriesText = releaseItem.series?.trim() ?: "Не доступно"
         val dateText = releaseItem.torrentUpdate
             ?.toEpochMilliseconds()
@@ -21,7 +22,7 @@ class CardsDataConverter(
             LibriaCard(
                 id.id,
                 names?.firstOrNull()?.text.orEmpty(),
-                "$season год • $genreText • Серии: $seriesText • Обновлен $dateText",
+                "$seasonText год • $genreText • Серии: $seriesText • Обновлен $dateText",
                 poster?.url.orEmpty(),
                 LibriaCard.Type.RELEASE
             ).apply {

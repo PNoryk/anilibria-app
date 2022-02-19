@@ -5,8 +5,7 @@ import tv.anilibria.module.data.local.ReleaseUpdateHelper
 import tv.anilibria.module.data.local.holders.GenresLocalDataSource
 import tv.anilibria.module.data.local.holders.YearsLocalDataSource
 import tv.anilibria.module.data.restapi.datasource.remote.api.SearchRemoteDataSource
-import tv.anilibria.module.domain.entity.Page
-import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.module.domain.entity.*
 import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
@@ -17,11 +16,11 @@ class SearchRepository @Inject constructor(
     private val releaseUpdateHolder: ReleaseUpdateHelper
 ) {
 
-    fun observeGenres(): Flow<List<String>> {
+    fun observeGenres(): Flow<List<ReleaseGenre>> {
         return genresHolder.observe()
     }
 
-    fun observeYears(): Flow<List<String>> {
+    fun observeYears(): Flow<List<ReleaseYear>> {
         return yearsHolder.observe()
     }
 
@@ -37,19 +36,19 @@ class SearchRepository @Inject constructor(
         }
     }
 
-
-    suspend fun getGenres(): List<String> {
+    suspend fun getGenres(): List<ReleaseGenre> {
         return searchApi.getGenres().also {
             genresHolder.put(it)
         }
     }
 
-    suspend fun getYears(): List<String> {
+    suspend fun getYears(): List<ReleaseYear> {
         return searchApi.getYears().also {
             yearsHolder.put(it)
         }
     }
 
-    fun getSeasons(): List<String> = listOf("зима", "весна", "лето", "осень")
+    fun getSeasons(): List<ReleaseSeason> =
+        listOf("зима", "весна", "лето", "осень").map { ReleaseSeason(it) }
 
 }

@@ -10,6 +10,7 @@ import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.HistoryRepository
 import tv.anilibria.module.data.repos.ReleaseRepository
 import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.SearchForm
 
 @InjectConstructor
@@ -36,7 +37,7 @@ class WatchingRecommendsViewModel(
             .getReleases()
             .let { releaseRepository.getReleasesById(it.map { it.id }) }
             .let { releases ->
-                val genresMap = mutableMapOf<String, Int>()
+                val genresMap = mutableMapOf<ReleaseGenre, Int>()
                 releases.forEach { release ->
                     release.genres?.forEach {
                         val currentCount = genresMap[it] ?: 0

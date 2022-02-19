@@ -5,6 +5,9 @@ import kotlinx.datetime.Instant
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.HtmlText
 import tv.anilibria.core.types.RelativeUrl
+import tv.anilibria.module.domain.entity.ReleaseGenre
+import tv.anilibria.module.domain.entity.ReleaseSeason
+import tv.anilibria.module.domain.entity.ReleaseYear
 
 data class ReleaseId(val id: Long)
 data class ReleaseCode(val code: String)
@@ -19,10 +22,10 @@ data class Release(
     val statusName: String?,
     val status: ReleaseStatus?,
     val type: String?,
-    val genres: List<String>?,
+    val genres: List<ReleaseGenre>?,
     val voices: List<String>?,
-    val year: String?,
-    val season: String?,
+    val year: ReleaseYear?,
+    val season: ReleaseSeason?,
     val scheduleDay: DayOfWeek?,
     val description: HtmlText?,
     val announce: HtmlText?,

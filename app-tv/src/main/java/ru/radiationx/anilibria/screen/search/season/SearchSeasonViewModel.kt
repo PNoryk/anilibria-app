@@ -5,9 +5,9 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.search.BaseSearchValuesViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
-import ru.radiationx.data.entity.app.release.SeasonItem
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.ReleaseSeason
 
 @InjectConstructor
 class SearchSeasonViewModel(
@@ -16,19 +16,19 @@ class SearchSeasonViewModel(
     private val guidedRouter: GuidedRouter
 ) : BaseSearchValuesViewModel() {
 
-    private val currentSeasons = mutableListOf<SeasonItem>()
+    private val currentSeasons = mutableListOf<ReleaseSeason>()
 
     override fun onCreate() {
         super.onCreate()
         viewModelScope.launch {
             runCatching {
-                searchRepository.getSeasons().map { SeasonItem(it, it) }
+                searchRepository.getSeasons()
             }.onSuccess {
                 currentSeasons.clear()
                 currentSeasons.addAll(it)
                 currentValues.clear()
                 currentValues.addAll(it.map { it.value })
-                valuesData.value = it.map { it.title }
+                valuesData.value = it.map { it.value }
                 updateChecked()
                 updateSelected()
             }

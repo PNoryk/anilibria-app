@@ -11,6 +11,7 @@ import ru.radiationx.anilibria.screen.search.SearchController
 import ru.radiationx.data.entity.app.release.YearItem
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.ReleaseYear
 
 @InjectConstructor
 class SearchYearViewModel(
@@ -19,19 +20,18 @@ class SearchYearViewModel(
     private val guidedRouter: GuidedRouter
 ) : BaseSearchValuesViewModel() {
 
-    private val currentYears = mutableListOf<YearItem>()
+    private val currentYears = mutableListOf<ReleaseYear>()
 
     override fun onColdCreate() {
         super.onColdCreate()
         searchRepository
             .observeYears()
-            .map { it.map { YearItem(it, it) } }
             .onEach {
                 currentYears.clear()
                 currentYears.addAll(it)
                 currentValues.clear()
                 currentValues.addAll(it.map { it.value })
-                valuesData.value = it.map { it.title }
+                valuesData.value = it.map { it.value }
                 progressState.value = false
                 updateChecked()
                 updateSelected()

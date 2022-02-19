@@ -3,6 +3,9 @@ package tv.anilibria.module.data.restapi.entity.mapper
 import kotlinx.datetime.Instant
 import tv.anilibria.core.types.*
 import tv.anilibria.module.data.restapi.entity.app.release.*
+import tv.anilibria.module.domain.entity.ReleaseGenre
+import tv.anilibria.module.domain.entity.ReleaseSeason
+import tv.anilibria.module.domain.entity.ReleaseYear
 import tv.anilibria.module.domain.entity.release.*
 
 fun RandomReleaseResponse.toDomain() = RandomRelease(
@@ -21,10 +24,10 @@ fun ReleaseResponse.toDomain(): Release {
         statusName = status,
         status = statusCode?.toReleaseStatus(),
         type = type,
-        genres = genres,
+        genres = genres?.map { ReleaseGenre(it) },
         voices = voices,
-        year = year,
-        season = season,
+        year = year?.let { ReleaseYear(it) },
+        season = season?.let { ReleaseSeason(it) },
         scheduleDay = scheduleDay?.asWeekDay(),
         description = description?.asHtmlText(),
         announce = announce?.asHtmlText(),

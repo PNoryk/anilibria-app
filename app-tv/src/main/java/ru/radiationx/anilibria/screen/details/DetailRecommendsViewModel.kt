@@ -12,6 +12,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.SearchForm
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
@@ -65,7 +66,7 @@ class DetailRecommendsViewModel(
             }
     }
 
-    private fun getGenres(count: Int): List<String> {
+    private fun getGenres(count: Int): List<ReleaseGenre> {
         val release = releaseInteractor.getFull(releaseId) ?: return emptyList()
         return release.genres?.take(count).orEmpty()
     }

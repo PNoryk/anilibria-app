@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tv.anilibria.module.domain.entity.ReleaseYear
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
@@ -19,23 +20,23 @@ class YearsLocalDataSource(
         moshi.adapter<List<String>>(type)
     }
 
-    private val persistableData = MoshiStorageDataHolder<List<String>, List<String>>(
+    private val persistableData = MoshiStorageDataHolder<List<String>, List<ReleaseYear>>(
         key = storageStringKey("refactor.years"),
         adapter = adapter,
         storage = storage,
-        read = { it },
-        write = { it }
+        read = { data -> data?.map { ReleaseYear(it) } },
+        write = { data -> data?.map { it.value } }
     )
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Flow<List<String>> = observableData
+    fun observe(): Flow<List<ReleaseYear>> = observableData
         .observe()
         .map { it.orEmpty() }
 
-    suspend fun get(): List<String> = observableData
+    suspend fun get(): List<ReleaseYear> = observableData
         .get()
         .orEmpty()
 
-    suspend fun put(data: List<String>) = observableData.put(data)
+    suspend fun put(data: List<ReleaseYear>) = observableData.put(data)
 }

@@ -19,9 +19,6 @@ import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.analytics.TimeCounter
 import ru.radiationx.data.datasource.holders.PreferencesHolder
-import ru.radiationx.data.entity.app.release.GenreItem
-import ru.radiationx.data.entity.app.release.SeasonItem
-import ru.radiationx.data.entity.app.release.YearItem
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CatalogAnalytics
@@ -29,6 +26,9 @@ import tv.anilibria.module.data.analytics.features.CatalogFilterAnalytics
 import tv.anilibria.module.data.analytics.features.FastSearchAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.ReleaseGenre
+import tv.anilibria.module.domain.entity.ReleaseSeason
+import tv.anilibria.module.domain.entity.ReleaseYear
 import tv.anilibria.module.domain.entity.SearchForm
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
@@ -53,16 +53,16 @@ class SearchPresenter @Inject constructor(
     private val remindText =
         "Если не удаётся найти нужный релиз, попробуйте искать через Google или Yandex c приставкой \"AniLibria\".\nПо ссылке в поисковике можно будет открыть приложение."
 
-    private val currentGenres = mutableListOf<String>()
-    private val currentYears = mutableListOf<String>()
-    private val currentSeasons = mutableListOf<String>()
+    private val currentGenres = mutableListOf<ReleaseGenre>()
+    private val currentYears = mutableListOf<ReleaseYear>()
+    private val currentSeasons = mutableListOf<ReleaseSeason>()
     private var currentSorting = "1"
     private var currentComplete = false
     private val currentItems = mutableListOf<Release>()
 
-    private val beforeOpenDialogGenres = mutableListOf<String>()
-    private val beforeOpenDialogYears = mutableListOf<String>()
-    private val beforeOpenDialogSeasons = mutableListOf<String>()
+    private val beforeOpenDialogGenres = mutableListOf<ReleaseGenre>()
+    private val beforeOpenDialogYears = mutableListOf<ReleaseYear>()
+    private val beforeOpenDialogSeasons = mutableListOf<ReleaseSeason>()
     private var beforeOpenDialogSorting = ""
     private var beforeComplete = false
 
@@ -95,9 +95,7 @@ class SearchPresenter @Inject constructor(
     private fun loadSeasons() {
         viewModelScope.launch {
             runCatching {
-                val seasons = searchRepository.getSeasons().map {
-                    SeasonItem(it, it)
-                }
+                val seasons = searchRepository.getSeasons()
                 viewState.showSeasons(seasons)
             }.onFailure {
                 errorHandler.handle(it)
@@ -118,7 +116,7 @@ class SearchPresenter @Inject constructor(
     private fun observeGenres() {
         searchRepository
             .observeGenres()
-            .onEach { viewState.showGenres(it.map { GenreItem(it, it) }) }
+            .onEach { viewState.showGenres(it) }
             .catch { errorHandler.handle(it) }
             .launchIn(viewModelScope)
     }
@@ -136,7 +134,7 @@ class SearchPresenter @Inject constructor(
     private fun observeYears() {
         searchRepository
             .observeYears()
-            .onEach { viewState.showYears(it.map { YearItem(it, it) }) }
+            .onEach { viewState.showYears(it) }
             .catch { errorHandler.handle(it) }
             .launchIn(viewModelScope)
     }
@@ -255,21 +253,21 @@ class SearchPresenter @Inject constructor(
         onAcceptDialog()
     }
 
-    fun onChangeGenres(newGenres: List<String>) {
+    fun onChangeGenres(newGenres: List<ReleaseGenre>) {
         currentGenres.clear()
         currentGenres.addAll(newGenres)
         viewState.selectGenres(currentGenres)
         updateInfo()
     }
 
-    fun onChangeYears(newYears: List<String>) {
+    fun onChangeYears(newYears: List<ReleaseYear>) {
         currentYears.clear()
         currentYears.addAll(newYears)
         viewState.selectYears(currentYears)
         updateInfo()
     }
 
-    fun onChangeSeasons(newSeasons: List<String>) {
+    fun onChangeSeasons(newSeasons: List<ReleaseSeason>) {
         currentSeasons.clear()
         currentSeasons.addAll(newSeasons)
         viewState.selectSeasons(currentSeasons)

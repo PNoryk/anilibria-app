@@ -4,6 +4,8 @@ import org.json.JSONObject
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.SearchApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
+import tv.anilibria.module.domain.entity.ReleaseGenre
+import tv.anilibria.module.domain.entity.ReleaseYear
 import tv.anilibria.module.domain.entity.SearchForm
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.plugin.data.network.NetworkWrapper
@@ -15,22 +17,24 @@ class SearchRemoteDataSource @Inject constructor(
     private val searchApi: NetworkWrapper<SearchApi>
 ) {
 
-    suspend fun getGenres(): List<String> {
+    suspend fun getGenres(): List<ReleaseGenre> {
         val args = formBodyOf(
             "query" to "genres"
         )
         return searchApi.proxy()
             .getGenres(args)
             .handleApiResponse()
+            .map { ReleaseGenre(it) }
     }
 
-    suspend fun getYears(): List<String> {
+    suspend fun getYears(): List<ReleaseYear> {
         val args = formBodyOf(
             "query" to "years"
         )
         return searchApi.proxy()
             .getYears(args)
             .handleApiResponse()
+            .map { ReleaseYear(it) }
     }
 
     suspend fun fastSearch(name: String): List<Release> {

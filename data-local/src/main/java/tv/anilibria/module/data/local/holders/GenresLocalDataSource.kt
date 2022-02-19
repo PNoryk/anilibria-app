@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
@@ -19,21 +20,21 @@ class GenresLocalDataSource(
         moshi.adapter<List<String>>(type)
     }
 
-    private val persistableData = MoshiStorageDataHolder<List<String>, List<String>>(
+    private val persistableData = MoshiStorageDataHolder<List<String>, List<ReleaseGenre>>(
         key = storageStringKey("refactor.genres"),
         adapter = adapter,
         storage = storage,
-        read = { it },
-        write = { it }
+        read = { data -> data?.map { ReleaseGenre(it) } },
+        write = { data -> data?.map { it.value } }
     )
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Flow<List<String>> = observableData
+    fun observe(): Flow<List<ReleaseGenre>> = observableData
         .observe()
         .map { it.orEmpty() }
 
-    suspend fun get(): List<String> = observableData.get().orEmpty()
+    suspend fun get(): List<ReleaseGenre> = observableData.get().orEmpty()
 
-    suspend fun put(data: List<String>) = observableData.put(data)
+    suspend fun put(data: List<ReleaseGenre>) = observableData.put(data)
 }
