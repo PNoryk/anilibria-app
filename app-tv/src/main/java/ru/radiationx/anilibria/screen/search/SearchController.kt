@@ -4,8 +4,8 @@ import com.jakewharton.rxrelay2.PublishRelay
 import ru.radiationx.data.entity.app.release.GenreItem
 import ru.radiationx.data.entity.app.release.SeasonItem
 import ru.radiationx.data.entity.app.release.YearItem
-import ru.radiationx.data.entity.app.search.SearchForm
 import toothpick.InjectConstructor
+import tv.anilibria.module.domain.entity.SearchForm
 
 @InjectConstructor
 class SearchController {

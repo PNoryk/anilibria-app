@@ -1,16 +1,15 @@
 package ru.radiationx.anilibria.screen.search
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.Single
 import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.SuggestionsScreen
-import ru.radiationx.data.entity.app.search.SearchForm
-import ru.radiationx.data.repository.SearchRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.SearchForm
 
 @InjectConstructor
 class SearchViewModel(
@@ -37,11 +36,10 @@ class SearchViewModel(
         }
     }
 
-    override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = searchRepository
+    override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = searchRepository
         .searchReleases(searchForm, requestPage)
-        .map { it.data.map { converter.toCard(it) } }
-        .doOnSubscribe { progressState.value = requestPage == firstPage }
-        .doFinally { progressState.value = false }
+        .let { it.items.map { converter.toCard(it) } }
+        .also { progressState.value = false }
 
     fun onSearchClick() {
         router.navigateTo(SuggestionsScreen())

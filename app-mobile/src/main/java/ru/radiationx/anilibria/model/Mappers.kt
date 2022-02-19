@@ -4,7 +4,6 @@ import ru.radiationx.anilibria.ui.fragments.other.OtherMenuItemState
 import ru.radiationx.anilibria.ui.fragments.other.ProfileItemState
 import ru.radiationx.data.entity.app.other.OtherMenuItem
 import ru.radiationx.data.entity.app.other.ProfileItem
-import ru.radiationx.data.entity.app.search.SuggestionItem
 import ru.radiationx.data.entity.common.AuthState
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.entity.feed.Feed
@@ -83,8 +82,8 @@ fun SocialAuthService.toState(): SocialAuthItemState = SocialAuthItemState(
     colorRes = key.asDataColorRes()
 )
 
-fun SuggestionItem.toState(query: String): SuggestionItemState {
-    val itemTitle = names.firstOrNull().orEmpty()
+fun Release.toSuggestionState(query: String): SuggestionItemState {
+    val itemTitle = names?.firstOrNull()?.text.orEmpty()
     val matchRanges = try {
         Regex(query, RegexOption.IGNORE_CASE).findAll(itemTitle).map { it.range }.toList()
     } catch (ignore: Throwable) {
@@ -94,7 +93,7 @@ fun SuggestionItem.toState(query: String): SuggestionItemState {
     return SuggestionItemState(
         id,
         itemTitle,
-        poster.orEmpty(),
+        poster?.url.orEmpty(),
         matchRanges
     )
 }

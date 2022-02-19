@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.*
-import ru.radiationx.data.entity.app.search.SearchForm
-import ru.radiationx.data.repository.SearchRepository
 import toothpick.InjectConstructor
+import tv.anilibria.module.domain.entity.SearchForm
 
 @InjectConstructor
 class SearchFormViewModel(
-    private val searchRepository: SearchRepository,
     private val searchController: SearchController,
     private val guidedRouter: GuidedRouter
 ) : LifecycleViewModel() {
@@ -51,15 +49,15 @@ class SearchFormViewModel(
     }
 
     fun onYearClick() {
-        guidedRouter.open(SearchYearGuidedScreen(searchForm.years?.map { it.value }))
+        guidedRouter.open(SearchYearGuidedScreen(searchForm.years))
     }
 
     fun onSeasonClick() {
-        guidedRouter.open(SearchSeasonGuidedScreen(searchForm.seasons?.map { it.value }))
+        guidedRouter.open(SearchSeasonGuidedScreen(searchForm.seasons))
     }
 
     fun onGenreClick() {
-        guidedRouter.open(SearchGenreGuidedScreen(searchForm.genres?.map { it.value }))
+        guidedRouter.open(SearchGenreGuidedScreen(searchForm.genres))
     }
 
     fun onSortClick() {
@@ -72,9 +70,9 @@ class SearchFormViewModel(
 
     private fun updateDataByForm() {
         Log.e("kokoko", "updateDataByForm $searchForm")
-        yearData.value = searchForm.years?.map { it.title }.generateListTitle("Все годы")
-        seasonData.value = searchForm.seasons?.map { it.title }.generateListTitle("Все сезоны")
-        genreData.value = searchForm.genres?.map { it.title }.generateListTitle("Все жанры")
+        yearData.value = searchForm.years?.generateListTitle("Все годы")
+        seasonData.value = searchForm.seasons?.generateListTitle("Все сезоны")
+        genreData.value = searchForm.genres?.generateListTitle("Все жанры")
         sortData.value = when (searchForm.sort) {
             SearchForm.Sort.RATING -> "По популярности"
             SearchForm.Sort.DATE -> "По новизне"

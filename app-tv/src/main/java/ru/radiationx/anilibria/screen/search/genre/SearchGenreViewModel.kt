@@ -1,11 +1,16 @@
 package ru.radiationx.anilibria.screen.search.genre
 
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.search.BaseSearchValuesViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
 import ru.radiationx.data.entity.app.release.GenreItem
-import ru.radiationx.data.repository.SearchRepository
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.SearchRepository
 
 @InjectConstructor
 class SearchGenreViewModel(
@@ -20,7 +25,8 @@ class SearchGenreViewModel(
         super.onColdCreate()
         searchRepository
             .observeGenres()
-            .lifeSubscribe {
+            .map { it.map { GenreItem(it, it) } }
+            .onEach {
                 currentGenres.clear()
                 currentGenres.addAll(it)
                 currentValues.clear()
@@ -30,19 +36,24 @@ class SearchGenreViewModel(
                 updateChecked()
                 updateSelected()
             }
+            .launchIn(viewModelScope)
     }
 
     override fun onCreate() {
         super.onCreate()
         progressState.value = true
-        searchRepository
-            .getGenres()
-            .doFinally { progressState.value = false }
-            .lifeSubscribe({}, {})
+        viewModelScope.launch {
+            runCatching { searchRepository.getGenres() }
+            progressState.value = false
+        }
     }
 
     override fun applyValues() {
-        searchController.genresEvent.accept(currentGenres.filterIndexed { index, item -> checkedValues.contains(item.value) })
+        searchController.genresEvent.accept(currentGenres.filterIndexed { index, item ->
+            checkedValues.contains(
+                item.value
+            )
+        })
         guidedRouter.close()
     }
 }

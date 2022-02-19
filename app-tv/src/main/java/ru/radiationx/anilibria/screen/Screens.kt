@@ -30,8 +30,8 @@ import ru.radiationx.anilibria.screen.trash.TestFragment
 import ru.radiationx.anilibria.screen.trash.VerticalGridTestFragment
 import ru.radiationx.anilibria.screen.update.UpdateFragment
 import ru.radiationx.anilibria.screen.update.source.UpdateSourceGuidedFragment
-import ru.radiationx.data.entity.app.search.SearchForm
 import ru.terrakok.cicerone.android.support.SupportAppScreen
+import tv.anilibria.module.domain.entity.SearchForm
 
 class ConfigScreen() : SupportAppScreen() {
     override fun getFragment(): Fragment {

@@ -23,19 +23,6 @@ class SearchRepository @Inject constructor(
     private val releaseUpdateHolder: ReleaseUpdateHolder
 ) {
 
-    fun observeGenres(): Observable<MutableList<GenreItem>> = genresHolder
-        .observeGenres()
-        .observeOn(schedulers.ui())
-
-    fun observeYears(): Observable<MutableList<YearItem>> = yearsHolder
-        .observeYears()
-        .observeOn(schedulers.ui())
-
-    fun fastSearch(query: String): Single<List<SuggestionItem>> = searchApi
-        .fastSearch(query)
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
     fun searchReleases(form: SearchForm, page: Int): Single<Paginated<List<ReleaseItem>>> {
         val yearsQuery = form.years?.joinToString(",") { it.value }.orEmpty()
         val seasonsQuery = form.seasons?.joinToString(",") { it.value }.orEmpty()
@@ -49,7 +36,7 @@ class SearchRepository @Inject constructor(
         return searchReleases(genresQuery, yearsQuery, seasonsQuery, sortStr, onlyCompletedStr, page)
     }
 
-    fun searchReleases(
+    private fun searchReleases(
         genre: String,
         year: String,
         season: String,
@@ -83,25 +70,5 @@ class SearchRepository @Inject constructor(
         }
         .subscribeOn(schedulers.io())
         .observeOn(schedulers.ui())
-
-
-    fun getGenres(): Single<List<GenreItem>> = searchApi
-        .getGenres()
-        .doOnSuccess {
-            genresHolder.saveGenres(it)
-        }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun getYears(): Single<List<YearItem>> = searchApi
-        .getYears()
-        .doOnSuccess {
-            yearsHolder.saveYears(it)
-        }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun getSeasons(): Single<List<SeasonItem>> = Single
-        .just(listOf("зима", "весна", "лето", "осень").map { SeasonItem(it.capitalize(), it) })
 
 }

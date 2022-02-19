@@ -9,15 +9,12 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
 import android.util.Log
-import io.reactivex.Observable
+import kotlinx.coroutines.runBlocking
 import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.contentprovider.SystemSuggestionEntity
-import ru.radiationx.data.entity.app.search.SuggestionItem
-import ru.radiationx.data.repository.SearchRepository
 import ru.radiationx.shared_app.di.DI
-import ru.radiationx.shared_app.di.DependencyInjector
-import toothpick.ktp.delegate.inject
-import javax.inject.Inject
+import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.release.Release
 
 class SuggestionsContentProvider : ContentProvider() {
 
@@ -69,7 +66,12 @@ class SuggestionsContentProvider : ContentProvider() {
         throw UnsupportedOperationException("insert is not implemented.")
     }
 
-    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<out String>?
+    ): Int {
         throw UnsupportedOperationException("update is not implemented.")
     }
 
@@ -79,7 +81,7 @@ class SuggestionsContentProvider : ContentProvider() {
 
     private fun search(query: String): Cursor {
         Log.d(TAG, "Search suggestions query $query")
-        val result = searchRepository.fastSearch(query).blockingGet()
+        val result = runBlocking { searchRepository.fastSearch(query) }
         val matrixCursor = MatrixCursor(queryProjection)
         result.forEach {
             val entity = it.convertToEntity()
@@ -89,14 +91,15 @@ class SuggestionsContentProvider : ContentProvider() {
         return matrixCursor
     }
 
-    private fun appendProjectionColumns(id: Int, columns: Array<Any?>): Array<Any?> = columns + INTENT_ACTION + id
+    private fun appendProjectionColumns(id: Int, columns: Array<Any?>): Array<Any?> =
+        columns + INTENT_ACTION + id
 
-    private fun SuggestionItem.convertToEntity() = SystemSuggestionEntity(
-        id,
-        names.joinToString(),
+    private fun Release.convertToEntity() = SystemSuggestionEntity(
+        id.id.toInt(),
+        names?.joinToString().toString(),
         -1,
         -1,
-        cardImage = poster
+        cardImage = poster?.url
     )
 
     private fun buildUriMatcher(): UriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {

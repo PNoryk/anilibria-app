@@ -1,9 +1,12 @@
 package ru.radiationx.anilibria.presentation.search
 
-import io.reactivex.Single
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.ReleaseItemState
-import ru.radiationx.anilibria.model.loading.DataLoadingController
+import ru.radiationx.anilibria.model.loading.CoDataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
 import ru.radiationx.anilibria.model.loading.ScreenStateAction
 import ru.radiationx.anilibria.model.loading.StateController
@@ -14,18 +17,21 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
+import ru.radiationx.data.analytics.TimeCounter
+import ru.radiationx.data.datasource.holders.PreferencesHolder
+import ru.radiationx.data.entity.app.release.GenreItem
+import ru.radiationx.data.entity.app.release.SeasonItem
+import ru.radiationx.data.entity.app.release.YearItem
+import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.TimeCounter
 import tv.anilibria.module.data.analytics.features.CatalogAnalytics
 import tv.anilibria.module.data.analytics.features.CatalogFilterAnalytics
 import tv.anilibria.module.data.analytics.features.FastSearchAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
-import ru.radiationx.data.datasource.holders.PreferencesHolder
-import ru.radiationx.data.datasource.holders.ReleaseUpdateHolder
-import ru.radiationx.data.entity.app.release.ReleaseItem
-import ru.radiationx.data.entity.app.release.SeasonItem
-import ru.radiationx.data.repository.SearchRepository
-import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 @InjectViewState
@@ -33,7 +39,6 @@ class SearchPresenter @Inject constructor(
     private val searchRepository: SearchRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,
-    private val releaseUpdateHolder: ReleaseUpdateHolder,
     private val catalogAnalytics: CatalogAnalytics,
     private val catalogFilterAnalytics: CatalogFilterAnalytics,
     private val fastSearchAnalytics: FastSearchAnalytics,
@@ -48,15 +53,12 @@ class SearchPresenter @Inject constructor(
     private val remindText =
         "Если не удаётся найти нужный релиз, попробуйте искать через Google или Yandex c приставкой \"AniLibria\".\nПо ссылке в поисковике можно будет открыть приложение."
 
-    private val staticSeasons = listOf("зима", "весна", "лето", "осень")
-        .map { SeasonItem(it.capitalize(), it) }
-
     private val currentGenres = mutableListOf<String>()
     private val currentYears = mutableListOf<String>()
     private val currentSeasons = mutableListOf<String>()
     private var currentSorting = "1"
     private var currentComplete = false
-    private val currentItems = mutableListOf<ReleaseItem>()
+    private val currentItems = mutableListOf<Release>()
 
     private val beforeOpenDialogGenres = mutableListOf<String>()
     private val beforeOpenDialogYears = mutableListOf<String>()
@@ -64,94 +66,79 @@ class SearchPresenter @Inject constructor(
     private var beforeOpenDialogSorting = ""
     private var beforeComplete = false
 
-    private val loadingController = DataLoadingController {
+    private val loadingController = CoDataLoadingController(viewModelScope) {
         submitPageAnalytics(it.page)
         getDataSource(it)
-    }.addToDisposable()
+    }
     private val stateController = StateController(SearchScreenState())
 
-    private fun findRelease(id: Int): ReleaseItem? {
+    private fun findRelease(id: ReleaseId): Release? {
         return currentItems.find { it.id == id }
     }
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         observeScreenState()
+        loadSeasons()
         loadGenres()
         loadYears()
         observeGenres()
         observeYears()
         observeSearchRemind()
         updateInfo()
-        viewState.showSeasons(staticSeasons)
         onChangeSorting(currentSorting)
         onChangeComplete(currentComplete)
         observeLoadingState()
         loadingController.refresh()
-        releaseUpdateHolder
-            .observeEpisodes()
-            .subscribe { data ->
-                val itemsNeedUpdate = mutableListOf<ReleaseItem>()
-                currentItems.forEach { item ->
-                    data.firstOrNull { it.id == item.id }?.also { updItem ->
-                        val isNew =
-                            item.torrentUpdate > updItem.lastOpenTimestamp || item.torrentUpdate > updItem.timestamp
-                        if (item.isNew != isNew) {
-                            item.isNew = isNew
-                            itemsNeedUpdate.add(item)
-                        }
-                    }
-                }
-
-                val dataState = loadingController.currentState.data
-                val newItems = dataState?.map { itemState ->
-                    val releaseItem = itemsNeedUpdate.firstOrNull { it.id == itemState.id }
-                    releaseItem?.toState() ?: itemState
-                }
-                loadingController.modifyData(newItems)
-            }
-            .addToDisposable()
     }
 
-
-    private fun loadGenres() {
-        searchRepository
-            .getGenres()
-            .subscribe({ }) {
+    private fun loadSeasons() {
+        viewModelScope.launch {
+            runCatching {
+                val seasons = searchRepository.getSeasons().map {
+                    SeasonItem(it, it)
+                }
+                viewState.showSeasons(seasons)
+            }.onFailure {
                 errorHandler.handle(it)
             }
-            .addToDisposable()
+        }
+    }
+
+    private fun loadGenres() {
+        viewModelScope.launch {
+            runCatching {
+                searchRepository.getGenres()
+            }.onFailure {
+                errorHandler.handle(it)
+            }
+        }
     }
 
     private fun observeGenres() {
         searchRepository
             .observeGenres()
-            .subscribe({
-                viewState.showGenres(it)
-            }, {
-                errorHandler.handle(it)
-            })
-            .addToDisposable()
+            .onEach { viewState.showGenres(it.map { GenreItem(it, it) }) }
+            .catch { errorHandler.handle(it) }
+            .launchIn(viewModelScope)
     }
 
     private fun loadYears() {
-        searchRepository
-            .getYears()
-            .subscribe({ }) {
+        viewModelScope.launch {
+            runCatching {
+                searchRepository.getYears()
+            }.onFailure {
                 errorHandler.handle(it)
             }
-            .addToDisposable()
+        }
     }
 
     private fun observeYears() {
         searchRepository
             .observeYears()
-            .subscribe({
-                viewState.showYears(it)
-            }, {
-                errorHandler.handle(it)
-            })
-            .addToDisposable()
+            .onEach { viewState.showYears(it.map { YearItem(it, it) }) }
+            .catch { errorHandler.handle(it) }
+            .launchIn(viewModelScope)
     }
 
     private fun observeSearchRemind() {
@@ -171,12 +158,12 @@ class SearchPresenter @Inject constructor(
     private fun observeLoadingState() {
         loadingController
             .observeState()
-            .subscribe { loadingData ->
+            .onEach { loadingData ->
                 stateController.updateState {
                     it.copy(data = loadingData)
                 }
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
     }
 
     private fun observeScreenState() {
@@ -193,34 +180,38 @@ class SearchPresenter @Inject constructor(
         }
     }
 
-    private fun getDataSource(params: PageLoadParams): Single<ScreenStateAction.Data<List<ReleaseItemState>>> {
-        val genresQuery = currentGenres.joinToString(",")
-        val yearsQuery = currentYears.joinToString(",")
-        val seasonsQuery = currentSeasons.joinToString(",")
-        val completeStr = if (currentComplete) "2" else "1"
-        return searchRepository
-            .searchReleases(
-                genresQuery,
-                yearsQuery,
-                seasonsQuery,
-                currentSorting,
-                completeStr,
-                params.page
-            )
-            .map { paginated ->
-                if (params.isFirstPage) {
-                    currentItems.clear()
-                }
-                currentItems.addAll(paginated.data)
+    private suspend fun getDataSource(params: PageLoadParams): ScreenStateAction.Data<List<ReleaseItemState>> {
+        return try {
+            val sort = when (currentSorting) {
+                "2" -> SearchForm.Sort.RATING
+                "1" -> SearchForm.Sort.DATE
+                else -> SearchForm.Sort.RATING
+            }
 
-                val newItems = currentItems.map { it.toState() }
-                ScreenStateAction.Data(newItems, paginated.data.isNotEmpty())
-            }
-            .doOnError {
-                if (params.isFirstPage) {
-                    errorHandler.handle(it)
+            val form = SearchForm(
+                years = currentYears.toList(),
+                seasons = currentSeasons.toList(),
+                genres = currentGenres.toList(),
+                sort = sort,
+                currentComplete
+            )
+            searchRepository
+                .searchReleases(form, params.page)
+                .let { paginated ->
+                    if (params.isFirstPage) {
+                        currentItems.clear()
+                    }
+                    currentItems.addAll(paginated.items)
+
+                    val newItems = currentItems.map { it.toState() }
+                    ScreenStateAction.Data(newItems, paginated.items.isNotEmpty())
                 }
+        } catch (ex: Exception) {
+            if (params.isFirstPage) {
+                errorHandler.handle(ex)
             }
+            throw ex
+        }
     }
 
     fun refreshReleases() {
@@ -319,25 +310,25 @@ class SearchPresenter @Inject constructor(
     fun onItemClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
         catalogAnalytics.releaseClick()
-        releaseAnalytics.open(AnalyticsConstants.screen_catalog, releaseItem.id)
+        releaseAnalytics.open(AnalyticsConstants.screen_catalog, releaseItem.id.id)
         router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code, releaseItem))
     }
 
     fun onCopyClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.copyToClipBoard(releaseItem.link.orEmpty())
-        releaseAnalytics.copyLink(AnalyticsConstants.screen_catalog, releaseItem.id)
+        Utils.copyToClipBoard(releaseItem.link?.value.orEmpty())
+        releaseAnalytics.copyLink(AnalyticsConstants.screen_catalog, releaseItem.id.id)
     }
 
     fun onShareClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.shareText(releaseItem.link.orEmpty())
-        releaseAnalytics.share(AnalyticsConstants.screen_catalog, releaseItem.id)
+        Utils.shareText(releaseItem.link?.value.orEmpty())
+        releaseAnalytics.share(AnalyticsConstants.screen_catalog, releaseItem.id.id)
     }
 
     fun onShortcutClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
         ShortcutHelper.addShortcut(releaseItem)
-        releaseAnalytics.shortcut(AnalyticsConstants.screen_catalog, releaseItem.id)
+        releaseAnalytics.shortcut(AnalyticsConstants.screen_catalog, releaseItem.id.id)
     }
 }

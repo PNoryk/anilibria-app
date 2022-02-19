@@ -1,15 +1,14 @@
 package ru.radiationx.anilibria.screen.suggestions
 
-import io.reactivex.Single
 import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
-import ru.radiationx.data.entity.app.search.SearchForm
-import ru.radiationx.data.interactors.ReleaseInteractor
-import ru.radiationx.data.repository.SearchRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.repos.SearchRepository
+import tv.anilibria.module.domain.entity.SearchForm
 
 @InjectConstructor
 class SuggestionsRecommendsViewModel(
@@ -28,10 +27,10 @@ class SuggestionsRecommendsViewModel(
         onRefreshClick()
     }
 
-    override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = searchRepository
+    override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = searchRepository
         .searchReleases(SearchForm(sort = SearchForm.Sort.RATING), requestPage)
-        .doOnSuccess { releaseInteractor.updateItemsCache(it.data) }
-        .map { result -> result.data.map { converter.toCard(it) } }
+        .also { releaseInteractor.updateItemsCache(it.items) }
+        .let { result -> result.items.map { converter.toCard(it) } }
 
     override fun onLibriaCardClick(card: LibriaCard) {
         router.navigateTo(DetailsScreen(card.id))

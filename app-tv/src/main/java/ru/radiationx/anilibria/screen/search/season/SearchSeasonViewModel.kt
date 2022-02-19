@@ -1,11 +1,13 @@
 package ru.radiationx.anilibria.screen.search.season
 
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.search.BaseSearchValuesViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
 import ru.radiationx.data.entity.app.release.SeasonItem
-import ru.radiationx.data.repository.SearchRepository
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.SearchRepository
 
 @InjectConstructor
 class SearchSeasonViewModel(
@@ -18,9 +20,10 @@ class SearchSeasonViewModel(
 
     override fun onCreate() {
         super.onCreate()
-        searchRepository
-            .getSeasons()
-            .lifeSubscribe({
+        viewModelScope.launch {
+            runCatching {
+                searchRepository.getSeasons().map { SeasonItem(it, it) }
+            }.onSuccess {
                 currentSeasons.clear()
                 currentSeasons.addAll(it)
                 currentValues.clear()
@@ -28,11 +31,16 @@ class SearchSeasonViewModel(
                 valuesData.value = it.map { it.title }
                 updateChecked()
                 updateSelected()
-            }, {})
+            }
+        }
     }
 
     override fun applyValues() {
-        searchController.seasonsEvent.accept(currentSeasons.filterIndexed { index, item -> checkedValues.contains(item.value) })
+        searchController.seasonsEvent.accept(currentSeasons.filterIndexed { index, item ->
+            checkedValues.contains(
+                item.value
+            )
+        })
         guidedRouter.close()
     }
 }
