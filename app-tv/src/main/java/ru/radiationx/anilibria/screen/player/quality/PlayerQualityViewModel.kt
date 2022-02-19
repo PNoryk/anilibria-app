@@ -1,13 +1,13 @@
 package ru.radiationx.anilibria.screen.player.quality
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.data.datasource.holders.PreferencesHolder
-import ru.radiationx.data.interactors.ReleaseInteractor
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.domain.entity.release.EpisodeId
 
 @InjectConstructor
 class PlayerQualityViewModel(
@@ -21,8 +21,7 @@ class PlayerQualityViewModel(
         const val FULL_HD_ACTION_ID = PreferencesHolder.QUALITY_FULL_HD.toLong()
     }
 
-    var argReleaseId = -1
-    var argEpisodeId = -1
+    lateinit var argEpisodeId: EpisodeId
 
     val availableData = MutableLiveData<List<Long>>()
     val selectedData = MutableLiveData<Long>()
@@ -53,17 +52,18 @@ class PlayerQualityViewModel(
 
     private fun updateAvailable() {
         val available = mutableListOf(SD_ACTION_ID, HD_ACTION_ID, FULL_HD_ACTION_ID)
-        releaseInteractor.getFull(argReleaseId)?.episodes?.firstOrNull { it.id == argEpisodeId }?.also {
-            if (it.urlFullHd.isNullOrEmpty()) {
-                available.remove(FULL_HD_ACTION_ID)
+        releaseInteractor.getFull(argEpisodeId.releaseId)?.episodes?.firstOrNull { it.id == argEpisodeId }
+            ?.also {
+                if (it.urlFullHd?.value.isNullOrEmpty()) {
+                    available.remove(FULL_HD_ACTION_ID)
+                }
+                if (it.urlHd?.value.isNullOrEmpty()) {
+                    available.remove(HD_ACTION_ID)
+                }
+                if (it.urlSd?.value.isNullOrEmpty()) {
+                    available.remove(SD_ACTION_ID)
+                }
             }
-            if (it.urlHd.isNullOrEmpty()) {
-                available.remove(HD_ACTION_ID)
-            }
-            if (it.urlSd.isNullOrEmpty()) {
-                available.remove(SD_ACTION_ID)
-            }
-        }
         availableData.value = available
     }
 

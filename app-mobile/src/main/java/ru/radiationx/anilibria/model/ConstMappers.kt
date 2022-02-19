@@ -7,6 +7,7 @@ import ru.radiationx.data.entity.app.other.DataColor
 import ru.radiationx.data.entity.app.other.DataIcons
 
 @DrawableRes
+@Deprecated("old data")
 fun String.asDataIconRes(): Int? = when (this) {
     DataIcons.VK -> R.drawable.ic_logo_vk
     DataIcons.YOUTUBE,
@@ -26,6 +27,7 @@ fun String.asDataIconRes(): Int? = when (this) {
 }
 
 @ColorRes
+@Deprecated("old data")
 fun String.asDataColorRes(): Int? = when (this) {
     DataColor.VK -> R.color.brand_vk
     DataColor.YOUTUBE,

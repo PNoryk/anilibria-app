@@ -1,12 +1,17 @@
 package ru.radiationx.anilibria.screen.details
 
-import android.util.Log
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import ru.radiationx.anilibria.common.BaseRowsViewModel
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.interactors.ReleaseInteractor
 import ru.radiationx.data.repository.AuthRepository
-import ru.radiationx.data.repository.HistoryRepository
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.repos.HistoryRepository
+import tv.anilibria.module.domain.entity.release.ReleaseCode
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class DetailsViewModel(
@@ -22,16 +27,17 @@ class DetailsViewModel(
         const val RELATED_ROW_ID = 2L
         const val RECOMMENDS_ROW_ID = 3L
 
-        fun getReleasesFromDesc(description: String): List<String> {
-            return linkPattern.findAll(description).map { it.groupValues[1] }.toList()
+        fun getReleasesFromDesc(description: String): List<ReleaseCode> {
+            return linkPattern.findAll(description).map { ReleaseCode(it.groupValues[1]) }.toList()
         }
     }
 
-    var releaseId: Int = -1
+    var releaseId: ReleaseId? = null
 
     override val rowIds: List<Long> = listOf(RELEASE_ROW_ID, RELATED_ROW_ID, RECOMMENDS_ROW_ID)
 
-    override val availableRows: MutableSet<Long> = mutableSetOf(RELEASE_ROW_ID, RELATED_ROW_ID, RECOMMENDS_ROW_ID)
+    override val availableRows: MutableSet<Long> =
+        mutableSetOf(RELEASE_ROW_ID, RELATED_ROW_ID, RECOMMENDS_ROW_ID)
 
     override fun onCreate() {
         super.onCreate()
@@ -48,22 +54,22 @@ class DetailsViewModel(
             }
 
         (releaseInteractor.getFull(releaseId) ?: releaseInteractor.getItem(releaseId))?.also {
-            val releases = getReleasesFromDesc(it.description.orEmpty())
+            val releases = getReleasesFromDesc(it.description?.text.orEmpty())
             updateAvailableRow(RELATED_ROW_ID, releases.isNotEmpty())
         }
 
         releaseInteractor
             .observeFull(releaseId)
-            .map { getReleasesFromDesc(it.description.orEmpty()) }
-            .lifeSubscribe {
-                updateAvailableRow(RELATED_ROW_ID, it.isNotEmpty())
-            }
+            .map { getReleasesFromDesc(it.description?.text.orEmpty()) }
+            .onEach { updateAvailableRow(RELATED_ROW_ID, it.isNotEmpty()) }
+            .launchIn(viewModelScope)
     }
 
     private fun loadRelease() {
         releaseInteractor
             .loadRelease(releaseId)
-            .map { historyRepository.putRelease(it) }
-            .lifeSubscribe { }
+            .take(1)
+            .onEach { historyRepository.putRelease(it.id) }
+            .launchIn(viewModelScope)
     }
 }

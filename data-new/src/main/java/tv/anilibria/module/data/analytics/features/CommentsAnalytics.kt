@@ -12,7 +12,7 @@ class CommentsAnalytics(
     private val sender: AnalyticsSender
 ) {
 
-    fun open(from: String, releaseId: Int) {
+    fun open(from: String, releaseId: Long) {
         sender.send(
             AnalyticsConstants.comments_open,
             from.toNavFromParam(),

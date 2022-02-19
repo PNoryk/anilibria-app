@@ -22,69 +22,13 @@ class ReleaseRepository @Inject constructor(
     private val releaseUpdateHolder: ReleaseUpdateHolder
 ) {
 
-    fun getRandomRelease(): Single<RandomRelease> = releaseApi
-        .getRandomRelease()
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
     fun getRelease(releaseId: Int): Single<ReleaseFull> = releaseApi
         .getRelease(releaseId)
-        .doOnSuccess(this::fillReleaseUpdate)
         .subscribeOn(schedulers.io())
         .observeOn(schedulers.ui())
 
     fun getRelease(releaseIdName: String): Single<ReleaseFull> = releaseApi
         .getRelease(releaseIdName)
-        .doOnSuccess(this::fillReleaseUpdate)
         .subscribeOn(schedulers.io())
         .observeOn(schedulers.ui())
-
-    fun getReleasesById(ids: List<Int>): Single<List<ReleaseItem>> = releaseApi
-        .getReleasesByIds(ids)
-        .doOnSuccess { fillReleasesUpdate(it) }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    fun getReleases(page: Int): Single<Paginated<List<ReleaseItem>>> = releaseApi
-        .getReleases(page)
-        .doOnSuccess { fillReleasesUpdate(it.data) }
-        .subscribeOn(schedulers.io())
-        .observeOn(schedulers.ui())
-
-    private fun fillReleasesUpdate(items: List<ReleaseItem>) {
-        val newItems = mutableListOf<ReleaseItem>()
-        val updItems = mutableListOf<ReleaseUpdate>()
-        items.forEach { item ->
-            val updItem = releaseUpdateHolder.getRelease(item.id)
-            Log.e(
-                "lalalupdata",
-                "${item.id}, ${item.torrentUpdate} : ${updItem?.id}, ${updItem?.timestamp}, ${updItem?.lastOpenTimestamp}"
-            )
-            if (updItem == null) {
-                newItems.add(item)
-            } else {
-                item.isNew = item.torrentUpdate > updItem.lastOpenTimestamp || item.torrentUpdate > updItem.timestamp
-                /*if (item.torrentUpdate > updItem.timestamp) {
-                    updItem.timestamp = item.torrentUpdate
-                    updItems.add(updItem)
-                }*/
-            }
-        }
-        releaseUpdateHolder.putAllRelease(newItems)
-        releaseUpdateHolder.updAllRelease(updItems)
-    }
-
-    private fun fillReleaseUpdate(item: ReleaseItem) {
-        val updItem = releaseUpdateHolder.getRelease(item.id)
-
-        if (updItem == null) {
-            releaseUpdateHolder.putRelease(item)
-        } else {
-            item.isNew = item.torrentUpdate > updItem.lastOpenTimestamp
-            updItem.timestamp = item.torrentUpdate
-            updItem.lastOpenTimestamp = updItem.timestamp
-            Log.e("lalalupdata", "updRelease, ${updItem.id}, ${updItem.timestamp}, ${updItem.lastOpenTimestamp}")
-            releaseUpdateHolder.updRelease(updItem)
-        }
-    }
 }

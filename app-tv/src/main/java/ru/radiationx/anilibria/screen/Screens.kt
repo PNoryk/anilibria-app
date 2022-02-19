@@ -32,6 +32,8 @@ import ru.radiationx.anilibria.screen.update.UpdateFragment
 import ru.radiationx.anilibria.screen.update.source.UpdateSourceGuidedFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.module.domain.entity.release.EpisodeId
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 class ConfigScreen() : SupportAppScreen() {
     override fun getFragment(): Fragment {
@@ -147,37 +149,37 @@ class AuthOtpGuidedScreen : GuidedAppScreen() {
     }
 }
 
-class PlayerScreen(val releaseId: Int, val episodeId: Int = -1) : SupportAppScreen() {
+class PlayerScreen(val episodeId: EpisodeId) : SupportAppScreen() {
     override fun getFragment(): Fragment {
         return PlayerFragment.newInstance(releaseId, episodeId)
     }
 }
 
-class PlayerQualityGuidedScreen(val releaseId: Int = -1, val episodeId: Int = -1) : GuidedAppScreen() {
+class PlayerQualityGuidedScreen(val episodeId: EpisodeId) : GuidedAppScreen() {
     override fun getFragment(): FakeGuidedStepFragment? {
         return PlayerQualityGuidedFragment().putIds(releaseId, episodeId)
     }
 }
 
-class PlayerSpeedGuidedScreen(val releaseId: Int = -1, val episodeId: Int = -1) : GuidedAppScreen() {
+class PlayerSpeedGuidedScreen(val episodeId: EpisodeId) : GuidedAppScreen() {
     override fun getFragment(): FakeGuidedStepFragment? {
         return PlayerSpeedGuidedFragment().putIds(releaseId, episodeId)
     }
 }
 
-class PlayerEpisodesGuidedScreen(val releaseId: Int = -1, val episodeId: Int = -1) : GuidedAppScreen() {
+class PlayerEpisodesGuidedScreen(val episodeId: EpisodeId) : GuidedAppScreen() {
     override fun getFragment(): FakeGuidedStepFragment? {
         return PlayerEpisodesGuidedFragment().putIds(releaseId, episodeId)
     }
 }
 
-class PlayerEndEpisodeGuidedScreen(val releaseId: Int = -1, val episodeId: Int = -1) : GuidedAppScreen() {
+class PlayerEndEpisodeGuidedScreen(val episodeId: EpisodeId) : GuidedAppScreen() {
     override fun getFragment(): FakeGuidedStepFragment? {
         return EndEpisodeGuidedFragment().putIds(releaseId, episodeId)
     }
 }
 
-class PlayerEndSeasonGuidedScreen(val releaseId: Int = -1, val episodeId: Int = -1) : GuidedAppScreen() {
+class PlayerEndSeasonGuidedScreen(val episodeId: EpisodeId) : GuidedAppScreen() {
     override fun getFragment(): FakeGuidedStepFragment? {
         return EndSeasonGuidedFragment().putIds(releaseId, episodeId)
     }

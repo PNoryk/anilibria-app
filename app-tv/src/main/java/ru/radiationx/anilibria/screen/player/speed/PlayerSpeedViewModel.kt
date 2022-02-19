@@ -3,8 +3,8 @@ package ru.radiationx.anilibria.screen.player.speed
 import androidx.lifecycle.MutableLiveData
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
-import ru.radiationx.data.interactors.ReleaseInteractor
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.ReleaseInteractor
 
 @InjectConstructor
 class PlayerSpeedViewModel(

@@ -4,6 +4,7 @@ import tv.anilibria.module.data.local.ReleaseUpdateHelper
 import tv.anilibria.module.data.restapi.datasource.remote.api.FavoriteRemoteDataSource
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 class FavoriteRepository @Inject constructor(
@@ -17,13 +18,13 @@ class FavoriteRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteFavorite(releaseId: Int): Release {
+    suspend fun deleteFavorite(releaseId: ReleaseId): Release {
         return favoriteApi.deleteFavorite(releaseId).also {
             releaseUpdateHelper.update(listOf(it))
         }
     }
 
-    suspend fun addFavorite(releaseId: Int): Release {
+    suspend fun addFavorite(releaseId: ReleaseId): Release {
         return favoriteApi.addFavorite(releaseId).also {
             releaseUpdateHelper.update(listOf(it))
         }

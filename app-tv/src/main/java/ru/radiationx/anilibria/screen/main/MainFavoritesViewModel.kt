@@ -48,7 +48,6 @@ class MainFavoritesViewModel(
 
     override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = favoriteRepository
         .getFavorites(requestPage)
-        .doOnSuccess { releaseInteractor.updateItemsCache(it.data) }
         .map { favoriteItems ->
             favoriteItems.data.sortedByDescending { it.torrentUpdate }.map { converter.toCard(it) }
         }

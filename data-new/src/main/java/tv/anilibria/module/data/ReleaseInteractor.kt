@@ -33,7 +33,7 @@ class ReleaseInteractor @Inject constructor(
 
     suspend fun getRandomRelease(): RandomRelease = releaseRepository.getRandomRelease()
 
-    private suspend fun loadRelease(releaseId: ReleaseId): Flow<Release> = flow<Release> {
+    private fun loadRelease(releaseId: ReleaseId): Flow<Release> = flow<Release> {
         releaseRepository.getRelease(releaseId)
     }.onEach {
         updateFullCache(it)
@@ -43,7 +43,7 @@ class ReleaseInteractor @Inject constructor(
         fullLoadCacheById[releaseId] = it
     }
 
-    private suspend fun loadRelease(releaseCode: ReleaseCode): Flow<Release> = flow<Release> {
+    private fun loadRelease(releaseCode: ReleaseCode): Flow<Release> = flow<Release> {
         releaseRepository.getRelease(releaseCode)
     }.onEach {
         updateFullCache(it)
@@ -53,7 +53,7 @@ class ReleaseInteractor @Inject constructor(
         fullLoadCacheByCode[releaseCode] = it
     }
 
-    suspend fun loadRelease(
+    fun loadRelease(
         releaseId: ReleaseId? = null,
         releaseCode: ReleaseCode? = null
     ): Flow<Release> {

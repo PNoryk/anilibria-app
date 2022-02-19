@@ -1,6 +1,10 @@
 package ru.radiationx.anilibria.presentation.release.details
 
+import kotlinx.datetime.DayOfWeek
 import ru.radiationx.anilibria.model.DonationCardItemState
+import tv.anilibria.module.domain.entity.release.EpisodeId
+import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.module.domain.entity.release.TorrentId
 
 data class ReleaseDetailScreenState(
     val data: ReleaseDetailState? = null,
@@ -24,7 +28,7 @@ data class ReleaseDetailModifiersState(
 )
 
 data class ReleaseDetailState(
-    val id: Int,
+    val id: ReleaseId,
     val info: ReleaseInfoState,
     val episodesControl: ReleaseEpisodesControlState?,
     val episodesTabs: List<EpisodesTabState>,
@@ -37,10 +41,10 @@ data class ReleaseInfoState(
     val titleEng: String,
     val description: String,
     val info: String,
-    val days: List<Int>,
+    val day: DayOfWeek?,
     val isOngoing: Boolean,
     val announce: String?,
-    val favorite: ReleaseFavoriteState
+    val favorite: ReleaseFavoriteState?
 )
 
 data class ReleaseFavoriteState(
@@ -49,8 +53,7 @@ data class ReleaseFavoriteState(
 )
 
 data class ReleaseEpisodeItemState(
-    val id: Int,
-    val releaseId: Int,
+    val id: EpisodeId,
     val title: String,
     val subtitle: String?,
     val isViewed: Boolean,
@@ -70,7 +73,7 @@ enum class ReleaseEpisodeItemType {
 }
 
 data class ReleaseTorrentItemState(
-    val id: Int,
+    val id: TorrentId,
     val title: String,
     val subtitle: String,
     val size: String,

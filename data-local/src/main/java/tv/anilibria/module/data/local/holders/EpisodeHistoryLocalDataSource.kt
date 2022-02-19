@@ -51,6 +51,14 @@ class EpisodeHistoryLocalDataSource(
         }
     }
 
+    suspend fun put(data: List<EpisodeVisit>) = observableData.update { currentData ->
+        currentData?.toMutableList()?.apply {
+            val newIds = data.map { it.id }
+            removeAll { newIds.contains(it.id) }
+            addAll(data)
+        }
+    }
+
     suspend fun remove(episodeId: EpisodeId) = observableData.update { currentData ->
         currentData?.filter { it.id == episodeId }
     }

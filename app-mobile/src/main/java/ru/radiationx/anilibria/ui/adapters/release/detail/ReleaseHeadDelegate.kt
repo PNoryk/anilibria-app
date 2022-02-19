@@ -69,7 +69,7 @@ class ReleaseHeadDelegate(
             }
             full_info.text = Html.fromHtml(state.info)
 
-            full_days_bar.selectDays(state.days)
+            full_days_bar.selectDays(state.day)
             full_days_bar.isVisible = state.isOngoing
             full_days_divider.isVisible = state.isOngoing || state.announce != null
 

@@ -40,4 +40,7 @@ data class Release(
 
     // todo create link
     val link: AbsoluteUrl? = TODO()
+
+    val titleRus: HtmlText? = names?.getOrNull(0)
+    val titleEng: HtmlText? = names?.getOrNull(1)
 }

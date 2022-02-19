@@ -1,49 +1,54 @@
 package ru.radiationx.anilibria.screen.player.episodes
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.player.PlayerController
-import ru.radiationx.data.datasource.holders.PreferencesHolder
-import ru.radiationx.data.entity.app.release.ReleaseFull
-import ru.radiationx.data.interactors.ReleaseInteractor
 import ru.radiationx.shared.ktx.asTimeSecString
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.repos.EpisodeHistoryRepository
+import tv.anilibria.module.domain.entity.release.Episode
+import tv.anilibria.module.domain.entity.release.EpisodeId
 import java.util.*
 
 @InjectConstructor
 class PlayerEpisodesViewModel(
     private val releaseInteractor: ReleaseInteractor,
+    private val episodeHistoryRepository: EpisodeHistoryRepository,
     private val guidedRouter: GuidedRouter,
     private val playerController: PlayerController
 ) : LifecycleViewModel() {
 
-    var argReleaseId = -1
-    var argEpisodeId = -1
+    lateinit var argEpisodeId: EpisodeId
 
     val episodesData = MutableLiveData<List<Pair<String, String?>>>()
     val selectedIndex = MutableLiveData<Int>()
 
-    private val currentEpisodes = mutableListOf<ReleaseFull.Episode>()
+    private val currentEpisodes = mutableListOf<Episode>()
 
     override fun onCreate() {
         super.onCreate()
 
-        releaseInteractor.getFull(argReleaseId)?.also {
-            currentEpisodes.clear()
-            currentEpisodes.addAll(it.episodes.reversed())
-        }
-        episodesData.value = currentEpisodes.map {
-            val description = if (it.isViewed && it.seek > 0) {
-                "Остановлена на ${Date(it.seek).asTimeSecString()}"
-            } else {
-                null
+        viewModelScope.launch {
+            releaseInteractor.getFull(argEpisodeId.releaseId)?.also {
+                currentEpisodes.clear()
+                currentEpisodes.addAll(it.episodes?.reversed().orEmpty())
             }
-            Pair(it.title.orEmpty(), description)
+            val visits = episodeHistoryRepository.getByRelease(argEpisodeId.releaseId)
+            episodesData.value = currentEpisodes.map { episode ->
+                val visit = visits.find { it.id == episode.id }
+                val description = if (visit?.isViewed == true && visit.playerSeek ?: 0 > 0) {
+                    "Остановлена на ${Date(visit.playerSeek ?: 0).asTimeSecString()}"
+                } else {
+                    null
+                }
+                Pair(episode.title.orEmpty(), description)
+            }
+            selectedIndex.value = currentEpisodes.indexOfLast { it.id == argEpisodeId }
         }
-        selectedIndex.value = currentEpisodes.indexOfLast { it.id == argEpisodeId }
     }
 
     fun applyEpisode(index: Int) {

@@ -47,9 +47,6 @@ class MainFeedViewModel(
 
     override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = feedRepository
         .getFeed(requestPage)
-        .doOnSuccess {
-            releaseInteractor.updateItemsCache(it.filter { it.release != null }.map { it.release!! })
-        }
         .map { feedList -> feedList.map { converter.toCard(it) } }
 
     override fun onLibriaCardClick(card: LibriaCard) {

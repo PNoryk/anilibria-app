@@ -65,35 +65,35 @@ class ReleaseAnalytics(
         sender.send(AnalyticsConstants.release_history_reset_episode)
     }
 
-    fun episodesTopStartClick(releaseId: Int) {
+    fun episodesTopStartClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_episodes_top_start,
             releaseId.toIdParam()
         )
     }
 
-    fun episodesTopContinueClick(releaseId: Int) {
+    fun episodesTopContinueClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_episodes_top_continue,
             releaseId.toIdParam()
         )
     }
 
-    fun episodesStartClick(releaseId: Int) {
+    fun episodesStartClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_episodes_start,
             releaseId.toIdParam()
         )
     }
 
-    fun episodesContinueClick(releaseId: Int) {
+    fun episodesContinueClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_episodes_continue,
             releaseId.toIdParam()
         )
     }
 
-    fun episodePlayClick(quality: AnalyticsQuality, releaseId: Int) {
+    fun episodePlayClick(quality: AnalyticsQuality, releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_episode_play,
             quality.toQualityParam(),
@@ -101,7 +101,7 @@ class ReleaseAnalytics(
         )
     }
 
-    fun episodeExternalClick(releaseId: Int, externalTag: String) {
+    fun episodeExternalClick(releaseId: Long, externalTag: String) {
         sender.send(
             AnalyticsConstants.release_episode_external,
             releaseId.toIdParam(),
@@ -109,7 +109,7 @@ class ReleaseAnalytics(
         )
     }
 
-    fun episodeDownloadClick(quality: AnalyticsQuality, releaseId: Int) {
+    fun episodeDownloadClick(quality: AnalyticsQuality, releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_episode_download,
             quality.toQualityParam(),
@@ -117,21 +117,21 @@ class ReleaseAnalytics(
         )
     }
 
-    fun episodeDownloadByUrl(releaseId: Int) {
+    fun episodeDownloadByUrl(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_episode_download_url,
             releaseId.toIdParam()
         )
     }
 
-    fun webPlayerClick(releaseId: Int) {
+    fun webPlayerClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_web_player,
             releaseId.toIdParam()
         )
     }
 
-    fun torrentClick(isHevc: Boolean, releaseId: Int) {
+    fun torrentClick(isHevc: Boolean, releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_torrent,
             isHevc.toParam(PARAM_HEVC),
@@ -139,63 +139,63 @@ class ReleaseAnalytics(
         )
     }
 
-    fun donateClick(releaseId: Int) {
+    fun donateClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_donate,
             releaseId.toIdParam()
         )
     }
 
-    fun descriptionExpand(releaseId: Int) {
+    fun descriptionExpand(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_description_expand,
             releaseId.toIdParam()
         )
     }
 
-    fun descriptionLinkClick(releaseId: Int) {
+    fun descriptionLinkClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_description_link,
             releaseId.toIdParam()
         )
     }
 
-    fun scheduleClick(releaseId: Int) {
+    fun scheduleClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_schedule_click,
             releaseId.toIdParam()
         )
     }
 
-    fun genreClick(releaseId: Int) {
+    fun genreClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_genre_click,
             releaseId.toIdParam()
         )
     }
 
-    fun favoriteAdd(releaseId: Int) {
+    fun favoriteAdd(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_favorite_add,
             releaseId.toIdParam()
         )
     }
 
-    fun favoriteRemove(releaseId: Int) {
+    fun favoriteRemove(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_favorite_remove,
             releaseId.toIdParam()
         )
     }
 
-    fun commentsClick(releaseId: Int) {
+    fun commentsClick(releaseId: Long) {
         sender.send(
             AnalyticsConstants.release_comments_click,
             releaseId.toIdParam()
         )
     }
 
-    fun episodesTabClick(releaseId: Int, tabTag: String) {
+    fun episodesTabClick(releaseId: Long, tabTag: String) {
         sender.send(
             AnalyticsConstants.release_episodes_tab_click,
             releaseId.toIdParam(),

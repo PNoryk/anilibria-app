@@ -2,32 +2,43 @@ package ru.radiationx.anilibria.screen.player
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.*
 import ru.radiationx.data.datasource.holders.PreferencesHolder
-import ru.radiationx.data.entity.app.release.ReleaseFull
-import ru.radiationx.data.interactors.ReleaseInteractor
 import toothpick.InjectConstructor
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.repos.EpisodeHistoryRepository
+import tv.anilibria.module.domain.entity.EpisodeVisit
+import tv.anilibria.module.domain.entity.release.Episode
+import tv.anilibria.module.domain.entity.release.EpisodeId
+import tv.anilibria.module.domain.entity.release.Release
 
 @InjectConstructor
 class PlayerViewModel(
     private val releaseInteractor: ReleaseInteractor,
+    private val episodeHistoryRepository: EpisodeHistoryRepository,
     private val guidedRouter: GuidedRouter,
     private val playerController: PlayerController
 ) : LifecycleViewModel() {
 
-    var argReleaseId = -1
-    var argEpisodeId = -1
+    lateinit var argEpisodeId: EpisodeId
 
     val videoData = MutableLiveData<Video>()
     val qualityState = MutableLiveData<Int>()
     val speedState = MutableLiveData<Float>()
     val playAction = MutableLiveData<Boolean>()
 
-    private var currentEpisodes = mutableListOf<ReleaseFull.Episode>()
-    private var currentRelease: ReleaseFull? = null
-    private var currentEpisode: ReleaseFull.Episode? = null
+    private var playerInfo: PlayerInfo? = null
+
+    private var currentEpisode: Episode? = null
     private var currentQuality: Int? = null
     private var currentComplete: Boolean? = null
 
@@ -41,8 +52,9 @@ class PlayerViewModel(
             .selectEpisodeRelay
             .observeOn(AndroidSchedulers.mainThread())
             .lifeSubscribe { episodeId ->
-                currentEpisodes
-                    .firstOrNull { it.id == episodeId }
+                playerInfo
+                    ?.episodes
+                    ?.firstOrNull { it.id == episodeId }
                     ?.also { playEpisode(it, true) }
             }
 
@@ -65,15 +77,27 @@ class PlayerViewModel(
             }
 
         releaseInteractor
-            .observeFull(argReleaseId)
-            .lifeSubscribe { release ->
-                currentRelease = release
-                currentEpisodes.clear()
-                currentEpisodes.addAll(release.episodes.reversed())
+            .observeFull(argEpisodeId.releaseId)
+            .flatMapLatest { release ->
+                episodeHistoryRepository
+                    .observeByRelease(argEpisodeId.releaseId)
+                    .map { visits ->
+                        PlayerInfo(
+                            release,
+                            release.episodes?.reversed().orEmpty(),
+                            visits
+                        )
+                    }
+            }
+            .onEach { playerInfo ->
+                this.playerInfo = playerInfo
                 val episodeId = currentEpisode?.id ?: argEpisodeId
-                val episode = currentEpisodes.firstOrNull { it.id == episodeId } ?: currentEpisodes.firstOrNull()
+                val episode = playerInfo.episodes
+                    .find { it.id == episodeId }
+                    ?: playerInfo.episodes.firstOrNull()
                 episode?.also { playEpisode(it) }
             }
+            .launchIn(viewModelScope)
     }
 
     fun onPlayClick(position: Long) {
@@ -103,28 +127,24 @@ class PlayerViewModel(
     }
 
     fun onEpisodesClick(position: Long) {
-        val release = currentRelease ?: return
         val episode = currentEpisode ?: return
         saveEpisode(position)
-        guidedRouter.open(PlayerEpisodesGuidedScreen(release.id, episode.id))
+        guidedRouter.open(PlayerEpisodesGuidedScreen(episode.id))
     }
 
 
     fun onQualityClick(position: Long) {
-        val release = currentRelease ?: return
         val episode = currentEpisode ?: return
         saveEpisode(position)
-        guidedRouter.open(PlayerQualityGuidedScreen(release.id, episode.id))
+        guidedRouter.open(PlayerQualityGuidedScreen(episode.id))
     }
 
     fun onSpeedClick(position: Long) {
-        val release = currentRelease ?: return
         val episode = currentEpisode ?: return
-        guidedRouter.open(PlayerSpeedGuidedScreen(release.id, episode.id))
+        guidedRouter.open(PlayerSpeedGuidedScreen(episode.id))
     }
 
     fun onComplete(position: Long) {
-        val release = currentRelease ?: return
         val episode = currentEpisode ?: return
         if (currentComplete == true) return
         currentComplete = true
@@ -134,51 +154,51 @@ class PlayerViewModel(
         if (nextEpisode != null) {
             playEpisode(nextEpisode)
         } else {
-            guidedRouter.open(PlayerEndSeasonGuidedScreen(release.id, episode.id))
+            guidedRouter.open(PlayerEndSeasonGuidedScreen(episode.id))
         }
         Log.e("kokoko", "onComplete $position")
     }
 
     fun onPrepare(position: Long, duration: Long) {
-        val release = currentRelease ?: return
         val episode = currentEpisode ?: return
-        val complete = episode.seek >= duration
+        val info = playerInfo ?: return
+        val visit = info.episodeVisits.find { it.id == episode.id }
+        val complete = visit?.playerSeek ?: 0 >= duration
         if (currentComplete == complete) return
         currentComplete = complete
         if (complete) {
             playAction.value = false
             val nextEpisode = getNextEpisode()
             if (nextEpisode == null) {
-                guidedRouter.open(PlayerEndSeasonGuidedScreen(release.id, episode.id))
+                guidedRouter.open(PlayerEndSeasonGuidedScreen(episode.id))
             } else {
-                guidedRouter.open(PlayerEndEpisodeGuidedScreen(release.id, episode.id))
+                guidedRouter.open(PlayerEndEpisodeGuidedScreen(episode.id))
             }
         } else {
             playAction.value = true
         }
-
-        Log.e("kokoko", "onPrepare $position:${episode.seek}, $duration")
     }
 
-    private fun getNextEpisode(): ReleaseFull.Episode? = currentEpisodes.getOrNull(getCurrentEpisodeIndex() + 1)
+    private fun getNextEpisode(): Episode? =
+        playerInfo?.episodes?.getOrNull(getCurrentEpisodeIndex() + 1)
 
-    private fun getPrevEpisode(): ReleaseFull.Episode? = currentEpisodes.getOrNull(getCurrentEpisodeIndex() - 1)
+    private fun getPrevEpisode(): Episode? =
+        playerInfo?.episodes?.getOrNull(getCurrentEpisodeIndex() - 1)
 
-    private fun getCurrentEpisodeIndex(): Int = currentEpisodes.indexOfFirst { it.id == currentEpisode?.id }
+    private fun getCurrentEpisodeIndex(): Int =
+        playerInfo?.episodes?.indexOfFirst { it.id == currentEpisode?.id } ?: -1
 
     private fun saveEpisode(position: Long) {
         val episode = currentEpisode ?: return
         if (position < 0) {
             return
         }
-        releaseInteractor.putEpisode(episode.apply {
-            seek = position
-            lastAccess = System.currentTimeMillis()
-            isViewed = true
-        })
+        viewModelScope.launch {
+            episodeHistoryRepository.saveSeek(episode.id, position)
+        }
     }
 
-    private fun playEpisode(episode: ReleaseFull.Episode, force: Boolean = false) {
+    private fun playEpisode(episode: Episode, force: Boolean = false) {
         currentEpisode = episode
         currentComplete = null
         updateQuality()
@@ -191,13 +211,14 @@ class PlayerViewModel(
     }
 
     private fun updateEpisode(force: Boolean = false) {
-        val release = currentRelease ?: return
+        val info = playerInfo ?: return
         val episode = currentEpisode ?: return
         val quality = currentQuality ?: return
 
         val newVideo = episode.let {
+            val seek = info.episodeVisits.find { it.id == episode.id }?.playerSeek ?: 0
             val url = getEpisodeUrl(it, quality)
-            Video(url!!, episode.seek, release.title.orEmpty(), it.title.orEmpty())
+            Video(url?.value!!, seek, info.release.titleRus?.text.orEmpty(), it.title.orEmpty())
         }
         if (force || videoData.value?.url != newVideo.url) {
             videoData.value = newVideo
@@ -210,26 +231,33 @@ class PlayerViewModel(
         else -> quality
     }
 
-    private fun getEpisodeQuality(episode: ReleaseFull.Episode, quality: Int): Int {
+    private fun getEpisodeQuality(episode: Episode, quality: Int): Int {
         var newQuality = quality
 
-        if (newQuality == PreferencesHolder.QUALITY_FULL_HD && episode.urlFullHd.isNullOrEmpty()) {
+        if (newQuality == PreferencesHolder.QUALITY_FULL_HD && episode.urlFullHd == null) {
             newQuality = PreferencesHolder.QUALITY_HD
         }
-        if (newQuality == PreferencesHolder.QUALITY_HD && episode.urlHd.isNullOrEmpty()) {
+        if (newQuality == PreferencesHolder.QUALITY_HD && episode.urlHd == null) {
             newQuality = PreferencesHolder.QUALITY_SD
         }
-        if (newQuality == PreferencesHolder.QUALITY_SD && episode.urlSd.isNullOrEmpty()) {
+        if (newQuality == PreferencesHolder.QUALITY_SD && episode.urlSd == null) {
             newQuality = -1
         }
 
         return newQuality
     }
 
-    private fun getEpisodeUrl(episode: ReleaseFull.Episode, quality: Int): String? = when (getEpisodeQuality(episode, quality)) {
-        PreferencesHolder.QUALITY_FULL_HD -> episode.urlFullHd
-        PreferencesHolder.QUALITY_HD -> episode.urlHd
-        PreferencesHolder.QUALITY_SD -> episode.urlSd
-        else -> null
-    }
+    private fun getEpisodeUrl(episode: Episode, quality: Int): AbsoluteUrl? =
+        when (getEpisodeQuality(episode, quality)) {
+            PreferencesHolder.QUALITY_FULL_HD -> episode.urlFullHd
+            PreferencesHolder.QUALITY_HD -> episode.urlHd
+            PreferencesHolder.QUALITY_SD -> episode.urlSd
+            else -> null
+        }
+
+    private data class PlayerInfo(
+        val release: Release,
+        val episodes: List<Episode>,
+        val episodeVisits: List<EpisodeVisit>
+    )
 }

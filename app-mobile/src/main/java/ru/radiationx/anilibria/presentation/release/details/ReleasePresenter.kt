@@ -1,18 +1,23 @@
 package ru.radiationx.anilibria.presentation.release.details
 
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.release.details.ReleasePagerState
+import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
-import ru.radiationx.data.entity.app.release.ReleaseFull
-import ru.radiationx.data.entity.app.release.ReleaseItem
-import ru.radiationx.data.interactors.ReleaseInteractor
-import ru.radiationx.data.repository.HistoryRepository
-import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.repos.HistoryRepository
+import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.ReleaseCode
+import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 /* Created by radiationx on 18.11.17. */
@@ -26,10 +31,10 @@ class ReleasePresenter @Inject constructor(
     private val releaseAnalytics: ReleaseAnalytics
 ) : BasePresenter<ReleaseView>(router) {
 
-    private var currentData: ReleaseItem? = null
-    var releaseId = -1
-    var releaseIdCode: String? = null
-    var argReleaseItem: ReleaseItem? = null
+    private var currentData: Release? = null
+    var releaseId: ReleaseId? = null
+    var releaseIdCode: ReleaseCode? = null
+    var argReleaseItem: Release? = null
 
     private val stateController = StateController(ReleasePagerState())
 
@@ -40,7 +45,7 @@ class ReleasePresenter @Inject constructor(
             updateLocalRelease(it)
         }
         releaseInteractor.getItem(releaseId, releaseIdCode)?.also {
-            updateLocalRelease(ReleaseFull(it))
+            updateLocalRelease(it)
         }
         observeRelease()
         loadRelease()
@@ -54,39 +59,41 @@ class ReleasePresenter @Inject constructor(
     private fun loadRelease() {
         releaseInteractor
             .loadRelease(releaseId, releaseIdCode)
-            .doOnSubscribe { viewState.setRefreshing(true) }
-            .subscribe({
+            .take(1)
+            .onEach {
                 viewState.setRefreshing(false)
-                historyRepository.putRelease(it as ReleaseItem)
-            }, {
+                historyRepository.putRelease(it.id)
+            }
+            .catch {
                 viewState.setRefreshing(false)
                 errorHandler.handle(it)
-            })
-            .addToDisposable()
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun observeRelease() {
         releaseInteractor
             .observeFull(releaseId, releaseIdCode)
-            .subscribe({ release ->
+            .onEach { release ->
                 updateLocalRelease(release)
-                historyRepository.putRelease(release as ReleaseItem)
-            }) {
+                historyRepository.putRelease(release.id)
+            }
+            .catch {
                 errorHandler.handle(it)
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
     }
 
-    private fun updateLocalRelease(release: ReleaseItem) {
+    private fun updateLocalRelease(release: Release) {
         currentData = release
         releaseId = release.id
         releaseIdCode = release.code
 
         stateController.updateState {
             it.copy(
-                poster = currentData?.poster,
+                poster = currentData?.poster?.url,
                 title = currentData?.let {
-                    String.format("%s / %s", release.title, release.titleEng)
+                    String.format("%s / %s", release.titleRus?.text, release.titleEng?.text)
                 }
             )
         }
@@ -94,32 +101,32 @@ class ReleasePresenter @Inject constructor(
 
     fun onShareClick() {
         currentData?.let {
-            releaseAnalytics.share(AnalyticsConstants.screen_release, it.id)
+            releaseAnalytics.share(AnalyticsConstants.screen_release, it.id.id)
         }
         currentData?.link?.let {
-            viewState.shareRelease(it)
+            viewState.shareRelease(it.value)
         }
     }
 
     fun onCopyLinkClick() {
         currentData?.let {
-            releaseAnalytics.copyLink(AnalyticsConstants.screen_release, it.id)
+            releaseAnalytics.copyLink(AnalyticsConstants.screen_release, it.id.id)
         }
         currentData?.link?.let {
-            viewState.copyLink(it)
+            viewState.copyLink(it.value)
         }
     }
 
     fun onShortcutAddClick() {
         currentData?.let {
-            releaseAnalytics.shortcut(AnalyticsConstants.screen_release, it.id)
+            releaseAnalytics.shortcut(AnalyticsConstants.screen_release, it.id.id)
             viewState.addShortCut(it)
         }
     }
 
     fun onCommentsSwipe() {
         currentData?.also {
-            commentsAnalytics.open(AnalyticsConstants.screen_release, it.id)
+            commentsAnalytics.open(AnalyticsConstants.screen_release, it.id.id)
         }
     }
 

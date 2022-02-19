@@ -4,43 +4,44 @@ import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import ru.radiationx.data.entity.app.release.ReleaseFull
-import ru.radiationx.data.entity.app.release.SourceEpisode
-import ru.radiationx.data.entity.app.release.TorrentItem
+import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.domain.entity.release.Episode
+import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.Torrent
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface ReleaseInfoView : MvpView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun showState(state:ReleaseDetailScreenState)
+    fun showState(state: ReleaseDetailScreenState)
 
     @StateStrategyType(SkipStrategy::class)
-    fun loadTorrent(torrent: TorrentItem)
+    fun loadTorrent(torrent: Torrent)
 
     @StateStrategyType(SkipStrategy::class)
-    fun showTorrentDialog(torrents: List<TorrentItem>)
+    fun showTorrentDialog(torrents: List<Torrent>)
 
     @StateStrategyType(SkipStrategy::class)
-    fun playEpisodes(release: ReleaseFull)
+    fun playEpisodes(release: Release)
 
     @StateStrategyType(SkipStrategy::class)
-    fun playContinue(release: ReleaseFull, startWith: ReleaseFull.Episode)
+    fun playContinue(release: Release, startWith: Episode)
 
     @StateStrategyType(SkipStrategy::class)
     fun playWeb(link: String, code: String)
 
     @StateStrategyType(SkipStrategy::class)
     fun playEpisode(
-        release: ReleaseFull,
-        episode: ReleaseFull.Episode,
+        release: Release,
+        episode: Episode,
         playFlag: Int? = null,
-        quality: Int? = null
+        quality: PlayerQuality? = null
     )
 
     @StateStrategyType(SkipStrategy::class)
     fun downloadEpisode(
-        episode: SourceEpisode,
-        quality: Int? = null
+        episode: Episode,
+        quality: PlayerQuality? = null
     )
 
     @StateStrategyType(SkipStrategy::class)
@@ -56,5 +57,5 @@ interface ReleaseInfoView : MvpView {
     fun showEpisodesMenuDialog()
 
     @StateStrategyType(SkipStrategy::class)
-    fun showLongPressEpisodeDialog(episode: ReleaseFull.Episode)
+    fun showLongPressEpisodeDialog(episode: Episode)
 }

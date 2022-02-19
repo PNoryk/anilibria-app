@@ -49,9 +49,6 @@ class WatchingFavoritesViewModel(
 
     override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = favoriteRepository
         .getFavorites(requestPage)
-        .doOnSuccess {
-            releaseInteractor.updateItemsCache(it.data)
-        }
         .map { favoriteItems ->
             favoriteItems.data.map { converter.toCard(it) }
         }
