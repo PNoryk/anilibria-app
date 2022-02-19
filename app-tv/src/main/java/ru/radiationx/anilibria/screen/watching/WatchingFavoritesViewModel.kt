@@ -1,22 +1,18 @@
 package ru.radiationx.anilibria.screen.watching
 
-import io.reactivex.Single
 import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.interactors.ReleaseInteractor
 import ru.radiationx.data.repository.AuthRepository
-import ru.radiationx.data.repository.FavoriteRepository
-import ru.radiationx.data.repository.ReleaseRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.FavoriteRepository
 
 @InjectConstructor
 class WatchingFavoritesViewModel(
     private val favoriteRepository: FavoriteRepository,
-    private val releaseInteractor: ReleaseInteractor,
     private val authRepository: AuthRepository,
     private val converter: CardsDataConverter,
     private val router: Router
@@ -47,10 +43,10 @@ class WatchingFavoritesViewModel(
             }
     }
 
-    override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = favoriteRepository
+    override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = favoriteRepository
         .getFavorites(requestPage)
-        .map { favoriteItems ->
-            favoriteItems.data.map { converter.toCard(it) }
+        .let { favoriteItems ->
+            favoriteItems.items.map { converter.toCard(it) }
         }
 
     override fun onLibriaCardClick(card: LibriaCard) {

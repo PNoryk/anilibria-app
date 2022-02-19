@@ -6,15 +6,13 @@ import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.interactors.ReleaseInteractor
 import ru.radiationx.data.repository.AuthRepository
-import ru.radiationx.data.repository.FavoriteRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.FavoriteRepository
 
 @InjectConstructor
 class MainFavoritesViewModel(
-    private val releaseInteractor: ReleaseInteractor,
     private val favoriteRepository: FavoriteRepository,
     private val authRepository: AuthRepository,
     private val converter: CardsDataConverter,
@@ -46,10 +44,10 @@ class MainFavoritesViewModel(
             }
     }
 
-    override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = favoriteRepository
+    override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = favoriteRepository
         .getFavorites(requestPage)
-        .map { favoriteItems ->
-            favoriteItems.data.sortedByDescending { it.torrentUpdate }.map { converter.toCard(it) }
+        .let { favoriteItems ->
+            favoriteItems.items.sortedByDescending { it.torrentUpdate }.map { converter.toCard(it) }
         }
 
     override fun onLibriaCardClick(card: LibriaCard) {

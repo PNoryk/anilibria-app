@@ -1,9 +1,11 @@
 package ru.radiationx.anilibria.presentation.favorites
 
-import io.reactivex.Single
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.ReleaseItemState
-import ru.radiationx.anilibria.model.loading.DataLoadingController
+import ru.radiationx.anilibria.model.loading.CoDataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
 import ru.radiationx.anilibria.model.loading.ScreenStateAction
 import ru.radiationx.anilibria.model.loading.StateController
@@ -14,12 +16,13 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.favorites.FavoritesScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
+import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.FavoritesAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
-import ru.radiationx.data.entity.app.release.ReleaseItem
-import ru.radiationx.data.repository.FavoriteRepository
-import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.repos.FavoriteRepository
+import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 /**
@@ -34,10 +37,10 @@ class FavoritesPresenter @Inject constructor(
     private val releaseAnalytics: ReleaseAnalytics
 ) : BasePresenter<FavoritesView>(router) {
 
-    private val loadingController = DataLoadingController {
+    private val loadingController = CoDataLoadingController(viewModelScope) {
         submitPageAnalytics(it.page)
         getDataSource(it)
-    }.addToDisposable()
+    }
 
     private val stateController = StateController(FavoritesScreenState())
 
@@ -45,7 +48,7 @@ class FavoritesPresenter @Inject constructor(
     private var isSearchEnabled: Boolean = false
     private var currentQuery: String = ""
 
-    private val currentReleases = mutableListOf<ReleaseItem>()
+    private val currentReleases = mutableListOf<Release>()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -56,13 +59,13 @@ class FavoritesPresenter @Inject constructor(
 
         loadingController
             .observeState()
-            .subscribe { loadingData ->
+            .onEach { loadingData ->
                 stateController.updateState {
                     it.copy(data = loadingData)
                 }
                 updateSearchState()
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
 
         refreshReleases()
     }
@@ -75,19 +78,16 @@ class FavoritesPresenter @Inject constructor(
         loadingController.loadMore()
     }
 
-    fun deleteFav(id: Int) {
-        favoritesAnalytics.deleteFav()
-        stateController.updateState {
-            it.copy(deletingItemIds = it.deletingItemIds + id)
-        }
-        favoriteRepository
-            .deleteFavorite(id)
-            .doFinally {
-                stateController.updateState {
-                    it.copy(deletingItemIds = it.deletingItemIds - id)
-                }
+    fun deleteFav(id: ReleaseId) {
+        viewModelScope.launch {
+            favoritesAnalytics.deleteFav()
+            stateController.updateState {
+                it.copy(deletingItemIds = it.deletingItemIds + id)
             }
-            .subscribe({ deletedItem ->
+
+            runCatching {
+                favoriteRepository.deleteFavorite(id)
+            }.onSuccess { deletedItem ->
                 loadingController.currentState.data?.also { dataState ->
                     val newItems = dataState.toMutableList()
                     newItems.find { it.id == deletedItem.id }?.also {
@@ -95,28 +95,32 @@ class FavoritesPresenter @Inject constructor(
                     }
                     loadingController.modifyData(newItems)
                 }
-            }) { throwable ->
-                errorHandler.handle(throwable)
+            }.onFailure {
+                errorHandler.handle(it)
             }
-            .addToDisposable()
+
+            stateController.updateState {
+                it.copy(deletingItemIds = it.deletingItemIds - id)
+            }
+        }
     }
 
     fun onCopyClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.copyToClipBoard(releaseItem.link.orEmpty())
-        releaseAnalytics.copyLink(AnalyticsConstants.screen_favorites, releaseItem.id)
+        Utils.copyToClipBoard(releaseItem.link?.value.orEmpty())
+        releaseAnalytics.copyLink(AnalyticsConstants.screen_favorites, releaseItem.id.id)
     }
 
     fun onShareClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.shareText(releaseItem.link.orEmpty())
-        releaseAnalytics.share(AnalyticsConstants.screen_favorites, releaseItem.id)
+        Utils.shareText(releaseItem.link?.value.orEmpty())
+        releaseAnalytics.share(AnalyticsConstants.screen_favorites, releaseItem.id.id)
     }
 
     fun onShortcutClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
         ShortcutHelper.addShortcut(releaseItem)
-        releaseAnalytics.shortcut(AnalyticsConstants.screen_favorites, releaseItem.id)
+        releaseAnalytics.shortcut(AnalyticsConstants.screen_favorites, releaseItem.id.id)
     }
 
     fun localSearch(query: String) {
@@ -135,11 +139,11 @@ class FavoritesPresenter @Inject constructor(
         } else {
             favoritesAnalytics.releaseClick()
         }
-        releaseAnalytics.open(AnalyticsConstants.screen_favorites, releaseItem.id)
+        releaseAnalytics.open(AnalyticsConstants.screen_favorites, releaseItem.id.id)
         router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code, releaseItem))
     }
 
-    private fun findRelease(id: Int): ReleaseItem? {
+    private fun findRelease(id: ReleaseId): Release? {
         return currentReleases.find { it.id == id }
     }
 
@@ -150,30 +154,29 @@ class FavoritesPresenter @Inject constructor(
         }
     }
 
-    private fun getDataSource(params: PageLoadParams): Single<ScreenStateAction.Data<List<ReleaseItemState>>> {
-        return favoriteRepository
-            .getFavorites(params.page)
-            .map { paginated ->
-                if (params.isFirstPage) {
-                    currentReleases.clear()
-                }
-                currentReleases.addAll(paginated.data)
-                val newItems = currentReleases.map { it.toState() }
-                ScreenStateAction.Data(newItems, !paginated.isEnd())
+    private suspend fun getDataSource(params: PageLoadParams): ScreenStateAction.Data<List<ReleaseItemState>> {
+        return try {
+            val paginated = favoriteRepository.getFavorites(params.page)
+            if (params.isFirstPage) {
+                currentReleases.clear()
             }
-            .doOnError {
-                if (params.isFirstPage) {
-                    errorHandler.handle(it)
-                }
+            currentReleases.addAll(paginated.items)
+            val newItems = currentReleases.map { it.toState() }
+            ScreenStateAction.Data(newItems, !paginated.meta.isEnd())
+        } catch (ex: Exception) {
+            if (params.isFirstPage) {
+                errorHandler.handle(ex)
             }
+            throw ex
+        }
     }
 
     private fun updateSearchState() {
         isSearchEnabled = currentQuery.isNotEmpty()
         val searchItems = if (currentQuery.isNotEmpty()) {
             currentReleases.filter {
-                it.title.orEmpty().contains(currentQuery, true)
-                        || it.titleEng.orEmpty().contains(currentQuery, true)
+                it.titleRus?.text.orEmpty().contains(currentQuery, true)
+                        || it.titleEng?.text.orEmpty().contains(currentQuery, true)
             }
         } else {
             emptyList()
