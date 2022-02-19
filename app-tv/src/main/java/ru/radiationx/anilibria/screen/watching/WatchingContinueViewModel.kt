@@ -1,60 +1,71 @@
 package ru.radiationx.anilibria.screen.watching
 
-import android.util.Log
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.datetime.Instant
 import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
-import ru.radiationx.data.datasource.holders.EpisodesCheckerHolder
-import ru.radiationx.data.entity.app.release.ReleaseFull
-import ru.radiationx.data.interactors.ReleaseInteractor
-import ru.radiationx.data.repository.HistoryRepository
-import ru.radiationx.data.repository.ReleaseRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.repos.EpisodeHistoryRepository
+import tv.anilibria.module.data.repos.HistoryRepository
+import tv.anilibria.module.data.repos.ReleaseRepository
 
 @InjectConstructor
 class WatchingContinueViewModel(
-    private val releaseInteractor: ReleaseInteractor,
     private val historyRepository: HistoryRepository,
-    private val episodesCheckerHolder: EpisodesCheckerHolder,
+    private val episodesCheckerHolder: EpisodeHistoryRepository,
+    private val releaseRepository: ReleaseRepository,
     private val converter: CardsDataConverter,
     private val router: Router
 ) : BaseCardsViewModel() {
 
     override val defaultTitle: String = "Продолжить просмотр"
 
-    override fun getLoader(requestPage: Int): Single<List<LibriaCard>> = episodesCheckerHolder
-        .getEpisodes()
-        .map {
-            Log.e("lalala", "episoded ${it.map { it.lastAccess }}")
-            it.sortedByDescending { it.lastAccess }.map { it.releaseId }
+    // todo ну это просто за гранью добра и зла, нужно зарефачить и оптимизировать
+    override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = episodesCheckerHolder
+        .getAll()
+        .let { visits ->
+            val defaultInstant = Instant.fromEpochMilliseconds(0)
+            visits.sortedByDescending { visit -> visit.lastOpenAt ?: defaultInstant }
+                .map { visit -> visit.id.releaseId }
+                .toSet()
         }
-        .flatMap { ids ->
-            if (ids.isEmpty()) {
-                return@flatMap Single.just(emptyList<ReleaseFull>())
+        .let { releaseIds ->
+            if (releaseIds.isEmpty()) {
+                return@let emptyList()
             }
-            historyRepository.getReleases().map { releases ->
-                releases.filter { ids.contains(it.id) }
-            }
-        }
-        .observeOn(AndroidSchedulers.mainThread())
-        .map { releases ->
-            releases.map { release ->
-                val lastEpisode = releaseInteractor.getEpisodes(release.id).maxBy { it.lastAccess }
-                Pair(release, lastEpisode)
+            historyRepository.getReleases().let { visits ->
+                visits.filter { releaseIds.contains(it.id) }
             }
         }
-        .map {
-            it.sortedByDescending { it.second?.lastAccess }.map {
-                converter.toCard(it.first).copy(description = "Вы остановились на ${it.second?.id} серии")
+        .let { visits ->
+            val defaultInstant = Instant.fromEpochMilliseconds(0)
+            visits.mapNotNull { visit ->
+                val lastEpisode = episodesCheckerHolder.getByRelease(visit.id)
+                    .maxByOrNull { it.lastOpenAt ?: defaultInstant }
+                lastEpisode?.let { Pair(visit, it) }
             }
+        }
+        .let { visits ->
+            val releases = releaseRepository.getReleasesById(visits.map { it.first.id })
+            visits.mapNotNull { visit ->
+                releases.find { it.id == visit.first.id }?.let {
+                    Pair(it, visit.second)
+                }
+            }
+        }
+        .let {
+            val defaultInstant = Instant.fromEpochMilliseconds(0)
+            it.sortedByDescending { it.second.lastOpenAt ?: defaultInstant }
+                .map {
+                    converter.toCard(it.first)
+                        .copy(description = "Вы остановились на ${it.second.id} серии")
+                }
         }
 
-    override fun hasMoreCards(newCards: List<LibriaCard>, allCards: List<LibriaCard>): Boolean = false
+    override fun hasMoreCards(newCards: List<LibriaCard>, allCards: List<LibriaCard>): Boolean =
+        false
 
     override fun onLibriaCardClick(card: LibriaCard) {
         super.onLibriaCardClick(card)
