@@ -12,17 +12,14 @@ import ru.radiationx.anilibria.extension.getCompatDrawable
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.SettingsAnalytics
-import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
-import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
-import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
-import tv.anilibria.module.data.analytics.features.model.AnalyticsAppTheme
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.datasource.remote.Api
 import ru.radiationx.data.datasource.remote.address.ApiConfig
-import ru.radiationx.data.repository.AuthRepository
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.analytics.features.SettingsAnalytics
+import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
+import tv.anilibria.module.data.analytics.features.model.AnalyticsAppTheme
 import javax.inject.Inject
 
 /**
@@ -36,9 +33,6 @@ class SettingsFragment : BaseSettingFragment() {
 
     @Inject
     lateinit var apiConfig: ApiConfig
-
-    @Inject
-    lateinit var authRepository: AuthRepository
 
     @Inject
     lateinit var errorHandler: IErrorHandler

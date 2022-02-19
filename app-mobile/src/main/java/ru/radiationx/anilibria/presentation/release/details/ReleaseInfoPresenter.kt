@@ -13,9 +13,8 @@ import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.data.datasource.holders.PreferencesHolder
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
@@ -27,6 +26,7 @@ import tv.anilibria.module.data.repos.DonationRepository
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
 import tv.anilibria.module.data.repos.HistoryRepository
+import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.*
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class ReleaseInfoPresenter @Inject constructor(
     private val releaseInteractor: ReleaseInteractor,
     private val historyRepository: HistoryRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
-    private val authRepository: AuthRepository,
+    private val authStateHolder: AuthStateHolder,
     private val favoriteRepository: FavoriteRepository,
     private val donationRepository: DonationRepository,
     private val router: Router,
@@ -129,14 +129,14 @@ class ReleaseInfoPresenter @Inject constructor(
 
 
     private fun subscribeAuth() {
-        authRepository
-            .observeUser()
+        authStateHolder
+            .observe()
             .distinctUntilChanged()
-            .skip(1)
-            .subscribe {
+            .drop(1)
+            .onEach {
                 loadRelease()
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
     }
 
     private fun loadRelease() {
@@ -355,20 +355,20 @@ class ReleaseInfoPresenter @Inject constructor(
     }
 
     fun onClickFav() {
-        if (authRepository.getAuthState() != AuthState.AUTH) {
-            viewState.showFavoriteDialog()
-            return
-        }
-        val releaseId = currentData?.id ?: return
-        val favInfo = currentData?.release?.favoriteInfo ?: return
-
-        if (favInfo.isAdded) {
-            releaseAnalytics.favoriteRemove(releaseId.id)
-        } else {
-            releaseAnalytics.favoriteAdd(releaseId.id)
-        }
-
         viewModelScope.launch {
+            if (authStateHolder.get() != AuthState.AUTH) {
+                viewState.showFavoriteDialog()
+                return@launch
+            }
+            val releaseId = currentData?.id ?: return@launch
+            val favInfo = currentData?.release?.favoriteInfo ?: return@launch
+
+            if (favInfo.isAdded) {
+                releaseAnalytics.favoriteRemove(releaseId.id)
+            } else {
+                releaseAnalytics.favoriteAdd(releaseId.id)
+            }
+
             updateModifiers {
                 it.copy(favoriteRefreshing = true)
             }

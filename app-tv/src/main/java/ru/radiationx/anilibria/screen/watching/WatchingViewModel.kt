@@ -1,19 +1,19 @@
 package ru.radiationx.anilibria.screen.watching
 
 import androidx.lifecycle.viewModelScope
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.common.BaseRowsViewModel
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.HistoryRepository
+import tv.anilibria.module.domain.entity.AuthState
 
 @InjectConstructor
 class WatchingViewModel(
-    private val authRepository: AuthRepository,
+    private val authStateHolder: AuthStateHolder,
     private val historyRepository: HistoryRepository,
     private val episodesCheckerHolder: EpisodeHistoryRepository
 ) : BaseRowsViewModel() {
@@ -48,11 +48,12 @@ class WatchingViewModel(
             }
             .launchIn(viewModelScope)
 
-        authRepository
-            .observeUser()
-            .observeOn(AndroidSchedulers.mainThread())
-            .lifeSubscribe {
-                updateAvailableRow(FAVORITES_ROW_ID, it.authState == AuthState.AUTH)
+        authStateHolder
+            .observe()
+            .distinctUntilChanged()
+            .onEach {
+                updateAvailableRow(FAVORITES_ROW_ID, it == AuthState.AUTH)
             }
+            .launchIn(viewModelScope)
     }
 }

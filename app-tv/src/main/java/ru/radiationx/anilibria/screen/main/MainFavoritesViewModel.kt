@@ -1,20 +1,26 @@
 package ru.radiationx.anilibria.screen.main
 
-import io.reactivex.Single
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.repos.FavoriteRepository
+import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class MainFavoritesViewModel(
     private val favoriteRepository: FavoriteRepository,
-    private val authRepository: AuthRepository,
+    private val authStateHolder: AuthStateHolder,
     private val converter: CardsDataConverter,
     private val router: Router
 ) : BaseCardsViewModel() {
@@ -25,23 +31,26 @@ class MainFavoritesViewModel(
 
     override fun onCreate() {
         super.onCreate()
-        if (authRepository.getAuthState() == AuthState.AUTH) {
-            onRefreshClick()
+
+        viewModelScope.launch {
+            if (authStateHolder.get() == AuthState.AUTH) {
+                onRefreshClick()
+            }
         }
     }
 
     override fun onColdCreate() {
         super.onColdCreate()
-        authRepository
-            .observeUser()
-            .map { it.authState }
+        authStateHolder
+            .observe()
             .distinctUntilChanged()
-            .skip(1)
-            .lifeSubscribe {
+            .drop(1)
+            .onEach {
                 if (it == AuthState.AUTH) {
                     onRefreshClick()
                 }
             }
+            .launchIn(viewModelScope)
     }
 
     override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = favoriteRepository
@@ -51,6 +60,6 @@ class MainFavoritesViewModel(
         }
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }

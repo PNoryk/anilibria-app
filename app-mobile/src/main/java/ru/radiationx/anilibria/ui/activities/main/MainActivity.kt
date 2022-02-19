@@ -40,7 +40,6 @@ import ru.radiationx.anilibria.utils.DimensionsProvider
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.Api
-import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.data.system.LocaleHolder
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
@@ -55,6 +54,7 @@ import ru.terrakok.cicerone.commands.Command
 import ru.terrakok.cicerone.commands.Replace
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import java.util.*
 import javax.inject.Inject

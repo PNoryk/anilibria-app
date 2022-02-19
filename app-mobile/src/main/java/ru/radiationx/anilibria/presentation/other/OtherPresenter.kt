@@ -16,26 +16,27 @@ import ru.radiationx.anilibria.ui.fragments.other.OtherMenuItemState
 import ru.radiationx.anilibria.ui.fragments.other.ProfileScreenState
 import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.datasource.remote.address.ApiConfig
-import ru.radiationx.data.entity.app.other.ProfileItem
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
+import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
+import tv.anilibria.module.data.repos.AuthRepository
 import tv.anilibria.module.data.repos.MenuRepository
+import tv.anilibria.module.data.repos.UserRepository
+import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.module.domain.entity.other.User
 import javax.inject.Inject
 
 @InjectViewState
 class OtherPresenter @Inject constructor(
     private val router: Router,
     private val systemMessenger: SystemMessenger,
+    private val authStateHolder: AuthStateHolder,
+    private val userRepository: UserRepository,
     private val authRepository: AuthRepository,
-    private val authRepositoryNew: tv.anilibria.module.data.repos.AuthRepository,
     private val errorHandler: IErrorHandler,
-    private val apiConfig: ApiConfig,
     private val menuRepository: MenuRepository,
     private val authDeviceAnalytics: AuthDeviceAnalytics,
     private val authMainAnalytics: AuthMainAnalytics,
@@ -59,9 +60,9 @@ class OtherPresenter @Inject constructor(
 
     private val stateController = StateController(ProfileScreenState())
 
-    private var currentProfileItem: ProfileItem = authRepository.getUser()
-    private var currentLinkMenuItems = mutableListOf<LinkMenuItem>()
-    private var linksMap = mutableMapOf<Int, LinkMenuItem>()
+    private var currentProfileItem: User? = null
+    private val currentLinkMenuItems = mutableListOf<LinkMenuItem>()
+    private val linksMap = mutableMapOf<Int, LinkMenuItem>()
 
     private val allMainMenu = mutableListOf<OtherMenuItemState>()
     private val allSystemMenu = mutableListOf<OtherMenuItemState>()
@@ -108,27 +109,28 @@ class OtherPresenter @Inject constructor(
 
     override fun attachView(view: OtherView?) {
         super.attachView(view)
-        authRepository
-            .loadUser()
-            .subscribe({}, {})
-            .addToDisposable()
+        viewModelScope.launch {
+            runCatching { userRepository.loadUser() }
+        }
     }
 
     fun onProfileClick() {
-        if (currentProfileItem.authState == AuthState.AUTH) {
-            otherAnalytics.profileClick()
-            return
+        viewModelScope.launch {
+            if (authStateHolder.get() == AuthState.AUTH) {
+                otherAnalytics.profileClick()
+            } else {
+                otherAnalytics.loginClick()
+                authMainAnalytics.open(AnalyticsConstants.screen_other)
+                router.navigateTo(Screens.Auth())
+            }
         }
-        otherAnalytics.loginClick()
-        authMainAnalytics.open(AnalyticsConstants.screen_other)
-        router.navigateTo(Screens.Auth())
     }
 
     fun signOut() {
         otherAnalytics.logoutClick()
         GlobalScope.launch {
             runCatching {
-                authRepositoryNew.signOut()
+                authRepository.signOut()
             }.onSuccess {
                 systemMessenger.showMessage("Данные авторизации удалены")
             }.onFailure {
@@ -182,13 +184,13 @@ class OtherPresenter @Inject constructor(
     }
 
     private fun subscribeUpdate() {
-        authRepository
+        userRepository
             .observeUser()
-            .subscribe {
+            .onEach {
                 currentProfileItem = it
                 updateMenuItems()
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
 
         menuRepository
             .observeMenu()
@@ -211,19 +213,21 @@ class OtherPresenter @Inject constructor(
     }
 
     private fun updateMenuItems() {
-        // Для фильтрации, если вдруг понадобится добавить
-        val mainMenu = allMainMenu.toMutableList()
-        val systemMenu = allSystemMenu.toMutableList()
-        val linkMenu = allLinkMenu.toMutableList()
+        viewModelScope.launch {
+            // Для фильтрации, если вдруг понадобится добавить
+            val mainMenu = allMainMenu.toMutableList()
+            val systemMenu = allSystemMenu.toMutableList()
+            val linkMenu = allLinkMenu.toMutableList()
 
-        if (currentProfileItem.authState != AuthState.AUTH) {
-            mainMenu.removeAll { it.id == MENU_OTP_CODE }
-        }
+            if (authStateHolder.get() != AuthState.AUTH) {
+                mainMenu.removeAll { it.id == MENU_OTP_CODE }
+            }
 
-        val profileState = currentProfileItem.toState()
-        val menuState = listOf(mainMenu, systemMenu, linkMenu).filter { it.isNotEmpty() }
-        stateController.updateState {
-            it.copy(profile = profileState, menuItems = menuState)
+            val profileState = currentProfileItem?.toState(authStateHolder.get())
+            val menuState = listOf(mainMenu, systemMenu, linkMenu).filter { it.isNotEmpty() }
+            stateController.updateState {
+                it.copy(profile = profileState, menuItems = menuState)
+            }
         }
     }
 }

@@ -19,13 +19,13 @@ import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.PlayerEpisodesGuidedScreen
 import ru.radiationx.anilibria.screen.PlayerScreen
 import ru.radiationx.anilibria.screen.player.PlayerController
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
+import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
 
@@ -34,7 +34,7 @@ class DetailHeaderViewModel(
     private val releaseInteractor: ReleaseInteractor,
     private val favoriteRepository: FavoriteRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
-    private val authRepository: AuthRepository,
+    private val authStateHolder: AuthStateHolder,
     private val converter: DetailDataConverter,
     private val router: Router,
     private val guidedRouter: GuidedRouter,
@@ -128,13 +128,12 @@ class DetailHeaderViewModel(
     fun onFavoriteClick() {
         val release = currentRelease ?: return
         val favoriteInfo = release.favoriteInfo ?: return
-        if (authRepository.getAuthState() != AuthState.AUTH) {
-            guidedRouter.open(AuthGuidedScreen())
-            return
-        }
-
         favoriteDisposable?.cancel()
         favoriteDisposable = viewModelScope.launch {
+            if (authStateHolder.get() != AuthState.AUTH) {
+                guidedRouter.open(AuthGuidedScreen())
+                return@launch
+            }
             runCatching {
                 if (favoriteInfo.isAdded) {
                     favoriteRepository.deleteFavorite(release.id)

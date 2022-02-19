@@ -1,12 +1,10 @@
 package ru.radiationx.anilibria.model
 
-import ru.radiationx.anilibria.ui.fragments.other.OtherMenuItemState
 import ru.radiationx.anilibria.ui.fragments.other.ProfileItemState
-import ru.radiationx.data.entity.app.other.OtherMenuItem
-import ru.radiationx.data.entity.app.other.ProfileItem
-import ru.radiationx.data.entity.common.AuthState
+import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.entity.feed.Feed
+import tv.anilibria.module.domain.entity.other.User
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.youtube.Youtube
 
@@ -47,10 +45,10 @@ fun Release.toScheduleState() = ScheduleItemState(
     isCompleted = true
 )
 
-fun ProfileItem.toState(): ProfileItemState {
+fun User.toState(authState: AuthState): ProfileItemState {
     val hasAuth = authState == AuthState.AUTH
     val title = if (hasAuth) {
-        nick
+        login
     } else {
         "Гость"
     }
@@ -59,7 +57,7 @@ fun ProfileItem.toState(): ProfileItemState {
     } else {
         "Авторизоваться"
     }
-    val avatar = avatarUrl?.takeIf { it.isNotEmpty() } ?: "assets://res/alib_new_or_b.png"
+    val avatar = avatar?.url?.takeIf { it.isNotEmpty() } ?: "assets://res/alib_new_or_b.png"
     return ProfileItemState(
         id = id,
         hasAuth = hasAuth,
@@ -68,12 +66,6 @@ fun ProfileItem.toState(): ProfileItemState {
         avatar = avatar
     )
 }
-
-fun OtherMenuItem.toState() = OtherMenuItemState(
-    id = id,
-    title = title,
-    iconRes = icon
-)
 
 fun SocialAuthService.toState(): SocialAuthItemState = SocialAuthItemState(
     key = key,

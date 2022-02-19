@@ -53,7 +53,7 @@ class GridScreen() : SupportAppScreen() {
     }
 }
 
-class DetailsScreen(private val releaseId: Long) : SupportAppScreen() {
+class DetailsScreen(private val releaseId: ReleaseId) : SupportAppScreen() {
     override fun getFragment(): Fragment {
         return DetailFragment.newInstance(releaseId)
     }

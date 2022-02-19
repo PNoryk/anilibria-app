@@ -1,18 +1,17 @@
 package ru.radiationx.anilibria.screen.auth.main
 
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
-import ru.radiationx.anilibria.screen.AuthOtpGuidedScreen
 import ru.radiationx.anilibria.screen.AuthCredentialsGuidedScreen
+import ru.radiationx.anilibria.screen.AuthOtpGuidedScreen
 import ru.radiationx.anilibria.screen.LifecycleViewModel
-import ru.radiationx.data.entity.common.AuthState
-import ru.radiationx.data.repository.AuthRepository
-import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.AuthStateHolder
 
 @InjectConstructor
 class AuthViewModel(
-    private val authRepository: AuthRepository,
-    private val router: Router,
+    private val authStateHolder: AuthStateHolder,
     private val guidedRouter: GuidedRouter
 ) : LifecycleViewModel() {
 
@@ -29,7 +28,9 @@ class AuthViewModel(
     }
 
     fun onSkipClick() {
-        authRepository.updateUser(AuthState.AUTH_SKIPPED)
-        guidedRouter.finishGuidedChain()
+        viewModelScope.launch {
+            authStateHolder.skip()
+            guidedRouter.finishGuidedChain()
+        }
     }
 }
