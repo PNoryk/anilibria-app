@@ -8,11 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import ru.radiationx.anilibria.App
 
 /**
@@ -25,7 +20,10 @@ object ToolbarHelper {
         appBarLayout.setBackgroundColor(Color.TRANSPARENT)
     }
 
-    fun setScrollFlag(toolbarLayout: CollapsingToolbarLayout, @AppBarLayout.LayoutParams.ScrollFlags flag: Int) {
+    fun setScrollFlag(
+        toolbarLayout: CollapsingToolbarLayout,
+        @AppBarLayout.LayoutParams.ScrollFlags flag: Int
+    ) {
         val params = toolbarLayout.layoutParams as AppBarLayout.LayoutParams
         params.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or flag
         toolbarLayout.layoutParams = params
@@ -56,28 +54,24 @@ object ToolbarHelper {
         }
     }
 
-    fun isDarkImage(bitmap: Bitmap, onSuccess: Consumer<Boolean>): Disposable = Single
-            .fromCallable {
-                val histogram = IntArray(256) { 0 }
+    suspend fun isDarkImage(bitmap: Bitmap): Boolean {
+        val histogram = IntArray(256) { 0 }
 
-                for (x in 0 until bitmap.width) {
-                    for (y in 0 until bitmap.height) {
-                        val pixel = bitmap.getPixel(x, y)
-                        val r = Color.red(pixel)
-                        val g = Color.green(pixel)
-                        val b = Color.blue(pixel)
+        for (x in 0 until bitmap.width) {
+            for (y in 0 until bitmap.height) {
+                val pixel = bitmap.getPixel(x, y)
+                val r = Color.red(pixel)
+                val g = Color.green(pixel)
+                val b = Color.blue(pixel)
 
-                        val brightness = (0.2126 * r + 0.7152 * g + 0.0722 * b).toInt()
-                        histogram[brightness]++
-                    }
-                }
-
-                val allPixelsCount = bitmap.width * bitmap.height
-                val darkPixelCount = (0 until 64).sumBy { histogram[it] }
-                return@fromCallable darkPixelCount > allPixelsCount * 0.25
+                val brightness = (0.2126 * r + 0.7152 * g + 0.0722 * b).toInt()
+                histogram[brightness]++
             }
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(onSuccess)
+        }
+
+        val allPixelsCount = bitmap.width * bitmap.height
+        val darkPixelCount = (0 until 64).sumBy { histogram[it] }
+        return darkPixelCount > allPixelsCount * 0.25
+    }
 
 }

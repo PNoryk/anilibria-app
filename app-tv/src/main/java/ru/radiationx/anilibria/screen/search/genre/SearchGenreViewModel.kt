@@ -47,11 +47,13 @@ class SearchGenreViewModel(
     }
 
     override fun applyValues() {
-        searchController.genresEvent.accept(currentGenres.filterIndexed { index, item ->
-            checkedValues.contains(
-                item.value
-            )
-        })
-        guidedRouter.close()
+        viewModelScope.launch {
+            searchController.genresEvent.emit(currentGenres.filterIndexed { index, item ->
+                checkedValues.contains(
+                    item.value
+                )
+            })
+            guidedRouter.close()
+        }
     }
 }

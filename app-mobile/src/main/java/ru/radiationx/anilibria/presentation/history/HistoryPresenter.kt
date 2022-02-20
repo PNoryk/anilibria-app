@@ -45,8 +45,8 @@ class HistoryPresenter @Inject constructor(
         super.onFirstViewAttach()
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
         observeReleases()
     }
 

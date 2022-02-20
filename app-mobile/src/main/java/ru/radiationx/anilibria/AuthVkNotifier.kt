@@ -1,7 +1,8 @@
 package ru.radiationx.anilibria
 
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 /**
@@ -9,11 +10,11 @@ import javax.inject.Inject
  */
 class AuthVkNotifier @Inject constructor() {
 
-    private val vkAuthRelay = PublishRelay.create<Boolean>()
+    private val vkAuthRelay = MutableSharedFlow<Boolean>()
 
-    fun observeVkAuthChange(): Observable<Boolean> = vkAuthRelay.hide()
+    fun observeVkAuthChange(): SharedFlow<Boolean> = vkAuthRelay.asSharedFlow()
 
-    fun changeVkAuth(value: Boolean) {
-        vkAuthRelay.accept(value)
+    suspend fun changeVkAuth(value: Boolean) {
+        vkAuthRelay.emit(value)
     }
 }

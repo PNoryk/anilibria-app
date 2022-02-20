@@ -1,8 +1,5 @@
 package ru.radiationx.anilibria.presentation.comments
 
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -10,7 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.AuthVkNotifier
-import ru.radiationx.anilibria.model.loading.CoDataLoadingController
+import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.ScreenStateAction
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.navigation.Screens
@@ -47,7 +44,6 @@ class VkCommentsPresenter @Inject constructor(
 
     private var isVisibleToUser = false
     private var pendingAuthRequest: String? = null
-    private var authRequestDisposable = Disposables.disposed()
 
     private var hasJsError = false
     private var jsErrorClosed = false
@@ -55,7 +51,7 @@ class VkCommentsPresenter @Inject constructor(
     private var hasVkBlockedError = false
     private var vkBlockedErrorClosed = false
 
-    private val loadingController = CoDataLoadingController(viewModelScope) {
+    private val loadingController = DataLoadingController(viewModelScope) {
         getDataSource().let { ScreenStateAction.Data(it, false) }
     }
 
@@ -75,13 +71,13 @@ class VkCommentsPresenter @Inject constructor(
             .launchIn(viewModelScope)
 
         authHolder.observeVkAuthChange()
-            .subscribe { viewState.pageReloadAction() }
-            .addToDisposable()
+            .onEach { viewState.pageReloadAction() }
+            .launchIn(viewModelScope)
 
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
 
         loadingController
             .observeState()
@@ -166,19 +162,14 @@ class VkCommentsPresenter @Inject constructor(
     }
 
     private fun tryExecutePendingAuthRequest() {
-        authRequestDisposable.dispose()
-        authRequestDisposable = Completable
-            .fromAction {
-                val url = pendingAuthRequest
-                if (isVisibleToUser && url != null) {
-                    pendingAuthRequest = null
-                    authVkAnalytics.open(AnalyticsConstants.screen_auth_vk)
-                    router.navigateTo(Screens.Auth(Screens.AuthVk(url)))
-                }
+        viewModelScope.launch {
+            val url = pendingAuthRequest
+            if (isVisibleToUser && url != null) {
+                pendingAuthRequest = null
+                authVkAnalytics.open(AnalyticsConstants.screen_auth_vk)
+                router.navigateTo(Screens.Auth(Screens.AuthVk(url)))
             }
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-            .addToDisposable()
+        }
     }
 
     private suspend fun getDataSource(): VkCommentsState {

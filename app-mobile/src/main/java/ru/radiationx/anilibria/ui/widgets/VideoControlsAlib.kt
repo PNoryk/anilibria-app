@@ -14,18 +14,14 @@ import com.devbrackets.android.exomedia.ui.animation.BottomViewHideShowAnimation
 import com.devbrackets.android.exomedia.ui.animation.TopViewHideShowAnimation
 import com.devbrackets.android.exomedia.ui.widget.VideoControls
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsMobile
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
-import kotlinx.android.synthetic.main.activity_myplayer.*
 import kotlinx.android.synthetic.main.view_video_control.view.*
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatDrawable
 import ru.radiationx.anilibria.ui.widgets.gestures.VideoGestureEventsListener
-import tv.anilibria.module.data.analytics.features.PlayerAnalytics
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared.ktx.asTimeSecString
+import tv.anilibria.module.data.analytics.features.PlayerAnalytics
 import java.lang.Math.pow
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -120,18 +116,14 @@ class VideoControlsAlib @JvmOverloads constructor(
             private var swipeSeekStarted = false
             private var tapSeekStarted = false
 
-            private var tapDisposable = Disposables.disposed()
             private val tapSeekHandler = Handler()
             private val tapSeekRunnable = Runnable {
                 playerAnalytics?.rewindDoubleTap(getSeekPercent(), localSeekDelta)
                 applyPlayerSeek()
                 gestureSeekValue.gone()
-                tapDisposable.dispose()
                 tapSeekStarted = false
                 localSeekDelta = 0
             }
-
-            private val tapRelay = PublishRelay.create<MotionEvent>()
 
             private fun handleEndSwipeSeek() {
                 playerAnalytics?.rewindSlide(getSeekPercent(), localSeekDelta)
@@ -140,14 +132,6 @@ class VideoControlsAlib @JvmOverloads constructor(
                 gesturesControllerView.background = null
                 swipeSeekStarted = false
                 localSeekDelta = 0
-            }
-
-            private fun handleStartTapSeek() {
-                tapDisposable.dispose()
-                tapDisposable = tapRelay
-                    //.debounce(100L, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { handleTapSeek(it) }
             }
 
             private fun handleTapSeek(event: MotionEvent?) {
@@ -180,7 +164,7 @@ class VideoControlsAlib @JvmOverloads constructor(
 
                 videoView?.showControls()
                 if (tapSeekStarted) {
-                    event?.also { tapRelay.accept(it) }
+                    event?.also { handleTapSeek(it) }
                 }
             }
 
@@ -193,9 +177,8 @@ class VideoControlsAlib @JvmOverloads constructor(
                 if (!tapSeekStarted) {
                     gestureSeekValue.visible()
                     tapSeekStarted = true
-                    handleStartTapSeek()
                 }
-                event?.also { tapRelay.accept(it) }
+                event?.also { handleTapSeek(it) }
             }
 
             override fun onHorizontalScroll(event: MotionEvent?, delta: Float) {

@@ -4,9 +4,12 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.nostra13.universalimageloader.core.ImageLoader
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_other_profile.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.ui.adapters.ListItem
 import ru.radiationx.anilibria.ui.adapters.ProfileListItem
@@ -38,18 +41,7 @@ class ProfileItemDelegate(
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         private val dimensionsProvider = DI.get(DimensionsProvider::class.java)
-        private var compositeDisposable = CompositeDisposable()
-
-        init {
-            compositeDisposable.add(dimensionsProvider.observe().subscribe {
-                containerView.setPadding(
-                    containerView.paddingLeft,
-                    it.statusBar,
-                    containerView.paddingRight,
-                    containerView.paddingBottom
-                )
-            })
-        }
+        private var dimensionJob: Job? = null
 
         fun bind(state: ProfileItemState) {
             profileNick.text = state.title
@@ -60,10 +52,20 @@ class ProfileItemDelegate(
 
             containerView.setOnClickListener { clickListener(state) }
             profileLogout.setOnClickListener { logoutClickListener() }
+
+            dimensionJob?.cancel()
+            dimensionJob = dimensionsProvider.observe().onEach {
+                containerView.setPadding(
+                    containerView.paddingLeft,
+                    it.statusBar,
+                    containerView.paddingRight,
+                    containerView.paddingBottom
+                )
+            }.launchIn(GlobalScope)
         }
 
         fun onDetach() {
-            compositeDisposable.clear()
+            dimensionJob?.cancel()
         }
     }
 }

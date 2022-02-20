@@ -36,11 +36,13 @@ class SearchSeasonViewModel(
     }
 
     override fun applyValues() {
-        searchController.seasonsEvent.accept(currentSeasons.filterIndexed { index, item ->
-            checkedValues.contains(
-                item.value
-            )
-        })
-        guidedRouter.close()
+        viewModelScope.launch {
+            searchController.seasonsEvent.emit(currentSeasons.filterIndexed { index, item ->
+                checkedValues.contains(
+                    item.value
+                )
+            })
+            guidedRouter.close()
+        }
     }
 }

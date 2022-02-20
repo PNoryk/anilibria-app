@@ -5,31 +5,31 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
-import android.util.Log
 import androidx.annotation.ColorInt
-import androidx.core.graphics.alpha
 import androidx.fragment.app.FragmentActivity
 import androidx.leanback.app.BackgroundManager
+import androidx.lifecycle.lifecycleScope
 import androidx.palette.graphics.Palette
 import com.google.android.material.animation.ArgbEvaluatorCompat
-import com.jakewharton.rxrelay2.BehaviorRelay
 import com.nostra13.universalimageloader.core.ImageLoader
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatColor
 import toothpick.InjectConstructor
-import java.util.*
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 @InjectConstructor
 class GradientBackgroundManager(
     private val activity: FragmentActivity
 ) {
 
-    private val backgroundManager: BackgroundManager by lazy { BackgroundManager.getInstance(activity) }
+    private val backgroundManager: BackgroundManager by lazy {
+        BackgroundManager.getInstance(
+            activity
+        )
+    }
 
     private val defaultColor = activity.getCompatColor(R.color.dark_colorAccent)
     private val foregroundColor = activity.getCompatColor(R.color.dark_windowBackground)
@@ -58,9 +58,9 @@ class GradientBackgroundManager(
 
     private var primaryColorAnimator: ValueAnimator? = null
     private var foregroundColorAnimator: ValueAnimator? = null
-    private var imageApplierDisposable = Disposables.disposed()
-    private var colorApplierDisposable = Disposables.disposed()
-    private val colorApplier = BehaviorRelay.create<Int>()
+    private var imageApplierJob: Job? = null
+    private var colorApplierJob: Job? = null
+    private val colorApplier = MutableStateFlow<Int?>(null)
     private val colorEvaluator = ArgbEvaluatorCompat()
     private val urlColorMap = mutableMapOf<String, Int>()
 
@@ -84,20 +84,17 @@ class GradientBackgroundManager(
     }
 
     private fun subscribeColorApplier() {
-        if (!colorApplierDisposable.isDisposed) {
-            colorApplierDisposable.dispose()
-        }
-        colorApplierDisposable = colorApplier
-            .debounce(200, TimeUnit.MILLISECONDS)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                instantApplyColor(it)
-            }
+        colorApplierJob?.cancel()
+        colorApplierJob = colorApplier
+            .filterNotNull()
+            .debounce(200L.milliseconds)
+            .onEach { instantApplyColor(it) }
+            .launchIn(activity.lifecycleScope)
     }
 
     fun clearGradient() {
-        imageApplierDisposable.dispose()
-        colorApplierDisposable.dispose()
+        imageApplierJob?.cancel()
+        colorApplierJob?.cancel()
         instantApplyForeground(true)
     }
 
@@ -116,26 +113,22 @@ class GradientBackgroundManager(
             return
         }
 
-        imageApplierDisposable.dispose()
-        imageApplierDisposable = Single
-            .fromCallable {
-                ImageLoader.getInstance().loadImageSync(url).wrap()
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.computation())
-            .map {
-                it.data?.let { Palette.Builder(it).generate() }.wrap()
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                val palette = it.data ?: return@subscribe
-                if (colorSelector == defaultColorSelector) {
-                    urlColorMap[url] = colorSelector(palette) ?: defaultColorSelector(palette)
-                }
-                applyPalette(palette, colorSelector, colorModifier)
-            }, {
+        imageApplierJob?.cancel()
+        imageApplierJob = activity.lifecycleScope.launch {
+            runCatching {
+                ImageLoader.getInstance().loadImageSync(url)
+                    ?.let { Palette.Builder(it).generate() }
+                    ?.also { palette ->
+                        if (colorSelector == defaultColorSelector) {
+                            urlColorMap[url] =
+                                colorSelector(palette) ?: defaultColorSelector(palette)
+                        }
+                        applyPalette(palette, colorSelector, colorModifier)
+                    }
+            }.onFailure {
                 it.printStackTrace()
-            })
+            }
+        }
     }
 
     fun applyPalette(
@@ -149,11 +142,11 @@ class GradientBackgroundManager(
     fun applyColor(@ColorInt color: Int, colorModifier: (Int) -> Int = defaultColorModifier) {
         val finalColor = colorModifier.invoke(color)
         subscribeColorApplier()
-        colorApplier.accept(finalColor)
+        colorApplier.value = finalColor
     }
 
     private fun instantApplyColor(@ColorInt color: Int) {
-        imageApplierDisposable.dispose()
+        imageApplierJob?.cancel()
         primaryColorAnimator?.cancel()
         if (foregroundDrawable.alpha != 0) {
             instantApplyForeground(false)

@@ -11,12 +11,11 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayAt
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.*
-import ru.radiationx.anilibria.model.loading.CoDataLoadingController
+import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
 import ru.radiationx.anilibria.model.loading.ScreenStateAction
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.navigation.Screens
-import ru.radiationx.anilibria.presentation.Paginator
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.feed.FeedDataState
@@ -70,14 +69,14 @@ class FeedPresenter @Inject constructor(
         private const val DONATION_NEW_TAG = "donation_new"
     }
 
-    private val loadingController = CoDataLoadingController(viewModelScope) {
+    private val loadingController = DataLoadingController(viewModelScope) {
         submitPageAnalytics(it.page)
         getDataSource(it)
     }
 
     private val stateController = StateController(FeedScreenState())
 
-    private var randomDisposable: Job? = null
+    private var randomJob: Job? = null
 
     private var lastLoadedPage: Int? = null
 
@@ -127,8 +126,8 @@ class FeedPresenter @Inject constructor(
 
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
 
         loadingController.observeState()
             .onEach { loadingState ->
@@ -190,10 +189,10 @@ class FeedPresenter @Inject constructor(
 
     fun onRandomClick() {
         feedAnalytics.randomClick()
-        if (randomDisposable?.isActive == true) {
+        if (randomJob?.isActive == true) {
             return
         }
-        randomDisposable = viewModelScope.launch {
+        randomJob = viewModelScope.launch {
             runCatching {
                 releaseInteractor.getRandomRelease()
             }.onSuccess {
@@ -282,7 +281,7 @@ class FeedPresenter @Inject constructor(
     private suspend fun getFeedSource(page: Int): List<Feed> = feedRepository
         .getFeed(page)
         .also {
-            if (page == Paginator.FIRST_PAGE) {
+            if (page == 1) {
                 currentItems.clear()
             }
             currentItems.addAll(it)

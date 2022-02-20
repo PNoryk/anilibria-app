@@ -9,16 +9,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.appbar.AppBarLayout
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_main_base.*
 import kotlinx.android.synthetic.main.fragment_paged.*
+import kotlinx.coroutines.launch
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.R
@@ -32,11 +31,11 @@ import ru.radiationx.anilibria.ui.widgets.UILImageListener
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.ToolbarHelper
 import ru.radiationx.anilibria.utils.Utils
-import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
@@ -65,7 +64,6 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
     private val pagerAdapter: CustomPagerAdapter by lazy { CustomPagerAdapter() }
     private var currentColor: Int = Color.TRANSPARENT
     private var currentTitle: String? = null
-    private var toolbarHelperDisposable: Disposable = Disposables.disposed()
 
     private val defaultOptionsUIL: DisplayImageOptions.Builder = DisplayImageOptions.Builder()
         .cacheInMemory(true)
@@ -232,11 +230,6 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
         ShortcutHelper.addShortcut(release)
     }
 
-    override fun onDestroyView() {
-        toolbarHelperDisposable.dispose()
-        super.onDestroyView()
-    }
-
     private val imageListener = object : UILImageListener() {
         override fun onLoadingStarted(imageUri: String?, view: View?) {
             super.onLoadingStarted(imageUri, view)
@@ -259,9 +252,9 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
     }
 
     private fun updateToolbarColors(loadedImage: Bitmap) {
-        toolbarHelperDisposable.dispose()
-        toolbarHelperDisposable = ToolbarHelper.isDarkImage(loadedImage, Consumer {
-            currentColor = if (it) Color.WHITE else Color.BLACK
+        viewLifecycleOwner.lifecycleScope.launch {
+            val isDark = ToolbarHelper.isDarkImage(loadedImage)
+            currentColor = if (isDark) Color.WHITE else Color.BLACK
 
             toolbar.navigationIcon?.setColorFilter(
                 currentColor,
@@ -271,7 +264,7 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
                 currentColor,
                 PorterDuff.Mode.SRC_ATOP
             )
-        })
+        }
     }
 
     private inner class CustomPagerAdapter :

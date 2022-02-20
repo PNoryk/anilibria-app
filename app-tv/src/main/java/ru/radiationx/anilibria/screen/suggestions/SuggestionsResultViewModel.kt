@@ -65,8 +65,10 @@ class SuggestionsResultViewModel(
     }
 
     private fun showItems(items: List<Release>, query: String, validQuery: Boolean) {
-        val result = SuggestionsController.SearchResult(items, query, validQuery)
-        suggestionsController.resultEvent.accept(result)
+        viewModelScope.launch {
+            val result = SuggestionsController.SearchResult(items, query, validQuery)
+            suggestionsController.resultEvent.emit(result)
+        }
         progressState.value = false
         resultData.value = items.map {
             LibriaCard(

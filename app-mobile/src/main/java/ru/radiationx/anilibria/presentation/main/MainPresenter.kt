@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 import moxy.InjectViewState
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
-import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.Screen
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
@@ -31,7 +30,6 @@ class MainPresenter @Inject constructor(
     private val donationRepository: DonationRepository,
     private val preferencesStorage: PreferencesStorage,
     private val apiConfig: ApiConfigController,
-    private val schedulers: SchedulersProvider,
     private val analyticsProfile: AnalyticsProfile,
     private val authMainAnalytics: AuthMainAnalytics,
     private val catalogAnalytics: CatalogAnalytics,

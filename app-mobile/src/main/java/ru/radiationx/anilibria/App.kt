@@ -6,22 +6,17 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import biz.source_code.miniTemplator.MiniTemplator
 import com.google.firebase.messaging.FirebaseMessaging
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.YandexMetricaConfig
-import io.reactivex.disposables.Disposables
-import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.di.AppModule
-import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.shared_app.common.ImageLoaderConfig
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
 import ru.radiationx.shared_app.common.SimpleActivityLifecycleCallbacks
@@ -53,8 +48,6 @@ class App : Application() {
     private val timeCounter = TimeCounter().apply {
         start()
     }
-
-    private var messengerDisposable = Disposables.disposed()
 
     lateinit var staticPageTemplate: MiniTemplator
     lateinit var vkCommentsTemplate: MiniTemplator
@@ -116,26 +109,11 @@ class App : Application() {
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         }
 
-        RxJavaPlugins.setErrorHandler { throwable ->
-            Log.d("S_DEF_LOG", "RxJavaPlugins errorHandler $throwable")
-            throwable.printStackTrace()
-        }
-
         initDependencies()
 
         findTemplate("static_page")?.let { staticPageTemplate = it }
         findTemplate("vk_comments")?.let { vkCommentsTemplate = it }
         findTemplate("video_page")?.let { videoPageTemplate = it }
-
-        val systemMessenger = DI.get(SystemMessenger::class.java)
-        val schedulers = DI.get(SchedulersProvider::class.java)
-
-        /*messengerDisposable = systemMessenger
-                .observe()
-                .observeOn(schedulers.ui())
-                .subscribe {
-                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-                }*/
 
         val imageDownloader = DI.get(OkHttpImageDownloader::class.java)
         ImageLoaderConfig.init(this, imageDownloader)

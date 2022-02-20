@@ -73,8 +73,8 @@ class OtherPresenter @Inject constructor(
 
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
 
         allMainMenu.add(OtherMenuItemState(MENU_HISTORY, "История", R.drawable.ic_history))
         allMainMenu.add(

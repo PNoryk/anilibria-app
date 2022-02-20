@@ -1,6 +1,6 @@
 package ru.radiationx.anilibria.screen.search
 
-import com.jakewharton.rxrelay2.PublishRelay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import toothpick.InjectConstructor
 import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.ReleaseSeason
@@ -10,11 +10,11 @@ import tv.anilibria.module.domain.entity.SearchForm
 @InjectConstructor
 class SearchController {
 
-    val yearsEvent = PublishRelay.create<List<ReleaseYear>>()
-    val seasonsEvent = PublishRelay.create<List<ReleaseSeason>>()
-    val genresEvent = PublishRelay.create<List<ReleaseGenre>>()
-    val sortEvent = PublishRelay.create<SearchForm.Sort>()
-    val completedEvent = PublishRelay.create<Boolean>()
+    val yearsEvent = MutableSharedFlow<List<ReleaseYear>>()
+    val seasonsEvent = MutableSharedFlow<List<ReleaseSeason>>()
+    val genresEvent = MutableSharedFlow<List<ReleaseGenre>>()
+    val sortEvent = MutableSharedFlow<SearchForm.Sort>()
+    val completedEvent = MutableSharedFlow<Boolean>()
 
-    val applyFormEvent = PublishRelay.create<SearchForm>()
+    val applyFormEvent = MutableSharedFlow<SearchForm>()
 }

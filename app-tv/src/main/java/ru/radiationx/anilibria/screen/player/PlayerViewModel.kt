@@ -3,7 +3,6 @@ package ru.radiationx.anilibria.screen.player
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
@@ -51,13 +50,13 @@ class PlayerViewModel(
 
         playerController
             .selectEpisodeRelay
-            .observeOn(AndroidSchedulers.mainThread())
-            .lifeSubscribe { episodeId ->
+            .onEach { episodeId ->
                 playerInfo
                     ?.episodes
                     ?.firstOrNull { it.id == episodeId }
                     ?.also { playEpisode(it, true) }
             }
+            .launchIn(viewModelScope)
 
         preferencesStorage
             .quality.observe()

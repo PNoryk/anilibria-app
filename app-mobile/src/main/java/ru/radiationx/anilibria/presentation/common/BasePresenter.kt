@@ -1,7 +1,5 @@
 package ru.radiationx.anilibria.presentation.common
 
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -19,18 +17,10 @@ val MvpPresenter<*>.viewModelScope
 
 open class BasePresenter<ViewT : MvpView>(private val router: Router) : MvpPresenter<ViewT>() {
 
-    private var compositeDisposable = CompositeDisposable()
-
     val viewModelScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onDestroy() {
         viewModelScope.cancel()
-        compositeDisposable.dispose()
-    }
-
-    fun <T : Disposable> T.addToDisposable(): T {
-        compositeDisposable.add(this)
-        return this
     }
 
     fun onBackPressed() {

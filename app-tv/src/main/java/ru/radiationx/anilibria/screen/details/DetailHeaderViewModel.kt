@@ -3,8 +3,6 @@ package ru.radiationx.anilibria.screen.details
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -48,8 +46,8 @@ class DetailHeaderViewModel(
 
     private var currentRelease: Release? = null
 
-    private var selectEpisodeDisposable = Disposables.disposed()
-    private var favoriteDisposable: Job? = null
+    private var selectEpisodeJob: Job? = null
+    private var favoriteJob: Job? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -74,18 +72,18 @@ class DetailHeaderViewModel(
     override fun onResume() {
         super.onResume()
 
-        selectEpisodeDisposable.dispose()
-        selectEpisodeDisposable = playerController
+        selectEpisodeJob?.cancel()
+        selectEpisodeJob = playerController
             .selectEpisodeRelay
-            .observeOn(AndroidSchedulers.mainThread())
-            .lifeSubscribe { episodeId ->
+            .onEach { episodeId ->
                 router.navigateTo(PlayerScreen(episodeId))
             }
+            .launchIn(viewModelScope)
     }
 
     override fun onPause() {
         super.onPause()
-        selectEpisodeDisposable.dispose()
+        selectEpisodeJob?.cancel()
     }
 
     fun onContinueClick() {
@@ -128,8 +126,8 @@ class DetailHeaderViewModel(
     fun onFavoriteClick() {
         val release = currentRelease ?: return
         val favoriteInfo = release.favoriteInfo ?: return
-        favoriteDisposable?.cancel()
-        favoriteDisposable = viewModelScope.launch {
+        favoriteJob?.cancel()
+        favoriteJob = viewModelScope.launch {
             if (authStateHolder.get() != AuthState.AUTH) {
                 guidedRouter.open(AuthGuidedScreen())
                 return@launch
@@ -160,7 +158,7 @@ class DetailHeaderViewModel(
     private fun updateProgress() {
         progressState.value = DetailsState(
             currentRelease == null,
-            favoriteDisposable?.isActive == true
+            favoriteJob?.isActive == true
         )
     }
 

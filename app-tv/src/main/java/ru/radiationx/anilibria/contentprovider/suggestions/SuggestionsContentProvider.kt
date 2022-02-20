@@ -9,6 +9,8 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
 import android.util.Log
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.contentprovider.SystemSuggestionEntity
@@ -48,7 +50,9 @@ class SuggestionsContentProvider : ContentProvider() {
         sortOrder: String?
     ): Cursor? {
         Log.d(TAG, uri.toString())
-        App.appCreateAction.filter { it }.blockingFirst()
+        runBlocking {
+            App.appCreateAction.filter { it }.first()
+        }
         Log.d(TAG, "query appcreated")
 
         return if (uriMatcher.match(uri) == SEARCH_SUGGEST) {

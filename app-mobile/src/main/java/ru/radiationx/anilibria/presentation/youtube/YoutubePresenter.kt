@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.YoutubeItemState
-import ru.radiationx.anilibria.model.loading.CoDataLoadingController
+import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
 import ru.radiationx.anilibria.model.loading.ScreenStateAction
 import ru.radiationx.anilibria.model.loading.StateController
@@ -30,7 +30,7 @@ class YoutubePresenter @Inject constructor(
     private val youtubeVideosAnalytics: YoutubeVideosAnalytics
 ) : BasePresenter<YoutubeView>(router) {
 
-    private val loadingController = CoDataLoadingController(viewModelScope) {
+    private val loadingController = DataLoadingController(viewModelScope) {
         submitPageAnalytics(it.page)
         getDataSource(it)
     }
@@ -46,8 +46,8 @@ class YoutubePresenter @Inject constructor(
 
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
 
         loadingController
             .observeState()

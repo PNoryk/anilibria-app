@@ -6,10 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
-import ru.radiationx.shared.ktx.SchedulersProvider
-import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.ConfigScreenState
 import tv.anilibria.feature.networkconfig.data.ConfiguringInteractor
@@ -17,11 +14,8 @@ import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 
 @InjectConstructor
 class ConfiguringViewModel(
-    private val router: Router,
-    private val guidedRouter: GuidedRouter,
     private val apiConfig: ApiConfigController,
     private val configuringInteractor: ConfiguringInteractor,
-    private val schedulersProvider: SchedulersProvider
 ) : LifecycleViewModel() {
 
     private var configuringStarted = false

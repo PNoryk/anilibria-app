@@ -2,6 +2,9 @@ package ru.radiationx.anilibria.screen.suggestions
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.common.BaseRowsViewModel
 import toothpick.InjectConstructor
 
@@ -26,12 +29,13 @@ class SuggestionsRowsViewModel(
 
         suggestionsController
             .resultEvent
-            .lifeSubscribe {
+            .onEach {
                 Log.e("kokoko", "resultEvent $it")
                 emptyResultState.value = it.validQuery && it.items.isEmpty()
                 updateAvailableRow(RESULT_ROW_ID, it.validQuery && it.items.isNotEmpty())
                 updateAvailableRow(RECOMMENDS_ROW_ID, !it.validQuery && it.items.isEmpty())
             }
+            .launchIn(viewModelScope)
     }
 
 }

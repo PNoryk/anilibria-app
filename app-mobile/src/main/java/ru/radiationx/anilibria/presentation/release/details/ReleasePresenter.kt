@@ -52,8 +52,8 @@ class ReleasePresenter @Inject constructor(
 
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
     }
 
     private fun loadRelease() {

@@ -77,8 +77,8 @@ class ReleaseInfoPresenter @Inject constructor(
 
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
 
         donationRepository
             .observerDonationInfo()

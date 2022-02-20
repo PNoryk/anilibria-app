@@ -1,5 +1,7 @@
 package ru.radiationx.anilibria.presentation.auth.vk
 
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import moxy.InjectViewState
 import ru.radiationx.anilibria.AuthVkNotifier
 import ru.radiationx.anilibria.model.loading.StateController
@@ -35,8 +37,8 @@ class AuthVkPresenter @Inject constructor(
 
         stateController
             .observeState()
-            .subscribe { viewState.showState(it) }
-            .addToDisposable()
+            .onEach { viewState.showState(it) }
+            .launchIn(viewModelScope)
         resetPage()
     }
 
