@@ -15,6 +15,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.ScheduleRepository
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class MainScheduleViewModel(
@@ -70,6 +71,6 @@ class MainScheduleViewModel(
     }
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }

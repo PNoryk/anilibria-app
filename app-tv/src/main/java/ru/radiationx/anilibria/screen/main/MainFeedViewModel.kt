@@ -9,6 +9,7 @@ import ru.radiationx.shared_app.common.SystemUtils
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.FeedRepository
+import tv.anilibria.module.domain.entity.release.ReleaseId
 import tv.anilibria.module.domain.entity.youtube.Youtube
 
 @InjectConstructor
@@ -52,7 +53,7 @@ class MainFeedViewModel(
         super.onLibriaCardClick(card)
         when (card.type) {
             LibriaCard.Type.RELEASE -> {
-                router.navigateTo(DetailsScreen(card.id))
+                router.navigateTo(DetailsScreen(ReleaseId(card.id)))
             }
             LibriaCard.Type.YOUTUBE -> {
                 val youtubeItem = card.rawData as Youtube

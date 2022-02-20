@@ -24,8 +24,7 @@ class PlayerEpisodesGuidedFragment : BasePlayerGuidedFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(viewModel)
-        releaseId?.also { viewModel.argReleaseId = it }
-        episodeId?.also { viewModel.argEpisodeId = it }
+        viewModel.argEpisodeId = episodeId
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

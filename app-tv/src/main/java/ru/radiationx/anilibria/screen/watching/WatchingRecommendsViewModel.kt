@@ -12,6 +12,7 @@ import tv.anilibria.module.data.repos.ReleaseRepository
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class WatchingRecommendsViewModel(
@@ -62,7 +63,7 @@ class WatchingRecommendsViewModel(
     }
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 
 }

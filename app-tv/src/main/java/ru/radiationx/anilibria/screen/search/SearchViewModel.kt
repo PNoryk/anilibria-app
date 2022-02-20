@@ -13,6 +13,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class SearchViewModel(
@@ -50,7 +51,7 @@ class SearchViewModel(
 
     override fun onLibriaCardClick(card: LibriaCard) {
         if (card.type == LibriaCard.Type.RELEASE) {
-            router.navigateTo(DetailsScreen(card.id))
+            router.navigateTo(DetailsScreen(ReleaseId(card.id)))
         }
     }
 }

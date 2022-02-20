@@ -21,10 +21,10 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.common.GradientBackgroundManager
 import ru.radiationx.anilibria.di.DownloadModule
 import ru.radiationx.shared.ktx.android.subscribeTo
-import ru.radiationx.shared_app.common.download.DownloadControllerImpl
 import ru.radiationx.shared_app.di.viewModel
 import ru.radiationx.shared_app.screen.ScopedFragment
 import toothpick.ktp.binding.module
+import tv.anilibria.feature.downloads.data.shared.DownloadControllerImpl
 import javax.inject.Inject
 
 @RuntimePermissions
@@ -56,11 +56,11 @@ class UpdateFragment : ScopedFragment(R.layout.fragment_update) {
             val string = StringBuilder().apply {
                 appendParam("Версия", it.name.orEmpty())
                 appendParam("Дата", it.date.orEmpty())
-                appendln("<br>")
-                appendSection("Важно", it.important)
-                appendSection("Добавлено", it.added)
-                appendSection("Исправлено", it.fixed)
-                appendSection("Изменено", it.changed)
+                appendLine("<br>")
+                appendSection("Важно", it.important.map { it.text })
+                appendSection("Добавлено", it.added.map { it.text })
+                appendSection("Исправлено", it.fixed.map { it.text })
+                appendSection("Изменено", it.changed.map { it.text })
             }
             updateDescription.text = Html.fromHtml(string.toString())
         }

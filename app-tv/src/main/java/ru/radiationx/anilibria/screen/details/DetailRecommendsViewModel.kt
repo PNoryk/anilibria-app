@@ -72,6 +72,6 @@ class DetailRecommendsViewModel(
     }
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }

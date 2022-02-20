@@ -1,91 +1,67 @@
 package ru.radiationx.anilibria.common
 
-import android.content.Context
 import android.text.Html
+import kotlinx.datetime.DayOfWeek
 import toothpick.InjectConstructor
+import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseStatus
-import tv.anilibria.module.domain.entity.schedule.ScheduleDay
 import java.text.NumberFormat
-import java.util.*
 
 @InjectConstructor
-class DetailDataConverter(
-    private val context: Context
-) {
+class DetailDataConverter {
 
-    fun toDetail(releaseItem: Release): LibriaDetails = releaseItem.run {
+    fun toDetail(
+        releaseItem: Release,
+        visits: List<EpisodeVisit>
+    ): LibriaDetails = releaseItem.run {
         LibriaDetails(
-            id,
-            title.orEmpty(),
-            titleEng.orEmpty(),
-            listOf(
-                genres.firstOrNull()?.capitalize()?.trim(),
-                "${seasons.firstOrNull()} год",
-                types.firstOrNull()?.trim(),
+            id = id,
+            titleRu = titleRus?.text.orEmpty(),
+            titleEn = titleEng?.text.orEmpty(),
+            extra = listOf(
+                genres?.firstOrNull()?.value?.capitalize()?.trim(),
+                "${year?.value} год",
+                type?.trim(),
                 "Серии: ${series?.trim() ?: "Не доступно"}"
             ).joinToString(" • "),
-            Html.fromHtml(description.orEmpty()).toString().trim().trim('"')/*.replace('\n', ' ')*/,
-            getAnnounce(),
-            poster.orEmpty(),
-            NumberFormat.getNumberInstance().format(favoriteInfo.rating),
-            (releaseItem as? Release)?.episodes?.any { it.urlFullHd != null } ?: false,
-            favoriteInfo.isAdded,
-            (releaseItem as? Release)?.episodes?.isNotEmpty() ?: false,
-            (releaseItem as? Release)?.episodes?.any { it.isViewed } ?: false,
-            false && (releaseItem as? Release)?.moonwalkLink != null
+            description = Html.fromHtml(description?.text.orEmpty()).toString().trim()
+                .trim('"')/*.replace('\n', ' ')*/,
+            announce = getAnnounce(),
+            image = poster?.url.orEmpty(),
+            favoriteCount = favoriteInfo?.rating?.value?.let {
+                NumberFormat.getNumberInstance().format(it)
+            },
+            hasFullHd = (releaseItem as? Release)?.episodes?.any { it.urlFullHd != null } ?: false,
+            isFavorite = favoriteInfo?.isAdded ?: false,
+            hasEpisodes = releaseItem.episodes?.isNotEmpty() ?: false,
+            hasViewed = visits.any { it.isViewed },
+            hasWebPlayer = false
         )
     }
 
     fun Release.getAnnounce(): String {
-        if (statusCode == ReleaseStatus.COMPLETE) {
+        if (status == ReleaseStatus.COMPLETE) {
             return "Релиз завершен"
         }
 
-        val originalAnnounce = announce?.trim()?.trim('.')?.capitalize()
-        val scheduleAnnounce = days.firstOrNull()?.toAnnounce2().orEmpty()
+        val originalAnnounce = announce?.text?.trim()?.trim('.')?.capitalize()
+        val scheduleAnnounce = scheduleDay?.toAnnounce2().orEmpty()
         return originalAnnounce ?: scheduleAnnounce
     }
 
-    fun String.toAnnounce(): String {
-        val calendarDay = ScheduleDay.toCalendarDay(this)
-        val displayDay = Calendar.getInstance().let {
-            it.set(Calendar.DAY_OF_WEEK, calendarDay)
-            it.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
-        }.orEmpty()
-        val prefix = calendarDay.dayIterationPrefix()
-        return "Новая серия $prefix $displayDay"
-    }
-
-    fun String.toAnnounce2(): String {
-        val calendarDay = ScheduleDay.toCalendarDay(this)
-        val displayDay = Calendar.getInstance().let {
-            it.set(Calendar.DAY_OF_WEEK, calendarDay)
-            it.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())
-        }.orEmpty()
-        val prefix = calendarDay.dayIterationPrefix2()
+    fun DayOfWeek.toAnnounce2(): String {
+        val prefix = dayIterationPrefix2()
         return "Серии выходят $prefix"
     }
 
-    fun Int.dayIterationPrefix(): String = when (this) {
-        Calendar.MONDAY,
-        Calendar.TUESDAY,
-        Calendar.THURSDAY -> "каждый"
-        Calendar.WEDNESDAY,
-        Calendar.FRIDAY,
-        Calendar.SATURDAY -> "каждую"
-        Calendar.SUNDAY -> "каждое"
-        else -> throw Exception("Not found day by $this")
-    }
-
-    fun Int.dayIterationPrefix2(): String = when (this) {
-        Calendar.MONDAY -> "в понедельник"
-        Calendar.TUESDAY -> "во вторник"
-        Calendar.WEDNESDAY -> "в среду"
-        Calendar.THURSDAY -> "в четверг"
-        Calendar.FRIDAY -> "в пятницу"
-        Calendar.SATURDAY -> "в субботу"
-        Calendar.SUNDAY -> "в воскресенье"
-        else -> throw Exception("Not found day by $this")
+    fun DayOfWeek.dayIterationPrefix2(): String = when (this) {
+        DayOfWeek.MONDAY -> "в понедельник"
+        DayOfWeek.TUESDAY -> "во вторник"
+        DayOfWeek.WEDNESDAY -> "в среду"
+        DayOfWeek.THURSDAY -> "в четверг"
+        DayOfWeek.FRIDAY -> "в пятницу"
+        DayOfWeek.SATURDAY -> "в субботу"
+        DayOfWeek.SUNDAY -> "в воскресенье"
     }
 }

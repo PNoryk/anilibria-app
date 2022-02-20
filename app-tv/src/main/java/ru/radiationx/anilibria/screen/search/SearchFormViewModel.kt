@@ -52,15 +52,15 @@ class SearchFormViewModel(
     }
 
     fun onYearClick() {
-        guidedRouter.open(SearchYearGuidedScreen(searchForm.years))
+        guidedRouter.open(SearchYearGuidedScreen(searchForm.years.orEmpty()))
     }
 
     fun onSeasonClick() {
-        guidedRouter.open(SearchSeasonGuidedScreen(searchForm.seasons))
+        guidedRouter.open(SearchSeasonGuidedScreen(searchForm.seasons.orEmpty()))
     }
 
     fun onGenreClick() {
-        guidedRouter.open(SearchGenreGuidedScreen(searchForm.genres))
+        guidedRouter.open(SearchGenreGuidedScreen(searchForm.genres.orEmpty()))
     }
 
     fun onSortClick() {
@@ -74,9 +74,9 @@ class SearchFormViewModel(
     private fun updateDataByForm() {
         viewModelScope.launch {
             Log.e("kokoko", "updateDataByForm $searchForm")
-            yearData.value = searchForm.years?.generateListTitle("Все годы")
-            seasonData.value = searchForm.seasons?.generateListTitle("Все сезоны")
-            genreData.value = searchForm.genres?.generateListTitle("Все жанры")
+            yearData.value = searchForm.years?.map { it.value }.generateListTitle("Все годы")
+            seasonData.value = searchForm.seasons?.map { it.value }.generateListTitle("Все сезоны")
+            genreData.value = searchForm.genres?.map { it.value }.generateListTitle("Все жанры")
             sortData.value = when (searchForm.sort) {
                 SearchForm.Sort.RATING -> "По популярности"
                 SearchForm.Sort.DATE -> "По новизне"

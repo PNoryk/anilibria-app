@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.view_titleview.view.*
 import ru.radiationx.anilibria.R
 
 open class BrowseTitleView @JvmOverloads constructor(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.browseTitleViewStyle
 ) : ConstraintLayout(context, attrs, defStyleAttr), TitleViewAdapter.Provider {
@@ -140,7 +140,7 @@ open class BrowseTitleView @JvmOverloads constructor(
     override fun getTitleViewAdapter(): TitleViewAdapter = mTitleViewAdapter
 
     override fun focusSearch(focused: View, direction: Int): View? {
-        Log.e("kokoko","focusSearch $direction, $focused")
+        Log.e("kokoko", "focusSearch $direction, $focused")
         if ((direction == View.FOCUS_LEFT || direction == View.FOCUS_RIGHT || direction == View.FOCUS_UP || direction == View.FOCUS_DOWN)) {
             var nextView: View? = when (direction) {
                 View.FOCUS_LEFT -> findViewById(focused.nextFocusLeftId)
@@ -149,7 +149,7 @@ open class BrowseTitleView @JvmOverloads constructor(
                 View.FOCUS_UP -> findViewById(focused.nextFocusUpId)
                 else -> null
             }
-            Log.e("kokoko","focusSearch next $direction, $nextView")
+            Log.e("kokoko", "focusSearch next $direction, $nextView")
             if (focused.parent == this && (nextView == null || !nextView.isVisible || !(nextView.isFocusable || nextView is ViewGroup))) {
                 nextView = when (direction) {
                     View.FOCUS_LEFT -> findViewById(focused.nextFocusUpId)
@@ -161,7 +161,7 @@ open class BrowseTitleView @JvmOverloads constructor(
                 }
             }
 
-            Log.e("kokoko","focusSearch final next $direction, $nextView")
+            Log.e("kokoko", "focusSearch final next $direction, $nextView")
 
             if (nextView != null && (nextView.isFocusable || nextView is ViewGroup)) {
                 return nextView
@@ -170,8 +170,14 @@ open class BrowseTitleView @JvmOverloads constructor(
         return super.focusSearch(focused, direction)
     }
 
-    override fun onRequestFocusInDescendants(direction: Int, previouslyFocusedRect: Rect?): Boolean {
-        return searchAffordanceView.requestFocus() || super.onRequestFocusInDescendants(direction, previouslyFocusedRect)
+    override fun onRequestFocusInDescendants(
+        direction: Int,
+        previouslyFocusedRect: Rect?
+    ): Boolean {
+        return searchAffordanceView.requestFocus() || super.onRequestFocusInDescendants(
+            direction,
+            previouslyFocusedRect
+        )
     }
 
     class Adapter(private val titleView: BrowseTitleView) : TitleViewAdapter() {
@@ -182,7 +188,8 @@ open class BrowseTitleView @JvmOverloads constructor(
 
         fun getAlert(): CharSequence? = titleView.alert
 
-        fun setOnAlertClickedListener(listener: OnClickListener?) = titleView.setOnAlertClickedListener(listener)
+        fun setOnAlertClickedListener(listener: OnClickListener?) =
+            titleView.setOnAlertClickedListener(listener)
 
         fun setOther(otherText: CharSequence?) {
             titleView.other = otherText
@@ -190,13 +197,18 @@ open class BrowseTitleView @JvmOverloads constructor(
 
         fun getOther(): CharSequence? = titleView.other
 
-        fun setOnOtherClickedListener(listener: OnClickListener?) = titleView.setOnOtherClickedListener(listener)
+        fun setOnOtherClickedListener(listener: OnClickListener?) =
+            titleView.setOnOtherClickedListener(listener)
 
         override fun getSearchAffordanceView(): View = titleView.searchAffordanceView
-        override fun setOnSearchClickedListener(listener: OnClickListener?) = titleView.setOnSearchClickedListener(listener)
+        override fun setOnSearchClickedListener(listener: OnClickListener?) =
+            titleView.setOnSearchClickedListener(listener)
+
         override fun setAnimationEnabled(enable: Boolean) = titleView.enableAnimation(enable)
         override fun getBadgeDrawable(): Drawable? = titleView.badgeDrawable
-        override fun getSearchAffordanceColors(): SearchOrbView.Colors = titleView.searchAffordanceColors
+        override fun getSearchAffordanceColors(): SearchOrbView.Colors =
+            titleView.searchAffordanceColors
+
         override fun getTitle(): CharSequence? = titleView.title
         override fun setBadgeDrawable(drawable: Drawable?) {
             titleView.badgeDrawable = drawable
@@ -210,6 +222,7 @@ open class BrowseTitleView @JvmOverloads constructor(
             titleView.title = titleText
         }
 
-        override fun updateComponentsVisibility(flags: Int) = titleView.updateComponentsVisibility(flags)
+        override fun updateComponentsVisibility(flags: Int) =
+            titleView.updateComponentsVisibility(flags)
     }
 }

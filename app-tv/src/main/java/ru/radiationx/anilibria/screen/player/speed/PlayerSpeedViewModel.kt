@@ -1,14 +1,16 @@
 package ru.radiationx.anilibria.screen.player.speed
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.preferences.PreferencesStorage
 
 @InjectConstructor
 class PlayerSpeedViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val preferencesStorage: PreferencesStorage,
     private val guidedRouter: GuidedRouter
 ) : LifecycleViewModel() {
 
@@ -19,18 +21,22 @@ class PlayerSpeedViewModel(
 
     override fun onCreate() {
         super.onCreate()
-        speedData.value = speedList.map {
-            if (it == 1.0f) {
-                "Обычная"
-            } else {
-                "${it}x"
+        viewModelScope.launch {
+            speedData.value = speedList.map {
+                if (it == 1.0f) {
+                    "Обычная"
+                } else {
+                    "${it}x"
+                }
             }
+            selectedIndex.value = speedList.indexOf(preferencesStorage.playSpeed.get())
         }
-        selectedIndex.value = speedList.indexOf(releaseInteractor.getPlaySpeed())
     }
 
     fun applySpeed(index: Int) {
-        releaseInteractor.setPlaySpeed(speedList[index])
-        guidedRouter.close()
+        viewModelScope.launch {
+            preferencesStorage.playSpeed.put(speedList[index])
+            guidedRouter.close()
+        }
     }
 }

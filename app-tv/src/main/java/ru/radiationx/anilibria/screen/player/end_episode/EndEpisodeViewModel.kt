@@ -38,18 +38,21 @@ class EndEpisodeViewModel(
 
         viewModelScope.launch {
             episodeHistoryRepository.saveSeek(episode.id, 0)
-            playerController.selectEpisodeRelay.accept(episode.id)
+            playerController.selectEpisodeRelay.emit(episode.id)
             guidedRouter.close()
         }
     }
 
     fun onNextClick() {
         val episode = currentEpisode ?: return
-        val currentIndex = currentEpisodes.indexOfFirst { it.id == episode.id }
 
-        currentEpisodes.getOrNull(currentIndex + 1)?.also { nextEpisode ->
-            playerController.selectEpisodeRelay.accept(nextEpisode.id)
+        viewModelScope.launch {
+            val currentIndex = currentEpisodes.indexOfFirst { it.id == episode.id }
+
+            currentEpisodes.getOrNull(currentIndex + 1)?.also { nextEpisode ->
+                playerController.selectEpisodeRelay.emit(nextEpisode.id)
+            }
+            guidedRouter.close()
         }
-        guidedRouter.close()
     }
 }

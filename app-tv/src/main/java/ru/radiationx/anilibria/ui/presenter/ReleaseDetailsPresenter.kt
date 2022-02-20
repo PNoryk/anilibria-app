@@ -118,7 +118,7 @@ class LibriaReleaseViewHolder(
         rowReleaseDescription.text = details.description
         rowReleaseAnnounce.text = details.announce
         rowReleaseFavoriteCount.text = details.favoriteCount
-        rowReleaseFavoriteCount.isVisible = details.favoriteCount != "0"
+        rowReleaseFavoriteCount.isVisible = details.favoriteCount != null
 
         val favoriteDrawable = if (details.isFavorite) {
             rowReleaseFavoriteCount.getCompatDrawable(R.drawable.ic_details_favorite_filled)

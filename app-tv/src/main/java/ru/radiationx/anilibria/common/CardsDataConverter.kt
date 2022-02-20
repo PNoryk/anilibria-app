@@ -12,7 +12,7 @@ class CardsDataConverter(
 ) {
 
     fun toCard(releaseItem: Release): LibriaCard {
-        val seasonText = releaseItem.season?.value
+        val seasonText = releaseItem.year?.value
         val genreText = releaseItem.genres?.firstOrNull()?.value?.capitalize()
         val seriesText = releaseItem.series?.trim() ?: "Не доступно"
         val dateText = releaseItem.torrentUpdate

@@ -15,6 +15,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.repos.FavoriteRepository
 import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class WatchingFavoritesViewModel(
@@ -58,6 +59,6 @@ class WatchingFavoritesViewModel(
         }
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }

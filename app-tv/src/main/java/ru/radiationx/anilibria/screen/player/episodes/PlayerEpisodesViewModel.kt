@@ -52,7 +52,9 @@ class PlayerEpisodesViewModel(
     }
 
     fun applyEpisode(index: Int) {
-        playerController.selectEpisodeRelay.accept(currentEpisodes[index].id)
-        guidedRouter.close()
+        viewModelScope.launch {
+            playerController.selectEpisodeRelay.emit(currentEpisodes[index].id)
+            guidedRouter.close()
+        }
     }
 }

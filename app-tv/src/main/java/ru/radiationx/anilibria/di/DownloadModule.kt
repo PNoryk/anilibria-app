@@ -1,9 +1,9 @@
 package ru.radiationx.anilibria.di
 
-import ru.radiationx.shared_app.common.download.DownloadController
-import ru.radiationx.shared_app.common.download.DownloadControllerImpl
-import ru.radiationx.shared_app.common.download.DownloadsDataSource
 import toothpick.config.Module
+import tv.anilibria.feature.downloads.data.shared.DownloadController
+import tv.anilibria.feature.downloads.data.shared.DownloadControllerImpl
+import tv.anilibria.feature.downloads.data.shared.DownloadsDataSource
 
 class DownloadModule : Module() {
 

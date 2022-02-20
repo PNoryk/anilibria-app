@@ -24,6 +24,7 @@ import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
 import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
 
@@ -39,12 +40,13 @@ class DetailHeaderViewModel(
     private val playerController: PlayerController
 ) : LifecycleViewModel() {
 
-    var releaseId: ReleaseId? = null
+    lateinit var releaseId: ReleaseId
 
     val releaseData = MutableLiveData<LibriaDetails>()
     val progressState = MutableLiveData<DetailsState>()
 
     private var currentRelease: Release? = null
+    private var currentVisits = mutableListOf<EpisodeVisit>()
 
     private var selectEpisodeJob: Job? = null
     private var favoriteJob: Job? = null
@@ -54,16 +56,25 @@ class DetailHeaderViewModel(
 
         (releaseInteractor.getFull(releaseId) ?: releaseInteractor.getItem(releaseId))?.also {
             currentRelease = it
-            update(it)
+            update()
         }
         updateProgress()
+
+        episodeHistoryRepository
+            .observeByRelease(releaseId)
+            .onEach {
+                currentVisits.clear()
+                currentVisits.addAll(it)
+                update()
+            }
+            .launchIn(viewModelScope)
 
         releaseInteractor
             .observeFull(releaseId)
             .onEach {
                 Log.e("kekeke", "observeFull")
                 currentRelease = it
-                update(it)
+                update()
                 updateProgress()
             }
             .launchIn(viewModelScope)
@@ -139,8 +150,8 @@ class DetailHeaderViewModel(
                     favoriteRepository.addFavorite(release.id)
                 }
             }.onSuccess {
-                val newRelease = release.copy(favoriteInfo = it.favoriteInfo)
-                update(newRelease)
+                currentRelease = release.copy(favoriteInfo = it.favoriteInfo)
+                update()
             }.onFailure {
                 it.printStackTrace()
             }
@@ -162,7 +173,8 @@ class DetailHeaderViewModel(
         )
     }
 
-    private fun update(release: Release) {
-        releaseData.value = converter.toDetail(release)
+    private fun update() {
+        val release = currentRelease ?: return
+        releaseData.value = converter.toDetail(release, currentVisits)
     }
 }

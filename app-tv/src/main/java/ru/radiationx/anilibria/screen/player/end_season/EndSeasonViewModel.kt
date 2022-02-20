@@ -40,16 +40,18 @@ class EndSeasonViewModel(
 
         viewModelScope.launch {
             episodeHistoryRepository.saveSeek(episode.id, 0)
-            playerController.selectEpisodeRelay.accept(episode.id)
+            playerController.selectEpisodeRelay.emit(episode.id)
             guidedRouter.close()
         }
     }
 
     fun onReplaySeasonClick() {
-        currentEpisodes.firstOrNull()?.also { firstEpisode ->
-            playerController.selectEpisodeRelay.accept(firstEpisode.id)
+        viewModelScope.launch {
+            currentEpisodes.firstOrNull()?.also { firstEpisode ->
+                playerController.selectEpisodeRelay.emit(firstEpisode.id)
+            }
+            guidedRouter.close()
         }
-        guidedRouter.close()
     }
 
     fun onCloseClick() {

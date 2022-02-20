@@ -10,6 +10,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.HistoryRepository
 import tv.anilibria.module.data.repos.ReleaseRepository
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class WatchingContinueViewModel(
@@ -69,6 +70,6 @@ class WatchingContinueViewModel(
 
     override fun onLibriaCardClick(card: LibriaCard) {
         super.onLibriaCardClick(card)
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }

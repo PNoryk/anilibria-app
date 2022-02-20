@@ -9,6 +9,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class SuggestionsRecommendsViewModel(
@@ -33,6 +34,6 @@ class SuggestionsRecommendsViewModel(
         .let { result -> result.items.map { converter.toCard(it) } }
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }

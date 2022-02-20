@@ -11,6 +11,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.ReleaseId
 import kotlin.time.Duration.Companion.milliseconds
 
 @InjectConstructor
@@ -61,7 +62,7 @@ class SuggestionsResultViewModel(
     }
 
     fun onCardClick(item: LibriaCard) {
-        router.navigateTo(DetailsScreen(item.id))
+        router.navigateTo(DetailsScreen(ReleaseId(item.id)))
     }
 
     private fun showItems(items: List<Release>, query: String, validQuery: Boolean) {

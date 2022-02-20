@@ -13,6 +13,7 @@ import ru.radiationx.shared.ktx.asDayName
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.ScheduleRepository
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class ScheduleViewModel(
@@ -42,6 +43,6 @@ class ScheduleViewModel(
     }
 
     fun onCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }

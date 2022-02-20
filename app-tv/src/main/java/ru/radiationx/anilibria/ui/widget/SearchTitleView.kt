@@ -3,18 +3,16 @@ package ru.radiationx.anilibria.ui.widget
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import kotlinx.android.synthetic.main.view_titleview.view.*
 import kotlinx.android.synthetic.main.view_search_controls.view.*
+import kotlinx.android.synthetic.main.view_titleview.view.*
 import ru.radiationx.anilibria.R
 
 class SearchTitleView @JvmOverloads constructor(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.browseTitleViewStyle
 ) : BrowseTitleView(context, attrs, defStyleAttr) {
@@ -64,7 +62,10 @@ class SearchTitleView @JvmOverloads constructor(
         searchTitleComplete.setOnClickListener(listener)
     }
 
-    override fun onRequestFocusInDescendants(direction: Int, previouslyFocusedRect: Rect?): Boolean {
+    override fun onRequestFocusInDescendants(
+        direction: Int,
+        previouslyFocusedRect: Rect?
+    ): Boolean {
         if (findFocus() == null && direction == View.FOCUS_UP && title_controls.requestFocus()) {
             return true
         }

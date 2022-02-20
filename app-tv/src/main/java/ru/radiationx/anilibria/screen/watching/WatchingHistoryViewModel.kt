@@ -8,6 +8,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.HistoryRepository
 import tv.anilibria.module.data.repos.ReleaseRepository
+import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class WatchingHistoryViewModel(
@@ -32,6 +33,6 @@ class WatchingHistoryViewModel(
         false
 
     override fun onLibriaCardClick(card: LibriaCard) {
-        router.navigateTo(DetailsScreen(card.id))
+        router.navigateTo(DetailsScreen(ReleaseId(card.id)))
     }
 }
