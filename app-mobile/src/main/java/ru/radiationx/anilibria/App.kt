@@ -21,8 +21,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.di.AppModule
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.di.DataModule
-import ru.radiationx.data.migration.MigrationDataSource
 import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.shared_app.common.ImageLoaderConfig
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
@@ -31,6 +29,7 @@ import ru.radiationx.shared_app.di.DI
 import toothpick.Toothpick
 import toothpick.configuration.Configuration
 import tv.anilibria.module.data.analytics.features.AppAnalytics
+import tv.anilibria.module.data.migration.MigrationDataSource
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.ByteArrayInputStream
@@ -180,7 +179,7 @@ class App : Application() {
     private fun initDependencies() {
         Toothpick.setConfiguration(Configuration.forProduction())
         val scope = Toothpick.openScope(DI.DEFAULT_SCOPE)
-        scope.installModules(AppModule(this), DataModule(this))
+        scope.installModules(AppModule(this))
     }
 
     private fun appVersionCheck() {

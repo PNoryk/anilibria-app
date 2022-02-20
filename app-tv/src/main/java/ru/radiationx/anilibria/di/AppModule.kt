@@ -6,7 +6,7 @@ import ru.radiationx.anilibria.AppMigrationExecutor
 import ru.radiationx.anilibria.TvCheckerSources
 import ru.radiationx.data.analytics.AnalyticsErrorReporter
 import ru.radiationx.data.analytics.AnalyticsSender
-import ru.radiationx.data.migration.MigrationExecutor
+import tv.anilibria.module.data.migration.MigrationExecutor
 import ru.radiationx.shared_app.analytics.errors.AppMetricaErrorReporter
 import ru.radiationx.shared_app.analytics.errors.CombinedErrorReporter
 import ru.radiationx.shared_app.analytics.errors.LoggingErrorReporter

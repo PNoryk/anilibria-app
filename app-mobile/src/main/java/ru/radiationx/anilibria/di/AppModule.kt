@@ -12,7 +12,7 @@ import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.anilibria.ui.common.LinkRouter
 import ru.radiationx.anilibria.utils.DimensionsProvider
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.migration.MigrationExecutor
+import tv.anilibria.module.data.migration.MigrationExecutor
 import ru.radiationx.shared_app.analytics.errors.AppMetricaErrorReporter
 import ru.radiationx.shared_app.analytics.errors.CombinedErrorReporter
 import ru.radiationx.shared_app.analytics.errors.LoggingErrorReporter

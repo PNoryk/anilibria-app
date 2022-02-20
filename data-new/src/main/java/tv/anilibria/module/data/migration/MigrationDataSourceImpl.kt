@@ -1,12 +1,12 @@
-package ru.radiationx.data.migration
+package tv.anilibria.module.data.migration
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.TextUtils
 import android.widget.Toast
-import ru.radiationx.data.SharedBuildConfig
-import ru.radiationx.data.analytics.AnalyticsErrorReporter
 import toothpick.InjectConstructor
+import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 
 @InjectConstructor
 class MigrationDataSourceImpl(
