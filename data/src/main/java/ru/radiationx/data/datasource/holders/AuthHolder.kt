@@ -9,5 +9,4 @@ import io.reactivex.Observable
 interface AuthHolder {
     fun observeVkAuthChange(): Observable<Boolean>
     fun changeVkAuth(value: Boolean)
-    fun getDeviceId(): String
 }
