@@ -65,7 +65,7 @@ data class ReleaseListItem(val item: ReleaseItemState) : ListItem(item.id)
 data class ReleaseEpisodeListItem(
     val state: ReleaseEpisodeItemState,
     val isEven: Boolean
-) : ListItem("${state.releaseId}_${state.id}")
+) : ListItem("${state.id.releaseId}_${state.id.id}")
 
 data class ReleaseTorrentListItem(val state: ReleaseTorrentItemState) : ListItem(state.id)
 data class ReleaseExpandListItem(val title: String) : ListItem(title)

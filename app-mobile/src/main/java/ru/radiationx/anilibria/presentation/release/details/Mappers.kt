@@ -129,7 +129,7 @@ fun Release.toTabsState(episodesVisits: List<EpisodeVisit>): List<EpisodesTabSta
 fun ExternalPlaylist.toTabState(): EpisodesTabState = EpisodesTabState(
     tag = tag,
     title = title,
-    textColor = tag.asDataColorRes(),
+    textColor = color.asDataColorRes(),
     episodes = episodes.map { it.toState(this) }
 )
 

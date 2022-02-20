@@ -37,6 +37,8 @@ import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.ReleaseCode
+import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 
@@ -45,17 +47,14 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
     companion object {
         private const val ARG_ID: String = "release_id"
         private const val ARG_ID_CODE: String = "release_id_code"
-        private const val ARG_ITEM: String = "release_item"
         const val TRANSACTION = "CHTO_TEBE_SUKA_NADO_ESHO"
 
         fun newInstance(
-            id: Int = -1,
-            code: String? = null,
-            item: Release? = null
+            id: ReleaseId? = null,
+            code: ReleaseCode? = null,
         ) = ReleaseFragment().putExtra {
-            putInt(ARG_ID, id)
-            putString(ARG_ID_CODE, code)
-            putSerializable(ARG_ITEM, item)
+            putParcelable(ARG_ID, id)
+            putParcelable(ARG_ID_CODE, code)
         }
     }
 
@@ -97,9 +96,8 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
         Log.e("S_DEF_LOG", "ONCRETE $this")
         Log.e("S_DEF_LOG", "ONCRETE REL $arguments, $savedInstanceState")
         arguments?.also { bundle ->
-            presenter.releaseId = bundle.getInt(ARG_ID, presenter.releaseId)
-            presenter.releaseIdCode = bundle.getString(ARG_ID_CODE, presenter.releaseIdCode)
-            presenter.argReleaseItem = bundle.getSerializable(ARG_ITEM) as ReleaseItem?
+            presenter.releaseId = bundle.getParcelable(ARG_ID)
+            presenter.releaseIdCode = bundle.getParcelable(ARG_ID_CODE)
         }
     }
 
@@ -179,12 +177,6 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
         })
 
         viewPagerPaged.adapter = pagerAdapter
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(ARG_ID, presenter.releaseId)
-        outState.putString(ARG_ID_CODE, presenter.releaseIdCode)
     }
 
     override fun onBackPressed(): Boolean {

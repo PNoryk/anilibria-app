@@ -98,7 +98,7 @@ class SchedulePresenter @Inject constructor(
             ?: return
         scheduleAnalytics.releaseClick(position)
         releaseAnalytics.open(AnalyticsConstants.screen_schedule, releaseItem.id.id)
-        router.navigateTo(Screens.ReleaseDetails(releaseItem.id.id))
+        router.navigateTo(Screens.ReleaseDetails(releaseItem.id))
     }
 
     fun refresh() {

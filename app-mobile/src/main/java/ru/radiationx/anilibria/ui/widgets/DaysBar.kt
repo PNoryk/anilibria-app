@@ -6,31 +6,31 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.merge_days_bar.view.*
+import kotlinx.datetime.DayOfWeek
 import ru.radiationx.anilibria.R
-import java.util.*
 
 class DaysBar @JvmOverloads constructor(
-        context: Context, attrs:
-        AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context, attrs:
+    AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val daysViews: Map<Int, View>
+    private val daysViews: Map<DayOfWeek, View>
     private val buttons: List<View>
 
-    var clickListener: ((day: Int) -> Unit)? = null
+    var clickListener: ((day: DayOfWeek) -> Unit)? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.merge_days_bar, this, true)
 
         daysViews = mapOf(
-                Calendar.MONDAY to day1,
-                Calendar.TUESDAY to day2,
-                Calendar.WEDNESDAY to day3,
-                Calendar.THURSDAY to day4,
-                Calendar.FRIDAY to day5,
-                Calendar.SATURDAY to day6,
-                Calendar.SUNDAY to day7
+            DayOfWeek.MONDAY to day1,
+            DayOfWeek.TUESDAY to day2,
+            DayOfWeek.WEDNESDAY to day3,
+            DayOfWeek.THURSDAY to day4,
+            DayOfWeek.FRIDAY to day5,
+            DayOfWeek.SATURDAY to day6,
+            DayOfWeek.SUNDAY to day7
         )
         buttons = daysViews.values.toList()
 
@@ -44,10 +44,10 @@ class DaysBar @JvmOverloads constructor(
         }
     }
 
-    fun selectDays(days: List<Int>) {
+    fun selectDays(day: DayOfWeek?) {
         buttons.forEach { it.isSelected = false }
-        days.forEach { day ->
-            daysViews[day]?.isSelected = true
+        day?.also {
+            daysViews[it]?.isSelected = true
         }
     }
 

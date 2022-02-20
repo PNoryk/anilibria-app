@@ -37,7 +37,7 @@ class DonationSectionDelegate(
 
         fun bind(divider: DonationContentSection) {
             tvTitle.text = divider.title
-            tvSubtitle.text = divider.subtitle?.let { Html.fromHtml(it) }
+            tvSubtitle.text = divider.subtitle?.let { Html.fromHtml(it.text) }
             tvTitle.isVisible = divider.title != null
             tvSubtitle.isVisible = divider.subtitle != null
         }

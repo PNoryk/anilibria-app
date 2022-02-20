@@ -2,6 +2,7 @@ package ru.radiationx.anilibria.presentation.release.details
 
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.DonationCardItemState
@@ -29,6 +30,7 @@ import tv.anilibria.module.data.repos.FavoriteRepository
 import tv.anilibria.module.data.repos.HistoryRepository
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.EpisodeVisit
+import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.release.*
 import javax.inject.Inject
 
@@ -401,7 +403,7 @@ class ReleaseInfoPresenter @Inject constructor(
         }
     }
 
-    fun onScheduleClick(day: Int) {
+    fun onScheduleClick(day: DayOfWeek) {
         currentData?.also { data ->
             releaseAnalytics.scheduleClick(data.id.id)
         }
@@ -425,12 +427,13 @@ class ReleaseInfoPresenter @Inject constructor(
         router.navigateTo(Screens.Auth())
     }
 
-    fun openSearch(genre: String) {
+    fun openSearch(tag: String) {
         currentData?.also { data ->
             releaseAnalytics.genreClick(data.id.id)
+            val genre = data.release.genres?.find { it.value==tag }
+            catalogAnalytics.open(AnalyticsConstants.screen_release)
+            router.navigateTo(Screens.ReleasesSearch(genre))
         }
-        catalogAnalytics.open(AnalyticsConstants.screen_release)
-        router.navigateTo(Screens.ReleasesSearch(genre))
     }
 
     fun onDownloadLinkSelected(url: String) {

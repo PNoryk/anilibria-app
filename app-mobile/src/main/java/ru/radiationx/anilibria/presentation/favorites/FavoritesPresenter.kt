@@ -140,7 +140,7 @@ class FavoritesPresenter @Inject constructor(
             favoritesAnalytics.releaseClick()
         }
         releaseAnalytics.open(AnalyticsConstants.screen_favorites, releaseItem.id.id)
-        router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code, releaseItem))
+        router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code))
     }
 
     private fun findRelease(id: ReleaseId): Release? {

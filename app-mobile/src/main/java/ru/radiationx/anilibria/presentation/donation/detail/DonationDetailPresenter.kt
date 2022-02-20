@@ -76,7 +76,7 @@ class DonationDetailPresenter(
                 viewState.openContentDialog(dialog.tag)
             }
             buttonLink != null -> {
-                Utils.externalLink(buttonLink)
+                Utils.externalLink(buttonLink.value)
             }
         }
     }

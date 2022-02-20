@@ -5,6 +5,7 @@ import moxy.InjectViewState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.terrakok.cicerone.Router
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.analytics.features.PageAnalytics
 import tv.anilibria.module.data.repos.PageRepository
 import javax.inject.Inject
@@ -20,20 +21,18 @@ class PagePresenter @Inject constructor(
     private val pageAnalytics: PageAnalytics
 ) : BasePresenter<PageView>(router) {
 
-    var pagePath: String? = null
+    lateinit var pagePath: RelativeUrl
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        pagePath?.also {
-            loadPage(it)
-        }
+        loadPage()
     }
 
-    private fun loadPage(pagePath: String) {
+    private fun loadPage() {
         viewState.setRefreshing(true)
         viewModelScope.launch {
             runCatching {
-                pageRepository.getPage(pagePath)
+                pageRepository.getPage(pagePath.url)
             }.onSuccess { page ->
                 viewState.setRefreshing(false)
                 viewState.showPage(page)

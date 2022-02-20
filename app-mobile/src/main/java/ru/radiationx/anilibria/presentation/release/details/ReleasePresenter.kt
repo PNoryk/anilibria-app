@@ -34,16 +34,12 @@ class ReleasePresenter @Inject constructor(
     private var currentData: Release? = null
     var releaseId: ReleaseId? = null
     var releaseIdCode: ReleaseCode? = null
-    var argReleaseItem: Release? = null
 
     private val stateController = StateController(ReleasePagerState())
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        argReleaseItem?.also {
-            updateLocalRelease(it)
-        }
         releaseInteractor.getItem(releaseId, releaseIdCode)?.also {
             updateLocalRelease(it)
         }

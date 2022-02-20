@@ -35,7 +35,7 @@ class DonationCaptionDelegate(
         }
 
         fun bind(data: DonationContentCaption) {
-            tvText.text = data.text.let { Html.fromHtml(it) }
+            tvText.text = data.text.let { Html.fromHtml(it.text) }
         }
     }
 }

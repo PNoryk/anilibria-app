@@ -30,6 +30,7 @@ import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.ReleaseSeason
 import tv.anilibria.module.domain.entity.ReleaseYear
+import tv.anilibria.module.domain.entity.SearchForm
 
 
 class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView, SharedProvider,
@@ -37,14 +38,11 @@ class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView,
 
     companion object {
         private const val ARG_GENRE: String = "genre"
-        private const val ARG_YEAR: String = "year"
 
         fun newInstance(
-            genres: String? = null,
-            years: String? = null
+            genre: String? = null,
         ) = SearchCatalogFragment().putExtra {
-            putString(ARG_GENRE, genres)
-            putString(ARG_YEAR, years)
+            putString(ARG_GENRE, genre)
         }
     }
 
@@ -98,11 +96,8 @@ class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView,
         injectDependencies(screenScope)
         super.onCreate(savedInstanceState)
         arguments?.also { bundle ->
-            bundle.getString(ARG_GENRE, null)?.also {
-                presenter.onChangeGenres(listOf(it))
-            }
-            bundle.getString(ARG_YEAR, null)?.also {
-                presenter.onChangeYears(listOf(it))
+            bundle.getString(ARG_GENRE)?.also { genre ->
+                presenter.onChangeGenres(listOf(ReleaseGenre(genre)))
             }
         }
     }
@@ -124,20 +119,20 @@ class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView,
                     presenter.onCloseDialog()
                 }
 
-                override fun onCheckedGenres(items: List<String>) {
+                override fun onCheckedGenres(items: List<ReleaseGenre>) {
                     Log.e("lululu", "onCheckedItems ${items.size}")
                     presenter.onChangeGenres(items)
                 }
 
-                override fun onCheckedYears(items: List<String>) {
+                override fun onCheckedYears(items: List<ReleaseYear>) {
                     presenter.onChangeYears(items)
                 }
 
-                override fun onCheckedSeasons(items: List<String>) {
+                override fun onCheckedSeasons(items: List<ReleaseSeason>) {
                     presenter.onChangeSeasons(items)
                 }
 
-                override fun onChangeSorting(sorting: String) {
+                override fun onChangeSorting(sorting: SearchForm.Sort) {
                     presenter.onChangeSorting(sorting)
                 }
 
@@ -258,19 +253,19 @@ class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView,
         genresDialog.setSeasons(seasons)
     }
 
-    override fun selectGenres(genres: List<String>) {
+    override fun selectGenres(genres: List<ReleaseGenre>) {
         genresDialog.setCheckedGenres(genres)
     }
 
-    override fun selectYears(years: List<String>) {
+    override fun selectYears(years: List<ReleaseYear>) {
         genresDialog.setCheckedYears(years)
     }
 
-    override fun selectSeasons(seasons: List<String>) {
+    override fun selectSeasons(seasons: List<ReleaseSeason>) {
         genresDialog.setCheckedSeasons(seasons)
     }
 
-    override fun setSorting(sorting: String) {
+    override fun setSorting(sorting: SearchForm.Sort) {
         genresDialog.setSorting(sorting)
     }
 
@@ -278,12 +273,11 @@ class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView,
         genresDialog.setComplete(complete)
     }
 
-    override fun updateInfo(sort: String, filters: Int) {
+    override fun updateInfo(sort: SearchForm.Sort, filters: Int) {
         var subtitle = ""
         subtitle += when (sort) {
-            "1" -> "По новизне"
-            "2" -> "По популярности"
-            else -> "Ваще рандом"
+            SearchForm.Sort.DATE -> "По новизне"
+            SearchForm.Sort.RATING -> "По популярности"
         }
         subtitle += ", Фильтров: $filters"
         toolbar.subtitle = subtitle

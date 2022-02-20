@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_release_head_new.*
+import kotlinx.datetime.DayOfWeek
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.presentation.release.details.ReleaseDetailModifiersState
 import ru.radiationx.anilibria.presentation.release.details.ReleaseFavoriteState
@@ -76,7 +77,8 @@ class ReleaseHeadDelegate(
             full_announce.isVisible = state.announce != null
             full_announce.text = state.announce?.let { Html.fromHtml(it) }
 
-            bindFavorite(state.favorite, modifiers.favoriteRefreshing)
+            full_fav_btn.isVisible = state.favorite != null
+            state.favorite?.also { bindFavorite(it, modifiers.favoriteRefreshing) }
         }
 
         private fun bindFavorite(state: ReleaseFavoriteState, favoritesRefresh: Boolean) {
@@ -115,7 +117,7 @@ class ReleaseHeadDelegate(
 
         fun onClickFav()
 
-        fun onScheduleClick(day: Int)
+        fun onScheduleClick(day: DayOfWeek)
 
         fun onExpandClick()
     }

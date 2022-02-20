@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_vk_comments.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.App
@@ -35,10 +36,10 @@ import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared_app.di.DI
 import ru.radiationx.shared_app.di.injectDependencies
 import toothpick.Toothpick
+import tv.anilibria.module.data.VkCommentsClient
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
-import java.util.*
 import javax.inject.Inject
 
 
@@ -69,8 +70,8 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
         injectDependencies(screenScope)
         super.onCreate(savedInstanceState)
         arguments?.also { bundle ->
-            presenter.releaseId = bundle.getInt(ARG_ID, presenter.releaseId)
-            presenter.releaseIdCode = bundle.getString(ARG_ID_CODE, presenter.releaseIdCode)
+            presenter.releaseId = bundle.getParcelable(ARG_ID)
+            presenter.releaseIdCode = bundle.getParcelable(ARG_ID_CODE)
         }
     }
 
@@ -280,12 +281,13 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
             return if (needIntercept) {
                 Log.d("kekeke", "tryInterceptComments $url")
                 val client = Toothpick.openScopes(DI.DEFAULT_SCOPE, screenScope)
-                // todo заменить на нетворк клиент
-                //  .getInstance(IClient::class.java, MainClient::class.java.name)
+                    .getInstance(VkCommentsClient::class.java)
 
                 Log.d("S_DEF_LOG", "CHANGE CSS")
                 val cssSrc = try {
-                    client.get(url.orEmpty(), emptyMap()).blockingGet()
+                    runBlocking {
+                        client.getBody(url.orEmpty())
+                    }
                 } catch (ex: Throwable) {
                     ex.printStackTrace()
                     return WebResourceResponse(

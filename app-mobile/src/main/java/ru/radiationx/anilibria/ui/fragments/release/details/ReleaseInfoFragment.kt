@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nostra13.universalimageloader.core.ImageLoader
 import kotlinx.android.synthetic.main.dialog_file_download.view.*
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.datetime.DayOfWeek
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
@@ -81,8 +82,8 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         Log.e("S_DEF_LOG", "ONCRETE $this")
         Log.e("S_DEF_LOG", "ONCRETE REL $arguments, $savedInstanceState")
         arguments?.also { bundle ->
-            presenter.releaseId = bundle.getInt(ARG_ID, presenter.releaseId)
-            presenter.releaseIdCode = bundle.getString(ARG_ID_CODE, presenter.releaseIdCode)
+            presenter.releaseId = bundle.getParcelable(ARG_ID)
+            presenter.releaseIdCode = bundle.getParcelable(ARG_ID_CODE)
         }
     }
 
@@ -96,12 +97,6 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             setHasFixedSize(true)
             disableItemChangeAnimation()
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(ARG_ID, presenter.releaseId)
-        outState.putString(ARG_ID_CODE, presenter.releaseIdCode)
     }
 
     override fun onBackPressed(): Boolean {
@@ -130,7 +125,9 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     }
 
     override fun playEpisodes(release: Release) {
-        playEpisode(release, release.episodes.last())
+        release.episodes?.let { episodes ->
+            playEpisode(release, episodes.last())
+        }
     }
 
     override fun playContinue(release: Release, startWith: Episode) {
@@ -351,7 +348,6 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             quality.toAnalyticsQuality()
         )
         startActivity(Intent(context, MyPlayerActivity::class.java).apply {
-            putExtra(MyPlayerActivity.ARG_RELEASE, release)
             putExtra(MyPlayerActivity.ARG_EPISODE_ID, episode.id)
             putExtra(MyPlayerActivity.ARG_QUALITY, quality)
             playFlag?.let {
@@ -484,7 +480,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             presenter.onClickFav()
         }
 
-        override fun onScheduleClick(day: Int) {
+        override fun onScheduleClick(day: DayOfWeek) {
             presenter.onScheduleClick(day)
         }
 

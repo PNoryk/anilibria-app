@@ -159,7 +159,7 @@ class FeedPresenter @Inject constructor(
         feedAnalytics.scheduleReleaseClick(position)
         releaseAnalytics.open(AnalyticsConstants.screen_feed, releaseItem.id.id)
         router.navigateTo(
-            Screens.ReleaseDetails(releaseItem.id, releaseItem.code, releaseItem)
+            Screens.ReleaseDetails(releaseItem.id, releaseItem.code)
         )
     }
 
@@ -167,7 +167,7 @@ class FeedPresenter @Inject constructor(
         val releaseItem = findRelease(item.id) ?: return
         feedAnalytics.releaseClick()
         releaseAnalytics.open(AnalyticsConstants.screen_feed, releaseItem.id.id)
-        router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code, releaseItem))
+        router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code))
     }
 
     fun onYoutubeClick(item: YoutubeItemState) {

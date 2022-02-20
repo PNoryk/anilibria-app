@@ -12,7 +12,6 @@ import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.anilibria.ui.common.LinkRouter
 import ru.radiationx.anilibria.utils.DimensionsProvider
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import tv.anilibria.module.data.migration.MigrationExecutor
 import ru.radiationx.shared_app.analytics.errors.AppMetricaErrorReporter
 import ru.radiationx.shared_app.analytics.errors.CombinedErrorReporter
 import ru.radiationx.shared_app.analytics.errors.LoggingErrorReporter
@@ -27,9 +26,10 @@ import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import toothpick.config.Module
 import tv.anilibria.feature.appupdates.data.CheckerReserveSources
-import tv.anilibria.module.data.analytics.AnalyticsErrorReporter
-import tv.anilibria.module.data.analytics.AnalyticsSender
-import tv.anilibria.module.data.analytics.profile.AnalyticsProfile
+import tv.anilibria.module.data.migration.MigrationExecutor
+import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
+import tv.anilibria.plugin.data.analytics.AnalyticsSender
+import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 
 class AppModule(context: Context) : Module() {

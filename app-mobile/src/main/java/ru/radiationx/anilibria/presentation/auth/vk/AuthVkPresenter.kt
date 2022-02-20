@@ -2,6 +2,7 @@ package ru.radiationx.anilibria.presentation.auth.vk
 
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.AuthVkNotifier
 import ru.radiationx.anilibria.model.loading.StateController
@@ -82,7 +83,9 @@ class AuthVkPresenter @Inject constructor(
     }
 
     private fun successSignVk(resultUrl: String) {
-        authHolder.changeVkAuth(true)
-        router.exit()
+        viewModelScope.launch {
+            authHolder.changeVkAuth(true)
+            router.exit()
+        }
     }
 }

@@ -22,12 +22,15 @@ import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.ui.widgets.ExtendedWebView
 import ru.radiationx.anilibria.utils.ToolbarHelper
 import ru.radiationx.shared.ktx.android.putExtra
+import ru.radiationx.shared.ktx.android.toBase64
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.module.data.analytics.features.PageAnalytics
 import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.module.domain.entity.page.PageLibria
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 
@@ -41,8 +44,8 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
         private const val ARG_TITLE: String = "page_title"
         private const val WEB_VIEW_SCROLL_Y = "wvsy"
 
-        fun newInstance(pageTitle: String, title: String? = null) = PageFragment().putExtra {
-            putString(ARG_PATH, pageTitle)
+        fun newInstance(pagePath: RelativeUrl, title: String? = null) = PageFragment().putExtra {
+            putParcelable(ARG_PATH, pagePath)
             putString(ARG_TITLE, title)
         }
     }
@@ -51,7 +54,7 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
         LifecycleTimeCounter(pageAnalytics::useTime)
     }
 
-    private var pageTitle: String? = null
+    private val pageTitle: String? by lazy { arguments?.getString(ARG_TITLE) }
 
     @Inject
     lateinit var preferencesStorage: PreferencesStorage
@@ -74,10 +77,7 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(screenScope)
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            presenter.pagePath = it.getString(ARG_PATH, null)
-            pageTitle = it.getString(ARG_TITLE, null)
-        }
+        presenter.pagePath = requireNotNull(arguments?.getParcelable(ARG_PATH))
     }
 
     override fun getLayoutResource(): Int = R.layout.fragment_webview
@@ -190,7 +190,7 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
 
     override fun showPage(page: PageLibria) {
         //toolbar.title = page.title
-        webView?.evalJs("ViewModel.setText('content','${page.content.toBase64()}');")
+        webView?.evalJs("ViewModel.setText('content','${page.content.text.toBase64()}');")
     }
 
 }

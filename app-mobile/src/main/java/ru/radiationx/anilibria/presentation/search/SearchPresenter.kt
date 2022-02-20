@@ -56,14 +56,14 @@ class SearchPresenter @Inject constructor(
     private val currentGenres = mutableListOf<ReleaseGenre>()
     private val currentYears = mutableListOf<ReleaseYear>()
     private val currentSeasons = mutableListOf<ReleaseSeason>()
-    private var currentSorting = "1"
+    private var currentSorting = SearchForm.Sort.DATE
     private var currentComplete = false
     private val currentItems = mutableListOf<Release>()
 
     private val beforeOpenDialogGenres = mutableListOf<ReleaseGenre>()
     private val beforeOpenDialogYears = mutableListOf<ReleaseYear>()
     private val beforeOpenDialogSeasons = mutableListOf<ReleaseSeason>()
-    private var beforeOpenDialogSorting = ""
+    private var beforeOpenDialogSorting = SearchForm.Sort.DATE
     private var beforeComplete = false
 
     private val loadingController = DataLoadingController(viewModelScope) {
@@ -178,17 +178,11 @@ class SearchPresenter @Inject constructor(
 
     private suspend fun getDataSource(params: PageLoadParams): ScreenStateAction.Data<List<ReleaseItemState>> {
         return try {
-            val sort = when (currentSorting) {
-                "2" -> SearchForm.Sort.RATING
-                "1" -> SearchForm.Sort.DATE
-                else -> SearchForm.Sort.RATING
-            }
-
             val form = SearchForm(
                 years = currentYears.toList(),
                 seasons = currentSeasons.toList(),
                 genres = currentGenres.toList(),
-                sort = sort,
+                sort = currentSorting,
                 currentComplete
             )
             searchRepository
@@ -272,7 +266,7 @@ class SearchPresenter @Inject constructor(
         updateInfo()
     }
 
-    fun onChangeSorting(newSorting: String) {
+    fun onChangeSorting(newSorting: SearchForm.Sort) {
         currentSorting = newSorting
         viewState.setSorting(currentSorting)
         updateInfo()
@@ -300,14 +294,14 @@ class SearchPresenter @Inject constructor(
     }
 
     fun onRemindClose() {
-        preferencesStorage.searchRemind = false
+        preferencesStorage.searchRemind.blockingSet(false)
     }
 
     fun onItemClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
         catalogAnalytics.releaseClick()
         releaseAnalytics.open(AnalyticsConstants.screen_catalog, releaseItem.id.id)
-        router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code, releaseItem))
+        router.navigateTo(Screens.ReleaseDetails(releaseItem.id, releaseItem.code))
     }
 
     fun onCopyClick(item: ReleaseItemState) {

@@ -8,6 +8,7 @@ import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.ReleaseSeason
 import tv.anilibria.module.domain.entity.ReleaseYear
+import tv.anilibria.module.domain.entity.SearchForm
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface SearchCatalogView : MvpView {
@@ -15,7 +16,7 @@ interface SearchCatalogView : MvpView {
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun showState(state: SearchScreenState)
 
-    fun updateInfo(sort: String, filters: Int)
+    fun updateInfo(sort: SearchForm.Sort, filters: Int)
 
     fun showGenres(genres: List<ReleaseGenre>)
     fun showYears(years: List<ReleaseYear>)
@@ -23,7 +24,7 @@ interface SearchCatalogView : MvpView {
     fun selectGenres(genres: List<ReleaseGenre>)
     fun selectYears(years: List<ReleaseYear>)
     fun selectSeasons(seasons: List<ReleaseSeason>)
-    fun setSorting(sorting: String)
+    fun setSorting(sorting: SearchForm.Sort)
     fun setComplete(complete: Boolean)
 
     @StateStrategyType(SkipStrategy::class)

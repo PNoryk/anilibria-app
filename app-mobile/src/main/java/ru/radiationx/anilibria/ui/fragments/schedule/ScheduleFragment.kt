@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_list_refresh.*
 import kotlinx.android.synthetic.main.fragment_main_base.*
+import kotlinx.datetime.DayOfWeek
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.R
@@ -22,8 +23,8 @@ class ScheduleFragment : BaseFragment(), ScheduleView, SharedProvider {
 
     companion object {
         private const val ARG_DAY = "arg day"
-        fun newInstance(day: Int = -1) = ScheduleFragment().putExtra {
-            putInt(ARG_DAY, day)
+        fun newInstance(day: DayOfWeek? = null) = ScheduleFragment().putExtra {
+            putSerializable(ARG_DAY, day)
         }
     }
 
@@ -59,9 +60,7 @@ class ScheduleFragment : BaseFragment(), ScheduleView, SharedProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(screenScope)
         super.onCreate(savedInstanceState)
-        arguments?.apply {
-            presenter.argDay = getInt(ARG_DAY, presenter.argDay)
-        }
+        presenter.argDay = arguments?.getSerializable(ARG_DAY) as DayOfWeek?
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
