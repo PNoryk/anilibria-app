@@ -6,6 +6,7 @@ import tv.anilibria.module.domain.entity.release.ReleaseId
 
 data class EpisodeVisit(
     val id: EpisodeId,
+    //todo добавить тип
     val playerSeek: Long?,
     val lastOpenAt: Instant?
 ) {

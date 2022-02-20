@@ -27,13 +27,17 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType
-import com.devbrackets.android.exomedia.listener.*
+import com.devbrackets.android.exomedia.listener.OnCompletionListener
+import com.devbrackets.android.exomedia.listener.OnPreparedListener
+import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener
+import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.analytics.AnalyticsListener
 import com.google.android.exoplayer2.source.MediaSourceEventListener
 import kotlinx.android.synthetic.main.activity_myplayer.*
 import kotlinx.android.synthetic.main.view_video_control.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.michaelbel.bottomsheet.BottomSheet
 import ru.radiationx.anilibria.R
@@ -43,7 +47,7 @@ import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
-import tv.anilibria.module.data.analytics.AnalyticsErrorReporter
+import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.ErrorReporterConstants
 import tv.anilibria.module.data.analytics.features.PlayerAnalytics
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPip
@@ -56,8 +60,11 @@ import tv.anilibria.module.data.preferences.PlayerPipMode
 import tv.anilibria.module.data.preferences.PlayerQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
+import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Episode
+import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.IOException
@@ -70,8 +77,6 @@ import kotlin.math.min
 class MyPlayerActivity : BaseActivity() {
 
     companion object {
-        const val ARG_RELEASE = "release"
-
         //const val ARG_CURRENT = "current"
         const val ARG_EPISODE_ID = "episode_id"
         const val ARG_QUALITY = "quality"
@@ -90,12 +95,15 @@ class MyPlayerActivity : BaseActivity() {
         const val REMOTE_CONTROL_NEXT = 4
 
         //private const val NOT_SELECTED = -1
-        private const val NO_ID = -1
     }
 
-    private lateinit var releaseData: Release
+    private var releaseData: Release? = null
+    private val currentEpisodes = mutableListOf<Episode>()
+    private val currentVisits = mutableListOf<EpisodeVisit>()
+
+
     private var playFlag = PLAY_FLAG_DEFAULT
-    private var currentEpisodeId = NO_ID
+    private var currentEpisodeId: EpisodeId? = null
 
     //private var currentEpisode = NOT_SELECTED
     private var currentQuality: PlayerQuality = PlayerQuality.SD
@@ -106,6 +114,8 @@ class MyPlayerActivity : BaseActivity() {
     @Inject
     lateinit var episodeHistoryRepository: EpisodeHistoryRepository
 
+    @Inject
+    lateinit var releaseInteractor: ReleaseInteractor
 
     @Inject
     lateinit var preferencesStorage: PreferencesStorage
@@ -327,29 +337,41 @@ class MyPlayerActivity : BaseActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
-        val release = intent.getSerializableExtra(ARG_RELEASE) as Release? ?: return
-        val episodeId =
-            intent.getIntExtra(ARG_EPISODE_ID, if (release.episodes.size > 0) 0 else NO_ID)
-        val quality = intent.getIntExtra(ARG_QUALITY, DEFAULT_QUALITY)
-        val playFlag = intent.getIntExtra(ARG_PLAY_FLAG, PLAY_FLAG_DEFAULT)
+        lifecycleScope.launch {
+            val episodeIdArg = requireNotNull(intent.getParcelableExtra<EpisodeId>(ARG_EPISODE_ID))
+            val qualityArg =
+                requireNotNull(intent.getSerializableExtra(ARG_QUALITY) as? PlayerQuality?)
+            val playFlagArg = intent.getIntExtra(ARG_PLAY_FLAG, PLAY_FLAG_DEFAULT)
 
-        this.releaseData = release
-        this.currentEpisodeId = episodeId
-        this.currentQuality = quality
-        this.playFlag = playFlag
+            val release = releaseInteractor.getFull(episodeIdArg.releaseId)
+                ?: releaseInteractor.loadRelease(episodeIdArg.releaseId).first()
+            val visits = episodeHistoryRepository.getByRelease(episodeIdArg.releaseId)
 
-        updateAndPlayRelease()
+            currentEpisodes.clear()
+            currentVisits.clear()
+
+            releaseData = release
+            currentEpisodes.addAll(release.episodes.orEmpty())
+            currentVisits.addAll(visits)
+
+
+            currentEpisodeId = episodeIdArg
+            currentQuality = qualityArg
+            playFlag = playFlagArg
+
+            updateAndPlayRelease()
+        }
     }
 
     private fun updateAndPlayRelease() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(ActivityManager.TaskDescription(releaseData.title))
+            setTaskDescription(ActivityManager.TaskDescription(releaseData?.titleRus?.text))
         }
 
         videoControls?.apply {
-            setTitle(releaseData.title)
+            setTitle(releaseData?.titleRus?.text)
         }
-        playEpisode(getEpisode())
+        getEpisode()?.also { playEpisode(it) }
     }
 
     private fun loadScale(orientation: Int): ScaleType {
@@ -461,7 +483,7 @@ class MyPlayerActivity : BaseActivity() {
             return
         }
         lifecycleScope.launch {
-            episodeHistoryRepository.saveSeek(getEpisode().id, position)
+            getEpisode()?.let { episodeHistoryRepository.saveSeek(it.id, position) }
         }
     }
 
@@ -484,14 +506,12 @@ class MyPlayerActivity : BaseActivity() {
         exitFullscreen()
     }
 
-    private fun checkIndex(id: Int): Boolean {
-        val lastId = releaseData.episodes.last().id
-        val firstId = releaseData.episodes.first().id
-        return id in lastId..firstId
+    private fun checkIndex(id: EpisodeId?): Boolean {
+        return currentEpisodes.any { it.id == id }
     }
 
     private fun getNextEpisode(): Episode? {
-        val nextId = currentEpisodeId + 1
+        val nextId = currentEpisodeId?.let { it.copy(it.id + 1L) }
         if (checkIndex(nextId)) {
             Log.e("S_DEF_LOG", "NEXT INDEX $nextId")
             return getEpisode(nextId)
@@ -500,7 +520,7 @@ class MyPlayerActivity : BaseActivity() {
     }
 
     private fun getPrevEpisode(): Episode? {
-        val prevId = currentEpisodeId - 1
+        val prevId = currentEpisodeId?.let { it.copy(it.id - 1L) }
         if (checkIndex(prevId)) {
             Log.e("S_DEF_LOG", "PREV INDEX $prevId")
             return getEpisode(prevId)
@@ -508,23 +528,22 @@ class MyPlayerActivity : BaseActivity() {
         return null
     }
 
-    private fun getEpisode(id: Int = currentEpisodeId) = releaseData.episodes.first { it.id == id }
-
-    private fun getEpisodeId(episode: Episode) =
-        releaseData.episodes.first { it == episode }.id
+    private fun getEpisode(id: EpisodeId? = currentEpisodeId) = currentEpisodes.find { it.id == id }
 
     private fun playEpisode(episode: Episode) {
+        val visit = currentVisits.find { it.id == episode.id }
+        val seek = visit?.playerSeek ?: 0
         when (playFlag) {
             PLAY_FLAG_DEFAULT -> {
                 hardPlayEpisode(episode)
-                if (episode.seek > 0) {
+                if (seek > 0) {
                     hardPlayEpisode(episode)
                     val titles = arrayOf("К началу", "К последней позиции")
                     AlertDialog.Builder(this)
                         .setTitle("Перемотать")
                         .setItems(titles) { _, which ->
                             if (which == 1) {
-                                player.seekTo(episode.seek)
+                                player.seekTo(seek)
                             }
                         }
                         .show()
@@ -535,7 +554,7 @@ class MyPlayerActivity : BaseActivity() {
             }
             PLAY_FLAG_FORCE_CONTINUE -> {
                 hardPlayEpisode(episode)
-                player.seekTo(episode.seek)
+                player.seekTo(seek)
             }
         }
         playFlag = PLAY_FLAG_FORCE_CONTINUE
@@ -543,7 +562,7 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun hardPlayEpisode(episode: Episode) {
         toolbar.subtitle = "${episode.title} [${dialogController.getQualityTitle(currentQuality)}]"
-        currentEpisodeId = getEpisodeId(episode)
+        currentEpisodeId = getEpisode(episode.id)?.id
         val videoPath = when (currentQuality) {
             PlayerQuality.SD -> episode.urlSd
             PlayerQuality.HD -> episode.urlHd
@@ -551,7 +570,7 @@ class MyPlayerActivity : BaseActivity() {
             else -> null
         }
         videoPath?.also {
-            player.setVideoPath(it)
+            player.setVideoPath(it.value)
         }
     }
 
@@ -948,9 +967,9 @@ class MyPlayerActivity : BaseActivity() {
 
         fun showQualityDialog() {
             val qualities = mutableListOf<PlayerQuality>()
-            if (getEpisode().urlSd != null) qualities.add(PlayerQuality.SD)
-            if (getEpisode().urlHd != null) qualities.add(PlayerQuality.HD)
-            if (getEpisode().urlFullHd != null) qualities.add(PlayerQuality.FULL_HD)
+            if (getEpisode()?.urlSd != null) qualities.add(PlayerQuality.SD)
+            if (getEpisode()?.urlHd != null) qualities.add(PlayerQuality.HD)
+            if (getEpisode()?.urlFullHd != null) qualities.add(PlayerQuality.FULL_HD)
 
             val values = qualities.toTypedArray()
 
@@ -1050,11 +1069,11 @@ class MyPlayerActivity : BaseActivity() {
                     0 -> {
                         playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_EPISODE)
                         saveEpisode(0)
-                        hardPlayEpisode(getEpisode())
+                        getEpisode()?.let { hardPlayEpisode(it) }
                     }
                     1 -> {
                         playerAnalytics.seasonFinishAction(AnalyticsSeasonFinishAction.RESTART_SEASON)
-                        releaseData.episodes.lastOrNull()?.also {
+                        currentEpisodes.lastOrNull()?.also {
                             hardPlayEpisode(it)
                         }
                     }
@@ -1084,7 +1103,7 @@ class MyPlayerActivity : BaseActivity() {
                     0 -> {
                         playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.RESTART)
                         saveEpisode(0)
-                        hardPlayEpisode(getEpisode())
+                        getEpisode()?.let { hardPlayEpisode(it) }
                     }
                     1 -> {
                         playerAnalytics.episodesFinishAction(AnalyticsEpisodeFinishAction.NEXT)
@@ -1157,7 +1176,9 @@ class MyPlayerActivity : BaseActivity() {
     private val playerListener = object : OnPreparedListener, OnCompletionListener {
         override fun onPrepared() {
             val episode = getEpisode()
-            if (episode.seek >= player.duration) {
+            val visit = currentVisits.find { it.id == episode?.id }
+            val seek = visit?.playerSeek ?: 0
+            if (seek >= player.duration) {
                 player.stopPlayback()
                 if (getNextEpisode() == null) {
                     showSeasonFinishDialog()
