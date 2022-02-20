@@ -1,9 +1,8 @@
 package ru.radiationx.shared_app.analytics.errors
 
 import android.util.Log
-import com.yandex.metrica.YandexMetrica
-import ru.radiationx.data.analytics.AnalyticsErrorReporter
 import toothpick.InjectConstructor
+import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
 
 @InjectConstructor
 class LoggingErrorReporter : AnalyticsErrorReporter {

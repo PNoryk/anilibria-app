@@ -1,14 +1,14 @@
 package ru.radiationx.shared_app.analytics.profile
 
-import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.profile.Attribute
 import com.yandex.metrica.profile.UserProfile
 import com.yandex.metrica.profile.UserProfileUpdate
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import ru.radiationx.data.extensions.nullOnError
-import ru.radiationx.data.extensions.toWrapper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.analytics.AnalyticsProfileDataSource
+import tv.anilibria.module.data.analytics.ProfileConstants
+import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 
 @InjectConstructor
 class AppMetricaAnalyticsProfile(
@@ -16,16 +16,18 @@ class AppMetricaAnalyticsProfile(
 ) : AnalyticsProfile {
 
     override fun update() {
-        try {
-            unsafeUpdate()
-        } catch (ex: Throwable) {
-            ex.printStackTrace()
+        GlobalScope.launch {
+            try {
+                unsafeUpdate()
+            } catch (ex: Throwable) {
+                ex.printStackTrace()
+            }
         }
     }
 
-    private fun unsafeUpdate() {
+    private suspend fun unsafeUpdate() {
         val singleSources = with(dataSource) {
-            listOf<Single<DataWrapper<UserProfileUpdate<*>>>>(
+            listOf<UserProfileUpdate<*>>(
                 getApiAddressTag().mapStringAttr(ProfileConstants.address_tag),
                 getAppTheme().mapStringAttr(ProfileConstants.app_theme),
                 getQualitySettings().mapStringAttr(ProfileConstants.quality),
@@ -36,53 +38,28 @@ class AppMetricaAnalyticsProfile(
                 getNotificationsServiceSettings().mapBoolAttr(ProfileConstants.notification_service),
                 getEpisodeOrderSettings().mapBoolAttr(ProfileConstants.episode_order),
                 getAuthState().mapStringAttr(ProfileConstants.auth_state),
-                getHistoryItemsCount().mapIntAttr(ProfileConstants.history_count),
-                getEpisodesItemsCount().mapIntAttr(ProfileConstants.episodes_count),
-                getReleasesItemsCount().mapIntAttr(ProfileConstants.releases_count),
-                getDownloadsCount().mapIntAttr(ProfileConstants.downloads_count),
-                getAppVersionsHistory().mapStringAttr(ProfileConstants.app_versions)
             )
         }
 
-        val ignoreDisposable = Single
-            .merge(singleSources)
-            .filter { it.data != null }
-            .map { it.data!! }
-            .toList()
-            .map { attributes ->
-                UserProfile.newBuilder().run {
-                    attributes.forEach { attribute ->
-                        apply(attribute)
-                    }
-                    build()
+        singleSources.let { attributes ->
+            UserProfile.newBuilder().run {
+                attributes.forEach { attribute ->
+                    apply(attribute)
                 }
+                build()
             }
-            .subscribe({
-                YandexMetrica.reportUserProfile(it)
-            }, {
-                it.printStackTrace()
-            })
+        }
     }
 
-    private fun Single<String>.mapStringAttr(name: String) = this
-        .attachScheduler()
-        .map { Attribute.customString(name).withValue(it).toWrapper() }
-        .nullOnError()
+    private fun String.mapStringAttr(name: String) = this
+        .let { Attribute.customString(name).withValue(it) }
 
-    private fun Single<Int>.mapIntAttr(name: String) = this
-        .attachScheduler()
-        .map { Attribute.customNumber(name).withValue(it.toDouble()).toWrapper() }
-        .nullOnError()
+    private fun Int.mapIntAttr(name: String) = this
+        .let { Attribute.customNumber(name).withValue(it.toDouble()) }
 
-    private fun Single<Float>.mapFloatAttr(name: String) = this
-        .attachScheduler()
-        .map { Attribute.customNumber(name).withValue(it.toDouble()).toWrapper() }
-        .nullOnError()
+    private fun Float.mapFloatAttr(name: String) = this
+        .let { Attribute.customNumber(name).withValue(it.toDouble()) }
 
-    private fun Single<Boolean>.mapBoolAttr(name: String) = this
-        .attachScheduler()
-        .map { Attribute.customBoolean(name).withValue(it).toWrapper() }
-        .nullOnError()
-
-    private fun <T> Single<T>.attachScheduler() = this.subscribeOn(Schedulers.io())
+    private fun Boolean.mapBoolAttr(name: String) = this
+        .let { Attribute.customBoolean(name).withValue(it) }
 }

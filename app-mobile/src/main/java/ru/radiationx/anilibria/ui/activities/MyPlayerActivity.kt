@@ -42,7 +42,6 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getColorFromAttr
 import ru.radiationx.anilibria.extension.isDark
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
-import ru.radiationx.data.entity.app.release.ReleaseFull
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
@@ -59,6 +58,8 @@ import tv.anilibria.module.data.preferences.PlayerPipMode
 import tv.anilibria.module.data.preferences.PlayerQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
+import tv.anilibria.module.domain.entity.release.Episode
+import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.IOException
@@ -94,7 +95,7 @@ class MyPlayerActivity : BaseActivity() {
         private const val NO_ID = -1
     }
 
-    private lateinit var releaseData: ReleaseFull
+    private lateinit var releaseData: Release
     private var playFlag = PLAY_FLAG_DEFAULT
     private var currentEpisodeId = NO_ID
 
@@ -333,7 +334,7 @@ class MyPlayerActivity : BaseActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
-        val release = intent.getSerializableExtra(ARG_RELEASE) as ReleaseFull? ?: return
+        val release = intent.getSerializableExtra(ARG_RELEASE) as Release? ?: return
         val episodeId =
             intent.getIntExtra(ARG_EPISODE_ID, if (release.episodes.size > 0) 0 else NO_ID)
         val quality = intent.getIntExtra(ARG_QUALITY, DEFAULT_QUALITY)
@@ -497,7 +498,7 @@ class MyPlayerActivity : BaseActivity() {
         return id in lastId..firstId
     }
 
-    private fun getNextEpisode(): ReleaseFull.Episode? {
+    private fun getNextEpisode(): Episode? {
         val nextId = currentEpisodeId + 1
         if (checkIndex(nextId)) {
             Log.e("S_DEF_LOG", "NEXT INDEX $nextId")
@@ -506,7 +507,7 @@ class MyPlayerActivity : BaseActivity() {
         return null
     }
 
-    private fun getPrevEpisode(): ReleaseFull.Episode? {
+    private fun getPrevEpisode(): Episode? {
         val prevId = currentEpisodeId - 1
         if (checkIndex(prevId)) {
             Log.e("S_DEF_LOG", "PREV INDEX $prevId")
@@ -517,10 +518,10 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun getEpisode(id: Int = currentEpisodeId) = releaseData.episodes.first { it.id == id }
 
-    private fun getEpisodeId(episode: ReleaseFull.Episode) =
+    private fun getEpisodeId(episode: Episode) =
         releaseData.episodes.first { it == episode }.id
 
-    private fun playEpisode(episode: ReleaseFull.Episode) {
+    private fun playEpisode(episode: Episode) {
         when (playFlag) {
             PLAY_FLAG_DEFAULT -> {
                 hardPlayEpisode(episode)
@@ -548,7 +549,7 @@ class MyPlayerActivity : BaseActivity() {
         playFlag = PLAY_FLAG_FORCE_CONTINUE
     }
 
-    private fun hardPlayEpisode(episode: ReleaseFull.Episode) {
+    private fun hardPlayEpisode(episode: Episode) {
         toolbar.subtitle = "${episode.title} [${dialogController.getQualityTitle(currentQuality)}]"
         currentEpisodeId = getEpisodeId(episode)
         val videoPath = when (currentQuality) {

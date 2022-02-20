@@ -1,8 +1,8 @@
 package ru.radiationx.shared_app.analytics.events
 
 import com.yandex.metrica.YandexMetrica
-import ru.radiationx.data.analytics.AnalyticsSender
 import toothpick.InjectConstructor
+import tv.anilibria.plugin.data.analytics.AnalyticsSender
 
 @InjectConstructor
 class AppMetricaAnalyticsSender : AnalyticsSender {

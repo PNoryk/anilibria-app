@@ -127,7 +127,6 @@ dependencies {
     implementation project(":feature-downloads-data")
     implementation project(":feature-downloads-data")
 
-    implementation project(":data")
     implementation project(":shared-android-ktx")
     implementation project(":shared-app")
 

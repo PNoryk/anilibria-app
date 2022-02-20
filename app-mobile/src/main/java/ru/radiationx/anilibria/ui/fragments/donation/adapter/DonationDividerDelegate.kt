@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.item_donation_divider.*
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.ui.adapters.ListItem
 import ru.radiationx.anilibria.ui.common.adapters.AppAdapterDelegate
-import ru.radiationx.data.entity.domain.donation.DonationContentDivider
+import tv.anilibria.module.domain.entity.donation.DonationContentDivider
 import kotlin.math.roundToInt
 
 class DonationDividerDelegate :

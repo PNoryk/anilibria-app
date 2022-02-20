@@ -10,7 +10,7 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.ui.adapters.ListItem
 import ru.radiationx.anilibria.ui.common.adapters.AppAdapterDelegate
 import ru.radiationx.anilibria.utils.LinkMovementMethod
-import ru.radiationx.data.entity.domain.donation.DonationContentSection
+import tv.anilibria.module.domain.entity.donation.DonationContentSection
 
 class DonationSectionDelegate(
     private val linkClickListener: (String) -> Unit

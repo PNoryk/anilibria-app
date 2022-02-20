@@ -1,11 +1,12 @@
 package ru.radiationx.shared_app.analytics.profile
 
 import android.util.Log
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import ru.radiationx.data.extensions.nullOnError
-import ru.radiationx.data.extensions.toWrapper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.analytics.AnalyticsProfileDataSource
+import tv.anilibria.module.data.analytics.ProfileConstants
+import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 
 @InjectConstructor
 class LoggingAnalyticsProfile(
@@ -13,8 +14,18 @@ class LoggingAnalyticsProfile(
 ) : AnalyticsProfile {
 
     override fun update() {
+        GlobalScope.launch {
+            try {
+                unsafeUpdate()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+    }
+
+    private suspend fun unsafeUpdate() {
         val singleSources = with(dataSource) {
-            listOf<Single<DataWrapper<Pair<String, Any>>>>(
+            listOf<Pair<String, Any>>(
                 getApiAddressTag().mapToAttr(ProfileConstants.address_tag),
                 getAppTheme().mapToAttr(ProfileConstants.app_theme),
                 getQualitySettings().mapToAttr(ProfileConstants.quality),
@@ -25,30 +36,11 @@ class LoggingAnalyticsProfile(
                 getNotificationsServiceSettings().mapToAttr(ProfileConstants.notification_service),
                 getEpisodeOrderSettings().mapToAttr(ProfileConstants.episode_order),
                 getAuthState().mapToAttr(ProfileConstants.auth_state),
-                getHistoryItemsCount().mapToAttr(ProfileConstants.history_count),
-                getEpisodesItemsCount().mapToAttr(ProfileConstants.episodes_count),
-                getReleasesItemsCount().mapToAttr(ProfileConstants.releases_count),
-                getDownloadsCount().mapToAttr(ProfileConstants.downloads_count),
-                getAppVersionsHistory().mapToAttr(ProfileConstants.app_versions)
             )
         }
-        val ignoreDisposable = Single
-            .merge(singleSources)
-            .filter { it.data != null }
-            .map { it.data!! }
-            .toList()
-            .subscribe({
-                Log.d("LoggingAnalyticsProfile", it.toMap().toString())
-            }, {
-                it.printStackTrace()
-            })
+
+        Log.d("LoggingAnalyticsProfile", singleSources.toMap().toString())
     }
 
-    private fun Single<out Any>.mapToAttr(name: String): Single<DataWrapper<Pair<String, Any>>> =
-        this
-            .attachScheduler()
-            .map { Pair(name, it).toWrapper() }
-            .nullOnError()
-
-    private fun <T> Single<T>.attachScheduler() = this.subscribeOn(Schedulers.io())
+    private fun Any.mapToAttr(name: String): Pair<String, Any> = Pair(name, this)
 }

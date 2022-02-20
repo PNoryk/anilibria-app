@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.entity.domain.donation.DonationContentButton
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
@@ -14,6 +13,7 @@ import tv.anilibria.module.data.analytics.features.DonationDetailAnalytics
 import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
 import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics
 import tv.anilibria.module.data.repos.DonationRepository
+import tv.anilibria.module.domain.entity.donation.DonationContentButton
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 
 @InjectConstructor
