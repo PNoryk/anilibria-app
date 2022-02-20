@@ -1,24 +1,29 @@
 package ru.radiationx.anilibria.screen.player.quality
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
-import ru.radiationx.data.datasource.holders.PreferencesHolder
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.domain.entity.release.EpisodeId
 
 @InjectConstructor
 class PlayerQualityViewModel(
     private val releaseInteractor: ReleaseInteractor,
+    private val preferencesStorage: PreferencesStorage,
     private val guidedRouter: GuidedRouter
 ) : LifecycleViewModel() {
 
     companion object {
-        const val SD_ACTION_ID = PreferencesHolder.QUALITY_SD.toLong()
-        const val HD_ACTION_ID = PreferencesHolder.QUALITY_HD.toLong()
-        const val FULL_HD_ACTION_ID = PreferencesHolder.QUALITY_FULL_HD.toLong()
+        val SD_ACTION_ID = PlayerQuality.SD.ordinal.toLong()
+        val HD_ACTION_ID = PlayerQuality.HD.ordinal.toLong()
+        val FULL_HD_ACTION_ID = PlayerQuality.FULL_HD.ordinal.toLong()
     }
 
     lateinit var argEpisodeId: EpisodeId
@@ -31,23 +36,24 @@ class PlayerQualityViewModel(
 
         updateAvailable()
 
-        releaseInteractor
-            .observeQuality()
-            .observeOn(AndroidSchedulers.mainThread())
-            .lifeSubscribe {
+        preferencesStorage.quality.observe()
+            .onEach {
                 update(it)
             }
+            .launchIn(viewModelScope)
     }
 
     fun applyQuality(quality: Long) {
-        val value = when (quality) {
-            SD_ACTION_ID -> PreferencesHolder.QUALITY_SD
-            HD_ACTION_ID -> PreferencesHolder.QUALITY_HD
-            FULL_HD_ACTION_ID -> PreferencesHolder.QUALITY_FULL_HD
-            else -> PreferencesHolder.QUALITY_SD
+        viewModelScope.launch {
+            val value = when (quality) {
+                SD_ACTION_ID -> PlayerQuality.SD
+                HD_ACTION_ID -> PlayerQuality.HD
+                FULL_HD_ACTION_ID -> PlayerQuality.FULL_HD
+                else -> PlayerQuality.SD
+            }
+            preferencesStorage.quality.put(value)
+            guidedRouter.close()
         }
-        releaseInteractor.setQuality(value)
-        guidedRouter.close()
     }
 
     private fun updateAvailable() {
@@ -67,12 +73,12 @@ class PlayerQualityViewModel(
         availableData.value = available
     }
 
-    private fun update(currentQuality: Int) {
+    private fun update(currentQuality: PlayerQuality) {
         val available = availableData.value!!
         var selectedAction = when (currentQuality) {
-            PreferencesHolder.QUALITY_SD -> SD_ACTION_ID
-            PreferencesHolder.QUALITY_HD -> HD_ACTION_ID
-            PreferencesHolder.QUALITY_FULL_HD -> FULL_HD_ACTION_ID
+            PlayerQuality.SD -> SD_ACTION_ID
+            PlayerQuality.HD -> HD_ACTION_ID
+            PlayerQuality.FULL_HD -> FULL_HD_ACTION_ID
             else -> SD_ACTION_ID
         }
 

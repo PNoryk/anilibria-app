@@ -13,25 +13,26 @@ import biz.source_code.miniTemplator.MiniTemplator
 import com.google.firebase.messaging.FirebaseMessaging
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.YandexMetricaConfig
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.plugins.RxJavaPlugins
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.di.AppModule
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.shared.ktx.SchedulersProvider
-import tv.anilibria.module.data.analytics.TimeCounter
-import tv.anilibria.module.data.analytics.features.AppAnalytics
-import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.di.DataModule
 import ru.radiationx.data.migration.MigrationDataSource
-import ru.radiationx.shared.ktx.addTo
+import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.radiationx.shared_app.common.ImageLoaderConfig
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
 import ru.radiationx.shared_app.common.SimpleActivityLifecycleCallbacks
 import ru.radiationx.shared_app.di.DI
 import toothpick.Toothpick
 import toothpick.configuration.Configuration
+import tv.anilibria.module.data.analytics.features.AppAnalytics
+import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.nio.charset.Charset
@@ -92,7 +93,7 @@ class App : Application() {
             appAnalytics.timeToCreate(timeToCreate)
             appAnalytics.timeToInit(timeToInit)
 
-            registerActivityLifecycleCallbacks(object :SimpleActivityLifecycleCallbacks(){
+            registerActivityLifecycleCallbacks(object : SimpleActivityLifecycleCallbacks() {
                 override fun onActivityCreated(p0: Activity, p1: Bundle?) {
                     super.onActivityCreated(p0, p1)
                     val timeToActivity = timeCounter.elapsed()
@@ -105,7 +106,8 @@ class App : Application() {
 
     private fun initYandexAppMetrica() {
         //if (BuildConfig.DEBUG) return
-        val config = YandexMetricaConfig.newConfigBuilder("48d49aa0-6aad-407e-a738-717a6c77d603").build()
+        val config =
+            YandexMetricaConfig.newConfigBuilder("48d49aa0-6aad-407e-a738-717a6c77d603").build()
         YandexMetrica.activate(applicationContext, config)
         YandexMetrica.enableActivityAutoTracking(this)
     }
@@ -144,29 +146,22 @@ class App : Application() {
             isAutoInitEnabled = true
         }
 
-        val preferencesHolder = DI.get(PreferencesHolder::class.java)
-        val disposables = CompositeDisposable()
+        val preferencesHolder = DI.get(PreferencesStorage::class.java)
         preferencesHolder
-            .observeNotificationsAll()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ enabled ->
-                changeSubscribeStatus(enabled, "all")
-            }, {
-                it.printStackTrace()
-            })
-            .addTo(disposables)
+            .notificationsAll.observe()
+            .onEach { changeSubscribeStatus(it, "all") }
+            .catch { it.printStackTrace() }
+            .launchIn(GlobalScope)
 
         preferencesHolder
-            .observeNotificationsService()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ enabled ->
-                changeSubscribeStatus(enabled, "service")
-                changeSubscribeStatus(enabled, "app_update")
-                changeSubscribeStatus(enabled, "config")
-            }, {
-                it.printStackTrace()
-            })
-            .addTo(disposables)
+            .notificationsService.observe()
+            .onEach {
+                changeSubscribeStatus(it, "service")
+                changeSubscribeStatus(it, "app_update")
+                changeSubscribeStatus(it, "config")
+            }
+            .catch { it.printStackTrace() }
+            .launchIn(GlobalScope)
 
     }
 
@@ -202,7 +197,8 @@ class App : Application() {
                 MiniTemplator.Builder().build(stream, charset)
             } catch (e: Exception) {
                 e.printStackTrace()
-                MiniTemplator.Builder().build(ByteArrayInputStream("Template error!".toByteArray(charset)), charset)
+                MiniTemplator.Builder()
+                    .build(ByteArrayInputStream("Template error!".toByteArray(charset)), charset)
             }
         } catch (e: IOException) {
             e.printStackTrace()

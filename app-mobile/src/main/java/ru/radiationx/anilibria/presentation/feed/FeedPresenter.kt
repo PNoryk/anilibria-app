@@ -24,7 +24,6 @@ import ru.radiationx.anilibria.ui.fragments.feed.FeedScheduleState
 import ru.radiationx.anilibria.ui.fragments.feed.FeedScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.shared.ktx.asDayNameDeclension
 import ru.radiationx.shared.ktx.asDayPretext
 import ru.terrakok.cicerone.Router
@@ -53,7 +52,6 @@ class FeedPresenter @Inject constructor(
     private val scheduleRepository: ScheduleRepository,
     private val checkerRepository: CheckerRepository,
     private val sharedBuildConfig: SharedBuildConfig,
-    private val appPreferences: PreferencesHolder,
     private val preferencesStorage: PreferencesStorage,
     private val donationRepository: DonationRepository,
     private val router: Router,
@@ -226,7 +224,7 @@ class FeedPresenter @Inject constructor(
         when (state.tag) {
             DONATION_NEW_TAG -> {
                 donationCardAnalytics.onNewDonationClick(AnalyticsConstants.screen_feed)
-                appPreferences.newDonationRemind = false
+                preferencesStorage.newDonationRemind.blockingSet(false)
             }
         }
         donationDetailAnalytics.open(AnalyticsConstants.screen_feed)
@@ -237,7 +235,7 @@ class FeedPresenter @Inject constructor(
         when (state.tag) {
             DONATION_NEW_TAG -> {
                 donationCardAnalytics.onNewDonationCloseClick(AnalyticsConstants.screen_feed)
-                appPreferences.newDonationRemind = false
+                preferencesStorage.newDonationRemind.blockingSet(false)
             }
         }
     }

@@ -17,13 +17,13 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CatalogAnalytics
 import tv.anilibria.module.data.analytics.features.CatalogFilterAnalytics
 import tv.anilibria.module.data.analytics.features.FastSearchAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.ReleaseSeason
@@ -43,7 +43,7 @@ class SearchPresenter @Inject constructor(
     private val catalogFilterAnalytics: CatalogFilterAnalytics,
     private val fastSearchAnalytics: FastSearchAnalytics,
     private val releaseAnalytics: ReleaseAnalytics,
-    private val appPreferences: PreferencesHolder
+    private val preferencesStorage: PreferencesStorage
 ) : BasePresenter<SearchCatalogView>(router) {
 
 
@@ -140,17 +140,15 @@ class SearchPresenter @Inject constructor(
     }
 
     private fun observeSearchRemind() {
-        appPreferences
-            .observeSearchRemind()
-            .subscribe({ remindEnabled ->
+        preferencesStorage
+            .searchRemind.observe()
+            .onEach { remindEnabled ->
                 val newRemindText = remindText.takeIf { remindEnabled }
                 stateController.updateState {
                     it.copy(remindText = newRemindText)
                 }
-            }, {
-                errorHandler.handle(it)
-            })
-            .addToDisposable()
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun observeLoadingState() {
@@ -302,7 +300,7 @@ class SearchPresenter @Inject constructor(
     }
 
     fun onRemindClose() {
-        appPreferences.searchRemind = false
+        preferencesStorage.searchRemind = false
     }
 
     fun onItemClick(item: ReleaseItemState) {

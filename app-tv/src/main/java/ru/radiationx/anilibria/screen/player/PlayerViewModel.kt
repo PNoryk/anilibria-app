@@ -4,17 +4,15 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.*
-import ru.radiationx.data.datasource.holders.PreferencesHolder
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Episode
@@ -25,6 +23,7 @@ import tv.anilibria.module.domain.entity.release.Release
 class PlayerViewModel(
     private val releaseInteractor: ReleaseInteractor,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
+    private val preferencesStorage: PreferencesStorage,
     private val guidedRouter: GuidedRouter,
     private val playerController: PlayerController
 ) : LifecycleViewModel() {
@@ -32,21 +31,23 @@ class PlayerViewModel(
     lateinit var argEpisodeId: EpisodeId
 
     val videoData = MutableLiveData<Video>()
-    val qualityState = MutableLiveData<Int>()
+    val qualityState = MutableLiveData<PlayerQuality>()
     val speedState = MutableLiveData<Float>()
     val playAction = MutableLiveData<Boolean>()
 
     private var playerInfo: PlayerInfo? = null
 
     private var currentEpisode: Episode? = null
-    private var currentQuality: Int? = null
+    private var currentQuality: PlayerQuality? = null
     private var currentComplete: Boolean? = null
 
     override fun onCreate() {
         super.onCreate()
 
-        qualityState.value = releaseInteractor.getQuality()
-        speedState.value = releaseInteractor.getPlaySpeed()
+        viewModelScope.launch {
+            qualityState.value = preferencesStorage.quality.get()
+            speedState.value = preferencesStorage.playSpeed.get()
+        }
 
         playerController
             .selectEpisodeRelay
@@ -58,23 +59,23 @@ class PlayerViewModel(
                     ?.also { playEpisode(it, true) }
             }
 
-        releaseInteractor
-            .observeQuality()
+        preferencesStorage
+            .quality.observe()
             .distinctUntilChanged()
-            .observeOn(AndroidSchedulers.mainThread())
-            .lifeSubscribe {
+            .onEach {
                 currentQuality = handleRawQuality(it)
                 updateQuality()
                 updateEpisode()
             }
+            .launchIn(viewModelScope)
 
-        releaseInteractor
-            .observePlaySpeed()
+        preferencesStorage
+            .playSpeed.observe()
             .distinctUntilChanged()
-            .observeOn(AndroidSchedulers.mainThread())
-            .lifeSubscribe {
+            .onEach {
                 speedState.value = it
             }
+            .launchIn(viewModelScope)
 
         releaseInteractor
             .observeFull(argEpisodeId.releaseId)
@@ -225,33 +226,33 @@ class PlayerViewModel(
         }
     }
 
-    private fun handleRawQuality(quality: Int): Int = when (quality) {
-        PreferencesHolder.QUALITY_NO,
-        PreferencesHolder.QUALITY_ALWAYS -> PreferencesHolder.QUALITY_SD
+    private fun handleRawQuality(quality: PlayerQuality): PlayerQuality = when (quality) {
+        PlayerQuality.NOT_SELECTED,
+        PlayerQuality.ALWAYS_ASK -> PlayerQuality.SD
         else -> quality
     }
 
-    private fun getEpisodeQuality(episode: Episode, quality: Int): Int {
-        var newQuality = quality
+    private fun getEpisodeQuality(episode: Episode, quality: PlayerQuality): PlayerQuality? {
+        var newQuality: PlayerQuality? = quality
 
-        if (newQuality == PreferencesHolder.QUALITY_FULL_HD && episode.urlFullHd == null) {
-            newQuality = PreferencesHolder.QUALITY_HD
+        if (newQuality == PlayerQuality.FULL_HD && episode.urlFullHd == null) {
+            newQuality = PlayerQuality.HD
         }
-        if (newQuality == PreferencesHolder.QUALITY_HD && episode.urlHd == null) {
-            newQuality = PreferencesHolder.QUALITY_SD
+        if (newQuality == PlayerQuality.HD && episode.urlHd == null) {
+            newQuality = PlayerQuality.SD
         }
-        if (newQuality == PreferencesHolder.QUALITY_SD && episode.urlSd == null) {
-            newQuality = -1
+        if (newQuality == PlayerQuality.SD && episode.urlSd == null) {
+            newQuality = null
         }
 
         return newQuality
     }
 
-    private fun getEpisodeUrl(episode: Episode, quality: Int): AbsoluteUrl? =
+    private fun getEpisodeUrl(episode: Episode, quality: PlayerQuality): AbsoluteUrl? =
         when (getEpisodeQuality(episode, quality)) {
-            PreferencesHolder.QUALITY_FULL_HD -> episode.urlFullHd
-            PreferencesHolder.QUALITY_HD -> episode.urlHd
-            PreferencesHolder.QUALITY_SD -> episode.urlSd
+            PlayerQuality.FULL_HD -> episode.urlFullHd
+            PlayerQuality.HD -> episode.urlHd
+            PlayerQuality.SD -> episode.urlSd
             else -> null
         }
 

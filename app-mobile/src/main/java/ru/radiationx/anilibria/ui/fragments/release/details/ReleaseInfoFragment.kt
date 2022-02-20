@@ -28,17 +28,20 @@ import ru.radiationx.anilibria.presentation.release.details.ReleaseInfoPresenter
 import ru.radiationx.anilibria.presentation.release.details.ReleaseInfoView
 import ru.radiationx.anilibria.ui.activities.MyPlayerActivity
 import ru.radiationx.anilibria.ui.activities.WebPlayerActivity
-import ru.radiationx.anilibria.ui.activities.toPrefQuality
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeControlDelegate
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeDelegate
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseHeadDelegate
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.holders.PreferencesHolder
-import ru.radiationx.data.entity.app.release.ReleaseFull
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
+import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PlayerType
 import tv.anilibria.module.domain.entity.release.Episode
+import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.Torrent
 import java.net.URLConnection
 import java.util.regex.Pattern
@@ -111,13 +114,13 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     }
 
     override fun loadTorrent(torrent: Torrent) {
-        torrent.url?.also { Utils.externalLink(it) }
+        torrent.url?.also { Utils.externalLink(it.url) }
     }
 
     override fun showTorrentDialog(torrents: List<Torrent>) {
         val context = context ?: return
         val titles =
-            torrents.map { "Серия ${it.series} [${it.quality}][${Utils.readableFileSize(it.size)}]" }
+            torrents.map { "Серия ${it.series} [${it.quality}][${Utils.readableFileSize(it.size.value)}]" }
                 .toTypedArray()
         AlertDialog.Builder(context)
             .setItems(titles) { dialog, which ->
@@ -126,21 +129,21 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             .show()
     }
 
-    override fun playEpisodes(release: ReleaseFull) {
+    override fun playEpisodes(release: Release) {
         playEpisode(release, release.episodes.last())
     }
 
-    override fun playContinue(release: ReleaseFull, startWith: ReleaseFull.Episode) {
+    override fun playContinue(release: Release, startWith: Episode) {
         playEpisode(release, startWith, MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE)
     }
 
-    private fun <T> getUrlByQuality(qualityInfo: QualityInfo<T>, quality: Int): String {
+    private fun <T> getUrlByQuality(qualityInfo: QualityInfo<T>, quality: PlayerQuality): String {
         return when (quality) {
-            MyPlayerActivity.VAL_QUALITY_SD -> qualityInfo.urlSd
-            MyPlayerActivity.VAL_QUALITY_HD -> qualityInfo.urlHd
-            MyPlayerActivity.VAL_QUALITY_FULL_HD -> qualityInfo.urlFullHd
+            PlayerQuality.SD -> qualityInfo.urlSd
+            PlayerQuality.HD -> qualityInfo.urlHd
+            PlayerQuality.FULL_HD -> qualityInfo.urlFullHd
             else -> qualityInfo.urlSd
-        }.orEmpty()
+        }?.value.orEmpty()
     }
 
     override fun showDownloadDialog(url: String) {
@@ -204,7 +207,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             .show()
     }
 
-    override fun showLongPressEpisodeDialog(episode: ReleaseFull.Episode) {
+    override fun showLongPressEpisodeDialog(episode: Episode) {
         val context = context ?: return
         val items = arrayOf(
             "Отметить как непросмотренная"
@@ -218,7 +221,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             .show()
     }
 
-    override fun downloadEpisode(episode: Episode, quality: Int?) {
+    override fun downloadEpisode(episode: Episode, quality: PlayerQuality?) {
         val qualityInfo = QualityInfo(episode, episode.urlSd, episode.urlHd, episode.urlFullHd)
         if (quality == null) {
             selectQuality(qualityInfo, { selected ->
@@ -230,21 +233,21 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     }
 
     override fun playEpisode(
-        release: ReleaseFull,
-        episode: ReleaseFull.Episode,
+        release: Release,
+        episode: Episode,
         playFlag: Int?,
-        quality: Int?
+        quality: PlayerQuality?
     ) {
         val qualityInfo = QualityInfo(episode, episode.urlSd, episode.urlHd, episode.urlFullHd)
         selectPlayer({ playerType ->
             if (quality == null) {
                 when (playerType) {
-                    PreferencesHolder.PLAYER_TYPE_EXTERNAL -> {
+                    PlayerType.EXTERNAL -> {
                         selectQuality(qualityInfo, { selected ->
                             playExternal(release, episode, selected)
                         }, true)
                     }
-                    PreferencesHolder.PLAYER_TYPE_INTERNAL -> {
+                    PlayerType.INTERNAL -> {
                         selectQuality(qualityInfo, { selected ->
                             playInternal(release, episode, selected, playFlag)
                         })
@@ -252,12 +255,12 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
                 }
             } else {
                 when (playerType) {
-                    PreferencesHolder.PLAYER_TYPE_EXTERNAL -> playExternal(
+                    PlayerType.EXTERNAL -> playExternal(
                         release,
                         episode,
                         quality
                     )
-                    PreferencesHolder.PLAYER_TYPE_INTERNAL -> playInternal(
+                    PlayerType.INTERNAL -> playInternal(
                         release,
                         episode,
                         quality,
@@ -268,30 +271,33 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         })
     }
 
-    private fun selectPlayer(onSelect: (playerType: Int) -> Unit, forceDialog: Boolean = false) {
+    private fun selectPlayer(
+        onSelect: (playerType: PlayerType) -> Unit,
+        forceDialog: Boolean = false
+    ) {
         if (forceDialog) {
             showSelectPlayerDialog(onSelect)
         } else {
             val savedPlayerType = presenter.getPlayerType()
             when (savedPlayerType) {
-                PreferencesHolder.PLAYER_TYPE_NO -> {
+                PlayerType.NOT_SELECTED -> {
                     showSelectPlayerDialog(onSelect)
                 }
-                PreferencesHolder.PLAYER_TYPE_ALWAYS -> {
+                PlayerType.ALWAYS_ASK -> {
                     showSelectPlayerDialog(onSelect, false)
                 }
-                PreferencesHolder.PLAYER_TYPE_INTERNAL -> {
-                    onSelect(PreferencesHolder.PLAYER_TYPE_INTERNAL)
+                PlayerType.INTERNAL -> {
+                    onSelect(PlayerType.INTERNAL)
                 }
-                PreferencesHolder.PLAYER_TYPE_EXTERNAL -> {
-                    onSelect(PreferencesHolder.PLAYER_TYPE_EXTERNAL)
+                PlayerType.EXTERNAL -> {
+                    onSelect(PlayerType.EXTERNAL)
                 }
             }
         }
     }
 
     private fun showSelectPlayerDialog(
-        onSelect: (playerType: Int) -> Unit,
+        onSelect: (playerType: PlayerType) -> Unit,
         savePlayerType: Boolean = true
     ) {
         val titles = arrayOf("Внешний плеер", "Внутренний плеер")
@@ -299,11 +305,11 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         AlertDialog.Builder(context)
             .setItems(titles) { dialog, which ->
                 val playerType = when (which) {
-                    0 -> PreferencesHolder.PLAYER_TYPE_EXTERNAL
-                    1 -> PreferencesHolder.PLAYER_TYPE_INTERNAL
-                    else -> -1
+                    0 -> PlayerType.EXTERNAL
+                    1 -> PlayerType.INTERNAL
+                    else -> null
                 }
-                if (playerType != -1) {
+                if (playerType != null) {
                     if (savePlayerType) {
                         presenter.setPlayerType(playerType)
                     }
@@ -335,14 +341,14 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     }
 
     private fun playInternal(
-        release: ReleaseFull,
-        episode: ReleaseFull.Episode,
-        quality: Int,
+        release: Release,
+        episode: Episode,
+        quality: PlayerQuality,
         playFlag: Int? = null
     ) {
         presenter.submitPlayerOpenAnalytics(
-            PreferencesHolder.PLAYER_TYPE_INTERNAL.toAnalyticsPlayer(),
-            quality.toPrefQuality().toAnalyticsQuality()
+            PlayerType.INTERNAL.toAnalyticsPlayer(),
+            quality.toAnalyticsQuality()
         )
         startActivity(Intent(context, MyPlayerActivity::class.java).apply {
             putExtra(MyPlayerActivity.ARG_RELEASE, release)
@@ -354,19 +360,23 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         })
     }
 
-    private fun playExternal(release: ReleaseFull, episode: ReleaseFull.Episode, quality: Int) {
+    private fun playExternal(
+        release: Release,
+        episode: Episode,
+        quality: PlayerQuality
+    ) {
         presenter.submitPlayerOpenAnalytics(
-            PreferencesHolder.PLAYER_TYPE_EXTERNAL.toAnalyticsPlayer(),
-            quality.toPrefQuality().toAnalyticsQuality()
+            PlayerType.EXTERNAL.toAnalyticsPlayer(),
+            quality.toAnalyticsQuality()
         )
         presenter.markEpisodeViewed(episode)
         val url = when (quality) {
-            MyPlayerActivity.VAL_QUALITY_SD -> episode.urlSd
-            MyPlayerActivity.VAL_QUALITY_HD -> episode.urlHd
-            MyPlayerActivity.VAL_QUALITY_FULL_HD -> episode.urlFullHd
+            PlayerQuality.SD -> episode.urlSd
+            PlayerQuality.HD -> episode.urlHd
+            PlayerQuality.FULL_HD -> episode.urlFullHd
             else -> episode.urlSd
         }
-        val fileUri = Uri.parse(url)
+        val fileUri = Uri.parse(url?.value)
         val intent = Intent()
         intent.action = Intent.ACTION_VIEW
         intent.setDataAndType(fileUri, URLConnection.guessContentTypeFromName(fileUri.toString()))
@@ -387,53 +397,51 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
 
     private fun <T> selectQuality(
         qualityInfo: QualityInfo<T>,
-        onSelect: (quality: Int) -> Unit,
+        onSelect: (quality: PlayerQuality) -> Unit,
         forceDialog: Boolean = false
     ) {
         val savedQuality = presenter.getQuality()
 
         var correctQuality = savedQuality
-        if (correctQuality == PreferencesHolder.QUALITY_FULL_HD && qualityInfo.hasFullHd) {
-            correctQuality = PreferencesHolder.QUALITY_HD
+        if (correctQuality == PlayerQuality.FULL_HD && qualityInfo.hasFullHd) {
+            correctQuality = PlayerQuality.HD
         }
-        if (correctQuality == PreferencesHolder.QUALITY_HD && qualityInfo.hasHd) {
-            correctQuality = PreferencesHolder.QUALITY_SD
+        if (correctQuality == PlayerQuality.HD && qualityInfo.hasHd) {
+            correctQuality = PlayerQuality.SD
         }
-        if (correctQuality == PreferencesHolder.QUALITY_SD && qualityInfo.hasSd) {
-            correctQuality = PreferencesHolder.QUALITY_NO
+        if (correctQuality == PlayerQuality.SD && qualityInfo.hasSd) {
+            correctQuality = PlayerQuality.NOT_SELECTED
         }
 
         when {
             correctQuality != savedQuality -> showQualityDialog(qualityInfo, onSelect, false)
             forceDialog -> showQualityDialog(qualityInfo, onSelect, false)
             else -> when (savedQuality) {
-                PreferencesHolder.QUALITY_NO -> showQualityDialog(qualityInfo, onSelect)
-                PreferencesHolder.QUALITY_ALWAYS -> showQualityDialog(qualityInfo, onSelect, false)
-                PreferencesHolder.QUALITY_SD -> onSelect(MyPlayerActivity.VAL_QUALITY_SD)
-                PreferencesHolder.QUALITY_HD -> onSelect(MyPlayerActivity.VAL_QUALITY_HD)
-                PreferencesHolder.QUALITY_FULL_HD -> onSelect(MyPlayerActivity.VAL_QUALITY_FULL_HD)
+                PlayerQuality.NOT_SELECTED -> showQualityDialog(qualityInfo, onSelect)
+                PlayerQuality.ALWAYS_ASK -> showQualityDialog(qualityInfo, onSelect, false)
+                else -> onSelect(savedQuality)
             }
         }
     }
 
     private fun <T> showQualityDialog(
         qualityInfo: QualityInfo<T>,
-        onSelect: (quality: Int) -> Unit,
+        onSelect: (quality: PlayerQuality) -> Unit,
         saveQuality: Boolean = true
     ) {
         val context = context ?: return
 
-        val qualities = mutableListOf<Int>()
-        if (qualityInfo.hasSd) qualities.add(MyPlayerActivity.VAL_QUALITY_SD)
-        if (qualityInfo.hasHd) qualities.add(MyPlayerActivity.VAL_QUALITY_HD)
-        if (qualityInfo.hasFullHd) qualities.add(MyPlayerActivity.VAL_QUALITY_FULL_HD)
+        val qualities = mutableListOf<PlayerQuality>()
+        if (qualityInfo.hasSd) qualities.add(PlayerQuality.SD)
+        if (qualityInfo.hasHd) qualities.add(PlayerQuality.HD)
+        if (qualityInfo.hasFullHd) qualities.add(PlayerQuality.FULL_HD)
 
         val titles = qualities
             .map {
                 when (it) {
-                    MyPlayerActivity.VAL_QUALITY_SD -> "480p"
-                    MyPlayerActivity.VAL_QUALITY_HD -> "720p"
-                    MyPlayerActivity.VAL_QUALITY_FULL_HD -> "1080p"
+                    PlayerQuality.SD -> "480p"
+                    PlayerQuality.HD -> "720p"
+                    PlayerQuality.FULL_HD -> "1080p"
                     else -> "Unknown"
                 }
             }
@@ -442,17 +450,10 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         AlertDialog.Builder(context)
             .setTitle("Качество")
             .setItems(titles) { _, p1 ->
-                val quality = qualities[p1]
-                if (quality != -1) {
+                val quality = qualities.getOrNull(p1)
+                if (quality != null) {
                     if (saveQuality) {
-                        presenter.setQuality(
-                            when (quality) {
-                                MyPlayerActivity.VAL_QUALITY_SD -> PreferencesHolder.QUALITY_SD
-                                MyPlayerActivity.VAL_QUALITY_HD -> PreferencesHolder.QUALITY_HD
-                                MyPlayerActivity.VAL_QUALITY_FULL_HD -> PreferencesHolder.QUALITY_FULL_HD
-                                else -> PreferencesHolder.QUALITY_NO
-                            }
-                        )
+                        presenter.setQuality(quality)
                     }
                     onSelect.invoke(quality)
                 }
@@ -498,7 +499,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             presenter.onEpisodeClick(
                 episode,
                 MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE,
-                MyPlayerActivity.VAL_QUALITY_SD
+                PlayerQuality.SD
             )
         }
 
@@ -506,7 +507,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             presenter.onEpisodeClick(
                 episode,
                 MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE,
-                MyPlayerActivity.VAL_QUALITY_HD
+                PlayerQuality.HD
             )
         }
 
@@ -514,7 +515,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             presenter.onEpisodeClick(
                 episode,
                 MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE,
-                MyPlayerActivity.VAL_QUALITY_FULL_HD
+                PlayerQuality.FULL_HD
             )
         }
 
@@ -548,9 +549,9 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
 
     data class QualityInfo<T>(
         val data: T,
-        val urlSd: String?,
-        val urlHd: String?,
-        val urlFullHd: String?
+        val urlSd: AbsoluteUrl?,
+        val urlHd: AbsoluteUrl?,
+        val urlFullHd: AbsoluteUrl?
     ) {
         val hasSd = urlSd != null
         val hasHd = urlHd != null

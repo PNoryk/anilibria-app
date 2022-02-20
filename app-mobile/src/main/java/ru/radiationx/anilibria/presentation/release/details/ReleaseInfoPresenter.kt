@@ -12,7 +12,6 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
@@ -22,6 +21,8 @@ import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PlayerType
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.DonationRepository
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
@@ -42,7 +43,7 @@ class ReleaseInfoPresenter @Inject constructor(
     private val router: Router,
     private val linkHandler: ILinkHandler,
     private val errorHandler: IErrorHandler,
-    private val appPreferences: PreferencesHolder,
+    private val preferencesStorage: PreferencesStorage,
     private val authMainAnalytics: AuthMainAnalytics,
     private val catalogAnalytics: CatalogAnalytics,
     private val scheduleAnalytics: ScheduleAnalytics,
@@ -96,36 +97,37 @@ class ReleaseInfoPresenter @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        appPreferences
-            .observeEpisodesIsReverse()
-            .subscribe { episodesReversed ->
+        preferencesStorage
+            .episodesIsReverse.observe()
+            .onEach { episodesReversed ->
                 updateModifiers {
                     it.copy(episodesReversed = episodesReversed)
                 }
 
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
 
-        appPreferences
-            .observeReleaseRemind()
-            .subscribe { remindEnabled ->
+        preferencesStorage
+            .releaseRemind.observe()
+            .onEach { remindEnabled ->
                 stateController.updateState {
                     it.copy(remindText = remindText.takeIf { remindEnabled })
                 }
             }
-            .addToDisposable()
+            .launchIn(viewModelScope)
+
         observeRelease()
         loadRelease()
         subscribeAuth()
     }
 
-    fun getQuality() = releaseInteractor.getQuality()
+    fun getQuality() = preferencesStorage.quality.blockingGet()
 
-    fun setQuality(value: Int) = releaseInteractor.setQuality(value)
+    fun setQuality(value: PlayerQuality) = preferencesStorage.quality.blockingSet(value)
 
-    fun getPlayerType() = releaseInteractor.getPlayerType()
+    fun getPlayerType() = preferencesStorage.playerType.blockingGet()
 
-    fun setPlayerType(value: Int) = releaseInteractor.setPlayerType(value)
+    fun setPlayerType(value: PlayerType) = preferencesStorage.playerType.blockingSet(value)
 
 
     private fun subscribeAuth() {
@@ -195,7 +197,7 @@ class ReleaseInfoPresenter @Inject constructor(
     }
 
     fun onRemindCloseClick() {
-        appPreferences.releaseRemind = false
+        preferencesStorage.releaseRemind.blockingSet(false)
     }
 
     fun onTorrentClick(item: ReleaseTorrentItemState) {

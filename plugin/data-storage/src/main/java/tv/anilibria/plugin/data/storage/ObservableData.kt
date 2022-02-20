@@ -50,4 +50,7 @@ class ObservableData<T>(
     @Deprecated("use suspend get")
     fun blockingGet(): T = runBlocking { get() }
 
+    @Deprecated("use suspend get")
+    fun blockingSet(data: T) = runBlocking { put(data) }
+
 }

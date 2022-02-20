@@ -6,20 +6,23 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
-import ru.radiationx.anilibria.BuildConfig
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatDrawable
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.datasource.remote.Api
 import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.SettingsAnalytics
-import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
+import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsAppTheme
+import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PlayerType
+import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
 /**
@@ -29,7 +32,7 @@ import javax.inject.Inject
 class SettingsFragment : BaseSettingFragment() {
 
     @Inject
-    lateinit var appPreferences: PreferencesHolder
+    lateinit var preferencesStorage: PreferencesStorage
 
     @Inject
     lateinit var apiConfig: ApiConfig
@@ -41,7 +44,7 @@ class SettingsFragment : BaseSettingFragment() {
     lateinit var settingsAnalytics: SettingsAnalytics
 
     @Inject
-    lateinit var updaterAnalytics: UpdaterAnalytics
+    lateinit var sharedBuildConfig: SharedBuildConfig
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
@@ -84,17 +87,17 @@ class SettingsFragment : BaseSettingFragment() {
         }
 
         findPreference<Preference>("quality")?.apply {
-            val savedQuality = appPreferences.getQuality()
+            val savedQuality = preferencesStorage.quality.blockingGet()
             icon = getQualityIcon(savedQuality)
             summary = getQualityTitle(savedQuality)
             setOnPreferenceClickListener { preference ->
                 settingsAnalytics.qualityClick()
                 val values = arrayOf(
-                    PreferencesHolder.QUALITY_SD,
-                    PreferencesHolder.QUALITY_HD,
-                    PreferencesHolder.QUALITY_FULL_HD,
-                    PreferencesHolder.QUALITY_NO,
-                    PreferencesHolder.QUALITY_ALWAYS
+                    PlayerQuality.SD,
+                    PlayerQuality.HD,
+                    PlayerQuality.FULL_HD,
+                    PlayerQuality.NOT_SELECTED,
+                    PlayerQuality.ALWAYS_ASK,
                 )
                 val titles = values.map { getQualityTitle(it) }.toTypedArray()
                 AlertDialog.Builder(preference.context)
@@ -102,7 +105,7 @@ class SettingsFragment : BaseSettingFragment() {
                     .setItems(titles) { _, which ->
                         val quality = values[which]
                         settingsAnalytics.qualityChange(quality.toAnalyticsQuality())
-                        appPreferences.setQuality(quality)
+                        preferencesStorage.quality.blockingSet(quality)
                         icon = getQualityIcon(quality)
                         summary = getQualityTitle(quality)
                     }
@@ -112,16 +115,16 @@ class SettingsFragment : BaseSettingFragment() {
         }
 
         findPreference<Preference>("player_type")?.apply {
-            val savedPlayerType = appPreferences.getPlayerType()
+            val savedPlayerType = preferencesStorage.playerType.blockingGet()
             icon = this.context.getCompatDrawable(R.drawable.ic_play_circle_outline)
             summary = getPlayerTypeTitle(savedPlayerType)
             setOnPreferenceClickListener { preference ->
                 settingsAnalytics.playerClick()
                 val values = arrayOf(
-                    PreferencesHolder.PLAYER_TYPE_EXTERNAL,
-                    PreferencesHolder.PLAYER_TYPE_INTERNAL,
-                    PreferencesHolder.PLAYER_TYPE_NO,
-                    PreferencesHolder.PLAYER_TYPE_ALWAYS
+                    PlayerType.EXTERNAL,
+                    PlayerType.INTERNAL,
+                    PlayerType.NOT_SELECTED,
+                    PlayerType.ALWAYS_ASK
                 )
                 val titles = values.map { getPlayerTypeTitle(it) }.toTypedArray()
                 AlertDialog.Builder(preference.context)
@@ -129,7 +132,7 @@ class SettingsFragment : BaseSettingFragment() {
                     .setItems(titles) { dialog, which ->
                         val playerType = values[which]
                         settingsAnalytics.playerChange(playerType.toAnalyticsPlayer())
-                        appPreferences.setPlayerType(playerType)
+                        preferencesStorage.playerType.blockingSet(playerType)
                         summary = getPlayerTypeTitle(playerType)
                     }
                     .show()
@@ -138,12 +141,12 @@ class SettingsFragment : BaseSettingFragment() {
         }
 
         findPreference<Preference>("about.application")?.apply {
-            val appendix = if (Api.STORE_APP_IDS.contains(BuildConfig.APPLICATION_ID)) {
+            val appendix = if (Api.STORE_APP_IDS.contains(sharedBuildConfig.applicationId)) {
                 " для Play Market"
             } else {
                 ""
             }
-            summary = "Версия ${BuildConfig.VERSION_NAME}$appendix"
+            summary = "Версия ${sharedBuildConfig.versionName}$appendix"
         }
 
         findPreference<Preference>("about.app_other_apps")?.apply {
@@ -183,33 +186,33 @@ class SettingsFragment : BaseSettingFragment() {
         }
     }
 
-    private fun getQualityIcon(quality: Int): Drawable? {
+    private fun getQualityIcon(quality: PlayerQuality): Drawable? {
         val iconRes = when (quality) {
-            PreferencesHolder.QUALITY_SD -> R.drawable.ic_quality_sd_base
-            PreferencesHolder.QUALITY_HD -> R.drawable.ic_quality_hd_base
-            PreferencesHolder.QUALITY_FULL_HD -> R.drawable.ic_quality_full_hd_base
+            PlayerQuality.SD -> R.drawable.ic_quality_sd_base
+            PlayerQuality.HD -> R.drawable.ic_quality_hd_base
+            PlayerQuality.FULL_HD -> R.drawable.ic_quality_full_hd_base
             else -> return null
         }
         return context?.let { ContextCompat.getDrawable(it, iconRes) }
     }
 
-    private fun getQualityTitle(quality: Int): String {
+    private fun getQualityTitle(quality: PlayerQuality): String {
         return when (quality) {
-            PreferencesHolder.QUALITY_SD -> "480p"
-            PreferencesHolder.QUALITY_HD -> "720p"
-            PreferencesHolder.QUALITY_FULL_HD -> "1080p"
-            PreferencesHolder.QUALITY_NO -> "Не выбрано"
-            PreferencesHolder.QUALITY_ALWAYS -> "Спрашивать всегда"
+            PlayerQuality.SD -> "480p"
+            PlayerQuality.HD -> "720p"
+            PlayerQuality.FULL_HD -> "1080p"
+            PlayerQuality.NOT_SELECTED -> "Не выбрано"
+            PlayerQuality.ALWAYS_ASK -> "Спрашивать всегда"
             else -> ""
         }
     }
 
-    private fun getPlayerTypeTitle(playerType: Int): String {
+    private fun getPlayerTypeTitle(playerType: PlayerType): String {
         return when (playerType) {
-            PreferencesHolder.PLAYER_TYPE_EXTERNAL -> "Внешний плеер"
-            PreferencesHolder.PLAYER_TYPE_INTERNAL -> "Внутренний плеер"
-            PreferencesHolder.PLAYER_TYPE_NO -> "Не выбрано"
-            PreferencesHolder.PLAYER_TYPE_ALWAYS -> "Спрашивать всегда"
+            PlayerType.EXTERNAL -> "Внешний плеер"
+            PlayerType.INTERNAL -> "Внутренний плеер"
+            PlayerType.NOT_SELECTED -> "Не выбрано"
+            PlayerType.ALWAYS_ASK -> "Спрашивать всегда"
             else -> ""
         }
     }
