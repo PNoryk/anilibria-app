@@ -28,9 +28,7 @@ import ru.radiationx.anilibria.ui.common.webpage.compositeWebViewClientOf
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.ui.widgets.ExtendedWebView
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.MainClient
 import ru.radiationx.data.datasource.holders.AppThemeHolder
-import ru.radiationx.data.datasource.remote.IClient
 import ru.radiationx.shared.ktx.android.toBase64
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared_app.di.DI
@@ -286,7 +284,8 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
             return if (needIntercept) {
                 Log.d("kekeke", "tryInterceptComments $url")
                 val client = Toothpick.openScopes(DI.DEFAULT_SCOPE, screenScope)
-                    .getInstance(IClient::class.java, MainClient::class.java.name)
+                // todo заменить на нетворк клиент
+                //  .getInstance(IClient::class.java, MainClient::class.java.name)
 
                 Log.d("S_DEF_LOG", "CHANGE CSS")
                 val cssSrc = try {

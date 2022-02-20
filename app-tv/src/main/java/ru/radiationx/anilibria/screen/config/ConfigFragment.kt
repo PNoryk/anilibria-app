@@ -7,12 +7,12 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.fragment_config.*
-import ru.radiationx.anilibria.common.MotionLayoutListener
 import ru.radiationx.anilibria.R
-import ru.radiationx.data.entity.common.ConfigScreenState
+import ru.radiationx.anilibria.common.MotionLayoutListener
 import ru.radiationx.shared.ktx.android.subscribeTo
-import ru.radiationx.shared_app.screen.ScopedFragment
 import ru.radiationx.shared_app.di.viewModel
+import ru.radiationx.shared_app.screen.ScopedFragment
+import tv.anilibria.feature.networkconfig.data.ConfigScreenState
 
 class ConfigFragment : ScopedFragment(R.layout.fragment_config) {
 

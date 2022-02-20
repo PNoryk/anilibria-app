@@ -9,11 +9,11 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.common.GradientBackgroundManager
-import ru.radiationx.data.entity.common.AuthState
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel
 import ru.radiationx.shared_app.di.viewModelFromParent
 import ru.radiationx.shared_app.screen.ScopedFragment
+import tv.anilibria.module.domain.entity.AuthState
 import javax.inject.Inject
 
 class ProfileFragment : ScopedFragment(R.layout.fragment_profile), BrowseSupportFragment.MainFragmentAdapterProvider {

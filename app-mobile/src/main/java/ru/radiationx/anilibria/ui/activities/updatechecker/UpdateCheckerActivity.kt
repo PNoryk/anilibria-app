@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Html
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,10 +22,8 @@ import ru.radiationx.anilibria.presentation.checker.CheckerPresenter
 import ru.radiationx.anilibria.presentation.checker.CheckerView
 import ru.radiationx.anilibria.ui.activities.BaseActivity
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.remote.IApiUtils
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
-import ru.radiationx.shared_app.analytics.LifecycleTimeCounter
 import ru.radiationx.shared_app.di.getDependency
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.HtmlText
@@ -32,6 +31,7 @@ import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.feature.appupdates.data.domain.UpdateLink
 import tv.anilibria.feature.appupdates.data.domain.UpdateLinkType
 import tv.anilibria.module.data.analytics.features.UpdaterAnalytics
+import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
@@ -57,9 +57,6 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
     private val useTimeCounter by lazy {
         LifecycleTimeCounter(presenter::submitUseTime)
     }
-
-    @Inject
-    lateinit var apiUtils: IApiUtils
 
     @Inject
     lateinit var sharedBuildConfig: SharedBuildConfig
@@ -198,7 +195,7 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
         }
 
         val sectionText = TextView(this)
-        sectionText.text = apiUtils.toHtml(stringBuilder.toString())
+        sectionText.text = Html.fromHtml(stringBuilder.toString())
         sectionText.setPadding((resources.displayMetrics.density * 8).toInt(), 0, 0, 0)
         sectionText.setTextColor(getCompatColor(R.color.light_textDefault))
         root.addView(sectionText)

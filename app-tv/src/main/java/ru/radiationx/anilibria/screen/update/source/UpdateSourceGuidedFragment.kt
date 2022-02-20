@@ -5,9 +5,9 @@ import android.view.View
 import androidx.leanback.widget.GuidedAction
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.common.fragment.scoped.ScopedGuidedStepFragment
-import ru.radiationx.data.entity.app.updater.UpdateData
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel
+import tv.anilibria.feature.appupdates.data.domain.UpdateLink
 
 class UpdateSourceGuidedFragment : ScopedGuidedStepFragment() {
 
@@ -24,7 +24,7 @@ class UpdateSourceGuidedFragment : ScopedGuidedStepFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeTo(viewModel.sourcesData) {
-            actions = it.mapIndexed { index: Int, updateLink: UpdateData.UpdateLink ->
+            actions = it.mapIndexed { index: Int, updateLink: UpdateLink ->
                 GuidedAction.Builder(requireContext())
                     .id(index.toLong())
                     .title(updateLink.name)

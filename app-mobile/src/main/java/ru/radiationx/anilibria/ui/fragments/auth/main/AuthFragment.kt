@@ -19,8 +19,8 @@ import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.addTextChangeListener
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
-import ru.radiationx.shared_app.analytics.LifecycleTimeCounter
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 
 /**

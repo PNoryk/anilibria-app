@@ -33,11 +33,11 @@ import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.ToolbarHelper
 import ru.radiationx.anilibria.utils.Utils
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
-import ru.radiationx.data.entity.app.release.ReleaseItem
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.domain.entity.release.Release
 import javax.inject.Inject
 
 
@@ -52,7 +52,7 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
         fun newInstance(
             id: Int = -1,
             code: String? = null,
-            item: ReleaseItem? = null
+            item: Release? = null
         ) = ReleaseFragment().putExtra {
             putInt(ARG_ID, id)
             putString(ARG_ID_CODE, code)
@@ -228,7 +228,7 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
         Toast.makeText(context, "Ссылка скопирована", Toast.LENGTH_SHORT).show()
     }
 
-    override fun addShortCut(release: ReleaseItem) {
+    override fun addShortCut(release: Release) {
         ShortcutHelper.addShortcut(release)
     }
 

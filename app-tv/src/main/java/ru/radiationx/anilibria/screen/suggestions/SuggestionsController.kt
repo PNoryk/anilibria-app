@@ -1,7 +1,6 @@
 package ru.radiationx.anilibria.screen.suggestions
 
 import com.jakewharton.rxrelay2.PublishRelay
-import ru.radiationx.data.entity.app.search.SuggestionItem
 import toothpick.InjectConstructor
 import tv.anilibria.module.domain.entity.release.Release
 

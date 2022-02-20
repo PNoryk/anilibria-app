@@ -3,21 +3,19 @@ package ru.radiationx.anilibria.ui.activities
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import android.webkit.*
 import kotlinx.android.synthetic.main.activity_moon.*
 import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.R
-import ru.radiationx.shared_app.di.injectDependencies
 import ru.radiationx.anilibria.extension.generateWithTheme
 import ru.radiationx.anilibria.utils.Utils
-import tv.anilibria.module.data.analytics.TimeCounter
-import tv.anilibria.module.data.analytics.features.WebPlayerAnalytics
 import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.toException
-import ru.radiationx.shared_app.analytics.LifecycleTimeCounter
+import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.data.analytics.features.WebPlayerAnalytics
+import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import java.util.regex.Pattern
 import javax.inject.Inject
 

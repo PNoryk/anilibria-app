@@ -17,15 +17,16 @@ import javax.inject.Inject
 class VerticalGridTestFragment : BaseVerticalGridFragment() {
 
     @Inject
-    lateinit var mockData: MockData
-
-    @Inject
     lateinit var backgroundManager: GradientBackgroundManager
 
     @Inject
     lateinit var dataConverter: CardsDataConverter
 
-    override fun onInflateTitleView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): View {
+    override fun onInflateTitleView(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.lb_search_titleview, parent, false)
     }
 
@@ -68,7 +69,6 @@ class VerticalGridTestFragment : BaseVerticalGridFragment() {
             adapter.apply {
                 startEntranceTransition()
                 clear()
-                addAll(0, mockData.releases.shuffled().map { dataConverter.toCard(it) })
                 //add(LoadingCard())
                 //add(LinkCard("Открыть избранное"))
             }

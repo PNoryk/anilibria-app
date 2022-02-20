@@ -13,9 +13,9 @@ import ru.radiationx.shared_app.di.injectDependencies
 import ru.radiationx.anilibria.presentation.configuring.ConfiguringPresenter
 import ru.radiationx.anilibria.presentation.configuring.ConfiguringView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
-import ru.radiationx.data.entity.common.ConfigScreenState
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
+import tv.anilibria.feature.networkconfig.data.ConfigScreenState
 
 class ConfiguringFragment : BaseFragment(), ConfiguringView {
 

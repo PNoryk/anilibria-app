@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
-import ru.radiationx.data.entity.app.search.SearchForm
 import toothpick.InjectConstructor
+import tv.anilibria.module.domain.entity.SearchForm
 
 @InjectConstructor
 class SearchSortViewModel(

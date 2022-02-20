@@ -1,6 +1,5 @@
 package ru.radiationx.data.interactors
 
-import ru.radiationx.data.datasource.holders.EpisodesCheckerHolder
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.entity.app.release.ReleaseFull
 import javax.inject.Inject

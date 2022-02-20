@@ -15,7 +15,6 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
-import ru.radiationx.data.datasource.holders.DownloadsHolder
 import toothpick.InjectConstructor
 import java.util.concurrent.TimeUnit
 

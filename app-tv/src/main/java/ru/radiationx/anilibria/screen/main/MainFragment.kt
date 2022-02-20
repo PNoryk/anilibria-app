@@ -24,9 +24,6 @@ class MainFragment : ScopedRowsFragment() {
     private val rowsAdapter by lazy { ArrayObjectAdapter(rowsPresenter) }
 
     @Inject
-    lateinit var mockData: MockData
-
-    @Inject
     lateinit var router: Router
 
     @Inject

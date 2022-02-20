@@ -3,6 +3,7 @@ package ru.radiationx.anilibria.presentation.comments
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,8 +19,8 @@ import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsScreenState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
 import ru.radiationx.data.datasource.holders.AuthHolder
-import ru.radiationx.data.datasource.holders.UserHolder
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
@@ -31,7 +32,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class VkCommentsPresenter @Inject constructor(
-    private val userHolder: UserHolder,
+    private val authStateHolder: AuthStateHolder,
     private val pageRepository: PageRepository,
     private val releaseInteractor: ReleaseInteractor,
     private val authHolder: AuthHolder,
@@ -67,12 +68,11 @@ class VkCommentsPresenter @Inject constructor(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        userHolder
-            .observeUser()
-            .map { it.authState }
+        authStateHolder
+            .observe()
             .distinctUntilChanged()
-            .subscribe { viewState.pageReloadAction() }
-            .addToDisposable()
+            .onEach { viewState.pageReloadAction() }
+            .launchIn(viewModelScope)
 
         authHolder.observeVkAuthChange()
             .subscribe { viewState.pageReloadAction() }

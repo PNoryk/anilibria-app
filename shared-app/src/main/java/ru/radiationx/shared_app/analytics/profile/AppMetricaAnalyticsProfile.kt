@@ -6,10 +6,6 @@ import com.yandex.metrica.profile.UserProfile
 import com.yandex.metrica.profile.UserProfileUpdate
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import ru.radiationx.data.analytics.profile.AnalyticsProfile
-import ru.radiationx.data.analytics.profile.AnalyticsProfileDataSource
-import ru.radiationx.data.analytics.profile.ProfileConstants
-import ru.radiationx.data.entity.common.DataWrapper
 import ru.radiationx.data.extensions.nullOnError
 import ru.radiationx.data.extensions.toWrapper
 import toothpick.InjectConstructor

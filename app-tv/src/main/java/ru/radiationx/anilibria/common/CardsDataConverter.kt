@@ -2,7 +2,6 @@ package ru.radiationx.anilibria.common
 
 import android.content.Context
 import android.text.format.DateUtils
-import ru.radiationx.data.entity.app.feed.FeedItem
 import tv.anilibria.module.domain.entity.feed.Feed
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.youtube.Youtube

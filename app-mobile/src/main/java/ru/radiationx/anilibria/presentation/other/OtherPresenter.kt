@@ -149,7 +149,7 @@ class OtherPresenter @Inject constructor(
             MENU_TEAM -> {
                 otherAnalytics.teamClick()
                 pageAnalytics.open(AnalyticsConstants.screen_other, PAGE_PATH_TEAM.url)
-                router.navigateTo(Screens.StaticPage(PAGE_PATH_TEAM))
+                router.navigateTo(Screens.StaticPage(PAGE_PATH_TEAM, "Список команды"))
             }
             MENU_DONATE -> {
                 otherAnalytics.donateClick()

@@ -26,11 +26,11 @@ import ru.radiationx.anilibria.ui.fragments.ToolbarShadowController
 import ru.radiationx.anilibria.ui.fragments.release.list.ReleasesAdapter
 import ru.radiationx.anilibria.utils.DimensionHelper
 import ru.radiationx.data.datasource.holders.AppThemeHolder
-import ru.radiationx.data.entity.app.release.GenreItem
-import ru.radiationx.data.entity.app.release.SeasonItem
-import ru.radiationx.data.entity.app.release.YearItem
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.domain.entity.ReleaseGenre
+import tv.anilibria.module.domain.entity.ReleaseSeason
+import tv.anilibria.module.domain.entity.ReleaseYear
 import javax.inject.Inject
 
 
@@ -251,15 +251,15 @@ class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView,
         genresDialog.showDialog()
     }
 
-    override fun showGenres(genres: List<GenreItem>) {
+    override fun showGenres(genres: List<ReleaseGenre>) {
         genresDialog.setItems(genres)
     }
 
-    override fun showYears(years: List<YearItem>) {
+    override fun showYears(years: List<ReleaseYear>) {
         genresDialog.setYears(years)
     }
 
-    override fun showSeasons(seasons: List<SeasonItem>) {
+    override fun showSeasons(seasons: List<ReleaseSeason>) {
         genresDialog.setSeasons(seasons)
     }
 

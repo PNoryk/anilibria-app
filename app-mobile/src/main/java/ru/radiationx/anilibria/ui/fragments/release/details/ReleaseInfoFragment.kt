@@ -35,13 +35,11 @@ import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeDelegate
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseHeadDelegate
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.utils.Utils
-import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
-import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.entity.app.release.ReleaseFull
-import ru.radiationx.data.entity.app.release.SourceEpisode
-import ru.radiationx.data.entity.app.release.TorrentItem
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.domain.entity.release.Episode
+import tv.anilibria.module.domain.entity.release.Torrent
 import java.net.URLConnection
 import java.util.regex.Pattern
 
@@ -112,11 +110,11 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         state.data?.let { releaseInfoAdapter.bindState(it, state) }
     }
 
-    override fun loadTorrent(torrent: TorrentItem) {
+    override fun loadTorrent(torrent: Torrent) {
         torrent.url?.also { Utils.externalLink(it) }
     }
 
-    override fun showTorrentDialog(torrents: List<TorrentItem>) {
+    override fun showTorrentDialog(torrents: List<Torrent>) {
         val context = context ?: return
         val titles =
             torrents.map { "Серия ${it.series} [${it.quality}][${Utils.readableFileSize(it.size)}]" }
@@ -220,7 +218,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             .show()
     }
 
-    override fun downloadEpisode(episode: SourceEpisode, quality: Int?) {
+    override fun downloadEpisode(episode: Episode, quality: Int?) {
         val qualityInfo = QualityInfo(episode, episode.urlSd, episode.urlHd, episode.urlFullHd)
         if (quality == null) {
             selectQuality(qualityInfo, { selected ->

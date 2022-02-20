@@ -120,6 +120,7 @@ dependencies {
     implementation project(":data-local")
     implementation project(":data-preferences")
     implementation project(":plugin:shared-appinfo")
+    implementation project(":plugin:data-analytics")
     implementation project(":plugin:data-storage")
     implementation project(":feature-network-config-data")
     implementation project(":feature-appupdates-data")

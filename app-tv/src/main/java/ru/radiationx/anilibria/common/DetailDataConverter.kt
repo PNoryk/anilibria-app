@@ -2,10 +2,10 @@ package ru.radiationx.anilibria.common
 
 import android.content.Context
 import android.text.Html
-import ru.radiationx.data.entity.app.release.ReleaseFull
-import ru.radiationx.data.entity.app.release.ReleaseItem
-import ru.radiationx.data.entity.app.schedule.ScheduleDay
 import toothpick.InjectConstructor
+import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.module.domain.entity.release.ReleaseStatus
+import tv.anilibria.module.domain.entity.schedule.ScheduleDay
 import java.text.NumberFormat
 import java.util.*
 
@@ -14,7 +14,7 @@ class DetailDataConverter(
     private val context: Context
 ) {
 
-    fun toDetail(releaseItem: ReleaseItem): LibriaDetails = releaseItem.run {
+    fun toDetail(releaseItem: Release): LibriaDetails = releaseItem.run {
         LibriaDetails(
             id,
             title.orEmpty(),
@@ -29,16 +29,16 @@ class DetailDataConverter(
             getAnnounce(),
             poster.orEmpty(),
             NumberFormat.getNumberInstance().format(favoriteInfo.rating),
-            (releaseItem as? ReleaseFull)?.episodes?.any { it.urlFullHd != null } ?: false,
+            (releaseItem as? Release)?.episodes?.any { it.urlFullHd != null } ?: false,
             favoriteInfo.isAdded,
-            (releaseItem as? ReleaseFull)?.episodes?.isNotEmpty() ?: false,
-            (releaseItem as? ReleaseFull)?.episodes?.any { it.isViewed } ?: false,
-            false && (releaseItem as? ReleaseFull)?.moonwalkLink != null
+            (releaseItem as? Release)?.episodes?.isNotEmpty() ?: false,
+            (releaseItem as? Release)?.episodes?.any { it.isViewed } ?: false,
+            false && (releaseItem as? Release)?.moonwalkLink != null
         )
     }
 
-    fun ReleaseItem.getAnnounce(): String {
-        if (statusCode == ReleaseItem.STATUS_CODE_COMPLETE) {
+    fun Release.getAnnounce(): String {
+        if (statusCode == ReleaseStatus.COMPLETE) {
             return "Релиз завершен"
         }
 

@@ -17,7 +17,6 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.analytics.TimeCounter
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.analytics.AnalyticsConstants
@@ -32,6 +31,7 @@ import tv.anilibria.module.domain.entity.ReleaseYear
 import tv.anilibria.module.domain.entity.SearchForm
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.plugin.data.analytics.TimeCounter
 import javax.inject.Inject
 
 @InjectViewState

@@ -1,11 +1,9 @@
-package ru.radiationx.shared_app.analytics
+package tv.anilibria.plugin.data.analytics
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import io.reactivex.android.schedulers.AndroidSchedulers
-import ru.radiationx.data.analytics.TimeCounter
-import ru.radiationx.shared.ktx.addTo
+
 
 class LifecycleTimeCounter(
     private val onDestroyTimeListener: (Long) -> Unit = {}

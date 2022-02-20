@@ -2,7 +2,6 @@ package ru.radiationx.anilibria.ui.fragments.auth.otp
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +21,8 @@ import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.presentation.auth.otp.OtpAcceptPresenter
 import ru.radiationx.anilibria.presentation.auth.otp.OtpAcceptView
-import ru.radiationx.shared_app.analytics.LifecycleTimeCounter
 import ru.radiationx.shared_app.di.getDependency
+import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 
 class OtpAcceptDialogFragment : MvpAppCompatDialogFragment(), OtpAcceptView {
 

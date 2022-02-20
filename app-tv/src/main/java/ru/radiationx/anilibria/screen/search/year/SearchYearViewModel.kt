@@ -2,13 +2,11 @@ package ru.radiationx.anilibria.screen.search.year
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.search.BaseSearchValuesViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
-import ru.radiationx.data.entity.app.release.YearItem
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.ReleaseYear
