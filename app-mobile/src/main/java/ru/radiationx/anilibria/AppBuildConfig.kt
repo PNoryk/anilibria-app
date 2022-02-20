@@ -1,6 +1,6 @@
 package ru.radiationx.anilibria
 
-import ru.radiationx.data.SharedBuildConfig
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
 class AppBuildConfig @Inject constructor() : SharedBuildConfig {
@@ -12,4 +12,6 @@ class AppBuildConfig @Inject constructor() : SharedBuildConfig {
     override val versionCode: Int = BuildConfig.VERSION_CODE
 
     override val debug: Boolean = BuildConfig.DEBUG
+
+    override val buildDate: String = BuildConfig.BUILD_DATE
 }

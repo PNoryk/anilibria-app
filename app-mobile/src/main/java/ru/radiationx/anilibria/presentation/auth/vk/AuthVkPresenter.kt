@@ -1,18 +1,18 @@
 package ru.radiationx.anilibria.presentation.auth.vk
 
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AuthVkNotifier
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.presentation.auth.social.WebAuthSoFastDetector
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.auth.vk.AuthVkScreenState
-import ru.radiationx.data.datasource.holders.AuthHolder
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 @InjectViewState
 class AuthVkPresenter @Inject constructor(
-    private val authHolder: AuthHolder,
+    private val authHolder: AuthVkNotifier,
     private val router: Router
 ) : BasePresenter<AuthVkView>(router) {
 

@@ -1,7 +1,7 @@
 package ru.radiationx.anilibria
 
-import ru.radiationx.data.datasource.remote.common.CheckerReserveSources
 import toothpick.InjectConstructor
+import tv.anilibria.feature.appupdates.data.CheckerReserveSources
 
 @InjectConstructor
 class TvCheckerSources : CheckerReserveSources {

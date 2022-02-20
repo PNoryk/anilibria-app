@@ -4,10 +4,8 @@ import android.content.Context
 import ru.radiationx.anilibria.AppBuildConfig
 import ru.radiationx.anilibria.AppMigrationExecutor
 import ru.radiationx.anilibria.TvCheckerSources
-import ru.radiationx.data.SharedBuildConfig
 import ru.radiationx.data.analytics.AnalyticsErrorReporter
 import ru.radiationx.data.analytics.AnalyticsSender
-import ru.radiationx.data.datasource.remote.common.CheckerReserveSources
 import ru.radiationx.data.migration.MigrationExecutor
 import ru.radiationx.shared_app.analytics.errors.AppMetricaErrorReporter
 import ru.radiationx.shared_app.analytics.errors.CombinedErrorReporter
@@ -20,6 +18,8 @@ import ru.radiationx.shared_app.analytics.profile.CombinedAnalyticsProfile
 import ru.radiationx.shared_app.analytics.profile.LoggingAnalyticsProfile
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
 import toothpick.config.Module
+import tv.anilibria.feature.appupdates.data.CheckerReserveSources
+import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 
 class AppModule(context: Context) : Module() {
 

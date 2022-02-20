@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AuthVkNotifier
 import ru.radiationx.anilibria.model.loading.CoDataLoadingController
 import ru.radiationx.anilibria.model.loading.ScreenStateAction
 import ru.radiationx.anilibria.model.loading.StateController
@@ -18,7 +19,6 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsScreenState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
-import ru.radiationx.data.datasource.holders.AuthHolder
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
@@ -35,7 +35,7 @@ class VkCommentsPresenter @Inject constructor(
     private val authStateHolder: AuthStateHolder,
     private val pageRepository: PageRepository,
     private val releaseInteractor: ReleaseInteractor,
-    private val authHolder: AuthHolder,
+    private val authHolder: AuthVkNotifier,
     private val router: Router,
     private val errorHandler: IErrorHandler,
     private val authVkAnalytics: AuthVkAnalytics,
