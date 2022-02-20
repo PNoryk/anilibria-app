@@ -13,12 +13,10 @@ import ru.radiationx.anilibria.presentation.auth.Auth2FaCodePresenter
 import ru.radiationx.anilibria.presentation.auth.Auth2FaCodeView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.addTextChangeListener
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared_app.di.injectDependencies
-import javax.inject.Inject
 
 /**
  * Created by radiationx on 30.12.17.
@@ -34,9 +32,6 @@ class Auth2FaCodeFragment : BaseFragment(), Auth2FaCodeView {
             putString(ARG_PASSWORD, password)
         }
     }
-
-    @Inject
-    lateinit var apiConfig: ApiConfig
 
     @InjectPresenter
     lateinit var presenter: Auth2FaCodePresenter

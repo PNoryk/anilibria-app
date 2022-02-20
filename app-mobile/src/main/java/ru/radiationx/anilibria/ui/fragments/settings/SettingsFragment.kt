@@ -11,8 +11,6 @@ import ru.radiationx.anilibria.extension.getCompatDrawable
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.remote.Api
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.SettingsAnalytics
@@ -33,9 +31,6 @@ class SettingsFragment : BaseSettingFragment() {
 
     @Inject
     lateinit var preferencesStorage: PreferencesStorage
-
-    @Inject
-    lateinit var apiConfig: ApiConfig
 
     @Inject
     lateinit var errorHandler: IErrorHandler
@@ -141,12 +136,7 @@ class SettingsFragment : BaseSettingFragment() {
         }
 
         findPreference<Preference>("about.application")?.apply {
-            val appendix = if (Api.STORE_APP_IDS.contains(sharedBuildConfig.applicationId)) {
-                " для Play Market"
-            } else {
-                ""
-            }
-            summary = "Версия ${sharedBuildConfig.versionName}$appendix"
+            summary = "Версия ${sharedBuildConfig.versionName}"
         }
 
         findPreference<Preference>("about.app_other_apps")?.apply {

@@ -15,11 +15,11 @@ import ru.radiationx.anilibria.presentation.auth.AuthPresenter
 import ru.radiationx.anilibria.presentation.auth.AuthView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.addTextChangeListener
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 
@@ -37,7 +37,7 @@ class AuthFragment : BaseFragment(), AuthView {
     }
 
     @Inject
-    lateinit var apiConfig: ApiConfig
+    lateinit var apiConfig: ApiConfigController
 
     @InjectPresenter
     lateinit var presenter: AuthPresenter
@@ -109,7 +109,7 @@ class AuthFragment : BaseFragment(), AuthView {
                 presenter.onSocialClick(item)
             }
             .setNegativeButton("Личный кабинет") { _, _ ->
-                Utils.externalLink("${apiConfig.siteUrl}/pages/cp.php")
+                Utils.externalLink("${apiConfig.getActiveBlocking().site}/pages/cp.php")
             }
             .show()
     }

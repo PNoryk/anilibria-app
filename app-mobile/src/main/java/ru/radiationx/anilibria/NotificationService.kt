@@ -12,16 +12,13 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.json.JSONObject
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.ui.activities.main.IntentActivity
 import ru.radiationx.anilibria.ui.activities.main.MainActivity
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import ru.radiationx.data.datasource.remote.address.ApiConfig
-import ru.radiationx.data.datasource.remote.parsers.ConfigurationParser
-import ru.radiationx.data.datasource.storage.ApiConfigStorage
 import ru.radiationx.shared_app.di.DI
+import tv.anilibria.module.data.ApiConfigPushHandler
+import tv.anilibria.module.data.analytics.AnalyticsConstants
 
 class NotificationService : FirebaseMessagingService() {
 
@@ -67,17 +64,9 @@ class NotificationService : FirebaseMessagingService() {
 
         if (data.type == CUSTOM_TYPE_CONFIG) {
             try {
-                val configurationParser = DI.get(ConfigurationParser::class.java)
-                val apiConfig = DI.get(ApiConfig::class.java)
-                val apiConfigStorage = DI.get(ApiConfigStorage::class.java)
-
-                apiConfig.updateNeedConfig(true)
-
                 val payload = data.payload.orEmpty()
-                val jsonObject = JSONObject(payload)
-                apiConfigStorage.saveJson(jsonObject)
-                val addresses = configurationParser.parse(jsonObject)
-                apiConfig.setAddresses(addresses)
+                val handler = DI.get(ApiConfigPushHandler::class.java)
+                handler.handlePushData(payload)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

@@ -20,7 +20,6 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.di.LocaleModule
 import ru.radiationx.anilibria.extension.disableItemChangeAnimation
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.extension.getMainStyleRes
@@ -37,11 +36,8 @@ import ru.radiationx.anilibria.ui.fragments.configuring.ConfiguringFragment
 import ru.radiationx.anilibria.utils.DimensionHelper
 import ru.radiationx.anilibria.utils.DimensionsProvider
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.datasource.remote.Api
-import ru.radiationx.data.system.LocaleHolder
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
-import ru.radiationx.shared_app.di.DI
 import ru.radiationx.shared_app.di.getDependency
 import ru.radiationx.shared_app.di.injectDependencies
 import ru.terrakok.cicerone.NavigatorHolder
@@ -122,19 +118,10 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
         } else {
             resources.configuration.locale
         }
-        injectDependencies(LocaleModule(locale), DI.DEFAULT_SCOPE)
+        injectDependencies()
         currentAppTheme = preferencesStorage.appTheme.blockingGet()
         setTheme(currentAppTheme.getMainStyleRes())
         super.onCreate(savedInstanceState)
-
-        if (Api.STORE_APP_IDS.contains(sharedBuildConfig.applicationId) && !LocaleHolder.checkAvail(
-                locale.country
-            )
-        ) {
-            startActivity(Screens.BlockedCountry().getActivityIntent(this))
-            finish()
-            return
-        }
 
         setContentView(R.layout.activity_main)
 

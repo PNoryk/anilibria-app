@@ -1,5 +1,6 @@
 package ru.radiationx.anilibria.presentation.main
 
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -7,10 +8,10 @@ import kotlinx.coroutines.runBlocking
 import moxy.InjectViewState
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.Screen
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
@@ -29,7 +30,7 @@ class MainPresenter @Inject constructor(
     private val authStateHolder: AuthStateHolder,
     private val donationRepository: DonationRepository,
     private val preferencesStorage: PreferencesStorage,
-    private val apiConfig: ApiConfig,
+    private val apiConfig: ApiConfigController,
     private val schedulers: SchedulersProvider,
     private val analyticsProfile: AnalyticsProfile,
     private val authMainAnalytics: AuthMainAnalytics,
@@ -55,8 +56,7 @@ class MainPresenter @Inject constructor(
         apiConfig
             .observeNeedConfig()
             .distinctUntilChanged()
-            .observeOn(schedulers.ui())
-            .subscribe({
+            .onEach {
                 if (it) {
                     viewState.showConfiguring()
                 } else {
@@ -65,11 +65,8 @@ class MainPresenter @Inject constructor(
                         initMain()
                     }
                 }
-            }, {
-                it.printStackTrace()
-                throw it
-            })
-            .addToDisposable()
+            }
+            .launchIn(viewModelScope)
 
         if (apiConfig.needConfig) {
             viewState.showConfiguring()

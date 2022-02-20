@@ -91,10 +91,6 @@
             android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
             android:theme="@style/LightAppTheme.NoActionBar" />
 
-        <activity
-            android:name=".ui.activities.CountryBlockedActivity"
-            android:theme="@style/Splash.LightAppTheme" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_push_notification" />

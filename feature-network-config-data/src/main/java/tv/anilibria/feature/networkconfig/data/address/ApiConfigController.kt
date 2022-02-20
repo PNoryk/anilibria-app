@@ -3,6 +3,7 @@ package tv.anilibria.feature.networkconfig.data.address
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.runBlocking
 import tv.anilibria.feature.networkconfig.data.ConfigLocalDataStorage
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import javax.inject.Inject
@@ -40,5 +41,8 @@ class ApiConfigController @Inject constructor(
     }
 
     suspend fun getTag() = getActive().tag
+
+    @Deprecated("use suspend")
+    fun getActiveBlocking() = runBlocking { getActive() }
 
 }

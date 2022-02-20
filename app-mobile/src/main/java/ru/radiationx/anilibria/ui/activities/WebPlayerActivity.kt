@@ -10,9 +10,9 @@ import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.generateWithTheme
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.module.data.analytics.features.WebPlayerAnalytics
 import tv.anilibria.module.data.preferences.AppTheme
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
@@ -35,7 +35,7 @@ class WebPlayerActivity : BaseActivity() {
     }
 
     @Inject
-    lateinit var apiConfig: ApiConfig
+    lateinit var apiConfig: ApiConfigController
 
     @Inject
     lateinit var webPlayerAnalytics: WebPlayerAnalytics
@@ -120,7 +120,8 @@ class WebPlayerActivity : BaseActivity() {
     }
 
     private fun loadUrl() {
-        val releaseUrl = "${apiConfig.widgetsSiteUrl}/release/$argReleaseCode.html\""
+        val releaseUrl =
+            "${apiConfig.getActiveBlocking().widgetsSite}/release/$argReleaseCode.html\""
 
         val template = App.instance.videoPageTemplate
         template.setVariableOpt("iframe_url", argUrl)

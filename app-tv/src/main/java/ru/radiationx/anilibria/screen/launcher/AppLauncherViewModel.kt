@@ -2,20 +2,22 @@ package ru.radiationx.anilibria.screen.launcher
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.screen.*
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.SchedulersProvider
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class AppLauncherViewModel(
-    private val apiConfig: ApiConfig,
-    private val schedulersProvider: SchedulersProvider,
+    private val apiConfig: ApiConfigController,
     private val router: Router,
     private val authStateHolder: AuthStateHolder
 ) : LifecycleViewModel() {
@@ -37,8 +39,7 @@ class AppLauncherViewModel(
         apiConfig
             .observeNeedConfig()
             .distinctUntilChanged()
-            .observeOn(schedulersProvider.ui())
-            .lifeSubscribe {
+            .onEach {
                 if (it) {
                     router.newRootScreen(ConfigScreen())
                 } else {
@@ -47,6 +48,7 @@ class AppLauncherViewModel(
                     }
                 }
             }
+            .launchIn(viewModelScope)
 
         if (apiConfig.needConfig) {
             router.newRootScreen(ConfigScreen())

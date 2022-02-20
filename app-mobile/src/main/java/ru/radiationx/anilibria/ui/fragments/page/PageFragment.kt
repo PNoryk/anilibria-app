@@ -21,11 +21,11 @@ import ru.radiationx.anilibria.presentation.page.PageView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.ui.widgets.ExtendedWebView
 import ru.radiationx.anilibria.utils.ToolbarHelper
-import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.module.data.analytics.features.PageAnalytics
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
@@ -57,7 +57,7 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
     lateinit var preferencesStorage: PreferencesStorage
 
     @Inject
-    lateinit var apiConfig: ApiConfig
+    lateinit var apiConfig: ApiConfigController
 
     @Inject
     lateinit var pageAnalytics: PageAnalytics
@@ -143,7 +143,7 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
 
         val template = App.instance.staticPageTemplate
         webView.easyLoadData(
-            apiConfig.siteUrl,
+            apiConfig.getActiveBlocking().site,
             template.generateWithTheme(preferencesStorage.appTheme.blockingGet())
         )
 
