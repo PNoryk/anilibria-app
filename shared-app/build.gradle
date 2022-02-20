@@ -30,6 +30,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation project(":data-new")
+    implementation project(":data-network")
+    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation project(":plugin:data-analytics")
     implementation project(":shared-android-ktx")
     implementation 'androidx.appcompat:appcompat:1.1.0'

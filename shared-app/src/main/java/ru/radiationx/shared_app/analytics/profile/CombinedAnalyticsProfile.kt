@@ -1,6 +1,7 @@
 package ru.radiationx.shared_app.analytics.profile
 
 import toothpick.InjectConstructor
+import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 
 @InjectConstructor
 class CombinedAnalyticsProfile(

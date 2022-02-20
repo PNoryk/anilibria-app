@@ -53,9 +53,9 @@ class SearchRemoteDataSource @Inject constructor(
         form: SearchForm,
         page: Int
     ): Page<Release> {
-        val yearsQuery = form.years?.joinToString(",") { it }.orEmpty()
-        val seasonsQuery = form.seasons?.joinToString(",") { it }.orEmpty()
-        val genresQuery = form.genres?.joinToString(",") { it }.orEmpty()
+        val yearsQuery = form.years?.joinToString(",") { it.value }.orEmpty()
+        val seasonsQuery = form.seasons?.joinToString(",") { it.value }.orEmpty()
+        val genresQuery = form.genres?.joinToString(",") { it.value }.orEmpty()
         val sortStr = when (form.sort) {
             SearchForm.Sort.RATING -> "2"
             SearchForm.Sort.DATE -> "1"

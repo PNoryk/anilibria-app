@@ -36,7 +36,7 @@ fun ReleaseResponse.toDomain(): Release {
         blockedInfo = blockedInfo?.toDomain(),
         webPlayerUrl = moonwalkLink?.asAbsoluteUrl(),
         episodes = episodes?.map { it.toDomain(releaseId) },
-        externalPlaylists = externalPlaylists?.map { it.toDomain() },
+        externalPlaylists = externalPlaylists?.map { it.toDomain(releaseId) },
         torrents = torrents?.map { it.toDomain(releaseId) }
     )
 }
@@ -62,17 +62,17 @@ fun EpisodeResponse.toDomain(releaseId: ReleaseId) = Episode(
     srcUrlFullHd = srcUrlFullHd?.asAbsoluteUrl()
 )
 
-fun ExternalPlaylistResponse.toDomain() = ExternalPlaylist(
+fun ExternalPlaylistResponse.toDomain(releaseId: ReleaseId) = ExternalPlaylist(
     tag = tag,
     title = title,
     actionText = actionText,
-    episodes = episodes.map { it.toDomain() },
+    episodes = episodes.map { it.toDomain(releaseId) },
     color = tag.toDataColor(),
     icon = tag.toDataIcon()
 )
 
-fun ExternalEpisodeResponse.toDomain() = ExternalEpisode(
-    id = id,
+fun ExternalEpisodeResponse.toDomain(releaseId: ReleaseId) = ExternalEpisode(
+    id = EpisodeId(id, releaseId),
     title = title,
     url = url?.asAbsoluteUrl()
 )
