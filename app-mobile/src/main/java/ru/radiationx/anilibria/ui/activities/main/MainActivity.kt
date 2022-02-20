@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.App
-import ru.radiationx.anilibria.BuildConfig
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.di.LocaleModule
 import ru.radiationx.anilibria.extension.disableItemChangeAnimation
@@ -38,7 +37,6 @@ import ru.radiationx.anilibria.ui.fragments.configuring.ConfiguringFragment
 import ru.radiationx.anilibria.utils.DimensionHelper
 import ru.radiationx.anilibria.utils.DimensionsProvider
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.Api
 import ru.radiationx.data.system.LocaleHolder
 import ru.radiationx.shared.ktx.android.gone
@@ -54,9 +52,10 @@ import ru.terrakok.cicerone.commands.Command
 import ru.terrakok.cicerone.commands.Replace
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.module.data.analytics.AnalyticsConstants
+import tv.anilibria.module.data.preferences.AppTheme
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
-import java.util.*
 import javax.inject.Inject
 import kotlin.math.max
 
@@ -82,7 +81,7 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
     lateinit var dimensionsProvider: DimensionsProvider
 
     @Inject
-    lateinit var appThemeHolder: AppThemeHolder
+    lateinit var preferencesStorage: PreferencesStorage
 
     @Inject
     lateinit var sharedBuildConfig: SharedBuildConfig
@@ -100,7 +99,7 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
 
     private val tabsStack = mutableListOf<String>()
 
-    private lateinit var currentAppTheme: AppThemeHolder.AppTheme
+    private lateinit var currentAppTheme: AppTheme
 
     private var dimensionHelper: DimensionHelper? = null
 
@@ -124,7 +123,7 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
             resources.configuration.locale
         }
         injectDependencies(LocaleModule(locale), DI.DEFAULT_SCOPE)
-        currentAppTheme = appThemeHolder.getTheme()
+        currentAppTheme = preferencesStorage.appTheme.blockingGet()
         setTheme(currentAppTheme.getMainStyleRes())
         super.onCreate(savedInstanceState)
 
@@ -231,7 +230,7 @@ class MainActivity : BaseActivity(), MainView, CheckerView {
         }
     }
 
-    override fun changeTheme(appTheme: AppThemeHolder.AppTheme) {
+    override fun changeTheme(appTheme: AppTheme) {
         if (currentAppTheme != appTheme) {
             currentAppTheme = appTheme
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {

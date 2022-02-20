@@ -5,9 +5,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.*
-import io.reactivex.disposables.CompositeDisposable
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_main_base.*
 import kotlinx.android.synthetic.main.fragment_webview.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.App
@@ -19,14 +21,13 @@ import ru.radiationx.anilibria.presentation.page.PageView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.ui.widgets.ExtendedWebView
 import ru.radiationx.anilibria.utils.ToolbarHelper
-import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.putExtra
-import ru.radiationx.shared.ktx.android.toBase64
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.module.data.analytics.features.PageAnalytics
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 
@@ -53,15 +54,13 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
     private var pageTitle: String? = null
 
     @Inject
-    lateinit var appThemeHolder: AppThemeHolder
+    lateinit var preferencesStorage: PreferencesStorage
 
     @Inject
     lateinit var apiConfig: ApiConfig
 
     @Inject
     lateinit var pageAnalytics: PageAnalytics
-
-    private val disposables = CompositeDisposable()
 
     private var webViewScrollPos = 0
 
@@ -145,16 +144,12 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
         val template = App.instance.staticPageTemplate
         webView.easyLoadData(
             apiConfig.siteUrl,
-            template.generateWithTheme(appThemeHolder.getTheme())
+            template.generateWithTheme(preferencesStorage.appTheme.blockingGet())
         )
 
-        disposables.add(
-            appThemeHolder
-                .observeTheme()
-                .subscribe {
-                    webView?.evalJs("changeStyleType(\"${it.getWebStyleType()}\")")
-                }
-        )
+        preferencesStorage.appTheme.observe().onEach {
+            webView?.evalJs("changeStyleType(\"${it.getWebStyleType()}\")")
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onResume() {
@@ -165,11 +160,6 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
     override fun onPause() {
         super.onPause()
         webView?.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.dispose()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

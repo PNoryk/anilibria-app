@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ObservableData<T>(
@@ -45,5 +46,8 @@ class ObservableData<T>(
         }
         return inMemoryData.get()
     }
+
+    @Deprecated("use suspend get")
+    fun blockingGet(): T = runBlocking { get() }
 
 }

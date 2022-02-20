@@ -40,7 +40,6 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getColorFromAttr
 import ru.radiationx.anilibria.extension.isDark
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
-import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.holders.PreferencesHolder
 import ru.radiationx.data.entity.app.release.ReleaseFull
 import ru.radiationx.data.interactors.ReleaseInteractor
@@ -54,6 +53,7 @@ import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsScale
 import tv.anilibria.module.data.analytics.features.model.AnalyticsEpisodeFinishAction
 import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsSeasonFinishAction
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.IOException
@@ -117,7 +117,7 @@ class MyPlayerActivity : BaseActivity() {
     lateinit var releaseInteractor: ReleaseInteractor
 
     @Inject
-    lateinit var appThemeHolder: AppThemeHolder
+    lateinit var preferencesStorage: PreferencesStorage
 
     @Inject
     lateinit var defaultPreferences: SharedPreferences
@@ -924,7 +924,7 @@ class MyPlayerActivity : BaseActivity() {
                         }
                     }
                 }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
+                .setDarkTheme(preferencesStorage.appTheme.blockingGet().isDark())
                 .setIconTintMode(PorterDuff.Mode.SRC_ATOP)
                 .setIconColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorOnSurface))
                 .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
@@ -961,7 +961,7 @@ class MyPlayerActivity : BaseActivity() {
                 .setItems(titles) { _, which ->
                     updatePlaySpeed(values[which])
                 }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
+                .setDarkTheme(preferencesStorage.appTheme.blockingGet().isDark())
                 .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
                 .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
                 .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
@@ -991,7 +991,7 @@ class MyPlayerActivity : BaseActivity() {
                 .setItems(titles) { _, which ->
                     updateQuality(values[which])
                 }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
+                .setDarkTheme(preferencesStorage.appTheme.blockingGet().isDark())
                 .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
                 .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
                 .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
@@ -1021,7 +1021,7 @@ class MyPlayerActivity : BaseActivity() {
                     playerAnalytics.settingsScaleChange(newScaleType.ordinal.toAnalyticsScale())
                     updateScale(newScaleType)
                 }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
+                .setDarkTheme(preferencesStorage.appTheme.blockingGet().isDark())
                 .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
                 .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
                 .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
@@ -1050,7 +1050,7 @@ class MyPlayerActivity : BaseActivity() {
                     playerAnalytics.settingsPipChange(newPipControl.toAnalyticsPip())
                     updatePIPControl(newPipControl)
                 }
-                .setDarkTheme(appThemeHolder.getTheme().isDark())
+                .setDarkTheme(preferencesStorage.appTheme.blockingGet().isDark())
                 .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
                 .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
                 .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
@@ -1087,7 +1087,7 @@ class MyPlayerActivity : BaseActivity() {
                     }
                 }
             }
-            .setDarkTheme(appThemeHolder.getTheme().isDark())
+            .setDarkTheme(preferencesStorage.appTheme.blockingGet().isDark())
             .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
             .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
             .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))
@@ -1115,7 +1115,7 @@ class MyPlayerActivity : BaseActivity() {
                     }
                 }
             }
-            .setDarkTheme(appThemeHolder.getTheme().isDark())
+            .setDarkTheme(preferencesStorage.appTheme.blockingGet().isDark())
             .setItemTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textDefault))
             .setTitleTextColor(this@MyPlayerActivity.getColorFromAttr(R.attr.textSecond))
             .setBackgroundColor(this@MyPlayerActivity.getColorFromAttr(R.attr.colorSurface))

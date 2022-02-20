@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import io.reactivex.disposables.CompositeDisposable
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.R
-import ru.radiationx.shared_app.di.injectDependencies
 import ru.radiationx.anilibria.extension.getPrefStyleRes
 import ru.radiationx.anilibria.ui.fragments.settings.SettingsFragment
-import ru.radiationx.data.datasource.holders.AppThemeHolder
+import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.module.data.preferences.AppTheme
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import javax.inject.Inject
 
 
@@ -20,14 +23,14 @@ import javax.inject.Inject
 class SettingsActivity : BaseActivity() {
 
     @Inject
-    lateinit var appThemeHolder: AppThemeHolder
+    lateinit var preferencesStorage: PreferencesStorage
 
-    private val disposables = CompositeDisposable()
 
-    private lateinit var currentAppTheme: AppThemeHolder.AppTheme
+    private lateinit var currentAppTheme: AppTheme
+
     override fun onCreate(savedInstanceState: Bundle?) {
         this.injectDependencies()
-        currentAppTheme = appThemeHolder.getTheme()
+        currentAppTheme = preferencesStorage.appTheme.blockingGet()
         setTheme(currentAppTheme.getPrefStyleRes())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -40,18 +43,15 @@ class SettingsActivity : BaseActivity() {
             actionBar.title = "Настройки"
         }
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_content, SettingsFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_content, SettingsFragment())
+            .commit()
 
-        disposables.add(
-                appThemeHolder
-                        .observeTheme()
-                        .subscribe { appTheme ->
-                            if (currentAppTheme !== appTheme) {
-                                currentAppTheme = appTheme
-                                recreate()
-                            }
-                        }
-        )
+        preferencesStorage.appTheme.observe().onEach { appTheme ->
+            if (currentAppTheme !== appTheme) {
+                currentAppTheme = appTheme
+                recreate()
+            }
+        }.launchIn(lifecycleScope)
     }
 
 
@@ -59,11 +59,6 @@ class SettingsActivity : BaseActivity() {
         if (item.itemId == android.R.id.home)
             finish()
         return true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.clear()
     }
 
     companion object {

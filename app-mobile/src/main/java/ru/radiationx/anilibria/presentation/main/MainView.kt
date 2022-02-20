@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.main
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import ru.radiationx.data.datasource.holders.AppThemeHolder
+import tv.anilibria.module.data.preferences.AppTheme
 
 /**
  * Created by radiationx on 17.12.17.
@@ -18,5 +18,5 @@ interface MainView : MvpView {
     fun hideConfiguring()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun changeTheme(appTheme: AppThemeHolder.AppTheme)
+    fun changeTheme(appTheme: AppTheme)
 }

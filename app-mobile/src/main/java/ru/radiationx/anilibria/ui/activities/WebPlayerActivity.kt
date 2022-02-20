@@ -10,11 +10,11 @@ import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.generateWithTheme
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.data.datasource.remote.address.ApiConfig
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.module.data.analytics.features.WebPlayerAnalytics
+import tv.anilibria.module.data.preferences.AppTheme
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -125,6 +125,6 @@ class WebPlayerActivity : BaseActivity() {
         val template = App.instance.videoPageTemplate
         template.setVariableOpt("iframe_url", argUrl)
 
-        webView.easyLoadData(releaseUrl, template.generateWithTheme(AppThemeHolder.AppTheme.DARK))
+        webView.easyLoadData(releaseUrl, template.generateWithTheme(AppTheme.DARK))
     }
 }

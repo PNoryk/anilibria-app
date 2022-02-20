@@ -10,8 +10,10 @@ import android.util.Log
 import android.view.View
 import android.webkit.*
 import androidx.core.view.isVisible
-import io.reactivex.disposables.CompositeDisposable
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_vk_comments.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.App
@@ -28,12 +30,12 @@ import ru.radiationx.anilibria.ui.common.webpage.compositeWebViewClientOf
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.ui.widgets.ExtendedWebView
 import ru.radiationx.anilibria.utils.Utils
-import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.shared.ktx.android.toBase64
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared_app.di.DI
 import ru.radiationx.shared_app.di.injectDependencies
 import toothpick.Toothpick
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -52,9 +54,7 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
     private var currentVkCommentsState: VkCommentsState? = null
 
     @Inject
-    lateinit var appThemeHolder: AppThemeHolder
-
-    private val disposables = CompositeDisposable()
+    lateinit var preferencesStorage: PreferencesStorage
 
     @InjectPresenter
     lateinit var presenter: VkCommentsPresenter
@@ -115,13 +115,9 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
             cookieManager.setAcceptThirdPartyCookies(webView, true)
         }
 
-        disposables.add(
-            appThemeHolder
-                .observeTheme()
-                .subscribe {
-                    webView?.evalJs("changeStyleType(\"${it.getWebStyleType()}\")")
-                }
-        )
+        preferencesStorage.appTheme.observe().onEach {
+            webView?.evalJs("changeStyleType(\"${it.getWebStyleType()}\")")
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -178,7 +174,7 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
         val template = App.instance.vkCommentsTemplate
         webView.easyLoadData(
             comments.url,
-            template.generateWithTheme(appThemeHolder.getTheme())
+            template.generateWithTheme(preferencesStorage.appTheme.blockingGet())
         )
         webView?.evalJs("ViewModel.setText('content','${comments.script.toBase64()}');")
 
@@ -302,7 +298,7 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
                 }
                 var newCss = cssSrc
 
-                val fixCss = if (appThemeHolder.getTheme().isDark()) {
+                val fixCss = if (preferencesStorage.appTheme.blockingGet().isDark()) {
                     App.instance.vkCommentCssFixDark
                 } else {
                     App.instance.vkCommentCssFixLight

@@ -13,12 +13,12 @@ import ru.radiationx.anilibria.ui.activities.BaseActivity
 import ru.radiationx.anilibria.ui.common.BackButtonListener
 import ru.radiationx.anilibria.utils.DimensionHelper
 import ru.radiationx.anilibria.utils.DimensionsProvider
-import ru.radiationx.data.datasource.holders.AppThemeHolder
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared_app.di.injectDependencies
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import javax.inject.Inject
 
 
@@ -43,7 +43,7 @@ class AuthActivity : BaseActivity() {
     lateinit var navigationHolder: NavigatorHolder
 
     @Inject
-    lateinit var appThemeHolder: AppThemeHolder
+    lateinit var preferencesStorage: PreferencesStorage
 
     @Inject
     lateinit var dimensionsProvider: DimensionsProvider
@@ -52,7 +52,7 @@ class AuthActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
-        setTheme(appThemeHolder.getTheme().getMainStyleRes())
+        setTheme(preferencesStorage.appTheme.blockingGet().getMainStyleRes())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
