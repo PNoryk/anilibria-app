@@ -23,6 +23,6 @@ class YouTubeViewModel(
 
     override fun onLibriaCardClick(card: LibriaCard) {
         val youtubeItem = card.rawData as Youtube
-        systemUtils.externalLink("https://www.youtube.com/watch?v=${youtubeItem.vid?.id}")
+        youtubeItem.link?.value?.let { systemUtils.externalLink(it) }
     }
 }

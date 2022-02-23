@@ -43,12 +43,10 @@ data class Release(
     val torrents: List<Torrent>?,
 ) {
 
-    // todo create link
     val link: RelativeUrl? = code?.let {
         RelativeUrl("/release/${it.code}.html")
     }
 
-    // todo чекнуть места, где юзаются просто names
     val nameRus: HtmlText? = names?.getOrNull(0)
     val nameEng: HtmlText? = names?.getOrNull(1)
 }

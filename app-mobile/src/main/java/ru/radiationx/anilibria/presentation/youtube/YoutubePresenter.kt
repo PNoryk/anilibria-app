@@ -76,7 +76,7 @@ class YoutubePresenter @Inject constructor(
             rawItem.id.id,
             rawItem.vid?.id
         )
-        Utils.externalLink("https://www.youtube.com/watch?v=${rawItem.vid?.id}")
+        rawItem.link?.value?.let { Utils.externalLink(it) }
     }
 
     private fun submitPageAnalytics(page: Int) {

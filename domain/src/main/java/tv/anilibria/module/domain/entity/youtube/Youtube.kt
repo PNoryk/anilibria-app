@@ -14,12 +14,13 @@ data class Youtube(
     val id: YoutubeId,
     val title: HtmlText?,
     val image: RelativeUrl?,
-    // todo что-нибудь придумать с ссылками
     val vid: YoutubeVideoId?,
     val views: Count,
     val comments: Count,
     val timestamp: Instant
 ) {
-    // todo link
-    val link:AbsoluteUrl?= TODO()
+
+    val link: AbsoluteUrl? = vid?.let {
+        AbsoluteUrl("https://www.youtube.com/watch?v=${it.id}")
+    }
 }
