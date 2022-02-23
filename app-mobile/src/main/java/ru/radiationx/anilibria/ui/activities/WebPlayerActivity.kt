@@ -7,12 +7,15 @@ import android.view.WindowManager
 import android.webkit.*
 import kotlinx.android.synthetic.main.activity_moon.*
 import ru.radiationx.anilibria.App
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.generateWithTheme
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.features.WebPlayerAnalytics
 import tv.anilibria.module.data.preferences.AppTheme
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
@@ -24,11 +27,15 @@ class WebPlayerActivity : BaseActivity() {
 
     companion object {
         const val ARG_URL = "iframe_url"
-        const val ARG_RELEASE_CODE = "release_code"
+        const val ARG_RELEASE_LINK = "release_link"
     }
 
-    private var argUrl: String = ""
-    private var argReleaseCode: String = ""
+    private val argUrl: AbsoluteUrl by lazy {
+        requireNotNull(intent?.getParcelableExtra(ARG_URL))
+    }
+    private val argReleaseLink: RelativeUrl by lazy {
+        requireNotNull(intent?.getParcelableExtra(ARG_RELEASE_LINK))
+    }
 
     private val useTimeCounter by lazy {
         LifecycleTimeCounter(webPlayerAnalytics::useTime)
@@ -40,16 +47,20 @@ class WebPlayerActivity : BaseActivity() {
     @Inject
     lateinit var webPlayerAnalytics: WebPlayerAnalytics
 
+    @Inject
+    lateinit var urlHelper: UrlHelper
+
+    @Inject
+    lateinit var appLinkHelper: AppLinkHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(useTimeCounter)
 
-        argUrl = intent?.getStringExtra(ARG_URL).orEmpty()
-        argReleaseCode = intent?.getStringExtra(ARG_RELEASE_CODE).orEmpty()
 
-        if (argUrl.isEmpty()) {
+        if (argUrl.value.isEmpty()) {
             finish()
             return
         }
@@ -75,7 +86,7 @@ class WebPlayerActivity : BaseActivity() {
                 return if (matcher.find()) {
                     false
                 } else {
-                    Utils.externalLink(url.orEmpty())
+                    appLinkHelper.open(AbsoluteUrl(url.orEmpty()))
                     true
                 }
             }
@@ -120,12 +131,11 @@ class WebPlayerActivity : BaseActivity() {
     }
 
     private fun loadUrl() {
-        val releaseUrl =
-            "${apiConfig.getActiveBlocking().widgetsSite}/release/$argReleaseCode.html\""
+        val releaseUrl = urlHelper.makeWidget(argReleaseLink)
 
         val template = App.instance.videoPageTemplate
-        template.setVariableOpt("iframe_url", argUrl)
+        template.setVariableOpt("iframe_url", argUrl.value)
 
-        webView.easyLoadData(releaseUrl, template.generateWithTheme(AppTheme.DARK))
+        webView.easyLoadData(releaseUrl?.value.orEmpty(), template.generateWithTheme(AppTheme.DARK))
     }
 }

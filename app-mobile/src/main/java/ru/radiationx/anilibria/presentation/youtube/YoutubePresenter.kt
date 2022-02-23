@@ -3,6 +3,7 @@ package ru.radiationx.anilibria.presentation.youtube
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.model.YoutubeItemState
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
@@ -12,8 +13,8 @@ import ru.radiationx.anilibria.model.toState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeScreenState
-import ru.radiationx.anilibria.utils.Utils
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.YoutubeAnalytics
 import tv.anilibria.module.data.analytics.features.YoutubeVideosAnalytics
@@ -27,7 +28,9 @@ class YoutubePresenter @Inject constructor(
     private val router: Router,
     private val errorHandler: IErrorHandler,
     private val youtubeAnalytics: YoutubeAnalytics,
-    private val youtubeVideosAnalytics: YoutubeVideosAnalytics
+    private val youtubeVideosAnalytics: YoutubeVideosAnalytics,
+    private val urlHelper: UrlHelper,
+    private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<YoutubeView>(router) {
 
     private val loadingController = DataLoadingController(viewModelScope) {
@@ -76,7 +79,7 @@ class YoutubePresenter @Inject constructor(
             rawItem.id.id,
             rawItem.vid?.id
         )
-        rawItem.link?.value?.let { Utils.externalLink(it) }
+        appLinkHelper.open(rawItem.link)
     }
 
     private fun submitPageAnalytics(page: Int) {
@@ -95,7 +98,7 @@ class YoutubePresenter @Inject constructor(
         }
         currentRawItems.addAll(paginated.items)
 
-        val newItems = currentRawItems.map { item -> item.toState() }
+        val newItems = currentRawItems.map { item -> item.toState(urlHelper) }
         ScreenStateAction.Data(newItems, !paginated.meta.isEnd())
     } catch (ex: Exception) {
         if (params.isFirstPage) {

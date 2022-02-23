@@ -5,12 +5,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.release.details.ReleasePagerState
+import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
@@ -28,7 +31,10 @@ class ReleasePresenter @Inject constructor(
     private val router: Router,
     private val errorHandler: IErrorHandler,
     private val commentsAnalytics: CommentsAnalytics,
-    private val releaseAnalytics: ReleaseAnalytics
+    private val releaseAnalytics: ReleaseAnalytics,
+    private val appLinkHelper: AppLinkHelper,
+    private val shortcutHelper: ShortcutHelper,
+    private val urlHelper: UrlHelper
 ) : BasePresenter<ReleaseView>(router) {
 
     private var currentData: Release? = null
@@ -87,7 +93,7 @@ class ReleasePresenter @Inject constructor(
 
         stateController.updateState {
             it.copy(
-                poster = currentData?.poster?.value,
+                poster = urlHelper.makeMedia(currentData?.poster),
                 title = currentData?.let {
                     String.format("%s / %s", release.nameRus?.text, release.nameEng?.text)
                 }
@@ -98,25 +104,21 @@ class ReleasePresenter @Inject constructor(
     fun onShareClick() {
         currentData?.let {
             releaseAnalytics.share(AnalyticsConstants.screen_release, it.id.id)
-        }
-        currentData?.link?.let {
-            viewState.shareRelease(it.value)
+            appLinkHelper.shareLink(it.link)
         }
     }
 
     fun onCopyLinkClick() {
         currentData?.let {
             releaseAnalytics.copyLink(AnalyticsConstants.screen_release, it.id.id)
-        }
-        currentData?.link?.let {
-            viewState.copyLink(it.value)
+            appLinkHelper.copyLink(it.link)
         }
     }
 
     fun onShortcutAddClick() {
         currentData?.let {
             releaseAnalytics.shortcut(AnalyticsConstants.screen_release, it.id.id)
-            viewState.addShortCut(it)
+            shortcutHelper.addShortcut(it)
         }
     }
 

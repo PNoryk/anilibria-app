@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.anilibria.model.loading.StateController
@@ -14,11 +15,11 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.other.OtherMenuItemState
 import ru.radiationx.anilibria.ui.fragments.other.ProfileScreenState
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.repos.AuthRepository
@@ -44,7 +45,9 @@ class OtherPresenter @Inject constructor(
     private val otherAnalytics: OtherAnalytics,
     private val settingsAnalytics: SettingsAnalytics,
     private val pageAnalytics: PageAnalytics,
-    private val donationDetailAnalytics: DonationDetailAnalytics
+    private val donationDetailAnalytics: DonationDetailAnalytics,
+    private val urlHelper: UrlHelper,
+    private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<OtherView>(router) {
 
     companion object {
@@ -172,7 +175,7 @@ class OtherPresenter @Inject constructor(
                     val absoluteLink = linkItem.absoluteLink
                     val pagePath = linkItem.sitePagePath
                     when {
-                        absoluteLink != null -> Utils.externalLink(absoluteLink.value)
+                        absoluteLink != null -> appLinkHelper.open(absoluteLink)
                         pagePath != null -> {
                             pageAnalytics.open(AnalyticsConstants.screen_other, pagePath.value)
                             router.navigateTo(Screens.StaticPage(pagePath))
@@ -223,7 +226,7 @@ class OtherPresenter @Inject constructor(
                 mainMenu.removeAll { it.id == MENU_OTP_CODE }
             }
 
-            val profileState = currentProfileItem?.toState(authStateHolder.get())
+            val profileState = currentProfileItem?.toState(urlHelper, authStateHolder.get())
             val menuState = listOf(mainMenu, systemMenu, linkMenu).filter { it.isNotEmpty() }
             stateController.updateState {
                 it.copy(profile = profileState, menuItems = menuState)

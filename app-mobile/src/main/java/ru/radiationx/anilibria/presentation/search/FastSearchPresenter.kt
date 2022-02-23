@@ -3,6 +3,7 @@ package ru.radiationx.anilibria.presentation.search
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.SuggestionItemState
 import ru.radiationx.anilibria.model.SuggestionLocalItemState
@@ -11,8 +12,9 @@ import ru.radiationx.anilibria.model.toSuggestionState
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
-import ru.radiationx.anilibria.utils.Utils
 import ru.terrakok.cicerone.Router
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CatalogAnalytics
 import tv.anilibria.module.data.analytics.features.FastSearchAnalytics
@@ -30,7 +32,9 @@ class FastSearchPresenter @Inject constructor(
     private val errorHandler: IErrorHandler,
     private val catalogAnalytics: CatalogAnalytics,
     private val fastSearchAnalytics: FastSearchAnalytics,
-    private val releaseAnalytics: ReleaseAnalytics
+    private val releaseAnalytics: ReleaseAnalytics,
+    private val urlHelper: UrlHelper,
+    private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<FastSearchView>(router) {
 
     companion object {
@@ -92,7 +96,7 @@ class FastSearchPresenter @Inject constructor(
         currentSuggestions.addAll(items)
 
         val isNotFound = appendEmpty && currentSuggestions.isEmpty() && query.isNotEmpty()
-        val stateItems = currentSuggestions.map { it.toSuggestionState(query) }
+        val stateItems = currentSuggestions.map { it.toSuggestionState(urlHelper, query) }
         val localItems = if (isNotFound) {
             listOf(
                 SuggestionLocalItemState(
@@ -138,7 +142,7 @@ class FastSearchPresenter @Inject constructor(
             ITEM_ID_GOOGLE -> {
                 fastSearchAnalytics.searchGoogleClick()
                 val urlQuery = URLEncoder.encode("anilibria $currentQuery", "utf-8")
-                Utils.externalLink("https://www.google.com/search?q=$urlQuery")
+                appLinkHelper.open(AbsoluteUrl("https://www.google.com/search?q=$urlQuery"))
             }
             ITEM_ID_SEARCH -> {
                 catalogAnalytics.open(AnalyticsConstants.screen_fast_search)

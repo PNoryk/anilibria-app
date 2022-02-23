@@ -17,7 +17,7 @@ import kotlin.math.pow
 /**
  * Created by isanechek on 30.07.16.
  */
-
+@Deprecated("replase to systemutils", level = DeprecationLevel.ERROR)
 object Utils {
 
     fun readableFileSize(size: Long): String {

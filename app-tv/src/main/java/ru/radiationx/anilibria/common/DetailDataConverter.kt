@@ -3,13 +3,16 @@ package ru.radiationx.anilibria.common
 import android.text.Html
 import kotlinx.datetime.DayOfWeek
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseStatus
 import java.text.NumberFormat
 
 @InjectConstructor
-class DetailDataConverter {
+class DetailDataConverter(
+    private val urlHelper: UrlHelper
+) {
 
     fun toDetail(
         releaseItem: Release,
@@ -28,7 +31,7 @@ class DetailDataConverter {
             description = Html.fromHtml(description?.text.orEmpty()).toString().trim()
                 .trim('"')/*.replace('\n', ' ')*/,
             announce = getAnnounce(),
-            image = poster?.value.orEmpty(),
+            image = urlHelper.makeMedia(poster),
             favoriteCount = favoriteInfo?.rating?.value?.let {
                 NumberFormat.getNumberInstance().format(it)
             },

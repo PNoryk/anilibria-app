@@ -17,6 +17,7 @@ import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleDayState
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleScreenState
 import ru.radiationx.shared.ktx.asDayName
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.module.data.analytics.features.ScheduleAnalytics
@@ -30,7 +31,8 @@ class SchedulePresenter @Inject constructor(
     private val router: Router,
     private val errorHandler: IErrorHandler,
     private val scheduleAnalytics: ScheduleAnalytics,
-    private val releaseAnalytics: ReleaseAnalytics
+    private val releaseAnalytics: ReleaseAnalytics,
+    private val urlHelper: UrlHelper
 ) : BasePresenter<ScheduleView>(router) {
 
     private var firstData = true
@@ -60,7 +62,7 @@ class SchedulePresenter @Inject constructor(
                     if (scheduleDay.day == calendarDay) {
                         dayName += " (сегодня)"
                     }
-                    val items = scheduleDay.items.map { it.toScheduleState() }
+                    val items = scheduleDay.items.map { it.toScheduleState(urlHelper) }
                     ScheduleDayState(dayName, items)
                 }
 

@@ -32,7 +32,7 @@ class PagePresenter @Inject constructor(
         viewState.setRefreshing(true)
         viewModelScope.launch {
             runCatching {
-                pageRepository.getPage(pagePath.value)
+                pageRepository.getPage(pagePath)
             }.onSuccess { page ->
                 viewState.setRefreshing(false)
                 viewState.showPage(page)

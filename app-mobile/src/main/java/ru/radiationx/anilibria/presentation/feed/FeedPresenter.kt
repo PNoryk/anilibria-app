@@ -10,6 +10,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayAt
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.model.*
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
@@ -22,12 +23,12 @@ import ru.radiationx.anilibria.ui.fragments.feed.FeedDataState
 import ru.radiationx.anilibria.ui.fragments.feed.FeedScheduleState
 import ru.radiationx.anilibria.ui.fragments.feed.FeedScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.asDayNameDeclension
 import ru.radiationx.shared.ktx.asDayPretext
 import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.preferences.PreferencesStorage
@@ -62,7 +63,10 @@ class FeedPresenter @Inject constructor(
     private val releaseAnalytics: ReleaseAnalytics,
     private val updaterAnalytics: UpdaterAnalytics,
     private val donationDetailAnalytics: DonationDetailAnalytics,
-    private val donationCardAnalytics: DonationCardAnalytics
+    private val donationCardAnalytics: DonationCardAnalytics,
+    private val shortcutHelper: ShortcutHelper,
+    private val appLinkHelper: AppLinkHelper,
+    private val urlHelper: UrlHelper
 ) : BasePresenter<FeedView>(router) {
 
     companion object {
@@ -178,7 +182,7 @@ class FeedPresenter @Inject constructor(
             youtubeItem.vid?.id
         )
         feedAnalytics.youtubeClick()
-        Utils.externalLink(youtubeItem.link?.value.orEmpty())
+        appLinkHelper.open(youtubeItem.link)
     }
 
     fun onSchedulesClick() {
@@ -247,19 +251,19 @@ class FeedPresenter @Inject constructor(
 
     fun onCopyClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.copyToClipBoard(releaseItem.link?.value.orEmpty())
+        appLinkHelper.copyLink(releaseItem.link)
         releaseAnalytics.copyLink(AnalyticsConstants.screen_feed, item.id.id)
     }
 
     fun onShareClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.shareText(releaseItem.link?.value.orEmpty())
+        appLinkHelper.shareLink(releaseItem.link)
         releaseAnalytics.share(AnalyticsConstants.screen_feed, item.id.id)
     }
 
     fun onShortcutClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        ShortcutHelper.addShortcut(releaseItem)
+        shortcutHelper.addShortcut(releaseItem)
         releaseAnalytics.shortcut(AnalyticsConstants.screen_feed, item.id.id)
     }
 
@@ -306,7 +310,7 @@ class FeedPresenter @Inject constructor(
                 .firstOrNull { it.day == mskDay }
                 ?.items
                 ?.also { currentScheduleItems.addAll(it) }
-                ?.map { it.toScheduleState() }
+                ?.map { it.toScheduleState(urlHelper) }
                 .orEmpty()
 
             FeedScheduleState(dayTitle, items)
@@ -323,7 +327,7 @@ class FeedPresenter @Inject constructor(
             }
 
             val feedDataState = FeedDataState(
-                feedItems = currentItems.map { it.toState() },
+                feedItems = currentItems.map { it.toState(urlHelper) },
                 schedule = scheduleState
             )
             ScreenStateAction.Data(feedDataState, feedItems.isNotEmpty())

@@ -4,10 +4,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.presentation.common.BasePresenter
-import ru.radiationx.anilibria.utils.Utils
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.DonationDetailAnalytics
 import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
@@ -22,7 +23,8 @@ class DonationDetailPresenter(
     private val donationRepository: DonationRepository,
     private val detailAnalytics: DonationDetailAnalytics,
     private val yooMoneyAnalytics: DonationYooMoneyAnalytics,
-    private val dialogAnalytics: DonationDialogAnalytics
+    private val dialogAnalytics: DonationDialogAnalytics,
+    private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<DonationDetailView>(router) {
 
     private var currentData: DonationInfo? = null
@@ -52,7 +54,7 @@ class DonationDetailPresenter(
 
     fun onLinkClick(url: String) {
         detailAnalytics.linkClick(url)
-        Utils.externalLink(url)
+        appLinkHelper.open(AbsoluteUrl(url))
     }
 
     fun onButtonClick(button: DonationContentButton) {
@@ -76,7 +78,7 @@ class DonationDetailPresenter(
                 viewState.openContentDialog(dialog.tag)
             }
             buttonLink != null -> {
-                Utils.externalLink(buttonLink.value)
+                appLinkHelper.open(buttonLink)
             }
         }
     }

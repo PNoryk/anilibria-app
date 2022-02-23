@@ -16,14 +16,18 @@ import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.ui.activities.main.IntentActivity
 import ru.radiationx.shared.ktx.android.centerCrop
 import ru.radiationx.shared.ktx.android.createAvatar
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.domain.entity.release.Release
 import kotlin.math.min
 
-object ShortcutHelper {
+class ShortcutHelper(
+    private val urlHelper: UrlHelper
+) {
 
     fun addShortcut(data: Release) {
+        val posterUrl = urlHelper.makeMedia(data.poster)?.value
         ImageLoader.getInstance()
-            .loadImage(data.poster?.value, object : SimpleImageLoadingListener() {
+            .loadImage(posterUrl, object : SimpleImageLoadingListener() {
                 override fun onLoadingComplete(
                     imageUri: String?,
                     view: View?,
@@ -37,12 +41,12 @@ object ShortcutHelper {
     }
 
     fun addShortcut(data: Release, bitmap: Bitmap) = addShortcut(
-        App.instance,
-        "release_${data.id}",
-        data.nameRus?.text.toString(),
-        data.names?.joinToString(" / ") { it.text }.toString(),
-        data.link?.value.orEmpty(),
-        bitmap
+        context = App.instance,
+        id = "release_${data.id}",
+        shortLabel = data.nameRus?.text.toString(),
+        longLabel = data.names?.joinToString(" / ") { it.text }.toString(),
+        url = urlHelper.makeSite(data.link)?.value.orEmpty(),
+        bitmap = bitmap
     )
 
     private fun addShortcut(

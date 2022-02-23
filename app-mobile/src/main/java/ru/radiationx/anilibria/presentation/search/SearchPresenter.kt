@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.model.ReleaseItemState
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
@@ -18,6 +19,7 @@ import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.Utils
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CatalogAnalytics
 import tv.anilibria.module.data.analytics.features.CatalogFilterAnalytics
@@ -43,7 +45,10 @@ class SearchPresenter @Inject constructor(
     private val catalogFilterAnalytics: CatalogFilterAnalytics,
     private val fastSearchAnalytics: FastSearchAnalytics,
     private val releaseAnalytics: ReleaseAnalytics,
-    private val preferencesStorage: PreferencesStorage
+    private val preferencesStorage: PreferencesStorage,
+    private val shortcutHelper: ShortcutHelper,
+    private val appLinkHelper: AppLinkHelper,
+    private val urlHelper: UrlHelper
 ) : BasePresenter<SearchCatalogView>(router) {
 
 
@@ -193,7 +198,7 @@ class SearchPresenter @Inject constructor(
                     }
                     currentItems.addAll(paginated.items)
 
-                    val newItems = currentItems.map { it.toState() }
+                    val newItems = currentItems.map { it.toState(urlHelper) }
                     ScreenStateAction.Data(newItems, paginated.items.isNotEmpty())
                 }
         } catch (ex: Exception) {
@@ -306,19 +311,19 @@ class SearchPresenter @Inject constructor(
 
     fun onCopyClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.copyToClipBoard(releaseItem.link?.value.orEmpty())
+        appLinkHelper.copyLink(releaseItem.link)
         releaseAnalytics.copyLink(AnalyticsConstants.screen_catalog, releaseItem.id.id)
     }
 
     fun onShareClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.shareText(releaseItem.link?.value.orEmpty())
+        appLinkHelper.shareLink(releaseItem.link)
         releaseAnalytics.share(AnalyticsConstants.screen_catalog, releaseItem.id.id)
     }
 
     fun onShortcutClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        ShortcutHelper.addShortcut(releaseItem)
+        shortcutHelper.addShortcut(releaseItem)
         releaseAnalytics.shortcut(AnalyticsConstants.screen_catalog, releaseItem.id.id)
     }
 }

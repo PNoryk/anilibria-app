@@ -2,6 +2,7 @@ package ru.radiationx.anilibria.contentprovider
 
 import android.app.SearchManager
 import android.provider.BaseColumns
+import tv.anilibria.core.types.AbsoluteUrl
 
 /*
 * title, duration, productionYear необходимы андроиду
@@ -12,9 +13,9 @@ class SystemSuggestionEntity(
     val duration: Int,
     val productionYear: Int,
     val description: String? = null,
-    val cardImage: String? = null,
-    val backgroundImage: String? = null,
-    val videoUrl: String? = null,
+    val cardImage: AbsoluteUrl? = null,
+    val backgroundImage: AbsoluteUrl? = null,
+    val videoUrl: AbsoluteUrl? = null,
     val contentType: String? = null,
     val live: Boolean? = null,
     val width: Int? = null,
@@ -68,7 +69,7 @@ class SystemSuggestionEntity(
         keysMap[KEY_ID] = id
         keysMap[KEY_TITLE] = title
         keysMap[KEY_DESCRIPTION] = description
-        keysMap[KEY_CARD_IMAGE] = cardImage
+        keysMap[KEY_CARD_IMAGE] = cardImage?.value
         keysMap[KEY_DATA_TYPE] = contentType
         keysMap[KEY_IS_LIVE] = live
         keysMap[KEY_VIDEO_WIDTH] = width

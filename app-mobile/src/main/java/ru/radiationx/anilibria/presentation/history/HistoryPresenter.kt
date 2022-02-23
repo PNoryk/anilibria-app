@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.model.ReleaseItemState
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.model.toState
@@ -12,8 +13,8 @@ import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.fragments.history.HistoryScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
-import ru.radiationx.anilibria.utils.Utils
 import ru.terrakok.cicerone.Router
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.HistoryAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
@@ -32,7 +33,10 @@ class HistoryPresenter @Inject constructor(
     private val historyRepository: HistoryRepository,
     private val releaseRepository: ReleaseRepository,
     private val historyAnalytics: HistoryAnalytics,
-    private val releaseAnalytics: ReleaseAnalytics
+    private val releaseAnalytics: ReleaseAnalytics,
+    private val shortcutHelper: ShortcutHelper,
+    private val appLinkHelper: AppLinkHelper,
+    private val urlHelper: UrlHelper
 ) : BasePresenter<HistoryView>(router) {
 
     private val currentReleases = mutableListOf<Release>()
@@ -59,7 +63,7 @@ class HistoryPresenter @Inject constructor(
                 currentReleases.addAll(releases)
 
                 stateController.updateState {
-                    it.copy(items = currentReleases.map { it.toState() })
+                    it.copy(items = currentReleases.map { it.toState(urlHelper) })
                 }
 
                 updateSearchState()
@@ -78,7 +82,7 @@ class HistoryPresenter @Inject constructor(
             emptyList()
         }
         stateController.updateState {
-            it.copy(searchItems = searchItes.map { it.toState() })
+            it.copy(searchItems = searchItes.map { it.toState(urlHelper) })
         }
     }
 
@@ -112,19 +116,19 @@ class HistoryPresenter @Inject constructor(
 
     fun onCopyClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.copyToClipBoard(releaseItem.link?.value.orEmpty())
+        appLinkHelper.copyLink(releaseItem.link)
         releaseAnalytics.copyLink(AnalyticsConstants.screen_history, releaseItem.id.id)
     }
 
     fun onShareClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        Utils.shareText(releaseItem.link?.value.orEmpty())
+        appLinkHelper.shareLink(releaseItem.link)
         releaseAnalytics.share(AnalyticsConstants.screen_history, releaseItem.id.id)
     }
 
     fun onShortcutClick(item: ReleaseItemState) {
         val releaseItem = findRelease(item.id) ?: return
-        ShortcutHelper.addShortcut(releaseItem)
+        shortcutHelper.addShortcut(releaseItem)
         releaseAnalytics.shortcut(AnalyticsConstants.screen_history, releaseItem.id.id)
     }
 

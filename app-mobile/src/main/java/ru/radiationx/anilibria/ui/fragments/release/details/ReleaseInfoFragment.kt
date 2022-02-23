@@ -21,6 +21,7 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.disableItemChangeAnimation
 import ru.radiationx.anilibria.presentation.release.details.ReleaseDetailScreenState
@@ -34,18 +35,19 @@ import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeControlD
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeDelegate
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseHeadDelegate
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
-import ru.radiationx.anilibria.utils.Utils
+import ru.radiationx.shared_app.common.SystemUtils
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PrefferedPlayerType
 import tv.anilibria.module.domain.entity.release.Episode
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.entity.release.Torrent
 import java.net.URLConnection
 import java.util.regex.Pattern
+import javax.inject.Inject
 
 @RuntimePermissions
 class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
@@ -68,6 +70,12 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             remindCloseListener = presenter::onRemindCloseClick
         )
     }
+
+    @Inject
+    lateinit var systemUtils: SystemUtils
+
+    @Inject
+    lateinit var appLinkHelper: AppLinkHelper
 
     @InjectPresenter
     lateinit var presenter: ReleaseInfoPresenter
@@ -108,22 +116,6 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         state.data?.let { releaseInfoAdapter.bindState(it, state) }
     }
 
-    override fun loadTorrent(torrent: Torrent) {
-        torrent.url?.also { Utils.externalLink(it.value) }
-    }
-
-    override fun showTorrentDialog(torrents: List<Torrent>) {
-        val context = context ?: return
-        val titles =
-            torrents.map { "Серия ${it.series} [${it.quality}][${Utils.readableFileSize(it.size.value)}]" }
-                .toTypedArray()
-        AlertDialog.Builder(context)
-            .setItems(titles) { dialog, which ->
-                loadTorrent(torrents[which])
-            }
-            .show()
-    }
-
     override fun playEpisodes(release: Release) {
         release.episodes?.let { episodes ->
             playEpisode(release, episodes.last())
@@ -134,30 +126,31 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         playEpisode(release, startWith, MyPlayerActivity.PLAY_FLAG_FORCE_CONTINUE)
     }
 
-    private fun <T> getUrlByQuality(qualityInfo: QualityInfo<T>, quality: PrefferedPlayerQuality): String {
-        return when (quality) {
-            PrefferedPlayerQuality.SD -> qualityInfo.urlSd
-            PrefferedPlayerQuality.HD -> qualityInfo.urlHd
-            PrefferedPlayerQuality.FULL_HD -> qualityInfo.urlFullHd
-            else -> qualityInfo.urlSd
-        }?.value.orEmpty()
+    private fun <T> getUrlByQuality(
+        qualityInfo: QualityInfo<T>,
+        quality: PrefferedPlayerQuality
+    ): AbsoluteUrl? = when (quality) {
+        PrefferedPlayerQuality.SD -> qualityInfo.urlSd
+        PrefferedPlayerQuality.HD -> qualityInfo.urlHd
+        PrefferedPlayerQuality.FULL_HD -> qualityInfo.urlFullHd
+        else -> qualityInfo.urlSd
     }
 
-    override fun showDownloadDialog(url: String) {
+    override fun showDownloadDialog(url: AbsoluteUrl?) {
         val context = context ?: return
         val titles = arrayOf("Внешний загрузчик", "Системный загрузчик")
         AlertDialog.Builder(context)
             .setItems(titles) { _, which ->
                 presenter.submitDownloadEpisodeUrlAnalytics()
                 when (which) {
-                    0 -> Utils.externalLink(url)
+                    0 -> appLinkHelper.open(url)
                     1 -> systemDownloadWithPermissionCheck(url)
                 }
             }
             .show()
     }
 
-    override fun showFileDonateDialog(url: String) {
+    override fun showFileDonateDialog(url: AbsoluteUrl?) {
         val dialogView = LayoutInflater.from(requireView().context)
             .inflate(R.layout.dialog_file_download, null, false)
             .apply {
@@ -317,14 +310,15 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun systemDownload(url: String) {
+    fun systemDownload(absoluteUrl: AbsoluteUrl?) {
+        val url = absoluteUrl?.value ?: return
         val context = context ?: return
-        var fileName = Utils.getFileNameFromUrl(url)
+        var fileName = systemUtils.getFileNameFromUrl(url)
         val matcher = Pattern.compile("\\?download=([\\s\\S]+)").matcher(fileName)
         if (matcher.find()) {
             fileName = matcher.group(1)
         }
-        Utils.systemDownloader(context, url, fileName)
+        systemUtils.systemDownloader(url, fileName)
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")
@@ -383,11 +377,11 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
         }
     }
 
-    override fun playWeb(link: String, code: String) {
+    override fun playWeb(link: AbsoluteUrl, releaseLink: RelativeUrl) {
         presenter.onWebPlayerClick()
         startActivity(Intent(context, WebPlayerActivity::class.java).apply {
             putExtra(WebPlayerActivity.ARG_URL, link)
-            putExtra(WebPlayerActivity.ARG_RELEASE_CODE, code)
+            putExtra(WebPlayerActivity.ARG_RELEASE_LINK, releaseLink)
         })
     }
 

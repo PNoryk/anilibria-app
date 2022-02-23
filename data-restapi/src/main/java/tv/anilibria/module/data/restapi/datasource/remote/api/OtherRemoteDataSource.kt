@@ -1,6 +1,7 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import kotlinx.coroutines.withTimeout
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.PagesParser
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.OtherApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
@@ -24,9 +25,9 @@ class OtherRemoteDataSource @Inject constructor(
     private val otherApi: NetworkWrapper<OtherApi>
 ) {
 
-    suspend fun getLibriaPage(pagePath: String): PageLibria {
+    suspend fun getLibriaPage(pagePath: RelativeUrl): PageLibria {
         return otherApi.proxy()
-            .getBody("${urlProvider.baseUrl}/$pagePath")
+            .getBody("${urlProvider.baseUrl}/${pagePath.value}")
             .let { pagesParser.baseParse(it.string()) }
             .toDomain()
     }

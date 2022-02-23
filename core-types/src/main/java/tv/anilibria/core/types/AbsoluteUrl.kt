@@ -1,5 +1,9 @@
 package tv.anilibria.core.types
 
-data class AbsoluteUrl(val value: String)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class AbsoluteUrl(val value: String) : Parcelable
 
 fun String.asAbsoluteUrl() = AbsoluteUrl(this)

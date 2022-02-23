@@ -9,6 +9,7 @@ import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
@@ -18,7 +19,8 @@ import kotlin.time.Duration.Companion.milliseconds
 class SuggestionsResultViewModel(
     private val searchRepository: SearchRepository,
     private val router: Router,
-    private val suggestionsController: SuggestionsController
+    private val suggestionsController: SuggestionsController,
+    private val urlHelper: UrlHelper
 ) : LifecycleViewModel() {
 
     private var currentQuery = ""
@@ -76,7 +78,7 @@ class SuggestionsResultViewModel(
                 it.id.id,
                 it.nameRus?.text.orEmpty(),
                 it.nameEng?.text.orEmpty(),
-                it.poster?.value.orEmpty(),
+                urlHelper.makeMedia(it.poster),
                 LibriaCard.Type.RELEASE
             )
         }

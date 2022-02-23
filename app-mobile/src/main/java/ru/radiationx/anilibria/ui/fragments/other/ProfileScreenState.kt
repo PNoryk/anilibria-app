@@ -1,5 +1,6 @@
 package ru.radiationx.anilibria.ui.fragments.other
 
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.domain.entity.other.UserId
 
 data class ProfileScreenState(
@@ -12,7 +13,7 @@ data class ProfileItemState(
     val hasAuth: Boolean,
     val title: String,
     val subtitle: String?,
-    val avatar: String
+    val avatar: AbsoluteUrl
 )
 
 data class OtherMenuItemState(

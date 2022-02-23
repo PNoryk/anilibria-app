@@ -4,10 +4,11 @@ import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.domain.entity.release.Episode
 import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.entity.release.Torrent
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface ReleaseInfoView : MvpView {
@@ -16,19 +17,13 @@ interface ReleaseInfoView : MvpView {
     fun showState(state: ReleaseDetailScreenState)
 
     @StateStrategyType(SkipStrategy::class)
-    fun loadTorrent(torrent: Torrent)
-
-    @StateStrategyType(SkipStrategy::class)
-    fun showTorrentDialog(torrents: List<Torrent>)
-
-    @StateStrategyType(SkipStrategy::class)
     fun playEpisodes(release: Release)
 
     @StateStrategyType(SkipStrategy::class)
     fun playContinue(release: Release, startWith: Episode)
 
     @StateStrategyType(SkipStrategy::class)
-    fun playWeb(link: String, code: String)
+    fun playWeb(link: AbsoluteUrl, releaseLink: RelativeUrl)
 
     @StateStrategyType(SkipStrategy::class)
     fun playEpisode(
@@ -48,10 +43,10 @@ interface ReleaseInfoView : MvpView {
     fun showFavoriteDialog()
 
     @StateStrategyType(SkipStrategy::class)
-    fun showDownloadDialog(url: String)
+    fun showDownloadDialog(url: AbsoluteUrl?)
 
     @StateStrategyType(SkipStrategy::class)
-    fun showFileDonateDialog(url: String)
+    fun showFileDonateDialog(url: AbsoluteUrl?)
 
     @StateStrategyType(SkipStrategy::class)
     fun showEpisodesMenuDialog()

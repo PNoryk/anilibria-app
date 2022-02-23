@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import moxy.InjectViewState
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.model.DonationCardItemState
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.navigation.Screens
@@ -12,18 +13,19 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
-import ru.radiationx.anilibria.utils.Utils
 import ru.terrakok.cicerone.Router
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PrefferedPlayerType
-import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.DonationRepository
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
@@ -51,7 +53,9 @@ class ReleaseInfoPresenter @Inject constructor(
     private val webPlayerAnalytics: WebPlayerAnalytics,
     private val releaseAnalytics: ReleaseAnalytics,
     private val playerAnalytics: PlayerAnalytics,
-    private val donationDetailAnalytics: DonationDetailAnalytics
+    private val donationDetailAnalytics: DonationDetailAnalytics,
+    private val appLinkHelper: AppLinkHelper,
+    private val urlHelper: UrlHelper
 ) : BasePresenter<ReleaseInfoView>(router) {
 
     private val remindText =
@@ -206,7 +210,9 @@ class ReleaseInfoPresenter @Inject constructor(
             val torrentItem = data.release.torrents?.find { it.id == item.id } ?: return
             val isHevc = torrentItem.quality?.contains("HEVC", true) == true
             releaseAnalytics.torrentClick(isHevc, data.id.id)
-            viewState.loadTorrent(torrentItem)
+            urlHelper.makeMedia(torrentItem.url)?.also {
+                appLinkHelper.open(it)
+            }
         }
     }
 
@@ -219,8 +225,10 @@ class ReleaseInfoPresenter @Inject constructor(
     fun onClickWatchWeb(place: EpisodeControlPlace) {
         currentData?.let { data ->
             releaseAnalytics.webPlayerClick(data.id.id)
-            data.release.webPlayerUrl?.let {
-                viewState.playWeb(it.value, data.release.code?.code.orEmpty())
+            val webUrl = data.release.webPlayerUrl
+            val releaseLink = data.release.link
+            if (webUrl != null && releaseLink != null) {
+                viewState.playWeb(webUrl, releaseLink)
             }
         }
     }
@@ -269,7 +277,7 @@ class ReleaseInfoPresenter @Inject constructor(
         episode: ExternalEpisode
     ) {
         releaseAnalytics.episodeExternalClick(release.id.id, episodeState.tag)
-        episode.url?.also { Utils.externalLink(it.value) }
+        appLinkHelper.open(episode.url)
     }
 
     private fun onSourceEpisodeClick(
@@ -344,7 +352,7 @@ class ReleaseInfoPresenter @Inject constructor(
             releaseAnalytics.descriptionLinkClick(data.id.id)
             val handled = linkHandler.handle(url, router)
             if (!handled) {
-                Utils.externalLink(url)
+                appLinkHelper.open(AbsoluteUrl(url))
             }
         }
     }
@@ -429,13 +437,13 @@ class ReleaseInfoPresenter @Inject constructor(
     fun openSearch(tag: String) {
         currentData?.also { data ->
             releaseAnalytics.genreClick(data.id.id)
-            val genre = data.release.genres?.find { it.value==tag }
+            val genre = data.release.genres?.find { it.value == tag }
             catalogAnalytics.open(AnalyticsConstants.screen_release)
             router.navigateTo(Screens.ReleasesSearch(genre))
         }
     }
 
-    fun onDownloadLinkSelected(url: String) {
+    fun onDownloadLinkSelected(url: AbsoluteUrl?) {
         currentData?.also { data ->
             if (data.release.showDonateDialog == true) {
                 viewState.showFileDonateDialog(url)
@@ -452,7 +460,7 @@ class ReleaseInfoPresenter @Inject constructor(
     }
 
     fun onDialogPatreonClick() {
-        Utils.externalLink("https://www.patreon.com/anilibria")
+        appLinkHelper.open(AbsoluteUrl("https://www.patreon.com/anilibria"))
     }
 
     fun onDialogDonateClick() {

@@ -16,16 +16,18 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
+import ru.radiationx.anilibria.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.presentation.checker.CheckerPresenter
 import ru.radiationx.anilibria.presentation.checker.CheckerView
 import ru.radiationx.anilibria.ui.activities.BaseActivity
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
+import ru.radiationx.shared_app.common.SystemUtils
 import ru.radiationx.shared_app.di.getDependency
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.HtmlText
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.feature.appupdates.data.domain.UpdateLink
@@ -63,6 +65,12 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
 
     @Inject
     lateinit var updaterAnalytics: UpdaterAnalytics
+
+    @Inject
+    lateinit var appLinkHelper: AppLinkHelper
+
+    @Inject
+    lateinit var systemUtils: SystemUtils
 
     @InjectPresenter
     lateinit var presenter: CheckerPresenter
@@ -141,15 +149,15 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
 
     private fun decideDownload(link: UpdateLink) {
         when (link.type) {
-            UpdateLinkType.FILE -> systemDownloadWithPermissionCheck(link.url.value)
-            UpdateLinkType.SITE -> Utils.externalLink(link.url.value)
-            UpdateLinkType.UNKNOWN -> Utils.externalLink(link.url.value)
+            UpdateLinkType.FILE -> systemDownloadWithPermissionCheck(link.url)
+            UpdateLinkType.SITE -> appLinkHelper.open(link.url)
+            UpdateLinkType.UNKNOWN -> appLinkHelper.open(link.url)
         }
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun systemDownload(url: String) {
-        Utils.systemDownloader(this, url)
+    fun systemDownload(url: AbsoluteUrl) {
+        systemUtils.systemDownloader(url.value)
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")

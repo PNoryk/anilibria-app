@@ -54,7 +54,7 @@ class AuthSocialPresenter @Inject constructor(
                 authRepository.getSocialAuth(argKey)
             }.onSuccess {
                 currentData = it
-                detector.loadUrl(it.socialUrl.value)
+                detector.loadUrl(it.socialUrl)
                 viewState.loadPage(it)
             }.onFailure {
                 authSocialAnalytics.error(it)

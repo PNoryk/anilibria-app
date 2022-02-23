@@ -13,13 +13,4 @@ import tv.anilibria.module.domain.entity.release.Release
 interface ReleaseView : IBaseView {
 
     fun showState(state: ReleasePagerState)
-
-    @StateStrategyType(SkipStrategy::class)
-    fun shareRelease(text: String)
-
-    @StateStrategyType(SkipStrategy::class)
-    fun copyLink(url: String)
-
-    @StateStrategyType(SkipStrategy::class)
-    fun addShortCut(release: Release)
 }

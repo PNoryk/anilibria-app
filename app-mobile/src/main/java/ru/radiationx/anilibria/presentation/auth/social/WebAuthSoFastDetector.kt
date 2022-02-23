@@ -1,6 +1,7 @@
 package ru.radiationx.anilibria.presentation.auth.social
 
 import android.webkit.CookieManager
+import tv.anilibria.core.types.AbsoluteUrl
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -14,8 +15,8 @@ class WebAuthSoFastDetector {
         loadTime = null
     }
 
-    fun loadUrl(url: String?) {
-        hasInitialCookies = CookieManager.getInstance().getCookie(url) != null
+    fun loadUrl(url: AbsoluteUrl?) {
+        hasInitialCookies = CookieManager.getInstance().getCookie(url?.value) != null
         loadTime = Date()
     }
 

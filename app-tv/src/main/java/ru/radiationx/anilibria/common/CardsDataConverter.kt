@@ -2,13 +2,15 @@ package ru.radiationx.anilibria.common
 
 import android.content.Context
 import android.text.format.DateUtils
+import tv.anilibria.module.data.UrlHelper
 import tv.anilibria.module.domain.entity.feed.Feed
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.youtube.Youtube
 import java.util.*
 
 class CardsDataConverter(
-    private val context: Context
+    private val context: Context,
+    private val urlHelper: UrlHelper
 ) {
 
     fun toCard(releaseItem: Release): LibriaCard {
@@ -23,7 +25,7 @@ class CardsDataConverter(
                 id.id,
                 nameRus?.text.orEmpty(),
                 "$seasonText год • $genreText • Серии: $seriesText • Обновлен $dateText",
-                poster?.value.orEmpty(),
+                urlHelper.makeMedia(poster),
                 LibriaCard.Type.RELEASE
             ).apply {
                 rawData = releaseItem
@@ -36,7 +38,7 @@ class CardsDataConverter(
             id.id,
             title?.text.orEmpty(),
             "Вышел ${Date(timestamp.toEpochMilliseconds()).relativeDate(context).decapitalize()}",
-            image?.value.orEmpty(),
+            urlHelper.makeMedia(youtubeItem.image),
             LibriaCard.Type.YOUTUBE
         ).apply {
             rawData = youtubeItem
