@@ -10,7 +10,7 @@ import ru.radiationx.anilibria.screen.*
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.domain.entity.EpisodeVisit
@@ -30,14 +30,14 @@ class PlayerViewModel(
     lateinit var argEpisodeId: EpisodeId
 
     val videoData = MutableLiveData<Video>()
-    val qualityState = MutableLiveData<PlayerQuality>()
+    val qualityState = MutableLiveData<PrefferedPlayerQuality>()
     val speedState = MutableLiveData<Float>()
     val playAction = MutableLiveData<Boolean>()
 
     private var playerInfo: PlayerInfo? = null
 
     private var currentEpisode: Episode? = null
-    private var currentQuality: PlayerQuality? = null
+    private var currentQuality: PrefferedPlayerQuality? = null
     private var currentComplete: Boolean? = null
 
     override fun onCreate() {
@@ -225,33 +225,33 @@ class PlayerViewModel(
         }
     }
 
-    private fun handleRawQuality(quality: PlayerQuality): PlayerQuality = when (quality) {
-        PlayerQuality.NOT_SELECTED,
-        PlayerQuality.ALWAYS_ASK -> PlayerQuality.SD
+    private fun handleRawQuality(quality: PrefferedPlayerQuality): PrefferedPlayerQuality = when (quality) {
+        PrefferedPlayerQuality.NOT_SELECTED,
+        PrefferedPlayerQuality.ALWAYS_ASK -> PrefferedPlayerQuality.SD
         else -> quality
     }
 
-    private fun getEpisodeQuality(episode: Episode, quality: PlayerQuality): PlayerQuality? {
-        var newQuality: PlayerQuality? = quality
+    private fun getEpisodeQuality(episode: Episode, quality: PrefferedPlayerQuality): PrefferedPlayerQuality? {
+        var newQuality: PrefferedPlayerQuality? = quality
 
-        if (newQuality == PlayerQuality.FULL_HD && episode.urlFullHd == null) {
-            newQuality = PlayerQuality.HD
+        if (newQuality == PrefferedPlayerQuality.FULL_HD && episode.urlFullHd == null) {
+            newQuality = PrefferedPlayerQuality.HD
         }
-        if (newQuality == PlayerQuality.HD && episode.urlHd == null) {
-            newQuality = PlayerQuality.SD
+        if (newQuality == PrefferedPlayerQuality.HD && episode.urlHd == null) {
+            newQuality = PrefferedPlayerQuality.SD
         }
-        if (newQuality == PlayerQuality.SD && episode.urlSd == null) {
+        if (newQuality == PrefferedPlayerQuality.SD && episode.urlSd == null) {
             newQuality = null
         }
 
         return newQuality
     }
 
-    private fun getEpisodeUrl(episode: Episode, quality: PlayerQuality): AbsoluteUrl? =
+    private fun getEpisodeUrl(episode: Episode, quality: PrefferedPlayerQuality): AbsoluteUrl? =
         when (getEpisodeQuality(episode, quality)) {
-            PlayerQuality.FULL_HD -> episode.urlFullHd
-            PlayerQuality.HD -> episode.urlHd
-            PlayerQuality.SD -> episode.urlSd
+            PrefferedPlayerQuality.FULL_HD -> episode.urlFullHd
+            PrefferedPlayerQuality.HD -> episode.urlHd
+            PrefferedPlayerQuality.SD -> episode.urlSd
             else -> null
         }
 

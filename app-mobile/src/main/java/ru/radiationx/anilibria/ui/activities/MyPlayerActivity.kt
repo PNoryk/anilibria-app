@@ -56,8 +56,8 @@ import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsScale
 import tv.anilibria.module.data.analytics.features.model.AnalyticsEpisodeFinishAction
 import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsSeasonFinishAction
-import tv.anilibria.module.data.preferences.PlayerPipMode
-import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerPipMode
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.domain.entity.EpisodeVisit
@@ -106,7 +106,7 @@ class MyPlayerActivity : BaseActivity() {
     private var currentEpisodeId: EpisodeId? = null
 
     //private var currentEpisode = NOT_SELECTED
-    private var currentQuality: PlayerQuality = PlayerQuality.SD
+    private var currentQuality: PrefferedPlayerQuality = PrefferedPlayerQuality.SD
     private var currentPlaySpeed = 1.0f
     private var videoControls: VideoControlsAlib? = null
     private val fullScreenListener = FullScreenListener()
@@ -149,7 +149,7 @@ class MyPlayerActivity : BaseActivity() {
     private var currentScale = defaultScale
     private var scaleEnabled = true
 
-    private var currentPipControl = PlayerPipMode.BUTTON
+    private var currentPipControl = PrefferedPlayerPipMode.BUTTON
 
     private val dialogController = SettingDialogController()
 
@@ -340,7 +340,7 @@ class MyPlayerActivity : BaseActivity() {
         lifecycleScope.launch {
             val episodeIdArg = requireNotNull(intent.getParcelableExtra<EpisodeId>(ARG_EPISODE_ID))
             val qualityArg =
-                requireNotNull(intent.getSerializableExtra(ARG_QUALITY) as? PlayerQuality?)
+                requireNotNull(intent.getSerializableExtra(ARG_QUALITY) as? PrefferedPlayerQuality?)
             val playFlagArg = intent.getIntExtra(ARG_PLAY_FLAG, PLAY_FLAG_DEFAULT)
 
             val release = releaseInteractor.getFull(episodeIdArg.releaseId)
@@ -397,7 +397,7 @@ class MyPlayerActivity : BaseActivity() {
         preferencesStorage.pipControl.blockingSet(currentPipControl)
     }
 
-    private fun loadPIPControl(): PlayerPipMode {
+    private fun loadPIPControl(): PrefferedPlayerPipMode {
         return preferencesStorage.pipControl.blockingGet()
     }
 
@@ -412,7 +412,7 @@ class MyPlayerActivity : BaseActivity() {
         player?.setScaleType(currentScale)
     }
 
-    private fun updateQuality(newQuality: PlayerQuality) {
+    private fun updateQuality(newQuality: PrefferedPlayerQuality) {
         this.currentQuality = newQuality
         playerAnalytics.settingsQualityChange(newQuality.toAnalyticsQuality())
         preferencesStorage.quality.blockingSet(newQuality)
@@ -426,15 +426,15 @@ class MyPlayerActivity : BaseActivity() {
         savePlaySpeed()
     }
 
-    private fun updatePIPControl(newPipControl: PlayerPipMode = currentPipControl) {
+    private fun updatePIPControl(newPipControl: PrefferedPlayerPipMode = currentPipControl) {
         currentPipControl = newPipControl
-        val pipCheck = checkPipMode() && newPipControl == PlayerPipMode.BUTTON
+        val pipCheck = checkPipMode() && newPipControl == PrefferedPlayerPipMode.BUTTON
         videoControls?.setPictureInPictureEnabled(pipCheck)
         savePIPControl()
     }
 
     override fun onUserLeaveHint() {
-        if (checkPipMode() && currentPipControl == PlayerPipMode.AUTO) {
+        if (checkPipMode() && currentPipControl == PrefferedPlayerPipMode.AUTO) {
             enterPipMode()
         }
     }
@@ -564,9 +564,9 @@ class MyPlayerActivity : BaseActivity() {
         toolbar.subtitle = "${episode.title} [${dialogController.getQualityTitle(currentQuality)}]"
         currentEpisodeId = getEpisode(episode.id)?.id
         val videoPath = when (currentQuality) {
-            PlayerQuality.SD -> episode.urlSd
-            PlayerQuality.HD -> episode.urlHd
-            PlayerQuality.FULL_HD -> episode.urlFullHd
+            PrefferedPlayerQuality.SD -> episode.urlSd
+            PrefferedPlayerQuality.HD -> episode.urlHd
+            PrefferedPlayerQuality.FULL_HD -> episode.urlFullHd
             else -> null
         }
         videoPath?.also {
@@ -804,10 +804,10 @@ class MyPlayerActivity : BaseActivity() {
 
         private fun BottomSheet.register() = openedDialogs.add(this)
 
-        fun getQualityTitle(quality: PlayerQuality) = when (quality) {
-            PlayerQuality.SD -> "480p"
-            PlayerQuality.HD -> "720p"
-            PlayerQuality.FULL_HD -> "1080p"
+        fun getQualityTitle(quality: PrefferedPlayerQuality) = when (quality) {
+            PrefferedPlayerQuality.SD -> "480p"
+            PrefferedPlayerQuality.HD -> "720p"
+            PrefferedPlayerQuality.FULL_HD -> "1080p"
             else -> "Вероятнее всего 480p"
         }
 
@@ -824,9 +824,9 @@ class MyPlayerActivity : BaseActivity() {
             else -> "Одному лишь богу известно"
         }
 
-        fun getPIPTitle(pipControl: PlayerPipMode) = when (pipControl) {
-            PlayerPipMode.AUTO -> "При скрытии экрана"
-            PlayerPipMode.BUTTON -> "По кнопке"
+        fun getPIPTitle(pipControl: PrefferedPlayerPipMode) = when (pipControl) {
+            PrefferedPlayerPipMode.AUTO -> "При скрытии экрана"
+            PrefferedPlayerPipMode.BUTTON -> "По кнопке"
         }
 
         fun updateSettingsDialog() {
@@ -877,9 +877,9 @@ class MyPlayerActivity : BaseActivity() {
                 .toTypedArray()
 
             val icQualityRes = when (currentQuality) {
-                PlayerQuality.SD -> R.drawable.ic_quality_sd_base
-                PlayerQuality.HD -> R.drawable.ic_quality_hd_base
-                PlayerQuality.FULL_HD -> R.drawable.ic_quality_full_hd_base
+                PrefferedPlayerQuality.SD -> R.drawable.ic_quality_sd_base
+                PrefferedPlayerQuality.HD -> R.drawable.ic_quality_hd_base
+                PrefferedPlayerQuality.FULL_HD -> R.drawable.ic_quality_full_hd_base
                 else -> R.drawable.ic_settings
             }
             val icons = valuesList
@@ -966,10 +966,10 @@ class MyPlayerActivity : BaseActivity() {
         }
 
         fun showQualityDialog() {
-            val qualities = mutableListOf<PlayerQuality>()
-            if (getEpisode()?.urlSd != null) qualities.add(PlayerQuality.SD)
-            if (getEpisode()?.urlHd != null) qualities.add(PlayerQuality.HD)
-            if (getEpisode()?.urlFullHd != null) qualities.add(PlayerQuality.FULL_HD)
+            val qualities = mutableListOf<PrefferedPlayerQuality>()
+            if (getEpisode()?.urlSd != null) qualities.add(PrefferedPlayerQuality.SD)
+            if (getEpisode()?.urlHd != null) qualities.add(PrefferedPlayerQuality.HD)
+            if (getEpisode()?.urlFullHd != null) qualities.add(PrefferedPlayerQuality.FULL_HD)
 
             val values = qualities.toTypedArray()
 
@@ -1027,8 +1027,8 @@ class MyPlayerActivity : BaseActivity() {
 
         fun showPIPDialog() {
             val values = arrayOf(
-                PlayerPipMode.AUTO,
-                PlayerPipMode.BUTTON
+                PrefferedPlayerPipMode.AUTO,
+                PrefferedPlayerPipMode.BUTTON
             )
             val activeIndex = values.indexOf(currentPipControl)
             val titles = values

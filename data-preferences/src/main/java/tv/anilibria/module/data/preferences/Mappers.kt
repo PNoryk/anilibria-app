@@ -19,45 +19,45 @@ object PrefsConstants {
 }
 
 
-fun Int.toPlayerQuality(): PlayerQuality = when (this) {
-    PrefsConstants.QUALITY_NO -> PlayerQuality.NOT_SELECTED
-    PrefsConstants.QUALITY_SD -> PlayerQuality.SD
-    PrefsConstants.QUALITY_HD -> PlayerQuality.HD
-    PrefsConstants.QUALITY_ALWAYS -> PlayerQuality.ALWAYS_ASK
-    PrefsConstants.QUALITY_FULL_HD -> PlayerQuality.FULL_HD
-    else -> PlayerQuality.NOT_SELECTED
+fun Int.toPlayerQuality(): PrefferedPlayerQuality = when (this) {
+    PrefsConstants.QUALITY_NO -> PrefferedPlayerQuality.NOT_SELECTED
+    PrefsConstants.QUALITY_SD -> PrefferedPlayerQuality.SD
+    PrefsConstants.QUALITY_HD -> PrefferedPlayerQuality.HD
+    PrefsConstants.QUALITY_ALWAYS -> PrefferedPlayerQuality.ALWAYS_ASK
+    PrefsConstants.QUALITY_FULL_HD -> PrefferedPlayerQuality.FULL_HD
+    else -> PrefferedPlayerQuality.NOT_SELECTED
 }
 
-fun Int.toPlayerType(): PlayerType = when (this) {
-    PrefsConstants.PLAYER_TYPE_NO -> PlayerType.NOT_SELECTED
-    PrefsConstants.PLAYER_TYPE_EXTERNAL -> PlayerType.EXTERNAL
-    PrefsConstants.PLAYER_TYPE_INTERNAL -> PlayerType.INTERNAL
-    PrefsConstants.PLAYER_TYPE_ALWAYS -> PlayerType.ALWAYS_ASK
-    else -> PlayerType.NOT_SELECTED
+fun Int.toPlayerType(): PrefferedPlayerType = when (this) {
+    PrefsConstants.PLAYER_TYPE_NO -> PrefferedPlayerType.NOT_SELECTED
+    PrefsConstants.PLAYER_TYPE_EXTERNAL -> PrefferedPlayerType.EXTERNAL
+    PrefsConstants.PLAYER_TYPE_INTERNAL -> PrefferedPlayerType.INTERNAL
+    PrefsConstants.PLAYER_TYPE_ALWAYS -> PrefferedPlayerType.ALWAYS_ASK
+    else -> PrefferedPlayerType.NOT_SELECTED
 }
 
-fun Int.toPipMode(): PlayerPipMode = when (this) {
-    PrefsConstants.PIP_BUTTON -> PlayerPipMode.BUTTON
-    PrefsConstants.PIP_AUTO -> PlayerPipMode.AUTO
-    else -> PlayerPipMode.AUTO
+fun Int.toPipMode(): PrefferedPlayerPipMode = when (this) {
+    PrefsConstants.PIP_BUTTON -> PrefferedPlayerPipMode.BUTTON
+    PrefsConstants.PIP_AUTO -> PrefferedPlayerPipMode.AUTO
+    else -> PrefferedPlayerPipMode.AUTO
 }
 
-fun PlayerQuality.toPrefs(): Int = when (this) {
-    PlayerQuality.NOT_SELECTED -> PrefsConstants.QUALITY_NO
-    PlayerQuality.SD -> PrefsConstants.QUALITY_SD
-    PlayerQuality.HD -> PrefsConstants.QUALITY_HD
-    PlayerQuality.ALWAYS_ASK -> PrefsConstants.QUALITY_ALWAYS
-    PlayerQuality.FULL_HD -> PrefsConstants.QUALITY_FULL_HD
+fun PrefferedPlayerQuality.toPrefs(): Int = when (this) {
+    PrefferedPlayerQuality.NOT_SELECTED -> PrefsConstants.QUALITY_NO
+    PrefferedPlayerQuality.SD -> PrefsConstants.QUALITY_SD
+    PrefferedPlayerQuality.HD -> PrefsConstants.QUALITY_HD
+    PrefferedPlayerQuality.ALWAYS_ASK -> PrefsConstants.QUALITY_ALWAYS
+    PrefferedPlayerQuality.FULL_HD -> PrefsConstants.QUALITY_FULL_HD
 }
 
-fun PlayerType.toPrefs(): Int = when (this) {
-    PlayerType.NOT_SELECTED -> PrefsConstants.PLAYER_TYPE_NO
-    PlayerType.EXTERNAL -> PrefsConstants.PLAYER_TYPE_EXTERNAL
-    PlayerType.INTERNAL -> PrefsConstants.PLAYER_TYPE_INTERNAL
-    PlayerType.ALWAYS_ASK -> PrefsConstants.PLAYER_TYPE_ALWAYS
+fun PrefferedPlayerType.toPrefs(): Int = when (this) {
+    PrefferedPlayerType.NOT_SELECTED -> PrefsConstants.PLAYER_TYPE_NO
+    PrefferedPlayerType.EXTERNAL -> PrefsConstants.PLAYER_TYPE_EXTERNAL
+    PrefferedPlayerType.INTERNAL -> PrefsConstants.PLAYER_TYPE_INTERNAL
+    PrefferedPlayerType.ALWAYS_ASK -> PrefsConstants.PLAYER_TYPE_ALWAYS
 }
 
-fun PlayerPipMode.toPrefs(): Int = when (this) {
-    PlayerPipMode.BUTTON -> PrefsConstants.PIP_BUTTON
-    PlayerPipMode.AUTO -> PrefsConstants.PIP_AUTO
+fun PrefferedPlayerPipMode.toPrefs(): Int = when (this) {
+    PrefferedPlayerPipMode.BUTTON -> PrefsConstants.PIP_BUTTON
+    PrefferedPlayerPipMode.AUTO -> PrefsConstants.PIP_AUTO
 }

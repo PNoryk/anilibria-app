@@ -17,8 +17,8 @@ import tv.anilibria.module.data.analytics.features.SettingsAnalytics
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsAppTheme
-import tv.anilibria.module.data.preferences.PlayerQuality
-import tv.anilibria.module.data.preferences.PlayerType
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerType
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
@@ -88,11 +88,11 @@ class SettingsFragment : BaseSettingFragment() {
             setOnPreferenceClickListener { preference ->
                 settingsAnalytics.qualityClick()
                 val values = arrayOf(
-                    PlayerQuality.SD,
-                    PlayerQuality.HD,
-                    PlayerQuality.FULL_HD,
-                    PlayerQuality.NOT_SELECTED,
-                    PlayerQuality.ALWAYS_ASK,
+                    PrefferedPlayerQuality.SD,
+                    PrefferedPlayerQuality.HD,
+                    PrefferedPlayerQuality.FULL_HD,
+                    PrefferedPlayerQuality.NOT_SELECTED,
+                    PrefferedPlayerQuality.ALWAYS_ASK,
                 )
                 val titles = values.map { getQualityTitle(it) }.toTypedArray()
                 AlertDialog.Builder(preference.context)
@@ -116,10 +116,10 @@ class SettingsFragment : BaseSettingFragment() {
             setOnPreferenceClickListener { preference ->
                 settingsAnalytics.playerClick()
                 val values = arrayOf(
-                    PlayerType.EXTERNAL,
-                    PlayerType.INTERNAL,
-                    PlayerType.NOT_SELECTED,
-                    PlayerType.ALWAYS_ASK
+                    PrefferedPlayerType.EXTERNAL,
+                    PrefferedPlayerType.INTERNAL,
+                    PrefferedPlayerType.NOT_SELECTED,
+                    PrefferedPlayerType.ALWAYS_ASK
                 )
                 val titles = values.map { getPlayerTypeTitle(it) }.toTypedArray()
                 AlertDialog.Builder(preference.context)
@@ -176,33 +176,33 @@ class SettingsFragment : BaseSettingFragment() {
         }
     }
 
-    private fun getQualityIcon(quality: PlayerQuality): Drawable? {
+    private fun getQualityIcon(quality: PrefferedPlayerQuality): Drawable? {
         val iconRes = when (quality) {
-            PlayerQuality.SD -> R.drawable.ic_quality_sd_base
-            PlayerQuality.HD -> R.drawable.ic_quality_hd_base
-            PlayerQuality.FULL_HD -> R.drawable.ic_quality_full_hd_base
+            PrefferedPlayerQuality.SD -> R.drawable.ic_quality_sd_base
+            PrefferedPlayerQuality.HD -> R.drawable.ic_quality_hd_base
+            PrefferedPlayerQuality.FULL_HD -> R.drawable.ic_quality_full_hd_base
             else -> return null
         }
         return context?.let { ContextCompat.getDrawable(it, iconRes) }
     }
 
-    private fun getQualityTitle(quality: PlayerQuality): String {
+    private fun getQualityTitle(quality: PrefferedPlayerQuality): String {
         return when (quality) {
-            PlayerQuality.SD -> "480p"
-            PlayerQuality.HD -> "720p"
-            PlayerQuality.FULL_HD -> "1080p"
-            PlayerQuality.NOT_SELECTED -> "Не выбрано"
-            PlayerQuality.ALWAYS_ASK -> "Спрашивать всегда"
+            PrefferedPlayerQuality.SD -> "480p"
+            PrefferedPlayerQuality.HD -> "720p"
+            PrefferedPlayerQuality.FULL_HD -> "1080p"
+            PrefferedPlayerQuality.NOT_SELECTED -> "Не выбрано"
+            PrefferedPlayerQuality.ALWAYS_ASK -> "Спрашивать всегда"
             else -> ""
         }
     }
 
-    private fun getPlayerTypeTitle(playerType: PlayerType): String {
+    private fun getPlayerTypeTitle(playerType: PrefferedPlayerType): String {
         return when (playerType) {
-            PlayerType.EXTERNAL -> "Внешний плеер"
-            PlayerType.INTERNAL -> "Внутренний плеер"
-            PlayerType.NOT_SELECTED -> "Не выбрано"
-            PlayerType.ALWAYS_ASK -> "Спрашивать всегда"
+            PrefferedPlayerType.EXTERNAL -> "Внешний плеер"
+            PrefferedPlayerType.INTERNAL -> "Внутренний плеер"
+            PrefferedPlayerType.NOT_SELECTED -> "Не выбрано"
+            PrefferedPlayerType.ALWAYS_ASK -> "Спрашивать всегда"
             else -> ""
         }
     }

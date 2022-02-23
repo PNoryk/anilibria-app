@@ -22,7 +22,7 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.leanback.widget.PlaybackControlsRow.*
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
-import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import java.util.concurrent.TimeUnit
 
 /**
@@ -151,11 +151,11 @@ class VideoPlayerGlue(
         }
     }
 
-    fun setQuality(quality: PlayerQuality) {
+    fun setQuality(quality: PrefferedPlayerQuality) {
         qualityAction.index = when (quality) {
-            PlayerQuality.SD -> QualityAction.INDEX_SD
-            PlayerQuality.HD -> QualityAction.INDEX_HD
-            PlayerQuality.FULL_HD -> QualityAction.INDEX_FHD
+            PrefferedPlayerQuality.SD -> QualityAction.INDEX_SD
+            PrefferedPlayerQuality.HD -> QualityAction.INDEX_HD
+            PrefferedPlayerQuality.FULL_HD -> QualityAction.INDEX_FHD
             else -> QualityAction.INDEX_SD
         }
         notifyActionChanged(

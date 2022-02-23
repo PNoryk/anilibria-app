@@ -1,8 +1,9 @@
 package tv.anilibria.module.data.preferences
 
-enum class PlayerType {
+enum class PrefferedPlayerQuality {
     NOT_SELECTED,
     ALWAYS_ASK,
-    EXTERNAL,
-    INTERNAL
+    SD,
+    HD,
+    FULL_HD
 }

@@ -9,7 +9,7 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.domain.entity.release.EpisodeId
 
@@ -21,9 +21,9 @@ class PlayerQualityViewModel(
 ) : LifecycleViewModel() {
 
     companion object {
-        val SD_ACTION_ID = PlayerQuality.SD.ordinal.toLong()
-        val HD_ACTION_ID = PlayerQuality.HD.ordinal.toLong()
-        val FULL_HD_ACTION_ID = PlayerQuality.FULL_HD.ordinal.toLong()
+        val SD_ACTION_ID = PrefferedPlayerQuality.SD.ordinal.toLong()
+        val HD_ACTION_ID = PrefferedPlayerQuality.HD.ordinal.toLong()
+        val FULL_HD_ACTION_ID = PrefferedPlayerQuality.FULL_HD.ordinal.toLong()
     }
 
     lateinit var argEpisodeId: EpisodeId
@@ -46,10 +46,10 @@ class PlayerQualityViewModel(
     fun applyQuality(quality: Long) {
         viewModelScope.launch {
             val value = when (quality) {
-                SD_ACTION_ID -> PlayerQuality.SD
-                HD_ACTION_ID -> PlayerQuality.HD
-                FULL_HD_ACTION_ID -> PlayerQuality.FULL_HD
-                else -> PlayerQuality.SD
+                SD_ACTION_ID -> PrefferedPlayerQuality.SD
+                HD_ACTION_ID -> PrefferedPlayerQuality.HD
+                FULL_HD_ACTION_ID -> PrefferedPlayerQuality.FULL_HD
+                else -> PrefferedPlayerQuality.SD
             }
             preferencesStorage.quality.put(value)
             guidedRouter.close()
@@ -73,12 +73,12 @@ class PlayerQualityViewModel(
         availableData.value = available
     }
 
-    private fun update(currentQuality: PlayerQuality) {
+    private fun update(currentQuality: PrefferedPlayerQuality) {
         val available = availableData.value!!
         var selectedAction = when (currentQuality) {
-            PlayerQuality.SD -> SD_ACTION_ID
-            PlayerQuality.HD -> HD_ACTION_ID
-            PlayerQuality.FULL_HD -> FULL_HD_ACTION_ID
+            PrefferedPlayerQuality.SD -> SD_ACTION_ID
+            PrefferedPlayerQuality.HD -> HD_ACTION_ID
+            PrefferedPlayerQuality.FULL_HD -> FULL_HD_ACTION_ID
             else -> SD_ACTION_ID
         }
 

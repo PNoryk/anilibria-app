@@ -21,8 +21,8 @@ import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
-import tv.anilibria.module.data.preferences.PlayerQuality
-import tv.anilibria.module.data.preferences.PlayerType
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerType
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.DonationRepository
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
@@ -30,7 +30,6 @@ import tv.anilibria.module.data.repos.FavoriteRepository
 import tv.anilibria.module.data.repos.HistoryRepository
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.EpisodeVisit
-import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.release.*
 import javax.inject.Inject
 
@@ -125,11 +124,11 @@ class ReleaseInfoPresenter @Inject constructor(
 
     fun getQuality() = preferencesStorage.quality.blockingGet()
 
-    fun setQuality(value: PlayerQuality) = preferencesStorage.quality.blockingSet(value)
+    fun setQuality(value: PrefferedPlayerQuality) = preferencesStorage.quality.blockingSet(value)
 
     fun getPlayerType() = preferencesStorage.playerType.blockingGet()
 
-    fun setPlayerType(value: PlayerType) = preferencesStorage.playerType.blockingSet(value)
+    fun setPlayerType(value: PrefferedPlayerType) = preferencesStorage.playerType.blockingSet(value)
 
 
     private fun subscribeAuth() {
@@ -276,7 +275,7 @@ class ReleaseInfoPresenter @Inject constructor(
     private fun onSourceEpisodeClick(
         release: Release,
         episode: Episode,
-        quality: PlayerQuality? = null
+        quality: PrefferedPlayerQuality? = null
     ) {
         val analyticsQuality = quality?.toAnalyticsQuality() ?: AnalyticsQuality.NONE
         releaseAnalytics.episodeDownloadClick(analyticsQuality, release.id.id)
@@ -287,7 +286,7 @@ class ReleaseInfoPresenter @Inject constructor(
         release: Release,
         episode: Episode,
         playFlag: Int? = null,
-        quality: PlayerQuality? = null
+        quality: PrefferedPlayerQuality? = null
     ) {
         val analyticsQuality = quality?.toAnalyticsQuality() ?: AnalyticsQuality.NONE
         releaseAnalytics.episodePlayClick(analyticsQuality, release.id.id)
@@ -297,7 +296,7 @@ class ReleaseInfoPresenter @Inject constructor(
     fun onEpisodeClick(
         episodeState: ReleaseEpisodeItemState,
         playFlag: Int? = null,
-        quality: PlayerQuality? = null
+        quality: PrefferedPlayerQuality? = null
     ) {
         val release = currentData?.release ?: return
         when (episodeState.type) {

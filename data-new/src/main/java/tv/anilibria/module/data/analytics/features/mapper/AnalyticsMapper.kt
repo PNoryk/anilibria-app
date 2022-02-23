@@ -2,9 +2,9 @@ package tv.anilibria.module.data.analytics.features.mapper
 
 import tv.anilibria.module.data.analytics.features.model.*
 import tv.anilibria.module.data.preferences.AppTheme
-import tv.anilibria.module.data.preferences.PlayerPipMode
-import tv.anilibria.module.data.preferences.PlayerQuality
-import tv.anilibria.module.data.preferences.PlayerType
+import tv.anilibria.module.data.preferences.PrefferedPlayerPipMode
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerType
 import tv.anilibria.module.domain.entity.AuthState
 
 fun AppTheme.toAnalyticsAppTheme(): AnalyticsAppTheme = when (this) {
@@ -20,26 +20,26 @@ fun AuthState.toAnalyticsAuthState(): AnalyticsAuthState = when (this) {
     else -> AnalyticsAuthState.UNKNOWN
 }
 
-fun PlayerQuality.toAnalyticsQuality(): AnalyticsQuality = when (this) {
-    PlayerQuality.SD -> AnalyticsQuality.SD
-    PlayerQuality.HD -> AnalyticsQuality.HD
-    PlayerQuality.FULL_HD -> AnalyticsQuality.FULL_HD
-    PlayerQuality.NOT_SELECTED -> AnalyticsQuality.NONE
-    PlayerQuality.ALWAYS_ASK -> AnalyticsQuality.ALWAYS_ASK
+fun PrefferedPlayerQuality.toAnalyticsQuality(): AnalyticsQuality = when (this) {
+    PrefferedPlayerQuality.SD -> AnalyticsQuality.SD
+    PrefferedPlayerQuality.HD -> AnalyticsQuality.HD
+    PrefferedPlayerQuality.FULL_HD -> AnalyticsQuality.FULL_HD
+    PrefferedPlayerQuality.NOT_SELECTED -> AnalyticsQuality.NONE
+    PrefferedPlayerQuality.ALWAYS_ASK -> AnalyticsQuality.ALWAYS_ASK
     else -> AnalyticsQuality.UNKNOWN
 }
 
-fun PlayerType.toAnalyticsPlayer(): AnalyticsPlayer = when (this) {
-    PlayerType.EXTERNAL -> AnalyticsPlayer.EXTERNAL
-    PlayerType.INTERNAL -> AnalyticsPlayer.INTERNAL
-    PlayerType.NOT_SELECTED -> AnalyticsPlayer.NONE
-    PlayerType.ALWAYS_ASK -> AnalyticsPlayer.ALWAYS_ASK
+fun PrefferedPlayerType.toAnalyticsPlayer(): AnalyticsPlayer = when (this) {
+    PrefferedPlayerType.EXTERNAL -> AnalyticsPlayer.EXTERNAL
+    PrefferedPlayerType.INTERNAL -> AnalyticsPlayer.INTERNAL
+    PrefferedPlayerType.NOT_SELECTED -> AnalyticsPlayer.NONE
+    PrefferedPlayerType.ALWAYS_ASK -> AnalyticsPlayer.ALWAYS_ASK
     else -> AnalyticsPlayer.UNKNOWN
 }
 
-fun PlayerPipMode.toAnalyticsPip(): AnalyticsPip = when (this) {
-    PlayerPipMode.AUTO -> AnalyticsPip.AUTO
-    PlayerPipMode.BUTTON -> AnalyticsPip.BUTTON
+fun PrefferedPlayerPipMode.toAnalyticsPip(): AnalyticsPip = when (this) {
+    PrefferedPlayerPipMode.AUTO -> AnalyticsPip.AUTO
+    PrefferedPlayerPipMode.BUTTON -> AnalyticsPip.BUTTON
     else -> AnalyticsPip.UNKNOWN
 }
 

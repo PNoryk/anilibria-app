@@ -4,7 +4,7 @@ import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import tv.anilibria.module.data.preferences.PlayerQuality
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.domain.entity.release.Episode
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.Torrent
@@ -35,13 +35,13 @@ interface ReleaseInfoView : MvpView {
         release: Release,
         episode: Episode,
         playFlag: Int? = null,
-        quality: PlayerQuality? = null
+        quality: PrefferedPlayerQuality? = null
     )
 
     @StateStrategyType(SkipStrategy::class)
     fun downloadEpisode(
         episode: Episode,
-        quality: PlayerQuality? = null
+        quality: PrefferedPlayerQuality? = null
     )
 
     @StateStrategyType(SkipStrategy::class)
