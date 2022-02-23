@@ -5,7 +5,6 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import moxy.InjectViewState
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.model.DonationCardItemState
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.navigation.Screens
@@ -13,11 +12,13 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
+import ru.radiationx.shared_app.AppLinkHelper
+import ru.radiationx.shared_app.common.SystemUtils
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.AuthStateHolder
-import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.BaseUrlHelper
+import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
@@ -55,7 +56,8 @@ class ReleaseInfoPresenter @Inject constructor(
     private val playerAnalytics: PlayerAnalytics,
     private val donationDetailAnalytics: DonationDetailAnalytics,
     private val appLinkHelper: AppLinkHelper,
-    private val urlHelper: BaseUrlHelper
+    private val urlHelper: BaseUrlHelper,
+    private val systemUtils: SystemUtils
 ) : BasePresenter<ReleaseInfoView>(router) {
 
     private val remindText =
@@ -175,7 +177,7 @@ class ReleaseInfoPresenter @Inject constructor(
         releaseId = releaseInfo.id
         releaseIdCode = releaseInfo.release.code
         stateController.updateState {
-            it.copy(data = releaseInfo.release.toState(releaseInfo.episodeVisits))
+            it.copy(data = releaseInfo.release.toState(systemUtils, releaseInfo.episodeVisits))
         }
     }
 

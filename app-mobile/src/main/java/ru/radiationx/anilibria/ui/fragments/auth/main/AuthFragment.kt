@@ -14,14 +14,12 @@ import ru.radiationx.anilibria.model.SocialAuthItemState
 import ru.radiationx.anilibria.presentation.auth.AuthPresenter
 import ru.radiationx.anilibria.presentation.auth.AuthView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.android.addTextChangeListener
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 

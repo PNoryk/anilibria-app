@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.*
 import android.net.Uri
 import android.os.Environment
+import android.text.format.Formatter
 import android.util.Log
 import toothpick.InjectConstructor
 import java.io.UnsupportedEncodingException
@@ -13,6 +14,11 @@ import java.net.URLDecoder
 class SystemUtils(
     private val context: Context
 ) {
+
+    fun readableFileSize(sizeBytes: Long): String {
+        return Formatter.formatShortFileSize(context, sizeBytes)
+    }
+
 
     /* PLEASE CHECK STORAGE PERMISSION */
     fun systemDownloader(url: String, fileName: String = getFileNameFromUrl(url)) {
@@ -66,13 +72,18 @@ class SystemUtils(
         sendIntent.putExtra(Intent.EXTRA_TEXT, text)
         sendIntent.type = "text/plain"
         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(Intent.createChooser(sendIntent, "Поделиться").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        context.startActivity(
+            Intent.createChooser(sendIntent, "Поделиться").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
     }
 
     fun externalLink(url: String) {
         Log.e("S_DEF_LOG", "externalLink $url")
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(Intent.createChooser(intent, "Открыть в").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        val intent =
+            Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(
+            Intent.createChooser(intent, "Открыть в").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
     }
 
     fun longLog(msg: String) {

@@ -1,6 +1,7 @@
 package ru.radiationx.anilibria.di
 
 import android.content.Context
+import android.text.format.Formatter
 import androidx.fragment.app.FragmentActivity
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.DetailDataConverter
@@ -14,5 +15,6 @@ class ActivityModule(activity: FragmentActivity) : Module() {
         bind(SystemUtils::class.java).singleton()
         bind(CardsDataConverter::class.java).singleton()
         bind(DetailDataConverter::class.java).singleton()
+        Formatter.formatFileSize(activity,0L)
     }
 }

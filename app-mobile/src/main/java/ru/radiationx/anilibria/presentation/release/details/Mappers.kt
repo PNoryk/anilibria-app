@@ -3,21 +3,23 @@ package ru.radiationx.anilibria.presentation.release.details
 import kotlinx.datetime.Instant
 import ru.radiationx.anilibria.model.asDataColorRes
 import ru.radiationx.anilibria.model.asDataIconRes
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.asTimeSecString
+import ru.radiationx.shared_app.common.SystemUtils
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.*
 import java.util.*
 
-fun Release.toState(episodesVisits: List<EpisodeVisit>): ReleaseDetailState =
-    ReleaseDetailState(
-        id = id,
-        info = toInfoState(),
-        episodesControl = toEpisodeControlState(episodesVisits),
-        episodesTabs = toTabsState(episodesVisits),
-        torrents = torrents?.map { it.toState() }.orEmpty(),
-        blockedInfo = blockedInfo?.takeIf { it.isBlocked }?.toState()
-    )
+fun Release.toState(
+    systemUtils: SystemUtils,
+    episodesVisits: List<EpisodeVisit>
+): ReleaseDetailState = ReleaseDetailState(
+    id = id,
+    info = toInfoState(),
+    episodesControl = toEpisodeControlState(episodesVisits),
+    episodesTabs = toTabsState(episodesVisits),
+    torrents = torrents?.map { it.toState(systemUtils) }.orEmpty(),
+    blockedInfo = blockedInfo?.takeIf { it.isBlocked }?.toState()
+)
 
 fun FavoriteInfo.toState() = ReleaseFavoriteState(
     rating = rating.toString(),
@@ -90,11 +92,11 @@ fun Release.toEpisodeControlState(episodesVisits: List<EpisodeVisit>): ReleaseEp
     }
 }
 
-fun Torrent.toState(): ReleaseTorrentItemState = ReleaseTorrentItemState(
+fun Torrent.toState(systemUtils: SystemUtils): ReleaseTorrentItemState = ReleaseTorrentItemState(
     id = id,
     title = "Серия $series",
     subtitle = quality.orEmpty(),
-    size = Utils.readableFileSize(size.value),
+    size = systemUtils.readableFileSize(size.value),
     seeders = seeders.toString(),
     leechers = leechers.toString(),
     date = null
