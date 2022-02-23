@@ -10,7 +10,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayAt
 import moxy.InjectViewState
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.model.*
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
@@ -182,7 +182,7 @@ class FeedPresenter @Inject constructor(
             youtubeItem.vid?.id
         )
         feedAnalytics.youtubeClick()
-        appLinkHelper.open(youtubeItem.link)
+        appLinkHelper.openLink(youtubeItem.link)
     }
 
     fun onSchedulesClick() {

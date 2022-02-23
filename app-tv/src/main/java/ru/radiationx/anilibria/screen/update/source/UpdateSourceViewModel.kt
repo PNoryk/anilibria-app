@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.update.UpdateController
-import ru.radiationx.shared_app.common.SystemUtils
+import ru.radiationx.shared_app.AppLinkHelper
 import toothpick.InjectConstructor
 import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.feature.appupdates.data.domain.UpdateLink
@@ -19,8 +19,8 @@ import tv.anilibria.feature.appupdates.data.domain.UpdateLinkType
 class UpdateSourceViewModel(
     private val checkerRepository: CheckerRepository,
     private val guidedRouter: GuidedRouter,
-    private val systemUtils: SystemUtils,
-    private val updateController: UpdateController
+    private val updateController: UpdateController,
+    private val appLinkHelper: AppLinkHelper
 ) : LifecycleViewModel() {
 
     val sourcesData = MutableLiveData<List<UpdateLink>>()
@@ -42,8 +42,8 @@ class UpdateSourceViewModel(
         viewModelScope.launch {
             when (link.type) {
                 UpdateLinkType.FILE -> updateController.downloadAction.emit(link)
-                UpdateLinkType.SITE -> systemUtils.externalLink(link.url.value)
-                UpdateLinkType.UNKNOWN -> systemUtils.externalLink(link.url.value)
+                UpdateLinkType.SITE -> appLinkHelper.openLink(link.url)
+                UpdateLinkType.UNKNOWN -> appLinkHelper.openLink(link.url)
             }
             guidedRouter.close()
         }

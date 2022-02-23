@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import moxy.InjectViewState
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.model.DonationCardItemState
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.navigation.Screens
@@ -211,7 +211,7 @@ class ReleaseInfoPresenter @Inject constructor(
             val isHevc = torrentItem.quality?.contains("HEVC", true) == true
             releaseAnalytics.torrentClick(isHevc, data.id.id)
             urlHelper.makeMedia(torrentItem.url)?.also {
-                appLinkHelper.open(it)
+                appLinkHelper.openLink(it)
             }
         }
     }
@@ -277,7 +277,7 @@ class ReleaseInfoPresenter @Inject constructor(
         episode: ExternalEpisode
     ) {
         releaseAnalytics.episodeExternalClick(release.id.id, episodeState.tag)
-        appLinkHelper.open(episode.url)
+        appLinkHelper.openLink(episode.url)
     }
 
     private fun onSourceEpisodeClick(
@@ -352,7 +352,7 @@ class ReleaseInfoPresenter @Inject constructor(
             releaseAnalytics.descriptionLinkClick(data.id.id)
             val handled = linkHandler.handle(url, router)
             if (!handled) {
-                appLinkHelper.open(AbsoluteUrl(url))
+                appLinkHelper.openLink(AbsoluteUrl(url))
             }
         }
     }
@@ -460,7 +460,7 @@ class ReleaseInfoPresenter @Inject constructor(
     }
 
     fun onDialogPatreonClick() {
-        appLinkHelper.open(AbsoluteUrl("https://www.patreon.com/anilibria"))
+        appLinkHelper.openLink(AbsoluteUrl("https://www.patreon.com/anilibria"))
     }
 
     fun onDialogDonateClick() {

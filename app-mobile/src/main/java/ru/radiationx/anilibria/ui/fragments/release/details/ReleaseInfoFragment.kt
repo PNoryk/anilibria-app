@@ -21,7 +21,7 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.disableItemChangeAnimation
 import ru.radiationx.anilibria.presentation.release.details.ReleaseDetailScreenState
@@ -143,7 +143,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
             .setItems(titles) { _, which ->
                 presenter.submitDownloadEpisodeUrlAnalytics()
                 when (which) {
-                    0 -> appLinkHelper.open(url)
+                    0 -> appLinkHelper.openLink(url)
                     1 -> systemDownloadWithPermissionCheck(url)
                 }
             }

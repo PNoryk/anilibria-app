@@ -1,4 +1,4 @@
-package ru.radiationx.anilibria
+package ru.radiationx.shared_app
 
 import ru.radiationx.shared_app.common.SystemUtils
 import tv.anilibria.core.types.AbsoluteUrl
@@ -12,9 +12,7 @@ class AppLinkHelper(
 
 
     fun shareLink(link: RelativeUrl?) {
-        urlHelper.makeSite(link)?.also {
-            systemUtils.shareText(it.value)
-        }
+        shareLink(urlHelper.makeSite(link))
     }
 
     fun shareLink(link: AbsoluteUrl?) {
@@ -24,9 +22,7 @@ class AppLinkHelper(
     }
 
     fun copyLink(link: RelativeUrl?) {
-        urlHelper.makeSite(link)?.also {
-            systemUtils.copyToClipBoard(it.value)
-        }
+        copyLink(urlHelper.makeSite(link))
     }
 
     fun copyLink(link: AbsoluteUrl?) {
@@ -35,13 +31,11 @@ class AppLinkHelper(
         }
     }
 
-    fun open(link: RelativeUrl?) {
-        urlHelper.makeSite(link)?.also {
-            systemUtils.externalLink(it.value)
-        }
+    fun openLink(link: RelativeUrl?) {
+        openLink(urlHelper.makeSite(link))
     }
 
-    fun open(link: AbsoluteUrl?) {
+    fun openLink(link: AbsoluteUrl?) {
         if (link != null) {
             systemUtils.externalLink(link.value)
         }

@@ -7,7 +7,7 @@ import android.view.WindowManager
 import android.webkit.*
 import kotlinx.android.synthetic.main.activity_moon.*
 import ru.radiationx.anilibria.App
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.generateWithTheme
 import ru.radiationx.shared.ktx.android.toException
@@ -86,7 +86,7 @@ class WebPlayerActivity : BaseActivity() {
                 return if (matcher.find()) {
                     false
                 } else {
-                    appLinkHelper.open(AbsoluteUrl(url.orEmpty()))
+                    appLinkHelper.openLink(AbsoluteUrl(url.orEmpty()))
                     true
                 }
             }

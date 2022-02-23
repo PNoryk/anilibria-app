@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.search
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.SuggestionItemState
 import ru.radiationx.anilibria.model.SuggestionLocalItemState
@@ -142,7 +142,7 @@ class FastSearchPresenter @Inject constructor(
             ITEM_ID_GOOGLE -> {
                 fastSearchAnalytics.searchGoogleClick()
                 val urlQuery = URLEncoder.encode("anilibria $currentQuery", "utf-8")
-                appLinkHelper.open(AbsoluteUrl("https://www.google.com/search?q=$urlQuery"))
+                appLinkHelper.openLink(AbsoluteUrl("https://www.google.com/search?q=$urlQuery"))
             }
             ITEM_ID_SEARCH -> {
                 catalogAnalytics.open(AnalyticsConstants.screen_fast_search)

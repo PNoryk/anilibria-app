@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
@@ -54,7 +54,7 @@ class DonationDetailPresenter(
 
     fun onLinkClick(url: String) {
         detailAnalytics.linkClick(url)
-        appLinkHelper.open(AbsoluteUrl(url))
+        appLinkHelper.openLink(AbsoluteUrl(url))
     }
 
     fun onButtonClick(button: DonationContentButton) {
@@ -78,7 +78,7 @@ class DonationDetailPresenter(
                 viewState.openContentDialog(dialog.tag)
             }
             buttonLink != null -> {
-                appLinkHelper.open(buttonLink)
+                appLinkHelper.openLink(buttonLink)
             }
         }
     }

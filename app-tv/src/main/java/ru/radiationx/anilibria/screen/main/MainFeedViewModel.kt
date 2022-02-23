@@ -5,7 +5,7 @@ import ru.radiationx.anilibria.common.BaseCardsViewModel
 import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
-import ru.radiationx.shared_app.common.SystemUtils
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.repos.FeedRepository
@@ -17,7 +17,7 @@ class MainFeedViewModel(
     private val feedRepository: FeedRepository,
     private val converter: CardsDataConverter,
     private val router: Router,
-    private val systemUtils: SystemUtils
+    private val appLinkHelper: AppLinkHelper
 ) : BaseCardsViewModel() {
 
     override val defaultTitle: String = "Самое актуальное"
@@ -57,7 +57,7 @@ class MainFeedViewModel(
             }
             LibriaCard.Type.YOUTUBE -> {
                 val youtubeItem = card.rawData as Youtube
-                youtubeItem.link?.value?.also { systemUtils.externalLink(it) }
+                appLinkHelper.openLink(youtubeItem.link)
             }
         }
     }

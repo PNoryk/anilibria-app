@@ -16,7 +16,7 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.presentation.checker.CheckerPresenter
@@ -150,8 +150,8 @@ class UpdateCheckerActivity : BaseActivity(), CheckerView {
     private fun decideDownload(link: UpdateLink) {
         when (link.type) {
             UpdateLinkType.FILE -> systemDownloadWithPermissionCheck(link.url)
-            UpdateLinkType.SITE -> appLinkHelper.open(link.url)
-            UpdateLinkType.UNKNOWN -> appLinkHelper.open(link.url)
+            UpdateLinkType.SITE -> appLinkHelper.openLink(link.url)
+            UpdateLinkType.UNKNOWN -> appLinkHelper.openLink(link.url)
         }
     }
 

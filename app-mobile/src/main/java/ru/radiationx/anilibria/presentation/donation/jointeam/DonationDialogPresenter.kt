@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.donation.jointeam
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.terrakok.cicerone.Router
@@ -46,11 +46,11 @@ class DonationDialogPresenter(
 
     fun onLinkClick(url: String) {
         analytics.linkClick(argTag.toString(), url)
-        appLinkHelper.open(AbsoluteUrl(url))
+        appLinkHelper.openLink(AbsoluteUrl(url))
     }
 
     fun onButtonClick(button: DonationContentButton) {
         analytics.buttonClick(argTag.toString(), button.text)
-        appLinkHelper.open(button.link)
+        appLinkHelper.openLink(button.link)
     }
 }

@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.youtube
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import moxy.InjectViewState
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.model.YoutubeItemState
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
@@ -79,7 +79,7 @@ class YoutubePresenter @Inject constructor(
             rawItem.id.id,
             rawItem.vid?.id
         )
-        appLinkHelper.open(rawItem.link)
+        appLinkHelper.openLink(rawItem.link)
     }
 
     private fun submitPageAnalytics(page: Int) {

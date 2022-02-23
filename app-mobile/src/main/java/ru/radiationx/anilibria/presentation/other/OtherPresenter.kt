@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
-import ru.radiationx.anilibria.AppLinkHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.anilibria.model.loading.StateController
@@ -175,7 +175,7 @@ class OtherPresenter @Inject constructor(
                     val absoluteLink = linkItem.absoluteLink
                     val pagePath = linkItem.sitePagePath
                     when {
-                        absoluteLink != null -> appLinkHelper.open(absoluteLink)
+                        absoluteLink != null -> appLinkHelper.openLink(absoluteLink)
                         pagePath != null -> {
                             pageAnalytics.open(AnalyticsConstants.screen_other, pagePath.value)
                             router.navigateTo(Screens.StaticPage(pagePath))
