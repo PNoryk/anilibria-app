@@ -6,33 +6,24 @@ import okhttp3.HttpUrl
 import javax.inject.Inject
 
 class AppCookieJar @Inject constructor(
-    private val cookieHolder: CookieHolder,
-    private val userHolder: UserHolder
+    private val cookieHolder: LegacyCookieHolder
 ) : CookieJar {
 
     companion object {
-        private const val SESSION_COOKIE = "PHPSESSID"
         private const val COOKIE_DELETED = "deleted"
     }
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        var authDestroyed = false
         for (cookie in cookies) {
             if (cookie.value() == COOKIE_DELETED) {
-                if (cookie.name() == SESSION_COOKIE) {
-                    authDestroyed = true
-                }
-                cookieHolder.removeCookie(cookie.name())
+                cookieHolder.remove(cookie.name())
             } else {
-                cookieHolder.putCookie(url.toString(), cookie)
+                cookieHolder.put(url.toString(), cookie)
             }
-        }
-        if (authDestroyed) {
-            userHolder.delete()
         }
     }
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        return cookieHolder.getCookies().values.map { it }
+        return cookieHolder.get().values.map { it }
     }
 }

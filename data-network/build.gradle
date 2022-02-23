@@ -41,6 +41,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
     implementation project(":plugin:data-network")
     implementation project(":plugin:shared-appinfo")
+    implementation project(":plugin:data-storage")
     implementation project(":feature-network-config-data")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"

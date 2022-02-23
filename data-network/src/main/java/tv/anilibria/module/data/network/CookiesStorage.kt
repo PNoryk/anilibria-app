@@ -1,69 +1,30 @@
 package tv.anilibria.module.data.network
 
-import android.content.SharedPreferences
-import android.util.Log
+import kotlinx.coroutines.flow.Flow
 import okhttp3.Cookie
 import okhttp3.HttpUrl
-import javax.inject.Inject
+import tv.anilibria.plugin.data.storage.ObservableData
 
-/**
- * Created by radiationx on 30.12.17.
- */
-//todo change to lazy init and smh else
-class CookiesStorage @Inject constructor(
-    private val sharedPreferences: SharedPreferences
-) : CookieHolder {
+class CookiesStorage {
 
-    private val clientCookies = mutableMapOf<String, Cookie>()
+    private val data = ObservableData<List<CookieData>>()
 
-    init {
-        sharedPreferences.all.keys
-            .filter { it.startsWith("cookie_") }
-            .mapNotNull { sharedPreferences.getString(it, null)?.let { parseCookie(it) } }
-            .forEach { clientCookies[it.name()] = it }
+    fun observe(): Flow<List<CookieData>> = data.observe()
+
+    suspend fun get(): List<CookieData> = data.get()
+
+    suspend fun put(cookie: CookieData) = data.update { cookies ->
+        cookies.filter { it.key != cookie.key } + cookie
     }
 
-    private fun parseCookie(cookieFields: String): Cookie? {
-        val fields = cookieFields.split("\\|:\\|".toRegex())
-        val httpUrl = HttpUrl.parse(fields[0])
-            ?: throw RuntimeException("Unknown cookie url = ${fields[0]}")
-        val cookieString = fields[1]
-        return Cookie.parse(httpUrl, cookieString)
+    suspend fun remove(cookie: CookieData) = data.update { cookies ->
+        cookies.filter { it.key != cookie.key }
     }
+}
 
-    private fun convertCookie(url: String, cookie: Cookie): String {
-        return "$url|:|$cookie"
-    }
-
-    override fun getCookies(): Map<String, Cookie> {
-        Log.e(
-            "CookiesStorage",
-            "getCookies: ${
-                clientCookies.map { it.value }.joinToString { "${it.name()}=${it.value()}" }
-            }"
-        )
-        return clientCookies
-    }
-
-    override fun putCookie(url: String, cookie: Cookie) {
-        Log.e("CookiesStorage", "putCookie: ${"${cookie.name()}=${cookie.value()}"}")
-        sharedPreferences
-            .edit()
-            .putString("cookie_${cookie.name()}", convertCookie(url, cookie))
-            .apply()
-
-        if (!clientCookies.containsKey(cookie.name())) {
-            clientCookies.remove(cookie.name())
-        }
-        clientCookies[cookie.name()] = cookie
-    }
-
-    override fun removeCookie(name: String) {
-        sharedPreferences
-            .edit()
-            .remove("cookie_$name")
-            .apply()
-
-        clientCookies.remove(name)
-    }
+data class CookieData(
+    val url: HttpUrl,
+    val cookie: Cookie
+) {
+    val key = url.toString() + cookie.name()
 }
