@@ -7,7 +7,7 @@ import tv.anilibria.module.domain.entity.other.UserId
 
 fun User.toLocal() = UserLocal(
     id = id.id,
-    avatar = avatar?.url,
+    avatar = avatar?.value,
     login = login
 )
 

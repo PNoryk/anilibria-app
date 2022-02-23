@@ -103,7 +103,7 @@ class SuggestionsContentProvider : ContentProvider() {
         names?.joinToString().toString(),
         -1,
         -1,
-        cardImage = poster?.url
+        cardImage = poster?.value
     )
 
     private fun buildUriMatcher(): UriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {

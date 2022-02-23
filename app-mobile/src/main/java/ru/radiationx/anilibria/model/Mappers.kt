@@ -10,7 +10,7 @@ import tv.anilibria.module.domain.entity.youtube.Youtube
 
 //todo map isnew
 fun Release.toState(): ReleaseItemState {
-    val rusTitle = names?.firstOrNull()
+    val rusTitle = nameRus?.text
     val title = if (series == null) {
         rusTitle.toString()
     } else {
@@ -20,7 +20,7 @@ fun Release.toState(): ReleaseItemState {
         id = id,
         title = title,
         description = description?.text.orEmpty(),
-        posterUrl = poster?.url.orEmpty(),
+        posterUrl = poster?.value.orEmpty(),
         isNew = false
     )
 }
@@ -28,7 +28,7 @@ fun Release.toState(): ReleaseItemState {
 fun Youtube.toState() = YoutubeItemState(
     id = id,
     title = title?.text.orEmpty(),
-    image = image?.url.orEmpty(),
+    image = image?.value.orEmpty(),
     views = views.value.toString(),
     comments = comments.value.toString()
 )
@@ -41,7 +41,7 @@ fun Feed.toState() = FeedItemState(
 //todo map iscompleted
 fun Release.toScheduleState() = ScheduleItemState(
     releaseId = id,
-    posterUrl = poster?.url.orEmpty(),
+    posterUrl = poster?.value.orEmpty(),
     isCompleted = true
 )
 
@@ -57,7 +57,7 @@ fun User.toState(authState: AuthState): ProfileItemState {
     } else {
         "Авторизоваться"
     }
-    val avatar = avatar?.url?.takeIf { it.isNotEmpty() } ?: "assets://res/alib_new_or_b.png"
+    val avatar = avatar?.value?.takeIf { it.isNotEmpty() } ?: "assets://res/alib_new_or_b.png"
     return ProfileItemState(
         id = id,
         hasAuth = hasAuth,
@@ -75,7 +75,7 @@ fun SocialAuthService.toState(): SocialAuthItemState = SocialAuthItemState(
 )
 
 fun Release.toSuggestionState(query: String): SuggestionItemState {
-    val itemTitle = names?.firstOrNull()?.text.orEmpty()
+    val itemTitle = nameRus?.text.orEmpty()
     val matchRanges = try {
         Regex(query, RegexOption.IGNORE_CASE).findAll(itemTitle).map { it.range }.toList()
     } catch (ignore: Throwable) {
@@ -85,7 +85,7 @@ fun Release.toSuggestionState(query: String): SuggestionItemState {
     return SuggestionItemState(
         id,
         itemTitle,
-        poster?.url.orEmpty(),
+        poster?.value.orEmpty(),
         matchRanges
     )
 }

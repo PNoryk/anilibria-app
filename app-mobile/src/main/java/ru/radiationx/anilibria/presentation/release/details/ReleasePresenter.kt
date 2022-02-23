@@ -87,9 +87,9 @@ class ReleasePresenter @Inject constructor(
 
         stateController.updateState {
             it.copy(
-                poster = currentData?.poster?.url,
+                poster = currentData?.poster?.value,
                 title = currentData?.let {
-                    String.format("%s / %s", release.titleRus?.text, release.titleEng?.text)
+                    String.format("%s / %s", release.nameRus?.text, release.nameEng?.text)
                 }
             )
         }

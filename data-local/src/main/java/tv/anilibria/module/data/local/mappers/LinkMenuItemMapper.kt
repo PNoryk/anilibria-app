@@ -8,7 +8,7 @@ import tv.anilibria.module.domain.entity.other.LinkMenuItem
 fun LinkMenuItem.toLocal() = LinkMenuItemLocal(
     title = title,
     absoluteLink = absoluteLink?.value,
-    sitePagePath = sitePagePath?.url,
+    sitePagePath = sitePagePath?.value,
     icon = icon?.toLocal()
 )
 

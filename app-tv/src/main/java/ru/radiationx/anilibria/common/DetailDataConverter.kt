@@ -17,8 +17,8 @@ class DetailDataConverter {
     ): LibriaDetails = releaseItem.run {
         LibriaDetails(
             id = id,
-            titleRu = titleRus?.text.orEmpty(),
-            titleEn = titleEng?.text.orEmpty(),
+            titleRu = nameRus?.text.orEmpty(),
+            titleEn = nameEng?.text.orEmpty(),
             extra = listOf(
                 genres?.firstOrNull()?.value?.capitalize()?.trim(),
                 "${year?.value} год",
@@ -28,7 +28,7 @@ class DetailDataConverter {
             description = Html.fromHtml(description?.text.orEmpty()).toString().trim()
                 .trim('"')/*.replace('\n', ' ')*/,
             announce = getAnnounce(),
-            image = poster?.url.orEmpty(),
+            image = poster?.value.orEmpty(),
             favoriteCount = favoriteInfo?.rating?.value?.let {
                 NumberFormat.getNumberInstance().format(it)
             },

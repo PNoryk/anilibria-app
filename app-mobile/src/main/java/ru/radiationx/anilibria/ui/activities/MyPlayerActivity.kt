@@ -365,11 +365,11 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun updateAndPlayRelease() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(ActivityManager.TaskDescription(releaseData?.titleRus?.text))
+            setTaskDescription(ActivityManager.TaskDescription(releaseData?.nameRus?.text))
         }
 
         videoControls?.apply {
-            setTitle(releaseData?.titleRus?.text)
+            setTitle(releaseData?.nameRus?.text)
         }
         getEpisode()?.also { playEpisode(it) }
     }

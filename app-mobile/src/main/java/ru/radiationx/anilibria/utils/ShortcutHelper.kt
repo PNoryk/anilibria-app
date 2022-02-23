@@ -23,7 +23,7 @@ object ShortcutHelper {
 
     fun addShortcut(data: Release) {
         ImageLoader.getInstance()
-            .loadImage(data.poster?.url, object : SimpleImageLoadingListener() {
+            .loadImage(data.poster?.value, object : SimpleImageLoadingListener() {
                 override fun onLoadingComplete(
                     imageUri: String?,
                     view: View?,
@@ -39,7 +39,7 @@ object ShortcutHelper {
     fun addShortcut(data: Release, bitmap: Bitmap) = addShortcut(
         App.instance,
         "release_${data.id}",
-        data.names?.firstOrNull()?.text.toString(),
+        data.nameRus?.text.toString(),
         data.names?.joinToString(" / ") { it.text }.toString(),
         data.link?.value.orEmpty(),
         bitmap

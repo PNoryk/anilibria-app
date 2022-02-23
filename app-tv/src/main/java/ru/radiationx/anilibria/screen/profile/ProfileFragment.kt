@@ -38,7 +38,7 @@ class ProfileFragment : ScopedFragment(R.layout.fragment_profile),
         super.onViewCreated(view, savedInstanceState)
 
         subscribeTo(viewModel.profileData) {
-            it.user.avatar?.url?.also { avatarUrl ->
+            it.user.avatar?.value?.also { avatarUrl ->
                 ImageLoader.getInstance().displayImage(avatarUrl, profileAvatar)
             }
             profileNick.text = it.user.login

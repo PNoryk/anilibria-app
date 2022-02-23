@@ -44,8 +44,8 @@ fun Release.toInfoState(): ReleaseInfoState {
     val infoStr = arrHtml.joinToString("<br>")
 
     return ReleaseInfoState(
-        titleRus = names?.getOrNull(0)?.text.orEmpty(),
-        titleEng = names?.getOrNull(1)?.text.orEmpty(),
+        nameRus = nameRus?.text.orEmpty(),
+        nameEng = nameEng?.text.orEmpty(),
         description = description?.text.orEmpty(),
         info = infoStr,
         day = scheduleDay,

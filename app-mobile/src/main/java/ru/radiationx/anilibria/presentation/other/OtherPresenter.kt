@@ -148,7 +148,7 @@ class OtherPresenter @Inject constructor(
             }
             MENU_TEAM -> {
                 otherAnalytics.teamClick()
-                pageAnalytics.open(AnalyticsConstants.screen_other, PAGE_PATH_TEAM.url)
+                pageAnalytics.open(AnalyticsConstants.screen_other, PAGE_PATH_TEAM.value)
                 router.navigateTo(Screens.StaticPage(PAGE_PATH_TEAM, "Список команды"))
             }
             MENU_DONATE -> {
@@ -174,7 +174,7 @@ class OtherPresenter @Inject constructor(
                     when {
                         absoluteLink != null -> Utils.externalLink(absoluteLink.value)
                         pagePath != null -> {
-                            pageAnalytics.open(AnalyticsConstants.screen_other, pagePath.url)
+                            pageAnalytics.open(AnalyticsConstants.screen_other, pagePath.value)
                             router.navigateTo(Screens.StaticPage(pagePath))
                         }
                     }

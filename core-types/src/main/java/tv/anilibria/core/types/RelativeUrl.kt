@@ -4,6 +4,6 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class RelativeUrl(val url: String) : Parcelable
+data class RelativeUrl(val value: String) : Parcelable
 
 fun String.asRelativeUrl() = RelativeUrl(this)

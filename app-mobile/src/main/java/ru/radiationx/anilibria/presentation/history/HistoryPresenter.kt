@@ -71,8 +71,8 @@ class HistoryPresenter @Inject constructor(
         isSearchEnabled = currentQuery.isNotEmpty()
         val searchItes = if (currentQuery.isNotEmpty()) {
             currentReleases.filter {
-                it.titleRus?.text.orEmpty().contains(currentQuery, true)
-                        || it.titleEng?.text.orEmpty().contains(currentQuery, true)
+                it.nameRus?.text.orEmpty().contains(currentQuery, true)
+                        || it.nameEng?.text.orEmpty().contains(currentQuery, true)
             }
         } else {
             emptyList()

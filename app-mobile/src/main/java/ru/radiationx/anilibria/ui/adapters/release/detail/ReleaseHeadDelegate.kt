@@ -62,8 +62,8 @@ class ReleaseHeadDelegate(
         }
 
         fun bind(state: ReleaseInfoState, modifiers: ReleaseDetailModifiersState) {
-            full_title.text = state.titleRus
-            full_title_en.text = state.titleEng
+            full_title.text = state.nameRus
+            full_title_en.text = state.nameEng
             full_description.text = Html.fromHtml(state.description)
             full_description.doOnLayout {
                 updateDescription(modifiers.descriptionExpanded)

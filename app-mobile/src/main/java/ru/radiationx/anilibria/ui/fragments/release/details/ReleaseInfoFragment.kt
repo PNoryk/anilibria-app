@@ -109,7 +109,7 @@ class ReleaseInfoFragment : BaseFragment(), ReleaseInfoView {
     }
 
     override fun loadTorrent(torrent: Torrent) {
-        torrent.url?.also { Utils.externalLink(it.url) }
+        torrent.url?.also { Utils.externalLink(it.value) }
     }
 
     override fun showTorrentDialog(torrents: List<Torrent>) {

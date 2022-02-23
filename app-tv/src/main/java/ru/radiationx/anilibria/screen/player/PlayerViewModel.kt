@@ -218,7 +218,7 @@ class PlayerViewModel(
         val newVideo = episode.let {
             val seek = info.episodeVisits.find { it.id == episode.id }?.playerSeek ?: 0
             val url = getEpisodeUrl(it, quality)
-            Video(url?.value!!, seek, info.release.titleRus?.text.orEmpty(), it.title.orEmpty())
+            Video(url?.value!!, seek, info.release.nameRus?.text.orEmpty(), it.title.orEmpty())
         }
         if (force || videoData.value?.url != newVideo.url) {
             videoData.value = newVideo

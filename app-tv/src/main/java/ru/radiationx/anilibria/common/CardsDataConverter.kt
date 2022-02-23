@@ -21,9 +21,9 @@ class CardsDataConverter(
         return releaseItem.run {
             LibriaCard(
                 id.id,
-                names?.firstOrNull()?.text.orEmpty(),
+                nameRus?.text.orEmpty(),
                 "$seasonText год • $genreText • Серии: $seriesText • Обновлен $dateText",
-                poster?.url.orEmpty(),
+                poster?.value.orEmpty(),
                 LibriaCard.Type.RELEASE
             ).apply {
                 rawData = releaseItem
@@ -36,7 +36,7 @@ class CardsDataConverter(
             id.id,
             title?.text.orEmpty(),
             "Вышел ${Date(timestamp.toEpochMilliseconds()).relativeDate(context).decapitalize()}",
-            image?.url.orEmpty(),
+            image?.value.orEmpty(),
             LibriaCard.Type.YOUTUBE
         ).apply {
             rawData = youtubeItem

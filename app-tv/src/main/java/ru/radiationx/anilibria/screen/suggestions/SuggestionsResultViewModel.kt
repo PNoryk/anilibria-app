@@ -74,9 +74,9 @@ class SuggestionsResultViewModel(
         resultData.value = items.map {
             LibriaCard(
                 it.id.id,
-                it.names?.getOrNull(0)?.text.orEmpty(),
-                it.names?.getOrNull(1)?.text.orEmpty(),
-                it.poster?.url.orEmpty(),
+                it.nameRus?.text.orEmpty(),
+                it.nameEng?.text.orEmpty(),
+                it.poster?.value.orEmpty(),
                 LibriaCard.Type.RELEASE
             )
         }
