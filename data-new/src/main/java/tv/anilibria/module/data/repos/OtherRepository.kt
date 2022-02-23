@@ -1,5 +1,6 @@
 package tv.anilibria.module.data.repos
 
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.restapi.datasource.remote.api.OtherRemoteDataSource
 import tv.anilibria.module.domain.entity.page.PageLibria
@@ -27,5 +28,5 @@ class OtherRepository @Inject constructor(
 
     suspend fun checkVkBlocked() = remoteDataSource.checkVkBlocked()
 
-    suspend fun getDirectBody(url: String) = remoteDataSource.getDirectBody(url)
+    suspend fun getDirectBody(url: AbsoluteUrl) = remoteDataSource.getDirectBody(url)
 }

@@ -1,6 +1,7 @@
 package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import kotlinx.coroutines.withTimeout
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.restapi.datasource.remote.parsers.PagesParser
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.OtherApi
@@ -51,7 +52,7 @@ class OtherRemoteDataSource @Inject constructor(
         ex !is UnknownHostException
     }
 
-    suspend fun getDirectBody(url: String): String {
-        return otherApi.direct().getBody(url).string()
+    suspend fun getDirectBody(url: AbsoluteUrl): String {
+        return otherApi.direct().getBody(url.value).string()
     }
 }

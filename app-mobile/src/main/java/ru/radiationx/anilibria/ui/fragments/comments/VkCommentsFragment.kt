@@ -290,7 +290,7 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
                 Log.d("S_DEF_LOG", "CHANGE CSS")
                 val cssSrc = try {
                     runBlocking {
-                        client.getBody(url.orEmpty())
+                        client.getBody(AbsoluteUrl(url.orEmpty()))
                     }
                 } catch (ex: Throwable) {
                     ex.printStackTrace()
