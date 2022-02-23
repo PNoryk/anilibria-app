@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.runBlocking
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.ui.activities.main.IntentActivity
@@ -66,7 +67,9 @@ class NotificationService : FirebaseMessagingService() {
             try {
                 val payload = data.payload.orEmpty()
                 val handler = DI.get(ApiConfigPushHandler::class.java)
-                handler.handlePushData(payload)
+                runBlocking {
+                    handler.handlePushData(payload)
+                }
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
