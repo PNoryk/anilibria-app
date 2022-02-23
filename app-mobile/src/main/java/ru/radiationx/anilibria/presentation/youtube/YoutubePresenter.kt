@@ -14,7 +14,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeScreenState
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.YoutubeAnalytics
 import tv.anilibria.module.data.analytics.features.YoutubeVideosAnalytics
@@ -29,7 +29,7 @@ class YoutubePresenter @Inject constructor(
     private val errorHandler: IErrorHandler,
     private val youtubeAnalytics: YoutubeAnalytics,
     private val youtubeVideosAnalytics: YoutubeVideosAnalytics,
-    private val urlHelper: UrlHelper,
+    private val urlHelper: BaseUrlHelper,
     private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<YoutubeView>(router) {
 

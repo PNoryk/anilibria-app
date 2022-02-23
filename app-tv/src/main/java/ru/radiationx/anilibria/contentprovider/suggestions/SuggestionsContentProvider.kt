@@ -15,7 +15,7 @@ import kotlinx.coroutines.runBlocking
 import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.contentprovider.SystemSuggestionEntity
 import ru.radiationx.shared_app.di.DI
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.release.Release
 
@@ -38,7 +38,7 @@ class SuggestionsContentProvider : ContentProvider() {
 
     private val searchRepository by lazy { DI.get(SearchRepository::class.java) }
 
-    private val urlHelper by lazy { DI.get(UrlHelper::class.java) }
+    private val urlHelper by lazy { DI.get(BaseUrlHelper::class.java) }
 
     override fun onCreate(): Boolean {
         return true

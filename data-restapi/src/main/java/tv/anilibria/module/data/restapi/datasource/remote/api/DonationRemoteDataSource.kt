@@ -2,12 +2,13 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 
 import retrofit2.HttpException
 import toothpick.InjectConstructor
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.DonationApi
 import tv.anilibria.module.data.restapi.entity.mapper.donation.toDomain
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
-import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
@@ -30,7 +31,7 @@ class DonationRemoteDataSource(
         amount: Int,
         type: String,
         form: YooMoneyDialog.YooMoneyForm
-    ): String {
+    ): AbsoluteUrl {
         val yooMoneyType = when (type) {
             YooMoneyDialog.TYPE_ID_ACCOUNT -> "PC"
             YooMoneyDialog.TYPE_ID_CARD -> "AC"
@@ -56,5 +57,6 @@ class DonationRemoteDataSource(
                 }
             }
             .raw().request().url().toString()
+            .let { AbsoluteUrl(it) }
     }
 }

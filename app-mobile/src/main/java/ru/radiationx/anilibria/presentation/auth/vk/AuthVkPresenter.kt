@@ -11,6 +11,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.auth.vk.AuthVkScreenState
 import ru.terrakok.cicerone.Router
+import tv.anilibria.core.types.AbsoluteUrl
 import javax.inject.Inject
 
 @InjectViewState
@@ -22,7 +23,7 @@ class AuthVkPresenter @Inject constructor(
     private var resultPattern =
         "(\\?act=widget|anilibria\\.tv\\/public\\/vk\\.php\\?code=|vk\\.com\\/widget_comments\\.php)"
 
-    var argUrl: String = ""
+    lateinit var argUrl: AbsoluteUrl
 
     private val detector = WebAuthSoFastDetector()
     private var currentSuccessUrl: String? = null

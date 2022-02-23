@@ -11,8 +11,8 @@ class ActivityModule(activity: FragmentActivity) : Module() {
 
     init {
         bind(Context::class.java).toInstance(activity)
-        bind(SystemUtils::class.java).toInstance(SystemUtils(activity))
-        bind(CardsDataConverter::class.java).toInstance(CardsDataConverter(activity))
-        bind(DetailDataConverter::class.java).toInstance(DetailDataConverter())
+        bind(SystemUtils::class.java).singleton()
+        bind(CardsDataConverter::class.java).singleton()
+        bind(DetailDataConverter::class.java).singleton()
     }
 }

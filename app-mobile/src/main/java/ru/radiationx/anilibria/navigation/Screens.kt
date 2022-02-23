@@ -23,6 +23,7 @@ import ru.radiationx.anilibria.ui.fragments.release.details.ReleaseFragment
 import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleFragment
 import ru.radiationx.anilibria.ui.fragments.search.SearchCatalogFragment
 import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeFragment
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.release.ReleaseCode
@@ -56,7 +57,7 @@ object Screens {
         override fun getFragment() = Auth2FaCodeFragment.newInstance(login, password)
     }
 
-    class AuthVk(val url: String) : BaseAppScreen() {
+    class AuthVk(val url: AbsoluteUrl) : BaseAppScreen() {
         override fun getFragment() = AuthVkFragment.newInstance(url)
     }
 

@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatColor
 import toothpick.InjectConstructor
+import tv.anilibria.core.types.AbsoluteUrl
 import kotlin.time.Duration.Companion.milliseconds
 
 @InjectConstructor
@@ -62,7 +63,7 @@ class GradientBackgroundManager(
     private var colorApplierJob: Job? = null
     private val colorApplier = MutableStateFlow<Int?>(null)
     private val colorEvaluator = ArgbEvaluatorCompat()
-    private val urlColorMap = mutableMapOf<String, Int>()
+    private val urlColorMap = mutableMapOf<AbsoluteUrl, Int>()
 
     private val defaultColorSelector = { palette: Palette ->
         val lightMuted = palette.getLightMutedColor(defaultColor)
@@ -103,10 +104,14 @@ class GradientBackgroundManager(
     }
 
     fun applyImage(
-        url: String,
+        url: AbsoluteUrl?,
         colorSelector: (Palette) -> Int? = defaultColorSelector,
         colorModifier: (Int) -> Int = defaultColorModifier
     ) {
+        if (url == null) {
+            applyColor(defaultColor, colorModifier)
+            return
+        }
         val color = urlColorMap[url]
         if (colorSelector == defaultColorSelector && color != null) {
             applyColor(color, colorModifier)
@@ -116,7 +121,7 @@ class GradientBackgroundManager(
         imageApplierJob?.cancel()
         imageApplierJob = activity.lifecycleScope.launch {
             runCatching {
-                ImageLoader.getInstance().loadImageSync(url)
+                ImageLoader.getInstance().loadImageSync(url.value)
                     ?.let { Palette.Builder(it).generate() }
                     ?.also { palette ->
                         if (colorSelector == defaultColorSelector) {

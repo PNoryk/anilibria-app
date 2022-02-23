@@ -12,7 +12,7 @@ import ru.radiationx.anilibria.common.GradientBackgroundManager
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModelFromParent
 import ru.radiationx.shared_app.screen.ScopedFragment
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.domain.entity.AuthState
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class ProfileFragment : ScopedFragment(R.layout.fragment_profile),
     lateinit var backgroundManager: GradientBackgroundManager
 
     @Inject
-    lateinit var urlHelper: UrlHelper
+    lateinit var urlHelper: BaseUrlHelper
 
     private val viewModel by viewModelFromParent<ProfileViewModel>()
 

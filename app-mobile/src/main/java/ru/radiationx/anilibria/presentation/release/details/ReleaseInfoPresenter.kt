@@ -17,7 +17,7 @@ import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
@@ -55,7 +55,7 @@ class ReleaseInfoPresenter @Inject constructor(
     private val playerAnalytics: PlayerAnalytics,
     private val donationDetailAnalytics: DonationDetailAnalytics,
     private val appLinkHelper: AppLinkHelper,
-    private val urlHelper: UrlHelper
+    private val urlHelper: BaseUrlHelper
 ) : BasePresenter<ReleaseInfoView>(router) {
 
     private val remindText =

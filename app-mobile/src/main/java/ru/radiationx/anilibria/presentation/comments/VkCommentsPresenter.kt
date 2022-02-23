@@ -17,6 +17,7 @@ import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsScreenState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
 import ru.terrakok.cicerone.Router
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
@@ -43,7 +44,7 @@ class VkCommentsPresenter @Inject constructor(
     var releaseIdCode: ReleaseCode? = null
 
     private var isVisibleToUser = false
-    private var pendingAuthRequest: String? = null
+    private var pendingAuthRequest: AbsoluteUrl? = null
 
     private var hasJsError = false
     private var jsErrorClosed = false
@@ -115,7 +116,7 @@ class VkCommentsPresenter @Inject constructor(
         tryExecutePendingAuthRequest()
     }
 
-    fun authRequest(url: String) {
+    fun authRequest(url: AbsoluteUrl) {
         pendingAuthRequest = url
         tryExecutePendingAuthRequest()
     }

@@ -44,7 +44,7 @@ class FeedReleaseDelegate(
             item_desc.text = Html.fromHtml(state.description)
             ViewCompat.setTransitionName(item_image, "${item.javaClass.simpleName}_${state.id}")
             item_new_indicator.visible(state.isNew)
-            ImageLoader.getInstance().displayImage(state.posterUrl, item_image)
+            ImageLoader.getInstance().displayImage(state.posterUrl?.value, item_image)
 
             containerView.setOnClickListener {
                 clickListener.invoke(state, item_image)

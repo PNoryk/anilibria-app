@@ -14,7 +14,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.fragments.history.HistoryScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.HistoryAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
@@ -36,7 +36,7 @@ class HistoryPresenter @Inject constructor(
     private val releaseAnalytics: ReleaseAnalytics,
     private val shortcutHelper: ShortcutHelper,
     private val appLinkHelper: AppLinkHelper,
-    private val urlHelper: UrlHelper
+    private val urlHelper: BaseUrlHelper
 ) : BasePresenter<HistoryView>(router) {
 
     private val currentReleases = mutableListOf<Release>()

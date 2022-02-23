@@ -45,7 +45,7 @@ class ReleaseItemDelegate(
             item_desc.text = Html.fromHtml(releaseItem.description)
             ViewCompat.setTransitionName(item_image, "${item.javaClass.simpleName}_${releaseItem.id}")
             item_new_indicator.visible(releaseItem.isNew)
-            ImageLoader.getInstance().displayImage(releaseItem.posterUrl, item_image)
+            ImageLoader.getInstance().displayImage(releaseItem.posterUrl?.value, item_image)
 
             containerView.setOnClickListener {
                 itemListener.onItemClick(layoutPosition, item_image)

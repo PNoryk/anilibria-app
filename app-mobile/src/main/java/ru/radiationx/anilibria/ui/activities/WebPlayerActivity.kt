@@ -15,7 +15,7 @@ import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.features.WebPlayerAnalytics
 import tv.anilibria.module.data.preferences.AppTheme
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
@@ -48,7 +48,7 @@ class WebPlayerActivity : BaseActivity() {
     lateinit var webPlayerAnalytics: WebPlayerAnalytics
 
     @Inject
-    lateinit var urlHelper: UrlHelper
+    lateinit var urlHelper: BaseUrlHelper
 
     @Inject
     lateinit var appLinkHelper: AppLinkHelper

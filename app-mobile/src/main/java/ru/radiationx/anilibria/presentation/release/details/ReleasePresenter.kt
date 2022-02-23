@@ -13,7 +13,7 @@ import ru.radiationx.anilibria.ui.fragments.release.details.ReleasePagerState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
@@ -34,7 +34,7 @@ class ReleasePresenter @Inject constructor(
     private val releaseAnalytics: ReleaseAnalytics,
     private val appLinkHelper: AppLinkHelper,
     private val shortcutHelper: ShortcutHelper,
-    private val urlHelper: UrlHelper
+    private val urlHelper: BaseUrlHelper
 ) : BasePresenter<ReleaseView>(router) {
 
     private var currentData: Release? = null

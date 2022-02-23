@@ -9,7 +9,7 @@ import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.repos.SearchRepository
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
@@ -20,7 +20,7 @@ class SuggestionsResultViewModel(
     private val searchRepository: SearchRepository,
     private val router: Router,
     private val suggestionsController: SuggestionsController,
-    private val urlHelper: UrlHelper
+    private val urlHelper: BaseUrlHelper
 ) : LifecycleViewModel() {
 
     private var currentQuery = ""

@@ -4,15 +4,15 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.BaseUrl
 import tv.anilibria.core.types.RelativeUrl
 
-class Urls(
+class BaseUrlsProvider(
     val widgetsSite: BaseUrl,
     val site: BaseUrl,
     val baseImages: BaseUrl,
     val base: BaseUrl,
 )
 
-class UrlHelper(
-    private val urls: Urls
+class BaseUrlHelper(
+    private val urls: BaseUrlsProvider
 ) {
 
     fun makeWidget(url: RelativeUrl?): AbsoluteUrl? {

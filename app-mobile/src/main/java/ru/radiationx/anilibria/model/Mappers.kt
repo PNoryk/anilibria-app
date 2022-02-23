@@ -2,7 +2,7 @@ package ru.radiationx.anilibria.model
 
 import ru.radiationx.anilibria.ui.fragments.other.ProfileItemState
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.entity.feed.Feed
@@ -11,7 +11,7 @@ import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.youtube.Youtube
 
 //todo map isnew
-fun Release.toState(urlHelper: UrlHelper): ReleaseItemState {
+fun Release.toState(urlHelper: BaseUrlHelper): ReleaseItemState {
     val rusTitle = nameRus?.text
     val title = if (series == null) {
         rusTitle.toString()
@@ -27,7 +27,7 @@ fun Release.toState(urlHelper: UrlHelper): ReleaseItemState {
     )
 }
 
-fun Youtube.toState(urlHelper: UrlHelper) = YoutubeItemState(
+fun Youtube.toState(urlHelper: BaseUrlHelper) = YoutubeItemState(
     id = id,
     title = title?.text.orEmpty(),
     image = urlHelper.makeMedia(image),
@@ -35,19 +35,19 @@ fun Youtube.toState(urlHelper: UrlHelper) = YoutubeItemState(
     comments = comments.value.toString()
 )
 
-fun Feed.toState(urlHelper: UrlHelper) = FeedItemState(
+fun Feed.toState(urlHelper: BaseUrlHelper) = FeedItemState(
     release = release?.toState(urlHelper),
     youtube = youtube?.toState(urlHelper)
 )
 
 //todo map iscompleted
-fun Release.toScheduleState(urlHelper: UrlHelper) = ScheduleItemState(
+fun Release.toScheduleState(urlHelper: BaseUrlHelper) = ScheduleItemState(
     releaseId = id,
     posterUrl = urlHelper.makeMedia(poster),
     isCompleted = true
 )
 
-fun User.toState(urlHelper: UrlHelper, authState: AuthState): ProfileItemState {
+fun User.toState(urlHelper: BaseUrlHelper, authState: AuthState): ProfileItemState {
     val hasAuth = authState == AuthState.AUTH
     val title = if (hasAuth) {
         login
@@ -76,7 +76,7 @@ fun SocialAuthService.toState(): SocialAuthItemState = SocialAuthItemState(
     colorRes = color.asDataColorRes()
 )
 
-fun Release.toSuggestionState(urlHelper: UrlHelper, query: String): SuggestionItemState {
+fun Release.toSuggestionState(urlHelper: BaseUrlHelper, query: String): SuggestionItemState {
     val itemTitle = nameRus?.text.orEmpty()
     val matchRanges = try {
         Regex(query, RegexOption.IGNORE_CASE).findAll(itemTitle).map { it.range }.toList()

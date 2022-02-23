@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
@@ -28,15 +27,12 @@ import ru.radiationx.anilibria.ui.fragments.SharedReceiver
 import ru.radiationx.anilibria.ui.fragments.comments.LazyVkCommentsFragment
 import ru.radiationx.anilibria.ui.widgets.ScrimHelper
 import ru.radiationx.anilibria.ui.widgets.UILImageListener
-import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.ToolbarHelper
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
-import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseCode
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
@@ -197,7 +193,7 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
             startPostponedEnterTransition()
         } else {
             ImageLoader.getInstance().displayImage(
-                state.poster,
+                state.poster.value,
                 toolbarImage,
                 defaultOptionsUIL.build(),
                 imageListener
@@ -207,19 +203,6 @@ open class ReleaseFragment : BaseFragment(), ReleaseView, SharedReceiver {
         if (state.title != null) {
             currentTitle = state.title
         }
-    }
-
-    override fun shareRelease(text: String) {
-        Utils.shareText(text)
-    }
-
-    override fun copyLink(url: String) {
-        Utils.copyToClipBoard(url)
-        Toast.makeText(context, "Ссылка скопирована", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun addShortCut(release: Release) {
-        ShortcutHelper.addShortcut(release)
     }
 
     private val imageListener = object : UILImageListener() {

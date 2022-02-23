@@ -17,7 +17,7 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.favorites.FavoritesScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.FavoritesAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
@@ -38,7 +38,7 @@ class FavoritesPresenter @Inject constructor(
     private val releaseAnalytics: ReleaseAnalytics,
     private val appLinkHelper: AppLinkHelper,
     private val shortcutHelper: ShortcutHelper,
-    private val urlHelper: UrlHelper
+    private val urlHelper: BaseUrlHelper
 ) : BasePresenter<FavoritesView>(router) {
 
     private val loadingController = DataLoadingController(viewModelScope) {

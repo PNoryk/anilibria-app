@@ -19,6 +19,7 @@ import ru.radiationx.anilibria.ui.presenter.ReleaseDetailsPresenter
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
@@ -91,7 +92,7 @@ class DetailFragment : ScopedRowsFragment() {
             if (row is ListRow) {
                 backgroundManager.applyCard(item)
             } else if (row is LibriaDetailsRow) {
-                applyImage(row.details?.image.orEmpty())
+                applyImage(row.details?.image)
             }
             if (rowViewHolder is CustomListRowViewHolder) {
                 when (item) {
@@ -164,7 +165,7 @@ class DetailFragment : ScopedRowsFragment() {
         return row
     }
 
-    private fun applyImage(image: String) {
+    private fun applyImage(image: AbsoluteUrl?) {
         backgroundManager.applyImage(image, colorSelector = {
             val swatch = it.darkVibrantSwatch ?: it.vibrantSwatch
             val color = swatch?.rgb

@@ -1,7 +1,6 @@
 package ru.radiationx.anilibria.ui.presenter
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.ImageCardView
@@ -35,22 +34,41 @@ class LibriaCardViewHolder(
     override val containerView: ImageCardView
 ) : Presenter.ViewHolder(containerView), LayoutContainer {
 
-    private val cardHeight by lazy { containerView.context.resources.getDimension(R.dimen.card_height).toInt() }
-    private val cardReleaseWidth by lazy { containerView.context.resources.getDimension(R.dimen.card_release_width).toInt() }
-    private val cardYoutubeWidth by lazy { containerView.context.resources.getDimension(R.dimen.card_youtube_width).toInt() }
+    private val cardHeight by lazy {
+        containerView.context.resources.getDimension(R.dimen.card_height).toInt()
+    }
+    private val cardReleaseWidth by lazy {
+        containerView.context.resources.getDimension(R.dimen.card_release_width).toInt()
+    }
+    private val cardYoutubeWidth by lazy {
+        containerView.context.resources.getDimension(R.dimen.card_youtube_width).toInt()
+    }
 
     fun bind(item: LibriaCard) {
         if (containerView.mainImageView.tag != item.image) {
             when (item.type) {
-                LibriaCard.Type.RELEASE -> containerView.setMainImageDimensions(cardReleaseWidth, cardHeight)
-                LibriaCard.Type.YOUTUBE -> containerView.setMainImageDimensions(cardYoutubeWidth, cardHeight)
+                LibriaCard.Type.RELEASE -> containerView.setMainImageDimensions(
+                    cardReleaseWidth,
+                    cardHeight
+                )
+                LibriaCard.Type.YOUTUBE -> containerView.setMainImageDimensions(
+                    cardYoutubeWidth,
+                    cardHeight
+                )
             }
-            ImageLoader.getInstance().displayImage(item.image, containerView.mainImageView, object : SimpleImageLoadingListener() {
-                override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                    super.onLoadingComplete(imageUri, view, loadedImage)
-                    view?.tag = item.image
-                }
-            })
+            ImageLoader.getInstance().displayImage(
+                item.image?.value,
+                containerView.mainImageView,
+                object : SimpleImageLoadingListener() {
+                    override fun onLoadingComplete(
+                        imageUri: String?,
+                        view: View?,
+                        loadedImage: Bitmap?
+                    ) {
+                        super.onLoadingComplete(imageUri, view, loadedImage)
+                        view?.tag = item.image
+                    }
+                })
         }
     }
 

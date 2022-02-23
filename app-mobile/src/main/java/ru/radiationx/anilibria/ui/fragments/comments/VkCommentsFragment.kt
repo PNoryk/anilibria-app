@@ -30,12 +30,13 @@ import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.common.webpage.compositeWebViewClientOf
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.anilibria.ui.widgets.ExtendedWebView
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.android.toBase64
 import ru.radiationx.shared.ktx.android.toException
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.DI
 import ru.radiationx.shared_app.di.injectDependencies
 import toothpick.Toothpick
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.VkCommentsClient
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import java.io.ByteArrayInputStream
@@ -56,6 +57,9 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
 
     @Inject
     lateinit var preferencesStorage: PreferencesStorage
+
+    @Inject
+    lateinit var appLinkHelper: AppLinkHelper
 
     @InjectPresenter
     lateinit var presenter: VkCommentsPresenter
@@ -271,7 +275,7 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
                     url.orEmpty()
                 }
                 Log.d("kekeke", "tryInterceptAuthCheck $url -> $mobileUrl")
-                presenter.authRequest(mobileUrl)
+                presenter.authRequest(AbsoluteUrl(mobileUrl))
             }
             return null
         }
@@ -327,10 +331,10 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
             loadingFinished = false
 
             if (url.orEmpty().contains(authRequestRegex)) {
-                presenter.authRequest(url.orEmpty())
+                presenter.authRequest(AbsoluteUrl(url.orEmpty()))
                 return true
             }
-            Utils.externalLink(url.orEmpty())
+            appLinkHelper.openLink(AbsoluteUrl(url.orEmpty()))
             return true
         }
 

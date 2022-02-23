@@ -3,10 +3,11 @@ package ru.radiationx.anilibria.ui.activities.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import ru.radiationx.shared_app.di.injectDependencies
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.activities.BaseActivity
-import ru.radiationx.anilibria.utils.Utils
+import ru.radiationx.shared_app.AppLinkHelper
+import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.AbsoluteUrl
 import javax.inject.Inject
 
 /**
@@ -16,6 +17,9 @@ class IntentActivity : BaseActivity() {
 
     @Inject
     lateinit var linkHandler: ILinkHandler
+
+    @Inject
+    lateinit var appLinkHelper: AppLinkHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
@@ -29,7 +33,7 @@ class IntentActivity : BaseActivity() {
                     data = intentUri
                 })
             } else {
-                Utils.externalLink(intentUri.toString())
+                appLinkHelper.openLink(AbsoluteUrl(intentUri.toString()))
             }
         }
         finish()

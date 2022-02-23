@@ -18,7 +18,9 @@ import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.shared.ktx.android.addTextChangeListener
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
@@ -37,7 +39,7 @@ class AuthFragment : BaseFragment(), AuthView {
     }
 
     @Inject
-    lateinit var apiConfig: ApiConfigController
+    lateinit var appLinkHelper: AppLinkHelper
 
     @InjectPresenter
     lateinit var presenter: AuthPresenter
@@ -109,7 +111,7 @@ class AuthFragment : BaseFragment(), AuthView {
                 presenter.onSocialClick(item)
             }
             .setNegativeButton("Личный кабинет") { _, _ ->
-                Utils.externalLink("${apiConfig.getActiveBlocking().site}/pages/cp.php")
+                appLinkHelper.openLink(RelativeUrl("/pages/cp.php"))
             }
             .show()
     }

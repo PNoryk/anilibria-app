@@ -40,7 +40,7 @@ class FeedYoutubeDelegate(
                 item_views_count.text = state.views
                 item_comments_count.text = state.comments
 
-                ImageLoader.getInstance().displayImage(state.image, item_image)
+                ImageLoader.getInstance().displayImage(state.image?.value, item_image)
                 ViewCompat.setTransitionName(item_image, "${item.javaClass.simpleName}_${state.id}")
             }
             itemView.run {

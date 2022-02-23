@@ -2,7 +2,6 @@ package ru.radiationx.anilibria.ui.presenter
 
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ import ru.radiationx.anilibria.common.LibriaDetails
 import ru.radiationx.anilibria.common.LibriaDetailsRow
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.extension.getCompatDrawable
-import ru.radiationx.anilibria.ui.widget.manager.ExternalProgressManager
 
 class ReleaseDetailsPresenter(
     private val continueClickListener: () -> Unit,
@@ -40,7 +38,8 @@ class ReleaseDetailsPresenter(
     }
 
     override fun createRowViewHolder(parent: ViewGroup): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_detail_release, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.row_detail_release, parent, false)
         return LibriaReleaseViewHolder(
             view,
             continueClickListener,
@@ -79,13 +78,15 @@ class LibriaReleaseViewHolder(
         rowReleaseActionFavorite.setOnClickListener { favoriteClickListener.invoke() }
         rowReleaseDescriptionCard.setOnClickListener { descriptionClickListener.invoke() }
         containerView.updateLayoutParams {
-            height = containerView.resources.displayMetrics.heightPixels - 1 // Шобы следующая строка подгрузилась при открытии
+            height =
+                containerView.resources.displayMetrics.heightPixels - 1 // Шобы следующая строка подгрузилась при открытии
         }
     }
 
     fun bind(item: LibriaDetailsRow) {
         containerView.updateLayoutParams {
-            height = containerView.resources.displayMetrics.heightPixels - 1 // Шобы следующая строка подгрузилась при открытии
+            height =
+                containerView.resources.displayMetrics.heightPixels - 1 // Шобы следующая строка подгрузилась при открытии
         }
         item.state?.also { bindState(it) }
         item.details?.also { bindDetails(it) }
@@ -154,13 +155,20 @@ class LibriaReleaseViewHolder(
         }
 
         if (rowReleaseImageCard.tag != details.image) {
-            ImageLoader.getInstance().displayImage(details.image, rowReleaseImageCard, object : SimpleImageLoadingListener() {
+            ImageLoader.getInstance().displayImage(
+                details.image?.value,
+                rowReleaseImageCard,
+                object : SimpleImageLoadingListener() {
 
-                override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                    super.onLoadingComplete(imageUri, view, loadedImage)
-                    view?.tag = details.image
-                }
-            })
+                    override fun onLoadingComplete(
+                        imageUri: String?,
+                        view: View?,
+                        loadedImage: Bitmap?
+                    ) {
+                        super.onLoadingComplete(imageUri, view, loadedImage)
+                        view?.tag = details.image
+                    }
+                })
         }
     }
 }

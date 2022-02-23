@@ -19,13 +19,14 @@ import ru.radiationx.anilibria.ui.fragments.auth.AuthPatternWebViewClient
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.AbsoluteUrl
 
 class AuthVkFragment : BaseFragment(), AuthVkView {
     companion object {
         private const val ARG_URL = "ARG_SOCIAL_URL"
 
-        fun newInstance(url: String) = AuthVkFragment().putExtra {
-            putString(ARG_URL, url)
+        fun newInstance(url: AbsoluteUrl) = AuthVkFragment().putExtra {
+            putParcelable(ARG_URL, url)
         }
     }
 
@@ -54,9 +55,7 @@ class AuthVkFragment : BaseFragment(), AuthVkView {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(screenScope)
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            presenter.argUrl = it.getString(ARG_URL, presenter.argUrl)
-        }
+        presenter.argUrl = requireNotNull(arguments?.getParcelable(ARG_URL))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,9 +90,9 @@ class AuthVkFragment : BaseFragment(), AuthVkView {
         super.onDestroyView()
     }
 
-    override fun loadPage(url: String, resultPattern: String) {
+    override fun loadPage(url: AbsoluteUrl, resultPattern: String) {
         authPatternWebViewClient.resultPattern = resultPattern
-        webView.loadUrl(url)
+        webView.loadUrl(url.value)
     }
 
     override fun showState(state: AuthVkScreenState) {

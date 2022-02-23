@@ -10,10 +10,10 @@ import ru.radiationx.anilibria.model.toState
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
-import ru.radiationx.anilibria.utils.Utils
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
+import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
@@ -34,8 +34,8 @@ class AuthPresenter @Inject constructor(
     private val errorHandler: IErrorHandler,
     private val authMainAnalytics: AuthMainAnalytics,
     private val authSocialAnalytics: AuthSocialAnalytics,
-    private val apiConfig: ApiConfigController,
-    private val authStateHolder: AuthStateHolder
+    private val authStateHolder: AuthStateHolder,
+    private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<AuthView>(router) {
 
     private var currentLogin = ""
@@ -132,7 +132,7 @@ class AuthPresenter @Inject constructor(
     fun registrationToSiteClick() {
         authMainAnalytics.regToSiteClick()
         viewModelScope.launch {
-            Utils.externalLink("${apiConfig.getActive().site}/pages/login.php")
+            appLinkHelper.openLink(RelativeUrl("/pages/login.php"))
         }
     }
 

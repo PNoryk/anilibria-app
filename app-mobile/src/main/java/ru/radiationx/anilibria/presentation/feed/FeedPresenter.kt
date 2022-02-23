@@ -28,7 +28,7 @@ import ru.radiationx.shared.ktx.asDayPretext
 import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.preferences.PreferencesStorage
@@ -66,7 +66,7 @@ class FeedPresenter @Inject constructor(
     private val donationCardAnalytics: DonationCardAnalytics,
     private val shortcutHelper: ShortcutHelper,
     private val appLinkHelper: AppLinkHelper,
-    private val urlHelper: UrlHelper
+    private val urlHelper: BaseUrlHelper
 ) : BasePresenter<FeedView>(router) {
 
     companion object {

@@ -14,7 +14,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CatalogAnalytics
 import tv.anilibria.module.data.analytics.features.FastSearchAnalytics
@@ -33,7 +33,7 @@ class FastSearchPresenter @Inject constructor(
     private val catalogAnalytics: CatalogAnalytics,
     private val fastSearchAnalytics: FastSearchAnalytics,
     private val releaseAnalytics: ReleaseAnalytics,
-    private val urlHelper: UrlHelper,
+    private val urlHelper: BaseUrlHelper,
     private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<FastSearchView>(router) {
 

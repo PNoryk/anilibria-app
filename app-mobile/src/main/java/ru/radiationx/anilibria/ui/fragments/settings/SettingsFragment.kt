@@ -10,16 +10,17 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatDrawable
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
-import ru.radiationx.anilibria.utils.Utils
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.SettingsAnalytics
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsAppTheme
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PrefferedPlayerType
-import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
@@ -40,6 +41,9 @@ class SettingsFragment : BaseSettingFragment() {
 
     @Inject
     lateinit var sharedBuildConfig: SharedBuildConfig
+
+    @Inject
+    lateinit var appLinkHelper: AppLinkHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
@@ -143,7 +147,7 @@ class SettingsFragment : BaseSettingFragment() {
             icon = this.context.getCompatDrawable(R.drawable.ic_anilibria)
             setOnPreferenceClickListener {
                 settingsAnalytics.otherAppsClick()
-                Utils.externalLink("https://anilibria.app/")
+                appLinkHelper.openLink(AbsoluteUrl("https://anilibria.app/"))
                 false
             }
         }
@@ -152,7 +156,7 @@ class SettingsFragment : BaseSettingFragment() {
             icon = this.context.getCompatDrawable(R.drawable.ic_4pda)
             setOnPreferenceClickListener {
                 settingsAnalytics.fourPdaClick()
-                Utils.externalLink("http://4pda.ru/forum/index.php?showtopic=886616")
+                appLinkHelper.openLink(AbsoluteUrl("http://4pda.ru/forum/index.php?showtopic=886616"))
                 false
             }
         }

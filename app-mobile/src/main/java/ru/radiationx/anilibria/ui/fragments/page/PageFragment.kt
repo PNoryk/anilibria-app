@@ -28,6 +28,7 @@ import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
+import tv.anilibria.module.data.BaseUrlsProvider
 import tv.anilibria.module.data.analytics.features.PageAnalytics
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.domain.entity.page.PageLibria
@@ -60,7 +61,7 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
     lateinit var preferencesStorage: PreferencesStorage
 
     @Inject
-    lateinit var apiConfig: ApiConfigController
+    lateinit var baseUrlsProvider: BaseUrlsProvider
 
     @Inject
     lateinit var pageAnalytics: PageAnalytics
@@ -143,7 +144,7 @@ class PageFragment : BaseFragment(), PageView, ExtendedWebView.JsLifeCycleListen
 
         val template = App.instance.staticPageTemplate
         webView.easyLoadData(
-            apiConfig.getActiveBlocking().site,
+            baseUrlsProvider.site.value,
             template.generateWithTheme(preferencesStorage.appTheme.blockingGet())
         )
 

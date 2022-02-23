@@ -42,7 +42,7 @@ class YoutubeDelegate(
                 item_views_count.text = item.state.views
                 item_comments_count.text = item.state.comments
 
-                ImageLoader.getInstance().displayImage(item.state.image, item_image)
+                ImageLoader.getInstance().displayImage(item.state.image?.value, item_image)
                 ViewCompat.setTransitionName(item_image, "${item.javaClass.simpleName}_${item.state.id}")
                 setOnClickListener {
                     itemListener.onItemClick(item.state, layoutPosition)

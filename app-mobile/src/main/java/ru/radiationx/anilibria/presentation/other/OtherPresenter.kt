@@ -19,7 +19,7 @@ import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.AuthStateHolder
-import tv.anilibria.module.data.UrlHelper
+import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.repos.AuthRepository
@@ -46,7 +46,7 @@ class OtherPresenter @Inject constructor(
     private val settingsAnalytics: SettingsAnalytics,
     private val pageAnalytics: PageAnalytics,
     private val donationDetailAnalytics: DonationDetailAnalytics,
-    private val urlHelper: UrlHelper,
+    private val urlHelper: BaseUrlHelper,
     private val appLinkHelper: AppLinkHelper
 ) : BasePresenter<OtherView>(router) {
 

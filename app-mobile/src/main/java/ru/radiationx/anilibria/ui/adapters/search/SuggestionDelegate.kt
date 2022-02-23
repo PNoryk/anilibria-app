@@ -41,7 +41,7 @@ class SuggestionDelegate(
 
         fun bind(state: SuggestionItemState) {
             ImageLoader.getInstance().cancelDisplayTask(item_image)
-            ImageLoader.getInstance().displayImage(state.poster, item_image)
+            ImageLoader.getInstance().displayImage(state.poster?.value, item_image)
             setTitle(state)
 
             containerView.setOnClickListener {

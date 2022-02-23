@@ -58,7 +58,7 @@ class FeedScheduleDelegate(
                 item_image,
                 "${item.javaClass.simpleName}_${state.releaseId}"
             )
-            ImageLoader.getInstance().displayImage(state.posterUrl, item_image)
+            ImageLoader.getInstance().displayImage(state.posterUrl?.value, item_image)
 
             containerView.setOnClickListener {
                 clickListener.invoke(state, item_image, adapterPosition)

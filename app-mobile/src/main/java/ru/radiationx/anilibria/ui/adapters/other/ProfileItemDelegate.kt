@@ -48,7 +48,7 @@ class ProfileItemDelegate(
             profileDesc.text = state.subtitle
             profileLogout.isVisible = state.hasAuth
             profileDesc.isVisible = state.subtitle != null
-            ImageLoader.getInstance().displayImage(state.avatar, profileAvatar)
+            ImageLoader.getInstance().displayImage(state.avatar.value, profileAvatar)
 
             containerView.setOnClickListener { clickListener(state) }
             profileLogout.setOnClickListener { logoutClickListener() }
