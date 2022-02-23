@@ -22,7 +22,7 @@ import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
-import tv.anilibria.module.data.repos.PageRepository
+import tv.anilibria.module.data.repos.OtherRepository
 import tv.anilibria.module.domain.entity.release.ReleaseCode
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject
@@ -30,7 +30,7 @@ import javax.inject.Inject
 @InjectViewState
 class VkCommentsPresenter @Inject constructor(
     private val authStateHolder: AuthStateHolder,
-    private val pageRepository: PageRepository,
+    private val pageRepository: OtherRepository,
     private val releaseInteractor: ReleaseInteractor,
     private val authHolder: AuthVkNotifier,
     private val router: Router,

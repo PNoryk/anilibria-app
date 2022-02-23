@@ -18,7 +18,7 @@ interface OtherApi {
     ): ApiResponse<List<LinkMenuItemResponse>>
 
     @POST
-    suspend fun getLibriaPage(
+    suspend fun getBody(
         @Url url: String
     ): ResponseBody
 

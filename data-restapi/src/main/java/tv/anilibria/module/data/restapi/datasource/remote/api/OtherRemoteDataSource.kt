@@ -17,15 +17,16 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Created by radiationx on 13.01.18.
  */
-class PageRemoteDataSource @Inject constructor(
+// todo проверить, что при ошибке body не возвращается
+class OtherRemoteDataSource @Inject constructor(
     private val pagesParser: PagesParser,
     private val urlProvider: NetworkUrlProvider,
     private val otherApi: NetworkWrapper<OtherApi>
 ) {
 
-    suspend fun getPage(pagePath: String): PageLibria {
+    suspend fun getLibriaPage(pagePath: String): PageLibria {
         return otherApi.proxy()
-            .getLibriaPage("${urlProvider.baseUrl}/$pagePath")
+            .getBody("${urlProvider.baseUrl}/$pagePath")
             .let { pagesParser.baseParse(it.string()) }
             .toDomain()
     }
@@ -49,4 +50,7 @@ class PageRemoteDataSource @Inject constructor(
         ex !is UnknownHostException
     }
 
+    suspend fun getDirectBody(url: String): String {
+        return otherApi.direct().getBody(url).string()
+    }
 }

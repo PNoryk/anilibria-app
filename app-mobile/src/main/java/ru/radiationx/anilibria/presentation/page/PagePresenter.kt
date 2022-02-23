@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.analytics.features.PageAnalytics
-import tv.anilibria.module.data.repos.PageRepository
+import tv.anilibria.module.data.repos.OtherRepository
 import javax.inject.Inject
 
 /**
@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 @InjectViewState
 class PagePresenter @Inject constructor(
-    private val pageRepository: PageRepository,
+    private val pageRepository: OtherRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,
     private val pageAnalytics: PageAnalytics
