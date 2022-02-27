@@ -14,8 +14,8 @@ import tv.anilibria.module.data.analytics.features.DonationDetailAnalytics
 import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
 import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics
 import tv.anilibria.feature.donation.data.DonationRepository
-import tv.anilibria.module.domain.entity.donation.DonationContentButton
-import tv.anilibria.module.domain.entity.donation.DonationInfo
+import tv.anilibria.feature.donation.data.domain.DonationContentButton
+import tv.anilibria.feature.donation.data.domain.DonationInfo
 
 @InjectConstructor
 class DonationDetailPresenter(

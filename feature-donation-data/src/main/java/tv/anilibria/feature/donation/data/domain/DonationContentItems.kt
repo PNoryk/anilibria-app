@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.donation
+package tv.anilibria.feature.donation.data.domain
 
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.HtmlText

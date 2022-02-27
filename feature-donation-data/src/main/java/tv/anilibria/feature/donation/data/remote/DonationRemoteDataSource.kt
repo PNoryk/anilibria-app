@@ -3,8 +3,8 @@ package tv.anilibria.feature.donation.data.remote
 import retrofit2.HttpException
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.domain.entity.donation.DonationInfo
-import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.feature.donation.data.domain.DonationInfo
+import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

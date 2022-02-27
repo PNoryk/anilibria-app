@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.donation
+package tv.anilibria.feature.donation.data.domain
 
 data class DonationCard(
     val title: String,

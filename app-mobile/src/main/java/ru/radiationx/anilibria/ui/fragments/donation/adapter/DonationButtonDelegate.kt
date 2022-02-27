@@ -13,7 +13,7 @@ import ru.radiationx.anilibria.model.asDataColorRes
 import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.anilibria.ui.adapters.ListItem
 import ru.radiationx.anilibria.ui.common.adapters.AppAdapterDelegate
-import tv.anilibria.module.domain.entity.donation.DonationContentButton
+import tv.anilibria.feature.donation.data.domain.DonationContentButton
 
 class DonationButtonDelegate(
     private val clickListener: (DonationContentButton) -> Unit

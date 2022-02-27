@@ -1,7 +1,7 @@
 package tv.anilibria.feature.donation.data.remote
 
 import tv.anilibria.feature.donation.data.remote.entity.content_data.YooMoneyDialogResponse
-import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 
 fun YooMoneyDialogResponse.toDomain() = YooMoneyDialog(
     title = title,

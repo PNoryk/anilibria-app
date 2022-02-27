@@ -1,6 +1,6 @@
 package ru.radiationx.anilibria.presentation.donation.infra
 
-import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 
 
 data class DonationYooMoneyState(

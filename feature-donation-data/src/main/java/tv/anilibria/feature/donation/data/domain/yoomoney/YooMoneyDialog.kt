@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.donation.yoomoney
+package tv.anilibria.feature.donation.data.domain.yoomoney
 
 data class YooMoneyDialog(
     val title: String,

@@ -4,7 +4,7 @@ import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import tv.anilibria.module.domain.entity.donation.DonationInfo
+import tv.anilibria.feature.donation.data.domain.DonationInfo
 
 
 interface DonationDetailView : MvpView {

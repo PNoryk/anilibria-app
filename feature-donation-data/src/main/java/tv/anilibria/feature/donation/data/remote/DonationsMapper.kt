@@ -2,6 +2,7 @@ package tv.anilibria.feature.donation.data.remote
 
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.core.types.asHtmlText
+import tv.anilibria.feature.donation.data.domain.*
 import tv.anilibria.feature.donation.data.remote.entity.DonationCardResponse
 import tv.anilibria.feature.donation.data.remote.entity.DonationContentItemResponse
 import tv.anilibria.feature.donation.data.remote.entity.DonationInfoResponse
@@ -9,7 +10,6 @@ import tv.anilibria.feature.donation.data.remote.entity.content.*
 import tv.anilibria.feature.donation.data.remote.entity.content_data.DonationDialogResponse
 import tv.anilibria.module.data.restapi.entity.mapper.toDataColor
 import tv.anilibria.module.data.restapi.entity.mapper.toDataIcon
-import tv.anilibria.module.domain.entity.donation.*
 
 fun DonationInfoResponse.toDomain() = DonationInfo(
     cardNewDonations = cards.newDonations?.toDomain(),

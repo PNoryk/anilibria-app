@@ -1,7 +1,7 @@
 package ru.radiationx.anilibria.ui.fragments.donation.adapter
 
 import ru.radiationx.anilibria.ui.common.adapters.ListItemAdapter
-import tv.anilibria.module.domain.entity.donation.*
+import tv.anilibria.feature.donation.data.domain.*
 
 class DonationContentAdapter(
     private val buttonClickListener: (DonationContentButton) -> Unit,

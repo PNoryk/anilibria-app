@@ -6,8 +6,8 @@ import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.donation.data.local.DonationInfoLocalDataSource
 import tv.anilibria.feature.donation.data.remote.DonationRemoteDataSource
-import tv.anilibria.module.domain.entity.donation.DonationInfo
-import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.feature.donation.data.domain.DonationInfo
+import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 
 @InjectConstructor
 class DonationRepository(

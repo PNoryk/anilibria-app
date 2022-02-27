@@ -16,7 +16,7 @@ import ru.radiationx.anilibria.ui.fragments.AlertDialogFragment
 import ru.radiationx.anilibria.ui.fragments.donation.adapter.DonationContentAdapter
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared_app.di.getDependency
-import tv.anilibria.module.domain.entity.donation.DonationDialog
+import tv.anilibria.feature.donation.data.domain.DonationDialog
 
 class DonationDialogFragment :
     AlertDialogFragment(R.layout.dialog_donation_content), DonationJoinTeamView {

@@ -1,6 +1,6 @@
-package tv.anilibria.module.domain.entity.donation
+package tv.anilibria.feature.donation.data.domain
 
-import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 
 
 data class DonationInfo(

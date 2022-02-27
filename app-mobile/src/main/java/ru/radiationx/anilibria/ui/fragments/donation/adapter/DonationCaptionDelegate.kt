@@ -9,7 +9,7 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.ui.adapters.ListItem
 import ru.radiationx.anilibria.ui.common.adapters.AppAdapterDelegate
 import ru.radiationx.anilibria.utils.LinkMovementMethod
-import tv.anilibria.module.domain.entity.donation.DonationContentCaption
+import tv.anilibria.feature.donation.data.domain.DonationContentCaption
 
 class DonationCaptionDelegate(
     private val linkClickListener: (String) -> Unit

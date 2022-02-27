@@ -1,7 +1,7 @@
 package tv.anilibria.feature.donation.data.local
 
 import kotlinx.coroutines.flow.Flow
-import tv.anilibria.module.domain.entity.donation.DonationInfo
+import tv.anilibria.feature.donation.data.domain.DonationInfo
 import tv.anilibria.plugin.data.storage.ObservableData
 
 class DonationInfoLocalDataSource {

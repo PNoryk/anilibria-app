@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.donation.jointeam
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import tv.anilibria.module.domain.entity.donation.DonationDialog
+import tv.anilibria.feature.donation.data.domain.DonationDialog
 
 interface DonationJoinTeamView : MvpView {
 

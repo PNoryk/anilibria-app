@@ -21,7 +21,7 @@ import ru.radiationx.anilibria.ui.fragments.AlertDialogFragment
 import ru.radiationx.shared.ktx.android.addTextChangeListener
 import ru.radiationx.shared.ktx.android.bindOptionalViews
 import ru.radiationx.shared_app.di.getDependency
-import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
+import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 
 class DonationYooMoneyDialogFragment :
     AlertDialogFragment(R.layout.dialog_donation_yoomoney), DonationYooMoneyView {
