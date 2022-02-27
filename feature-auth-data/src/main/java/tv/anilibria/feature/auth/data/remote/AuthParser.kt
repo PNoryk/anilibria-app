@@ -1,7 +1,6 @@
 package tv.anilibria.feature.auth.data.remote
 
 import org.json.JSONObject
-import tv.anilibria.module.data.restapi.datasource.remote.nullString
 import tv.anilibria.module.domain.errors.*
 import tv.anilibria.plugin.data.restapi.ApiException
 import javax.inject.Inject

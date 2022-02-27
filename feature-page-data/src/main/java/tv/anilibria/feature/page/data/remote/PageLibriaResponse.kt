@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.entity.app.page
+package tv.anilibria.feature.page.data.remote
 
 /**
  * Created by radiationx on 13.01.18.

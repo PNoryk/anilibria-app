@@ -2,7 +2,7 @@ package tv.anilibria.feature.vkcomments.data.remote
 
 import kotlinx.coroutines.withTimeout
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.restapi.datasource.remote.parsers.PagesParser
+import tv.anilibria.feature.page.data.remote.PagesParser
 import tv.anilibria.module.domain.entity.page.VkComments
 import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.NetworkWrapper
@@ -17,7 +17,7 @@ import kotlin.time.Duration.Companion.seconds
  */
 // todo проверить, что при ошибке body не возвращается
 class VkCommentsRemoteDataSource @Inject constructor(
-    private val pagesParser: PagesParser,
+    private val pagesParser: tv.anilibria.feature.page.data.remote.PagesParser,
     private val urlProvider: NetworkUrlProvider,
     private val otherApi: NetworkWrapper<tv.anilibria.feature.vkcomments.data.remote.VkCommentsApi>
 ) {

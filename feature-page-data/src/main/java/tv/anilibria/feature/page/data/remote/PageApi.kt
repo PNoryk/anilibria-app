@@ -1,10 +1,10 @@
-package tv.anilibria.module.data.restapi.datasource.remote.retrofit
+package tv.anilibria.feature.page.data.remote
 
 import okhttp3.ResponseBody
 import retrofit2.http.POST
 import retrofit2.http.Url
 
-interface OtherApi {
+interface PageApi {
 
     @POST
     suspend fun getBody(

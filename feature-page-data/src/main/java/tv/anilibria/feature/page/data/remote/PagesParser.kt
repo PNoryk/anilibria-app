@@ -1,6 +1,5 @@
-package tv.anilibria.module.data.restapi.datasource.remote.parsers
+package tv.anilibria.feature.page.data.remote
 
-import tv.anilibria.module.data.restapi.entity.app.page.PageLibriaResponse
 import java.util.regex.Pattern
 import javax.inject.Inject
 

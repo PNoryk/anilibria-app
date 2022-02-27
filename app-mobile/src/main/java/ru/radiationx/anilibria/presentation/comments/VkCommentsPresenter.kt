@@ -24,7 +24,6 @@ import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
-import tv.anilibria.module.data.repos.OtherRepository
 import tv.anilibria.module.domain.entity.release.ReleaseCode
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject

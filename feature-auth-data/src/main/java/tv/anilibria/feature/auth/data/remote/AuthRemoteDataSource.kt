@@ -3,7 +3,6 @@ package tv.anilibria.feature.auth.data.remote
 import android.net.Uri
 import org.json.JSONObject
 import retrofit2.HttpException
-import tv.anilibria.module.data.restapi.datasource.remote.nullString
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException

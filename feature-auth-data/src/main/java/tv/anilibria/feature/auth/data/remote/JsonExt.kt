@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.datasource.remote
+package tv.anilibria.feature.auth.data.remote
 
 import org.json.JSONObject
 

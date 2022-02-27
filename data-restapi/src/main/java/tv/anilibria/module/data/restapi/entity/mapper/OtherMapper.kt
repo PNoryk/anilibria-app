@@ -1,16 +1,8 @@
 package tv.anilibria.module.data.restapi.entity.mapper
 
 import kotlinx.datetime.DayOfWeek
-import tv.anilibria.core.types.asHtmlText
-import tv.anilibria.module.data.restapi.entity.app.page.PageLibriaResponse
 import tv.anilibria.module.domain.entity.other.DataColor
 import tv.anilibria.module.domain.entity.other.DataIcon
-import tv.anilibria.module.domain.entity.page.PageLibria
-
-fun PageLibriaResponse.toDomain() = PageLibria(
-    title = title,
-    content = content.asHtmlText()
-)
 
 fun String.asWeekDay(): DayOfWeek {
     val intDay = requireNotNull(toIntOrNull()) {
