@@ -3,7 +3,7 @@ package tv.anilibria.feature.menu.data
 import kotlinx.coroutines.flow.Flow
 import tv.anilibria.feature.menu.data.local.LinkMenuLocalDataSource
 import tv.anilibria.feature.menu.data.remote.MenuRemoteDataSource
-import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 import javax.inject.Inject
 
 class MenuRepository @Inject constructor(

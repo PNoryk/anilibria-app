@@ -1,6 +1,6 @@
 package tv.anilibria.feature.menu.data.remote
 
-import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

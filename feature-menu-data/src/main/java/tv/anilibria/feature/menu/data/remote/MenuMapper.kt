@@ -3,7 +3,7 @@ package tv.anilibria.feature.menu.data.remote
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.core.types.asRelativeUrl
 import tv.anilibria.module.data.restapi.entity.mapper.toDataIcon
-import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 
 fun LinkMenuItemResponse.toDomain() = LinkMenuItem(
     title = title,

@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import tv.anilibria.module.domain.entity.other.LinkMenuItem
+import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
