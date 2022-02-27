@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import tv.anilibria.feature.user.data.local.UserLocalDataSource
 import tv.anilibria.feature.user.data.remote.UserRemoteDataSource
-import tv.anilibria.module.domain.entity.other.User
+import tv.anilibria.feature.user.data.domain.User
 import javax.inject.Inject
 
 /**

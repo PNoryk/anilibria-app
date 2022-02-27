@@ -1,8 +1,6 @@
-package tv.anilibria.module.domain.entity.other
+package tv.anilibria.feature.user.data.domain
 
 import tv.anilibria.core.types.RelativeUrl
-
-data class UserId(val id: Long)
 
 data class User(
     val id: UserId,

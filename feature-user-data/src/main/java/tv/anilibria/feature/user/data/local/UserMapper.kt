@@ -1,8 +1,8 @@
 package tv.anilibria.feature.user.data.local
 
 import tv.anilibria.core.types.asRelativeUrl
-import tv.anilibria.module.domain.entity.other.User
-import tv.anilibria.module.domain.entity.other.UserId
+import tv.anilibria.feature.user.data.domain.User
+import tv.anilibria.feature.user.data.domain.UserId
 
 fun User.toLocal() = UserLocal(
     id = id.id,

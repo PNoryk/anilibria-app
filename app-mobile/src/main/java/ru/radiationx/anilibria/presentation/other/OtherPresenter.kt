@@ -26,7 +26,7 @@ import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.menu.data.MenuRepository
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.menu.data.domain.LinkMenuItem
-import tv.anilibria.module.domain.entity.other.User
+import tv.anilibria.feature.user.data.domain.User
 import javax.inject.Inject
 
 @InjectViewState

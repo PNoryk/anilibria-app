@@ -1,7 +1,7 @@
 package ru.radiationx.anilibria.ui.fragments.other
 
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.domain.entity.other.UserId
+import tv.anilibria.feature.user.data.domain.UserId
 
 data class ProfileScreenState(
     val profile: ProfileItemState? = null,
