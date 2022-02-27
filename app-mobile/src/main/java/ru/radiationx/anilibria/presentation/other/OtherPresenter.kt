@@ -24,7 +24,7 @@ import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.menu.data.MenuRepository
-import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import tv.anilibria.module.domain.entity.other.User
 import javax.inject.Inject

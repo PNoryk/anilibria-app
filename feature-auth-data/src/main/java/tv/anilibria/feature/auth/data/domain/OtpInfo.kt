@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.auth
+package tv.anilibria.feature.auth.data.domain
 
 import kotlinx.datetime.Instant
 import kotlin.time.Duration

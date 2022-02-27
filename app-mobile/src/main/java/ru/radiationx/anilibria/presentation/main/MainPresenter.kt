@@ -16,7 +16,7 @@ import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.feature.donation.data.DonationRepository
-import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 import javax.inject.Inject
 

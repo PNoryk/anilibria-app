@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity
+package tv.anilibria.feature.auth.data.domain
 
 /**
  * Created by radiationx on 30.12.17.

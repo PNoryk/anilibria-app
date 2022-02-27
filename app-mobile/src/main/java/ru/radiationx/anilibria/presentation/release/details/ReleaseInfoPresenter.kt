@@ -31,7 +31,7 @@ import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
 import tv.anilibria.module.data.repos.HistoryRepository
-import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.*
 import javax.inject.Inject

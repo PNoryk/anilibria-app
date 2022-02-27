@@ -4,8 +4,8 @@ import kotlinx.datetime.Instant
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.module.data.restapi.entity.mapper.toDataColor
 import tv.anilibria.module.data.restapi.entity.mapper.toDataIcon
-import tv.anilibria.module.domain.entity.auth.OtpInfo
-import tv.anilibria.module.domain.entity.auth.SocialAuthService
+import tv.anilibria.feature.auth.data.domain.OtpInfo
+import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import kotlin.time.Duration.Companion.seconds
 
 fun OtpInfoResponse.toDomain() = OtpInfo(

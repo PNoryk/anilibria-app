@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.auth
+package tv.anilibria.feature.auth.data.domain
 
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.domain.entity.other.DataColor

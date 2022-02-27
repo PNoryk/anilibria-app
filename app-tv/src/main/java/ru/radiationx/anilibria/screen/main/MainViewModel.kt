@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.common.BaseRowsViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
-import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.feature.auth.data.domain.AuthState
 
 @InjectConstructor
 class MainViewModel(

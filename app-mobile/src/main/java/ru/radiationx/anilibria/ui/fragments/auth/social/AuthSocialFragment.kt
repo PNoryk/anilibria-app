@@ -23,7 +23,7 @@ import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.module.domain.entity.auth.SocialAuthService
+import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 

@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import tv.anilibria.feature.auth.data.local.DeviceIdLocalDataSource
 import tv.anilibria.feature.auth.data.local.SocialAuthLocalDataSource
 import tv.anilibria.feature.auth.data.remote.AuthRemoteDataSource
-import tv.anilibria.module.domain.entity.auth.OtpInfo
-import tv.anilibria.module.domain.entity.auth.SocialAuthService
+import tv.anilibria.feature.auth.data.domain.OtpInfo
+import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import javax.inject.Inject
 
 /**

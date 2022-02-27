@@ -11,7 +11,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.feature.auth.data.AuthStateHolder
-import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.module.domain.entity.release.ReleaseId
 
 @InjectConstructor

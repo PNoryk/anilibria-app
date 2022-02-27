@@ -5,7 +5,7 @@ import tv.anilibria.module.data.preferences.AppTheme
 import tv.anilibria.module.data.preferences.PrefferedPlayerPipMode
 import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PrefferedPlayerType
-import tv.anilibria.module.domain.entity.AuthState
+import tv.anilibria.feature.auth.data.domain.AuthState
 
 fun AppTheme.toAnalyticsAppTheme(): AnalyticsAppTheme = when (this) {
     AppTheme.LIGHT -> AnalyticsAppTheme.LIGHT
