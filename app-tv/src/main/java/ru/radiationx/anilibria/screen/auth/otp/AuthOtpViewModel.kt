@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.errors.OtpNotAcceptedException
 import tv.anilibria.module.domain.errors.OtpNotFoundException

@@ -18,7 +18,7 @@ import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsScreenState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthVkAnalytics

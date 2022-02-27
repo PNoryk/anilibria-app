@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import ru.radiationx.anilibria.common.BaseRowsViewModel
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.HistoryRepository
 import tv.anilibria.module.domain.entity.release.ReleaseCode

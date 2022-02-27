@@ -6,9 +6,9 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
-import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.errors.WrongPasswordException
 import javax.inject.Inject

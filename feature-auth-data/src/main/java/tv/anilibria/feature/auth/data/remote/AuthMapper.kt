@@ -1,9 +1,9 @@
-package tv.anilibria.module.data.restapi.entity.mapper
+package tv.anilibria.feature.auth.data.remote
 
 import kotlinx.datetime.Instant
 import tv.anilibria.core.types.asAbsoluteUrl
-import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
-import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthServiceResponse
+import tv.anilibria.module.data.restapi.entity.mapper.toDataColor
+import tv.anilibria.module.data.restapi.entity.mapper.toDataIcon
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import kotlin.time.Duration.Companion.seconds

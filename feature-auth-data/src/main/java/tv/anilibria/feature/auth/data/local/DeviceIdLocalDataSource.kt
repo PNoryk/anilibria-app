@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.local.holders
+package tv.anilibria.feature.auth.data.local
 
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.storageStringKey

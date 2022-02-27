@@ -11,7 +11,7 @@ import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.auth.social.AuthSocialScreenState
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
-import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
 import javax.inject.Inject

@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.feature.auth.data.AuthRepository
 
 @InjectConstructor
 class AuthCredentialsViewModel(

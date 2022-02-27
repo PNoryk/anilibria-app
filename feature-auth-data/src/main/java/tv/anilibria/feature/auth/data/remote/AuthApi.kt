@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.datasource.remote.retrofit
+package tv.anilibria.feature.auth.data.remote
 
 import okhttp3.FormBody
 import okhttp3.ResponseBody
@@ -6,8 +6,6 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Url
-import tv.anilibria.module.data.restapi.entity.app.auth.OtpInfoResponse
-import tv.anilibria.module.data.restapi.entity.app.auth.SocialAuthServiceResponse
 import tv.anilibria.plugin.data.restapi.ApiResponse
 
 interface AuthApi {

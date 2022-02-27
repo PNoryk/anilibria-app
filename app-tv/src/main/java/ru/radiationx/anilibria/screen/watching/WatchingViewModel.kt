@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.common.BaseRowsViewModel
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.HistoryRepository
 import tv.anilibria.module.domain.entity.AuthState

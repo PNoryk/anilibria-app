@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.entity.app.auth
+package tv.anilibria.feature.auth.data.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

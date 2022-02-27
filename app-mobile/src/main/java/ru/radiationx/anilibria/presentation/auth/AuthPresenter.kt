@@ -14,11 +14,11 @@ import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
 import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
-import tv.anilibria.module.data.repos.AuthRepository
+import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.errors.EmptyFieldException
 import javax.inject.Inject

@@ -16,7 +16,7 @@ import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.common.SystemUtils
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants

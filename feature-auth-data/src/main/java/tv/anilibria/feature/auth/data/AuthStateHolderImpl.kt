@@ -1,4 +1,4 @@
-package tv.anilibria.module.data
+package tv.anilibria.feature.auth.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine

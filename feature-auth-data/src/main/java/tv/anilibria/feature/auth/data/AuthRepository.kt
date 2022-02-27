@@ -1,9 +1,9 @@
-package tv.anilibria.module.data.repos
+package tv.anilibria.feature.auth.data
 
 import kotlinx.coroutines.flow.Flow
-import tv.anilibria.module.data.local.holders.DeviceIdLocalDataSource
-import tv.anilibria.module.data.local.holders.SocialAuthLocalDataSource
-import tv.anilibria.module.data.restapi.datasource.remote.api.AuthRemoteDataSource
+import tv.anilibria.feature.auth.data.local.DeviceIdLocalDataSource
+import tv.anilibria.feature.auth.data.local.SocialAuthLocalDataSource
+import tv.anilibria.feature.auth.data.remote.AuthRemoteDataSource
 import tv.anilibria.module.domain.entity.auth.OtpInfo
 import tv.anilibria.module.domain.entity.auth.SocialAuthService
 import javax.inject.Inject

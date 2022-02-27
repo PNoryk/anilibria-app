@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.screen.AuthCredentialsGuidedScreen
 import ru.radiationx.anilibria.screen.AuthOtpGuidedScreen
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 
 @InjectConstructor
 class AuthViewModel(

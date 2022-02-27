@@ -2,7 +2,7 @@ package tv.anilibria.module.data.analytics
 
 import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.features.mapper.*
 import tv.anilibria.module.data.preferences.PreferencesStorage
 

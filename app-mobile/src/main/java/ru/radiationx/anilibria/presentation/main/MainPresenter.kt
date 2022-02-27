@@ -11,7 +11,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.Screen
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
-import tv.anilibria.module.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.preferences.PreferencesStorage
