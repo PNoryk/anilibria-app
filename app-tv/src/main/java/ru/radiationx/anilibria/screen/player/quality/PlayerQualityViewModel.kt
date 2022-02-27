@@ -9,8 +9,8 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.domain.entity.release.EpisodeId
 
 @InjectConstructor

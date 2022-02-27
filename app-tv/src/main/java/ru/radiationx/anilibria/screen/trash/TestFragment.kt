@@ -14,7 +14,8 @@ import ru.radiationx.shared_app.screen.ScopedFragment
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
-class TestFragment : ScopedFragment(R.layout.test_fragment), BrowseSupportFragment.MainFragmentAdapterProvider {
+class TestFragment : ScopedFragment(R.layout.test_fragment),
+    BrowseSupportFragment.MainFragmentAdapterProvider {
 
     private val selfMainFragmentAdapter by lazy { BrowseSupportFragment.MainFragmentAdapter(this) }
 
@@ -40,7 +41,8 @@ class TestFragment : ScopedFragment(R.layout.test_fragment), BrowseSupportFragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        testText.text = "${dependencyInjector.parentScopeTag} > ${dependencyInjector.screenScopeTag}"
+        testText.text =
+            "${dependencyInjector.parentScopeTag} > ${dependencyInjector.screenScopeTag}"
         btnback.setOnClickListener {
             router.exit()
         }

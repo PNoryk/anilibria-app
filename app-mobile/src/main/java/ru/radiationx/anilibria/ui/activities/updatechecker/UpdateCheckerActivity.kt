@@ -16,7 +16,6 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getCompatColor
 import ru.radiationx.anilibria.presentation.checker.CheckerPresenter
@@ -24,6 +23,7 @@ import ru.radiationx.anilibria.presentation.checker.CheckerView
 import ru.radiationx.anilibria.ui.activities.BaseActivity
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.common.SystemUtils
 import ru.radiationx.shared_app.di.getDependency
 import ru.radiationx.shared_app.di.injectDependencies

@@ -28,22 +28,18 @@ import ru.radiationx.anilibria.extension.ContextKt;
  */
 
 public class ExtendedWebView extends NestedWebView implements IBase {
-    private final String LOG_TAG = ExtendedWebView.class.getSimpleName() + ": " + Integer.toHexString(System.identityHashCode(this));
     public final static int DIRECTION_NONE = 0;
     public final static int DIRECTION_UP = 1;
     public final static int DIRECTION_DOWN = 2;
+    private final String LOG_TAG = ExtendedWebView.class.getSimpleName() + ": " + Integer.toHexString(System.identityHashCode(this));
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
+    private final Queue<Runnable> actionsForWebView = new LinkedList<>();
     private int direction = DIRECTION_NONE;
     private boolean isJsReady = false;
-
     private OnDirectionListener onDirectionListener;
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private Thread mUiThread;
-    private final Queue<Runnable> actionsForWebView = new LinkedList<>();
     private JsLifeCycleListener jsLifeCycleListener;
-
-    public interface OnDirectionListener {
-        void onDirectionChanged(int direction);
-    }
+    private OnStartActionModeListener actionModeListener;
 
     public ExtendedWebView(Context context) {
         super(context);
@@ -256,13 +252,6 @@ public class ExtendedWebView extends NestedWebView implements IBase {
         this.jsLifeCycleListener = jsLifeCycleListener;
     }
 
-    public interface JsLifeCycleListener {
-        void onDomContentComplete(final ArrayList<String> actions);
-
-        void onPageComplete(final ArrayList<String> actions);
-    }
-
-
     public void syncWithJs(final Runnable action) {
         Log.d(LOG_TAG, "syncWithJs " + isJsReady);
         if (!isJsReady) {
@@ -278,22 +267,16 @@ public class ExtendedWebView extends NestedWebView implements IBase {
         }
     }
 
+    public void setActionModeListener(OnStartActionModeListener actionModeListener) {
+        this.actionModeListener = actionModeListener;
+    }
+
 
 
 
     /*
      * OVERRIDE CONTEXT MENU
      * */
-
-    private OnStartActionModeListener actionModeListener;
-
-    public interface OnStartActionModeListener {
-        void OnStart(ActionMode actionMode, ActionMode.Callback callback, int type);
-    }
-
-    public void setActionModeListener(OnStartActionModeListener actionModeListener) {
-        this.actionModeListener = actionModeListener;
-    }
 
     @Override
     public ActionMode startActionMode(ActionMode.Callback callback) {
@@ -342,5 +325,19 @@ public class ExtendedWebView extends NestedWebView implements IBase {
         clearFocus();
         clearFormData();
         clearMatches();
+    }
+
+    public interface OnDirectionListener {
+        void onDirectionChanged(int direction);
+    }
+
+    public interface JsLifeCycleListener {
+        void onDomContentComplete(final ArrayList<String> actions);
+
+        void onPageComplete(final ArrayList<String> actions);
+    }
+
+    public interface OnStartActionModeListener {
+        void OnStart(ActionMode actionMode, ActionMode.Callback callback, int type);
     }
 }

@@ -10,8 +10,8 @@ import ru.radiationx.anilibria.screen.*
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Episode
@@ -225,13 +225,17 @@ class PlayerViewModel(
         }
     }
 
-    private fun handleRawQuality(quality: PrefferedPlayerQuality): PrefferedPlayerQuality = when (quality) {
-        PrefferedPlayerQuality.NOT_SELECTED,
-        PrefferedPlayerQuality.ALWAYS_ASK -> PrefferedPlayerQuality.SD
-        else -> quality
-    }
+    private fun handleRawQuality(quality: PrefferedPlayerQuality): PrefferedPlayerQuality =
+        when (quality) {
+            PrefferedPlayerQuality.NOT_SELECTED,
+            PrefferedPlayerQuality.ALWAYS_ASK -> PrefferedPlayerQuality.SD
+            else -> quality
+        }
 
-    private fun getEpisodeQuality(episode: Episode, quality: PrefferedPlayerQuality): PrefferedPlayerQuality? {
+    private fun getEpisodeQuality(
+        episode: Episode,
+        quality: PrefferedPlayerQuality
+    ): PrefferedPlayerQuality? {
         var newQuality: PrefferedPlayerQuality? = quality
 
         if (newQuality == PrefferedPlayerQuality.FULL_HD && episode.urlFullHd == null) {

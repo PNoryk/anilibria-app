@@ -7,7 +7,6 @@ import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import dev.rx.tvtest.cust.CustomListRowPresenter
 import dev.rx.tvtest.cust.CustomListRowViewHolder
-import ru.radiationx.anilibria.common.LinkCard
 import ru.radiationx.anilibria.common.*
 import ru.radiationx.anilibria.common.fragment.scoped.ScopedBrowseFragment
 import ru.radiationx.anilibria.extension.applyCard

@@ -1,6 +1,5 @@
 package ru.radiationx.anilibria.ui.adapters.release.detail
 
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat

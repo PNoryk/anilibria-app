@@ -30,7 +30,11 @@ class SearchFragment : BaseVerticalGridFragment() {
     private val cardsViewModel by viewModel<SearchViewModel>()
     private val formViewModel by viewModel<SearchFormViewModel>()
 
-    override fun onInflateTitleView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): View {
+    override fun onInflateTitleView(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.lb_search_titleview, parent, false)
     }
 

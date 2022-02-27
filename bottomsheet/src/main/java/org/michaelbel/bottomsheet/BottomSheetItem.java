@@ -31,7 +31,8 @@ public class BottomSheetItem {
     public Drawable icon;
     public CharSequence text;
 
-    public BottomSheetItem() {}
+    public BottomSheetItem() {
+    }
 
     public BottomSheetItem(CharSequence text, Drawable icon) {
         this.text = text;

@@ -4,10 +4,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.donation.data.local.DonationInfoLocalDataSource
-import tv.anilibria.feature.donation.data.remote.DonationRemoteDataSource
 import tv.anilibria.feature.donation.data.domain.DonationInfo
 import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
+import tv.anilibria.feature.donation.data.local.DonationInfoLocalDataSource
+import tv.anilibria.feature.donation.data.remote.DonationRemoteDataSource
 
 @InjectConstructor
 class DonationRepository(

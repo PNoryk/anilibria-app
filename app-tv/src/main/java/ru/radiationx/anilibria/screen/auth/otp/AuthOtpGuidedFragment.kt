@@ -85,12 +85,13 @@ class AuthOtpGuidedFragment : ScopedGuidedStepFragment() {
         }
     }
 
-    override fun onCreateGuidance(savedInstanceState: Bundle?): GuidanceStylist.Guidance = GuidanceStylist.Guidance(
-        "Запрашивается код",
-        "Запрашивается код",
-        "Авторизация",
-        null
-    )
+    override fun onCreateGuidance(savedInstanceState: Bundle?): GuidanceStylist.Guidance =
+        GuidanceStylist.Guidance(
+            "Запрашивается код",
+            "Запрашивается код",
+            "Авторизация",
+            null
+        )
 
     override fun onCreateActionsStylist(): GuidedActionsStylist = GuidedProgressActionsStylist()
 
@@ -107,6 +108,7 @@ class AuthOtpGuidedFragment : ScopedGuidedStepFragment() {
         super.onCreateActions(actions, savedInstanceState)
         actions.add(completeAction)
     }
+
     private fun GuidedProgressAction.updateProgress(progress: Boolean) {
         updateAction {
             showProgress = progress

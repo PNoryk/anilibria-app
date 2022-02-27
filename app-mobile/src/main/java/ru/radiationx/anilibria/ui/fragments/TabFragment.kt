@@ -14,8 +14,6 @@ import androidx.transition.*
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.di.MessengerModule
 import ru.radiationx.anilibria.di.RouterModule
-import ru.radiationx.shared_app.di.getDependency
-import ru.radiationx.shared_app.di.injectDependencies
 import ru.radiationx.anilibria.navigation.BaseAppScreen
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.common.BackButtonListener
@@ -24,6 +22,8 @@ import ru.radiationx.anilibria.ui.common.ScopeProvider
 import ru.radiationx.anilibria.ui.common.ScreenMessagesObserver
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared_app.di.DI
+import ru.radiationx.shared_app.di.getDependency
+import ru.radiationx.shared_app.di.injectDependencies
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -67,7 +67,11 @@ class TabFragment : Fragment(), ScopeProvider, BackButtonListener, IntentHandler
     private val navigationQueue = mutableListOf<Runnable>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies(arrayOf(RouterModule(screenScope), MessengerModule()), DI.DEFAULT_SCOPE, screenScope)
+        injectDependencies(
+            arrayOf(RouterModule(screenScope), MessengerModule()),
+            DI.DEFAULT_SCOPE,
+            screenScope
+        )
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(screenMessagesObserver)
         navigationQueue.add(Runnable {
@@ -75,7 +79,11 @@ class TabFragment : Fragment(), ScopeProvider, BackButtonListener, IntentHandler
         })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_tab_root, container, false)
     }
 
@@ -202,7 +210,9 @@ class TabFragment : Fragment(), ScopeProvider, BackButtonListener, IntentHandler
             currentFragment.exitTransition = enterFade
 
             val enterTransitionSet = TransitionSet()
-            enterTransitionSet.addTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.move))
+            enterTransitionSet.addTransition(
+                TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            )
             enterTransitionSet.setPathMotion(ArcMotion())
             enterTransitionSet.interpolator = FastOutSlowInInterpolator()
             enterTransitionSet.duration = TRANSITION_MOVE_TIME

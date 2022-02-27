@@ -6,7 +6,6 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import androidx.annotation.RequiresApi
-import java.lang.Exception
 
 fun SslError?.toException(): Exception {
     return Exception("onReceivedSslError $this")
@@ -21,7 +20,7 @@ fun WebResourceResponse?.toException(request: WebResourceRequest?): Exception {
 
 @RequiresApi(Build.VERSION_CODES.M)
 fun WebResourceError?.toException(request: WebResourceRequest?): Exception {
-    val description =this?.description.toString()
+    val description = this?.description.toString()
     val errorCode = this?.errorCode.toString()
     val url = request?.url.toString()
     return Exception("onReceivedError desc='$description', code='$errorCode', url='$url'")

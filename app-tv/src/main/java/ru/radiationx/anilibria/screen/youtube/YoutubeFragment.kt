@@ -5,7 +5,6 @@ import android.view.View
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.VerticalGridPresenter
-import ru.radiationx.anilibria.common.LinkCard
 import ru.radiationx.anilibria.common.*
 import ru.radiationx.anilibria.common.fragment.GridFragment
 import ru.radiationx.anilibria.extension.applyCard
@@ -32,23 +31,24 @@ class YoutubeFragment : GridFragment() {
         }
 
         backgroundManager.clearGradient()
-        onItemViewSelectedListener = OnItemViewSelectedListener { itemViewHolder, item, rowViewHolder, row ->
-            backgroundManager.applyCard(item)
-            when (item) {
-                is LibriaCard -> {
-                    setDescription(item.title, item.description)
-                }
-                is LinkCard -> {
-                    setDescription(item.title, "")
-                }
-                is LoadingCard -> {
-                    setDescription(item.title, item.description)
-                }
-                else -> {
-                    setDescription("", "")
+        onItemViewSelectedListener =
+            OnItemViewSelectedListener { itemViewHolder, item, rowViewHolder, row ->
+                backgroundManager.applyCard(item)
+                when (item) {
+                    is LibriaCard -> {
+                        setDescription(item.title, item.description)
+                    }
+                    is LinkCard -> {
+                        setDescription(item.title, "")
+                    }
+                    is LoadingCard -> {
+                        setDescription(item.title, item.description)
+                    }
+                    else -> {
+                        setDescription("", "")
+                    }
                 }
             }
-        }
 
 
         this.adapter = gridAdapter

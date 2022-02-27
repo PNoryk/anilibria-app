@@ -9,12 +9,12 @@ import kotlinx.android.synthetic.main.fragment_configuring.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.radiationx.anilibria.R
-import ru.radiationx.shared_app.di.injectDependencies
 import ru.radiationx.anilibria.presentation.configuring.ConfiguringPresenter
 import ru.radiationx.anilibria.presentation.configuring.ConfiguringView
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
+import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.feature.networkconfig.data.ConfigScreenState
 
 class ConfiguringFragment : BaseFragment(), ConfiguringView {
@@ -23,7 +23,8 @@ class ConfiguringFragment : BaseFragment(), ConfiguringView {
     lateinit var presenter: ConfiguringPresenter
 
     @ProvidePresenter
-    fun provideAuthPresenter(): ConfiguringPresenter = getDependency(ConfiguringPresenter::class.java, screenScope)
+    fun provideAuthPresenter(): ConfiguringPresenter =
+        getDependency(ConfiguringPresenter::class.java, screenScope)
 
     override fun getBaseLayout(): Int = R.layout.fragment_configuring
 

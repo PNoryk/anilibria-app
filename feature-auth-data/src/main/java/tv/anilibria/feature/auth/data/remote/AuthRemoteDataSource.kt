@@ -6,10 +6,10 @@ import retrofit2.HttpException
 import tv.anilibria.feature.auth.data.domain.OtpInfo
 import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import tv.anilibria.module.domain.errors.SocialAuthException
+import tv.anilibria.plugin.data.network.NetworkUrlProvider
+import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.ApiException
-import tv.anilibria.plugin.data.network.NetworkWrapper
-import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 

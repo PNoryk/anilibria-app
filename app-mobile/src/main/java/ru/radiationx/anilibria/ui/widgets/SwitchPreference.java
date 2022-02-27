@@ -12,9 +12,9 @@ import androidx.preference.SwitchPreferenceCompat;
  */
 
 /*
-* Исправляет самопроизвольные переключения настроек в киткате.
-* Пи*дец, да.
-* */
+ * Исправляет самопроизвольные переключения настроек в киткате.
+ * Пи*дец, да.
+ * */
 public class SwitchPreference extends SwitchPreferenceCompat {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public SwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {

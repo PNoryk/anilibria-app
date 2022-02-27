@@ -47,10 +47,10 @@ import ru.terrakok.cicerone.commands.Back
 import ru.terrakok.cicerone.commands.Command
 import ru.terrakok.cicerone.commands.Replace
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
+import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.preferences.AppTheme
 import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 import kotlin.math.max

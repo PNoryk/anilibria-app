@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nostra13.universalimageloader.core.ImageLoader
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_feed_release.*
-import kotlinx.android.synthetic.main.item_feed_youtube.view.*
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.ReleaseItemState
 import ru.radiationx.anilibria.ui.adapters.BaseItemListener
@@ -43,7 +42,10 @@ class ReleaseItemDelegate(
             item_title.text = releaseItem.title
 
             item_desc.text = Html.fromHtml(releaseItem.description)
-            ViewCompat.setTransitionName(item_image, "${item.javaClass.simpleName}_${releaseItem.id}")
+            ViewCompat.setTransitionName(
+                item_image,
+                "${item.javaClass.simpleName}_${releaseItem.id}"
+            )
             item_new_indicator.visible(releaseItem.isNew)
             ImageLoader.getInstance().displayImage(releaseItem.posterUrl?.value, item_image)
 

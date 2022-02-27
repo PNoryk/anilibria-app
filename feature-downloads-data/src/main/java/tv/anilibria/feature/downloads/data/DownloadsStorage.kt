@@ -3,8 +3,8 @@ package tv.anilibria.feature.downloads.data
 import kotlinx.coroutines.runBlocking
 import toothpick.InjectConstructor
 import tv.anilibria.plugin.data.storage.DataStorage
-import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.ModelStorageDataHolder
+import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.storageStringKey
 
 @InjectConstructor

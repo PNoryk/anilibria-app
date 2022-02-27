@@ -23,7 +23,11 @@ class GuidedStepNavigator(
     private val activityFragmentManager = activity.supportFragmentManager
 
     private val backStack: List<FragmentManager.BackStackEntry>
-        get() = (0 until fragmentManager.backStackEntryCount).map { fragmentManager.getBackStackEntryAt(it) }
+        get() = (0 until fragmentManager.backStackEntryCount).map {
+            fragmentManager.getBackStackEntryAt(
+                it
+            )
+        }
 
     fun backStackById(id: Int): FragmentManager.BackStackEntry? = backStack.find { it.id == id }
 
@@ -55,7 +59,8 @@ class GuidedStepNavigator(
         Log.e("GuidedStepNavigator", "guidedForward ${command.screen}")
         if (command.screen is GuidedAppScreen) {
             val screen = command.screen as GuidedAppScreen
-            val fragment = screen.fragment ?: throw RuntimeException("Can't create fragment for $screen")
+            val fragment =
+                screen.fragment ?: throw RuntimeException("Can't create fragment for $screen")
 
             fragment.putScopeArgument(getActualScopeProvider().screenScopeTag)
 
@@ -64,7 +69,11 @@ class GuidedStepNavigator(
                 .also {
                     GuidedStepFragmentHelper.prepare(activity.supportFragmentManager, it, fragment)
                 }
-                .replace(android.R.id.content, fragment, GuidedStepFragmentHelper.TAG_LEAN_BACK_ACTIONS_FRAGMENT)
+                .replace(
+                    android.R.id.content,
+                    fragment,
+                    GuidedStepFragmentHelper.TAG_LEAN_BACK_ACTIONS_FRAGMENT
+                )
                 .addToBackStack(screen.screenKey)
                 .commit()
 
@@ -79,11 +88,13 @@ class GuidedStepNavigator(
         Log.e("GuidedStepNavigator", "guidedForward ${command.screen}")
         if (command.screen is GuidedAppScreen) {
             val screen = command.screen as GuidedAppScreen
-            val fragment = screen.fragment ?: throw RuntimeException("Can't create fragment for $screen")
+            val fragment =
+                screen.fragment ?: throw RuntimeException("Can't create fragment for $screen")
 
             fragment.putScopeArgument(getActualScopeProvider().screenScopeTag)
 
-            val currentFragment = GuidedStepSupportFragment.getCurrentGuidedStepSupportFragment(fragmentManager)
+            val currentFragment =
+                GuidedStepSupportFragment.getCurrentGuidedStepSupportFragment(fragmentManager)
             if (guidedStack.isNotEmpty() && currentFragment != null) {
                 fragmentManager.popBackStackImmediate()
                 guidedStack.removeLast()
@@ -94,7 +105,11 @@ class GuidedStepNavigator(
                 .also {
                     GuidedStepFragmentHelper.prepare(activity.supportFragmentManager, it, fragment)
                 }
-                .replace(android.R.id.content, fragment, GuidedStepFragmentHelper.TAG_LEAN_BACK_ACTIONS_FRAGMENT)
+                .replace(
+                    android.R.id.content,
+                    fragment,
+                    GuidedStepFragmentHelper.TAG_LEAN_BACK_ACTIONS_FRAGMENT
+                )
                 .addToBackStack(screen.screenKey)
                 .commit()
 
@@ -121,13 +136,16 @@ class GuidedStepNavigator(
     }
 
     protected fun guidedBack() {
-        val currentFragment = GuidedStepSupportFragment.getCurrentGuidedStepSupportFragment(fragmentManager)
+        val currentFragment =
+            GuidedStepSupportFragment.getCurrentGuidedStepSupportFragment(fragmentManager)
 
         Log.e(
             "GuidedStepNavigator",
-            "guidedBack old current = $currentFragment, stack = ${(0 until fragmentManager.backStackEntryCount).map {
-                fragmentManager.getBackStackEntryAt(it)
-            }.joinToString()}"
+            "guidedBack old current = $currentFragment, stack = ${
+                (0 until fragmentManager.backStackEntryCount).map {
+                    fragmentManager.getBackStackEntryAt(it)
+                }.joinToString()
+            }"
         )
         Log.e(
             "GuidedStepNavigator",

@@ -15,9 +15,7 @@ package ru.radiationx.anilibria.common.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.transition.TransitionHelper
@@ -30,7 +28,8 @@ import kotlin.math.max
 /**
  * A fragment for rendering items in a vertical grids.
  */
-open class GridFragment : ScopedFragment(R.layout.fragment_grid), BrowseSupportFragment.MainFragmentAdapterProvider {
+open class GridFragment : ScopedFragment(R.layout.fragment_grid),
+    BrowseSupportFragment.MainFragmentAdapterProvider {
 
     private var mAdapter: ObjectAdapter? = null
 
@@ -40,20 +39,22 @@ open class GridFragment : ScopedFragment(R.layout.fragment_grid), BrowseSupportF
     private var mSelectedPosition = -1
     private var mOnItemViewSelectedListener: OnItemViewSelectedListener? = null
     private var mOnItemViewClickedListener: OnItemViewClickedListener? = null
-    private val mViewSelectedListener = OnItemViewSelectedListener { itemViewHolder, item, rowViewHolder, row ->
-        val gridViewHolder = mGridViewHolder ?: return@OnItemViewSelectedListener
-        val position = gridViewHolder.gridView.selectedPosition
-        gridOnItemSelected(position)
-        mOnItemViewSelectedListener?.onItemSelected(itemViewHolder, item, rowViewHolder, row)
-    }
+    private val mViewSelectedListener =
+        OnItemViewSelectedListener { itemViewHolder, item, rowViewHolder, row ->
+            val gridViewHolder = mGridViewHolder ?: return@OnItemViewSelectedListener
+            val position = gridViewHolder.gridView.selectedPosition
+            gridOnItemSelected(position)
+            mOnItemViewSelectedListener?.onItemSelected(itemViewHolder, item, rowViewHolder, row)
+        }
 
     private var mSceneAfterEntranceTransition: Any? = null
 
-    private val mMainFragmentAdapter = object : BrowseSupportFragment.MainFragmentAdapter<GridFragment>(this) {
-        override fun setEntranceTransitionState(state: Boolean) {
-            this@GridFragment.setEntranceTransitionState(state)
+    private val mMainFragmentAdapter =
+        object : BrowseSupportFragment.MainFragmentAdapter<GridFragment>(this) {
+            override fun setEntranceTransitionState(state: Boolean) {
+                this@GridFragment.setEntranceTransitionState(state)
+            }
         }
-    }
 
     private val mChildLaidOutListener = OnChildLaidOutListener { parent, view, position, id ->
         if (position == 0) {
@@ -101,8 +102,10 @@ open class GridFragment : ScopedFragment(R.layout.fragment_grid), BrowseSupportF
             setEntranceTransitionState(true)
         }
         mGridViewHolder?.gridView?.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            val cardDescriptionView = shadowDescriptionView?.getCardDescriptionView() ?: return@addOnLayoutChangeListener
-            val newWidth = max(v.width - v.paddingLeft - v.paddingRight, cardDescriptionView.minimumWidth)
+            val cardDescriptionView =
+                shadowDescriptionView?.getCardDescriptionView() ?: return@addOnLayoutChangeListener
+            val newWidth =
+                max(v.width - v.paddingLeft - v.paddingRight, cardDescriptionView.minimumWidth)
             val currentWidth = cardDescriptionView.layoutParams.width
             if (currentWidth != newWidth) {
                 cardDescriptionView.updateLayoutParams {

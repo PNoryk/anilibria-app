@@ -12,18 +12,19 @@ import ru.radiationx.anilibria.ui.common.adapters.AppAdapterDelegate
 import ru.radiationx.shared.ktx.android.setCompatDrawable
 import ru.radiationx.shared.ktx.android.setTintColorAttr
 
-class BottomTabDelegate(private val clickListener: Listener) : AppAdapterDelegate<BottomTabListItem, ListItem, BottomTabDelegate.ViewHolder>(
+class BottomTabDelegate(private val clickListener: Listener) :
+    AppAdapterDelegate<BottomTabListItem, ListItem, BottomTabDelegate.ViewHolder>(
         R.layout.item_bottom_tab,
         { it is BottomTabListItem },
         { ViewHolder(it, clickListener) }
-) {
+    ) {
 
     override fun bindData(item: BottomTabListItem, holder: ViewHolder) =
-            holder.bind(item.item, item.selected)
+        holder.bind(item.item, item.selected)
 
     class ViewHolder(
-            override val containerView: View,
-            private val clickListener: Listener
+        override val containerView: View,
+        private val clickListener: Listener
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         private lateinit var currentItem: MainActivity.Tab

@@ -6,10 +6,9 @@ import android.view.ViewConfiguration;
 
 public class VideoGestureListener extends GestureDetector.SimpleOnGestureListener {
 
+    public static final String TAG = "VideoGestureListener";
     private static final int SWIPE_THRESHOLD = 100;
     private final int minFlingVelocity;
-
-    public static final String TAG = "VideoGestureListener";
     private final VideoGestureEventsListener listener;
 
     public VideoGestureListener(VideoGestureEventsListener listener, ViewConfiguration viewConfiguration) {
@@ -53,7 +52,7 @@ public class VideoGestureListener extends GestureDetector.SimpleOnGestureListene
 
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             //if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
-                listener.onHorizontalScroll(e2, deltaX);
+            listener.onHorizontalScroll(e2, deltaX);
                 /*if (deltaX > 0) {
                     Log.i(TAG, "Slide right");
                 } else {
@@ -62,7 +61,7 @@ public class VideoGestureListener extends GestureDetector.SimpleOnGestureListene
             //}
         } else {
             //if (Math.abs(deltaY) > SWIPE_THRESHOLD) {
-                listener.onVerticalScroll(e2, deltaY);
+            listener.onVerticalScroll(e2, deltaY);
                 /*if (deltaY > 0) {
                     Log.i(TAG, "Slide down");
                 } else {

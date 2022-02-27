@@ -17,6 +17,8 @@ import ru.radiationx.shared_app.common.SystemUtils
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.domain.AuthState
+import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
@@ -27,11 +29,9 @@ import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.data.preferences.PrefferedPlayerType
-import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
 import tv.anilibria.module.data.repos.HistoryRepository
-import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.*
 import javax.inject.Inject

@@ -10,7 +10,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayAt
 import moxy.InjectViewState
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.model.*
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
@@ -25,14 +24,15 @@ import ru.radiationx.anilibria.ui.fragments.feed.FeedScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared.ktx.asDayNameDeclension
 import ru.radiationx.shared.ktx.asDayPretext
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.appupdates.data.CheckerRepository
-import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.data.BaseUrlHelper
+import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.data.repos.FeedRepository
 import tv.anilibria.module.data.repos.ScheduleRepository
 import tv.anilibria.module.domain.entity.feed.Feed

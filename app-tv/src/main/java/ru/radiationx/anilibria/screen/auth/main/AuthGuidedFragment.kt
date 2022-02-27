@@ -1,7 +1,6 @@
 package ru.radiationx.anilibria.screen.auth.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.leanback.widget.GuidanceStylist.Guidance
 import androidx.leanback.widget.GuidedAction
 import ru.radiationx.anilibria.common.fragment.scoped.ScopedGuidedStepFragment

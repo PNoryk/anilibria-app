@@ -3,9 +3,9 @@ package ru.radiationx.shared_app.screen
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentActivity
+import ru.radiationx.shared_app.di.ActivityScopeCloseChecker
 import ru.radiationx.shared_app.di.DependencyInjector
 import ru.radiationx.shared_app.di.ScopeProvider
-import ru.radiationx.shared_app.di.ActivityScopeCloseChecker
 import toothpick.smoothie.lifecycle.closeOnDestroy
 
 open class ScopedFragmentActivity(@LayoutRes layoutId: Int = 0) : FragmentActivity(layoutId),

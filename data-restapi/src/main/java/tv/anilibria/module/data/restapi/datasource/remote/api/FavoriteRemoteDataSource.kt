@@ -5,8 +5,8 @@ import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId
-import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 

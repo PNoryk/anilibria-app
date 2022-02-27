@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.common.fragment.scoped.ScopedVerticalGridFragment
@@ -38,8 +37,10 @@ open class BaseVerticalGridFragment : ScopedVerticalGridFragment() {
         )
 
         gridView.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            val cardDescriptionView = shadowDescriptionView?.getCardDescriptionView() ?: return@addOnLayoutChangeListener
-            val newWidth = max(v.width - v.paddingLeft - v.paddingRight, cardDescriptionView.minimumWidth)
+            val cardDescriptionView =
+                shadowDescriptionView?.getCardDescriptionView() ?: return@addOnLayoutChangeListener
+            val newWidth =
+                max(v.width - v.paddingLeft - v.paddingRight, cardDescriptionView.minimumWidth)
             val currentWidth = cardDescriptionView.layoutParams.width
             if (currentWidth != newWidth) {
                 cardDescriptionView.updateLayoutParams {

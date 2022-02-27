@@ -38,7 +38,12 @@ class UniversalItemDecoration : RecyclerView.ItemDecoration() {
         return this
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         manager?.let {
             spanCount = it.spanCount
         }
@@ -48,8 +53,10 @@ class UniversalItemDecoration : RecyclerView.ItemDecoration() {
 
         if (includeEdge) {
             if (!fullWidth) {
-                outRect.left = spacing - column * spacing / spanCount // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount // (column + 1) * ((1f / spanCount) * spacing)
+                outRect.left =
+                    spacing - column * spacing / spanCount // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right =
+                    (column + 1) * spacing / spanCount // (column + 1) * ((1f / spanCount) * spacing)
             }
             if (position < spanCount) { // top edge
                 outRect.top = spacing
@@ -58,7 +65,8 @@ class UniversalItemDecoration : RecyclerView.ItemDecoration() {
         } else {
             if (!fullWidth) {
                 outRect.left = column * spacing / spanCount // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                outRect.right =
+                    spacing - (column + 1) * spacing / spanCount // spacing - (column + 1) * ((1f /    spanCount) * spacing)
             }
             if (position >= spanCount) {
                 outRect.top = spacing // item top

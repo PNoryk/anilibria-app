@@ -86,7 +86,11 @@ open class OptimizeAdapter<T>(
         manager.addDelegate(viewType, delegate)
     }
 
-    fun addDelegate(viewType: Int, allowReplacingDelegate: Boolean, delegate: AdapterDelegate<List<T>>) {
+    fun addDelegate(
+        viewType: Int,
+        allowReplacingDelegate: Boolean,
+        delegate: AdapterDelegate<List<T>>
+    ) {
         manager.addDelegate(viewType, allowReplacingDelegate, delegate)
     }
 }

@@ -19,12 +19,13 @@ package org.michaelbel.bottomsheet.menu;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.DrawableRes;
 import android.view.ActionProvider;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+
+import androidx.annotation.DrawableRes;
 
 /**
  * Date: 3 MAR 2018
@@ -41,29 +42,20 @@ public class BottomSheetMenuItem implements MenuItem {
     private static final int EXCLUSIVE = 0x00000004;
     private static final int HIDDEN = 0x00000008;
     private static final int ENABLED = 0x00000010;
-
+    private static final int NO_ICON = 0;
     private final int mId;
     private final int mGroup;
     private final int mOrdering;
     private final int mCategoryOrder;
-
     private Intent mIntent;
     private Context mContext;
-
     private CharSequence mTitle;
     private CharSequence mTitleCondensed;
-
     private char mShortcutNumericChar;
     private char mShortcutAlphabeticChar;
-
     private Drawable mIconDrawable;
-
     private int mIconResId = NO_ICON;
-
     private OnMenuItemClickListener mClickListener;
-
-    private static final int NO_ICON = 0;
-
     private int mFlags = ENABLED;
 
     /**

@@ -6,7 +6,6 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ListRow
 import dev.rx.tvtest.cust.CustomListRowPresenter
 import dev.rx.tvtest.cust.CustomListRowViewHolder
-import ru.radiationx.anilibria.common.LinkCard
 import ru.radiationx.anilibria.common.*
 import ru.radiationx.anilibria.common.fragment.scoped.ScopedRowsFragment
 import ru.radiationx.anilibria.extension.applyCard
@@ -81,7 +80,8 @@ class WatchingFragment : ScopedRowsFragment() {
         val rowMap = mutableMapOf<Long, ListRow>()
         subscribeTo(watchingViewModel.rowListData) { rowList ->
             val rows = rowList.map { rowId ->
-                val row = rowMap[rowId] ?: createCardsRowBy(rowId, rowsAdapter, getViewModel(rowId)!!)
+                val row =
+                    rowMap[rowId] ?: createCardsRowBy(rowId, rowsAdapter, getViewModel(rowId)!!)
                 rowMap[rowId] = row
                 row
             }

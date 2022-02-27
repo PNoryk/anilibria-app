@@ -20,10 +20,10 @@ import ru.radiationx.anilibria.screen.player.PlayerController
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.data.repos.FavoriteRepository
-import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Release
 import tv.anilibria.module.domain.entity.release.ReleaseId

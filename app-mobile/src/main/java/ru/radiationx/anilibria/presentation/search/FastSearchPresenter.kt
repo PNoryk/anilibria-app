@@ -3,7 +3,6 @@ package ru.radiationx.anilibria.presentation.search
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.SuggestionItemState
 import ru.radiationx.anilibria.model.SuggestionLocalItemState
@@ -12,6 +11,7 @@ import ru.radiationx.anilibria.model.toSuggestionState
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.BaseUrlHelper

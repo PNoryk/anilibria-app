@@ -13,19 +13,19 @@ import ru.radiationx.anilibria.ui.common.adapters.AppAdapterDelegate
  * Created by radiationx on 13.01.18.
  */
 class FeedRandomBtnDelegate(
-        private val clickListener: () -> Unit
+    private val clickListener: () -> Unit
 ) : AppAdapterDelegate<FeedRandomBtnListItem, ListItem, FeedRandomBtnDelegate.ViewHolder>(
-        R.layout.item_feed_random_btn,
-        { it is FeedRandomBtnListItem },
-        { ViewHolder(it, clickListener) }
+    R.layout.item_feed_random_btn,
+    { it is FeedRandomBtnListItem },
+    { ViewHolder(it, clickListener) }
 ) {
 
     override fun bindData(item: FeedRandomBtnListItem, holder: ViewHolder) =
-            holder.bind()
+        holder.bind()
 
     class ViewHolder(
-            override val containerView: View,
-            private val clickListener: () -> Unit
+        override val containerView: View,
+        private val clickListener: () -> Unit
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         init {

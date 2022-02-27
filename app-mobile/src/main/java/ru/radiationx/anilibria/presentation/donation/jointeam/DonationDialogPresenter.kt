@@ -3,16 +3,16 @@ package ru.radiationx.anilibria.presentation.donation.jointeam
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.ui.common.ErrorHandler
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
 import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.donation.data.domain.DonationContentButton
 import tv.anilibria.feature.donation.data.domain.DonationDialog
+import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
 
 @InjectConstructor
 class DonationDialogPresenter(

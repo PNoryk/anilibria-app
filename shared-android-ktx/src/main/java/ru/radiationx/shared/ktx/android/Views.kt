@@ -1,14 +1,6 @@
 package ru.radiationx.shared.ktx.android
 
 import android.content.res.ColorStateList
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.appcompat.widget.AppCompatImageView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -16,7 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import ru.radiationx.anilibria.extension.getColorFromAttr
 import ru.radiationx.anilibria.extension.getCompatDrawable
 

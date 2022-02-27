@@ -23,7 +23,6 @@ import ru.radiationx.anilibria.di.DownloadModule
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel
 import ru.radiationx.shared_app.screen.ScopedFragment
-import toothpick.ktp.binding.module
 import tv.anilibria.feature.downloads.data.shared.DownloadControllerImpl
 import javax.inject.Inject
 
@@ -122,7 +121,11 @@ class UpdateFragment : ScopedFragment(R.layout.fragment_update) {
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
     }

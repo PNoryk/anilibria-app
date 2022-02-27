@@ -4,9 +4,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 
 open class ToolbarShadowController(
-        protected val recyclerView: RecyclerView,
-        protected val appBarLayout: AppBarLayout? = null,
-        protected val visibleListener: (Boolean) -> Unit
+    protected val recyclerView: RecyclerView,
+    protected val appBarLayout: AppBarLayout? = null,
+    protected val visibleListener: (Boolean) -> Unit
 ) {
 
     protected var listScrollY = 0

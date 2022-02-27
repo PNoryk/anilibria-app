@@ -1,7 +1,6 @@
 package ru.radiationx.shared.ktx
 
 import kotlinx.datetime.DayOfWeek
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit

@@ -10,7 +10,8 @@ class DependencyInjector(arguments: Bundle?) {
 
     private val modules = mutableListOf<Module>()
 
-    val parentScopeTag: String = arguments?.getString(ScopeProvider.ARG_PARENT_SCOPE) ?: DI.DEFAULT_SCOPE
+    val parentScopeTag: String =
+        arguments?.getString(ScopeProvider.ARG_PARENT_SCOPE) ?: DI.DEFAULT_SCOPE
 
     var screenScopeTag: String = objectScopeName()
         private set
@@ -20,8 +21,12 @@ class DependencyInjector(arguments: Bundle?) {
     }
 
     fun onCreate(target: Any, savedInstanceState: Bundle?): Scope {
-        Log.e("DependencyInjector", "onCreate $parentScopeTag -> $screenScopeTag to $target with $savedInstanceState")
-        screenScopeTag = savedInstanceState?.getString(ScopeProvider.STATE_SCREEN_SCOPE) ?: screenScopeTag
+        Log.e(
+            "DependencyInjector",
+            "onCreate $parentScopeTag -> $screenScopeTag to $target with $savedInstanceState"
+        )
+        screenScopeTag =
+            savedInstanceState?.getString(ScopeProvider.STATE_SCREEN_SCOPE) ?: screenScopeTag
         return if (needInstallModule(savedInstanceState)) {
             DI.inject(target, modules.toTypedArray(), parentScopeTag, screenScopeTag)
         } else {
@@ -37,5 +42,6 @@ class DependencyInjector(arguments: Bundle?) {
         DI.close(screenScopeTag)
     }
 
-    fun needInstallModule(savedInstanceState: Bundle?): Boolean = savedInstanceState == null || !Toothpick.isScopeOpen(screenScopeTag)
+    fun needInstallModule(savedInstanceState: Bundle?): Boolean =
+        savedInstanceState == null || !Toothpick.isScopeOpen(screenScopeTag)
 }

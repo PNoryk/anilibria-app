@@ -3,8 +3,8 @@ package tv.anilibria.module.data.restapi.datasource.remote.api
 import tv.anilibria.module.data.restapi.datasource.remote.retrofit.ScheduleApi
 import tv.anilibria.module.data.restapi.entity.mapper.toDomain
 import tv.anilibria.module.domain.entity.schedule.ScheduleDay
-import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 

@@ -5,15 +5,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import moxy.InjectViewState
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.release.details.ReleasePagerState
 import ru.radiationx.anilibria.utils.ShortcutHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.BaseUrlHelper
+import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.CommentsAnalytics
 import tv.anilibria.module.data.analytics.features.ReleaseAnalytics

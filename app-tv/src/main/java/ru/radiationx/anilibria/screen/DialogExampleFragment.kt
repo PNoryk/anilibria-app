@@ -3,8 +3,8 @@ package ru.radiationx.anilibria.screen
 import android.os.Bundle
 import androidx.leanback.widget.GuidanceStylist.Guidance
 import androidx.leanback.widget.GuidedAction
-import ru.radiationx.anilibria.common.fragment.scoped.ScopedGuidedStepFragment
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
+import ru.radiationx.anilibria.common.fragment.scoped.ScopedGuidedStepFragment
 import ru.terrakok.cicerone.Router
 import java.util.*
 import javax.inject.Inject

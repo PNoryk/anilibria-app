@@ -56,9 +56,9 @@ import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsScale
 import tv.anilibria.module.data.analytics.features.model.AnalyticsEpisodeFinishAction
 import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsSeasonFinishAction
+import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.preferences.PrefferedPlayerPipMode
 import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
-import tv.anilibria.module.data.preferences.PreferencesStorage
 import tv.anilibria.module.data.repos.EpisodeHistoryRepository
 import tv.anilibria.module.domain.entity.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Episode

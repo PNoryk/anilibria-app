@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.model.ReleaseItemState
 import ru.radiationx.anilibria.model.loading.DataLoadingController
 import ru.radiationx.anilibria.model.loading.PageLoadParams
@@ -17,6 +16,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants

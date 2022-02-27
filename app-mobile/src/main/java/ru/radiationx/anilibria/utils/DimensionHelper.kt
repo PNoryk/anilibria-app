@@ -7,9 +7,9 @@ import android.view.View
  * Created by radiationx on 30.12.17.
  */
 class DimensionHelper(
-        private var measurer: View?,
-        private var container: View?,
-        private var listener: DimensionsListener?
+    private var measurer: View?,
+    private var container: View?,
+    private var listener: DimensionsListener?
 ) {
 
     private val dimension = Dimensions()
@@ -19,33 +19,39 @@ class DimensionHelper(
     private var lastCh = 0
     private var lastKh = 0
 
-    private val layoutListener = View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-        Log.e("S_DEF_LOG", "OnLayoutChange $left $top $right $bottom ||| $oldLeft $oldTop $oldRight $oldBottom")
-        val container = this.container ?: return@OnLayoutChangeListener
-        val listener = this.listener ?: return@OnLayoutChangeListener
-        var anyChanges = false
-        if (dimension.contentHeight == 0) {
-            dimension.statusBar = v.top
-            dimension.navigationBar = container.bottom - v.bottom
-        }
+    private val layoutListener =
+        View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            Log.e(
+                "S_DEF_LOG",
+                "OnLayoutChange $left $top $right $bottom ||| $oldLeft $oldTop $oldRight $oldBottom"
+            )
+            val container = this.container ?: return@OnLayoutChangeListener
+            val listener = this.listener ?: return@OnLayoutChangeListener
+            var anyChanges = false
+            if (dimension.contentHeight == 0) {
+                dimension.statusBar = v.top
+                dimension.navigationBar = container.bottom - v.bottom
+            }
 
-        dimension.contentHeight = v.height
-        dimension.keyboardHeight = container.height - dimension.contentHeight - dimension.statusBar - dimension.navigationBar
+            dimension.contentHeight = v.height
+            dimension.keyboardHeight =
+                container.height - dimension.contentHeight - dimension.statusBar - dimension.navigationBar
 
-        dimension.let {
-            if (it.statusBar != lastSb
+            dimension.let {
+                if (it.statusBar != lastSb
                     || it.navigationBar != lastNb
                     || it.contentHeight != lastCh
-                    || it.keyboardHeight != lastKh) {
+                    || it.keyboardHeight != lastKh
+                ) {
 
-                lastSb = it.statusBar
-                lastNb = it.navigationBar
-                lastCh = it.contentHeight
-                lastKh = it.keyboardHeight
-                listener.onDimensionsChange(it)
+                    lastSb = it.statusBar
+                    lastNb = it.navigationBar
+                    lastCh = it.contentHeight
+                    lastKh = it.keyboardHeight
+                    listener.onDimensionsChange(it)
+                }
             }
         }
-    }
 
     init {
         measurer?.addOnLayoutChangeListener(layoutListener)
@@ -59,10 +65,10 @@ class DimensionHelper(
     }
 
     data class Dimensions(
-            var statusBar: Int = 0,
-            var navigationBar: Int = 0,
-            var contentHeight: Int = 0,
-            var keyboardHeight: Int = 0
+        var statusBar: Int = 0,
+        var navigationBar: Int = 0,
+        var contentHeight: Int = 0,
+        var keyboardHeight: Int = 0
     ) {
         override fun toString(): String {
             return "Dimensions:\nto=$statusBar\nbo=$navigationBar\nch=$contentHeight\nkh=$keyboardHeight"

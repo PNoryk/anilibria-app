@@ -7,10 +7,10 @@ import android.view.WindowManager
 import android.webkit.*
 import kotlinx.android.synthetic.main.activity_moon.*
 import ru.radiationx.anilibria.App
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.generateWithTheme
 import ru.radiationx.shared.ktx.android.toException
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl

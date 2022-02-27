@@ -104,12 +104,24 @@ class SuggestionsFragment : ScopedSearchFragment(), SearchSupportFragment.Search
         else -> null
     }
 
-    private fun createRowBy(rowId: Long, rowsAdapter: ArrayObjectAdapter, viewModel: ViewModel): Row = when (rowId) {
-        DetailsViewModel.RELEASE_ROW_ID -> createHeaderRowBy(rowId, rowsAdapter, viewModel as SuggestionsResultViewModel)
+    private fun createRowBy(
+        rowId: Long,
+        rowsAdapter: ArrayObjectAdapter,
+        viewModel: ViewModel
+    ): Row = when (rowId) {
+        DetailsViewModel.RELEASE_ROW_ID -> createHeaderRowBy(
+            rowId,
+            rowsAdapter,
+            viewModel as SuggestionsResultViewModel
+        )
         else -> createCardsRowBy(rowId, rowsAdapter, viewModel as BaseCardsViewModel)
     }
 
-    private fun createHeaderRowBy(rowId: Long, rowsAdapter: ArrayObjectAdapter, viewModel: SuggestionsResultViewModel): Row {
+    private fun createHeaderRowBy(
+        rowId: Long,
+        rowsAdapter: ArrayObjectAdapter,
+        viewModel: SuggestionsResultViewModel
+    ): Row {
         val cardsPresenter = CardPresenterSelector()
         val cardsAdapter = ArrayObjectAdapter(cardsPresenter)
         val row = ListRow(rowId, HeaderItem("Результат поиска"), cardsAdapter)

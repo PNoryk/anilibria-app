@@ -1,8 +1,8 @@
 package tv.anilibria.feature.appupdates.data
 
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
-import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 

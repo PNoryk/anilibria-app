@@ -4,7 +4,6 @@ import android.content.Context
 import ru.radiationx.anilibria.AppBuildConfig
 import ru.radiationx.anilibria.AppMigrationExecutor
 import ru.radiationx.anilibria.TvCheckerSources
-import tv.anilibria.module.data.migration.MigrationExecutor
 import ru.radiationx.shared_app.analytics.errors.AppMetricaErrorReporter
 import ru.radiationx.shared_app.analytics.errors.CombinedErrorReporter
 import ru.radiationx.shared_app.analytics.errors.LoggingErrorReporter
@@ -17,6 +16,7 @@ import ru.radiationx.shared_app.analytics.profile.LoggingAnalyticsProfile
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
 import toothpick.config.Module
 import tv.anilibria.feature.appupdates.data.CheckerReserveSources
+import tv.anilibria.module.data.migration.MigrationExecutor
 import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
 import tv.anilibria.plugin.data.analytics.AnalyticsSender
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile

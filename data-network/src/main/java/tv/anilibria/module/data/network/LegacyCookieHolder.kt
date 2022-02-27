@@ -1,6 +1,5 @@
 package tv.anilibria.module.data.network
 
-import kotlinx.coroutines.flow.Flow
 import okhttp3.Cookie
 
 /**

@@ -8,7 +8,11 @@ class OptimizeDelegateManager<T> : AdapterDelegatesManager<T>() {
 
     private val sizes = SparseIntArray()
 
-    override fun addDelegate(viewType: Int, allowReplacingDelegate: Boolean, delegate: AdapterDelegate<T>): AdapterDelegatesManager<T> {
+    override fun addDelegate(
+        viewType: Int,
+        allowReplacingDelegate: Boolean,
+        delegate: AdapterDelegate<T>
+    ): AdapterDelegatesManager<T> {
         val result = super.addDelegate(viewType, allowReplacingDelegate, delegate)
         (delegate as? OptimizeDelegate)?.also {
             val poolSize = it.getPoolSize()

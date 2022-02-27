@@ -190,7 +190,9 @@ abstract class SearchLayout @JvmOverloads constructor(
 
     // *********************************************************************************************
     protected fun init() {
-        setAnimationDuration(context.resources.getInteger(R.integer.search_animation_duration).toLong())
+        setAnimationDuration(
+            context.resources.getInteger(R.integer.search_animation_duration).toLong()
+        )
 
         mLinearLayout = findViewById(R.id.search_linearLayout)
 

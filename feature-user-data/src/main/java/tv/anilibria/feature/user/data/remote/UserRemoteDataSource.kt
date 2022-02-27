@@ -1,7 +1,7 @@
 package tv.anilibria.feature.user.data.remote
 
-import tv.anilibria.feature.user.data.toDomain
 import tv.anilibria.feature.user.data.domain.User
+import tv.anilibria.feature.user.data.toDomain
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

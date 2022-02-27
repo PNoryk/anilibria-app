@@ -64,9 +64,10 @@ class AuthCredentialsGuidedFragment : ScopedGuidedStepFragment() {
         null
     )
 
-    override fun onCreateButtonActionsStylist(): GuidedActionsStylist = GuidedProgressActionsStylist().apply {
-        setAsButtonActions()
-    }
+    override fun onCreateButtonActionsStylist(): GuidedActionsStylist =
+        GuidedProgressActionsStylist().apply {
+            setAsButtonActions()
+        }
 
     override fun onCreateActions(actions: MutableList<GuidedAction>, savedInstanceState: Bundle?) {
         actions.add(
@@ -101,7 +102,10 @@ class AuthCredentialsGuidedFragment : ScopedGuidedStepFragment() {
         )
     }
 
-    override fun onCreateButtonActions(actions: MutableList<GuidedAction>, savedInstanceState: Bundle?) {
+    override fun onCreateButtonActions(
+        actions: MutableList<GuidedAction>,
+        savedInstanceState: Bundle?
+    ) {
         actions.add(
             GuidedProgressAction.Builder(requireContext())
                 .id(LOGIN_ACTION_ID)

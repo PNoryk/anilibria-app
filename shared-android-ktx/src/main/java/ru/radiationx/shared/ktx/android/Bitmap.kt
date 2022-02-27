@@ -2,7 +2,11 @@ package ru.radiationx.shared.ktx.android
 
 import android.graphics.*
 
-fun Bitmap.createAvatar(width: Int = this.width, height: Int = this.height, isCircle: Boolean): Bitmap = if (isCircle) {
+fun Bitmap.createAvatar(
+    width: Int = this.width,
+    height: Int = this.height,
+    isCircle: Boolean
+): Bitmap = if (isCircle) {
     val bitmap = Bitmap.createScaledBitmap(this, width, height, true)
     val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(output)
@@ -25,7 +29,11 @@ fun Bitmap.createAvatar(width: Int = this.width, height: Int = this.height, isCi
 }
 
 
-fun Bitmap.centerCrop(width: Int = this.width, height: Int = this.height, scaleFactor: Float = 1.0f): Bitmap {
+fun Bitmap.centerCrop(
+    width: Int = this.width,
+    height: Int = this.height,
+    scaleFactor: Float = 1.0f
+): Bitmap {
     val src = this
     var w = width
     var h = height

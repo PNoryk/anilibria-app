@@ -1,8 +1,8 @@
 package ru.radiationx.anilibria
 
 import com.nostra13.universalimageloader.core.ImageLoader
-import tv.anilibria.module.data.migration.MigrationExecutor
 import toothpick.InjectConstructor
+import tv.anilibria.module.data.migration.MigrationExecutor
 import tv.anilibria.module.data.preferences.PreferencesStorage
 
 @InjectConstructor

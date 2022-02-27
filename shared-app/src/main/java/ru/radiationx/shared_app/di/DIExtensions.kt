@@ -79,7 +79,8 @@ inline fun <reified T : ViewModel> Fragment.viewModelFromParent(): Lazy<T> = laz
     val parent = requireParentFragment()
     ViewModelProviders
         .of(parent, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T = parent.getScopedDependency(modelClass)
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                parent.getScopedDependency(modelClass)
         })
         .get(T::class.java)
 }

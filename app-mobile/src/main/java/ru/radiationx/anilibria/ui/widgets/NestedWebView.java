@@ -14,23 +14,22 @@ import androidx.core.view.ViewCompat;
 
 
 /*
-* Обработка событий аккуратно слизана с RecyclerView с некоторыми доработками.
-* */
+ * Обработка событий аккуратно слизана с RecyclerView с некоторыми доработками.
+ * */
 public class NestedWebView extends WebView implements NestedScrollingChild {
 
     public static final int SCROLL_STATE_IDLE = 0;
     public static final int SCROLL_STATE_NESTED_SCROLL = 1;
     public static final int SCROLL_STATE_SCROLL = 2;
-    private int mScrollState = SCROLL_STATE_IDLE;
-
-    private int mLastTouchX;
-    private int mLastTouchY;
-
     private final int[] mScrollOffset = new int[2];
     private final int[] mScrollConsumed = new int[2];
     private final int[] mNestedOffsets = new int[2];
-
     private final NestedScrollingChildHelper mChildHelper;
+    private final int mTouchSlop;
+    private final OnLongClickListener longClickListener = v -> true;
+    private int mScrollState = SCROLL_STATE_IDLE;
+    private int mLastTouchX;
+    private int mLastTouchY;
 
     public NestedWebView(Context context) {
         this(context, null);
@@ -40,8 +39,6 @@ public class NestedWebView extends WebView implements NestedScrollingChild {
         this(context, attrs, android.R.attr.webViewStyle);
     }
 
-    private final int mTouchSlop;
-
     public NestedWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mChildHelper = new NestedScrollingChildHelper(this);
@@ -49,8 +46,6 @@ public class NestedWebView extends WebView implements NestedScrollingChild {
         final ViewConfiguration vc = ViewConfiguration.get(context);
         mTouchSlop = vc.getScaledTouchSlop();
     }
-
-    private final OnLongClickListener longClickListener = v -> true;
 
     private void changeLongClickable(boolean enable) {
         setOnLongClickListener(enable ? null : longClickListener);
@@ -171,13 +166,13 @@ public class NestedWebView extends WebView implements NestedScrollingChild {
     }
 
     @Override
-    public void setNestedScrollingEnabled(boolean enabled) {
-        mChildHelper.setNestedScrollingEnabled(enabled);
+    public boolean isNestedScrollingEnabled() {
+        return mChildHelper.isNestedScrollingEnabled();
     }
 
     @Override
-    public boolean isNestedScrollingEnabled() {
-        return mChildHelper.isNestedScrollingEnabled();
+    public void setNestedScrollingEnabled(boolean enabled) {
+        mChildHelper.setNestedScrollingEnabled(enabled);
     }
 
     @Override

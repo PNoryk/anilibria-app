@@ -21,7 +21,6 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.disableItemChangeAnimation
 import ru.radiationx.anilibria.presentation.release.details.ReleaseDetailScreenState
@@ -35,6 +34,7 @@ import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeControlD
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseEpisodeDelegate
 import ru.radiationx.anilibria.ui.adapters.release.detail.ReleaseHeadDelegate
 import ru.radiationx.anilibria.ui.fragments.BaseFragment
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.common.SystemUtils
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.AbsoluteUrl

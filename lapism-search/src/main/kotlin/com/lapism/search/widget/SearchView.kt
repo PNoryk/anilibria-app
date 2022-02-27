@@ -120,7 +120,8 @@ class SearchView @JvmOverloads constructor(
         margins = SearchUtils.Margins.NONE_TOOLBAR
         mViewDivider?.visibility = View.VISIBLE
         animateHamburgerToArrow(false)
-        elevation = context.resources.getDimensionPixelSize(R.dimen.search_elevation_focus).toFloat()
+        elevation =
+            context.resources.getDimensionPixelSize(R.dimen.search_elevation_focus).toFloat()
         val paddingLeftRight = context.resources.getDimensionPixelSize(R.dimen.search_key_line_16)
         val paddingTop = context.resources.getDimensionPixelSize(R.dimen.search_key_line_4)
         //mSearchEditText?.setPadding(paddingLeftRight, 0, paddingLeftRight, 0)

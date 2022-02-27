@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
-import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.anilibria.model.loading.StateController
@@ -16,17 +15,18 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.other.OtherMenuItemState
 import ru.radiationx.anilibria.ui.fragments.other.ProfileScreenState
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
+import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
+import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.domain.AuthState
+import tv.anilibria.feature.menu.data.MenuRepository
+import tv.anilibria.feature.menu.data.domain.LinkMenuItem
+import tv.anilibria.feature.user.data.domain.User
 import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
-import tv.anilibria.feature.auth.data.AuthRepository
-import tv.anilibria.feature.menu.data.MenuRepository
-import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.feature.menu.data.domain.LinkMenuItem
-import tv.anilibria.feature.user.data.domain.User
 import javax.inject.Inject
 
 @InjectViewState

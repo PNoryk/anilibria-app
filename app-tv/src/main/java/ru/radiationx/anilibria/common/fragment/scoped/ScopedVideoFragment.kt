@@ -1,7 +1,6 @@
 package ru.radiationx.anilibria.common.fragment.scoped
 
 import android.os.Bundle
-import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.app.VideoSupportFragment
 import ru.radiationx.shared_app.di.DependencyInjector
 import ru.radiationx.shared_app.di.FragmentScopeCloseChecker

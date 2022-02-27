@@ -5,7 +5,10 @@ import androidx.leanback.app.GuidedStepSupportFragment
 
 open class FakeGuidedStepFragment : GuidedStepSupportFragment() {
 
-    fun fakeOnAddSharedElementTransition(transaction: FragmentTransaction, disappearingFragment: GuidedStepSupportFragment) {
+    fun fakeOnAddSharedElementTransition(
+        transaction: FragmentTransaction,
+        disappearingFragment: GuidedStepSupportFragment
+    ) {
         onAddSharedElementTransition(transaction, disappearingFragment)
     }
 }

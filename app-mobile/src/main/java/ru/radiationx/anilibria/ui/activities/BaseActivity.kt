@@ -21,6 +21,7 @@ open class BaseActivity : MvpAppCompatActivity() {
     }
 
 
-    fun <T, A : FragmentActivity> A.getDependency(clazz: Class<T>, scope: String): T = DI.get(clazz, DI.DEFAULT_SCOPE, scope)
+    fun <T, A : FragmentActivity> A.getDependency(clazz: Class<T>, scope: String): T =
+        DI.get(clazz, DI.DEFAULT_SCOPE, scope)
 
 }

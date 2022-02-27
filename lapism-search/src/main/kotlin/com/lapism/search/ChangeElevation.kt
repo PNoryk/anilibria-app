@@ -6,16 +6,13 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.util.Property
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import androidx.cardview.widget.CardView
-import androidx.core.view.ViewCompat
 import androidx.transition.Transition
 import androidx.transition.TransitionValues
-import com.google.android.material.card.MaterialCardView
 
 /**
  * Transitions a view from [startRadius] to [endRadius] through a [ViewOutlineProvider].

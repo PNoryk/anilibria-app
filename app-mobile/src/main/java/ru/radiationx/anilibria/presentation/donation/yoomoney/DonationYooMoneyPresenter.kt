@@ -10,11 +10,11 @@ import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
+import tv.anilibria.feature.donation.data.DonationRepository
+import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics
 import tv.anilibria.module.data.analytics.features.model.AnalyticsDonationAmountType
 import tv.anilibria.module.data.analytics.features.model.AnalyticsDonationPaymentType
-import tv.anilibria.feature.donation.data.DonationRepository
-import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
 
 @InjectConstructor
 class DonationYooMoneyPresenter(
