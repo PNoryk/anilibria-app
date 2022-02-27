@@ -27,11 +27,10 @@ import ru.radiationx.shared.ktx.android.toException
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.module.data.BaseUrlsProvider
 import tv.anilibria.module.data.analytics.features.PageAnalytics
 import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.module.domain.entity.page.PageLibria
+import tv.anilibria.feature.page.data.domain.PageLibria
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 

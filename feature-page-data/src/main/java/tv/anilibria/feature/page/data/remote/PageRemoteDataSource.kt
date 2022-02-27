@@ -1,7 +1,7 @@
 package tv.anilibria.feature.page.data.remote
 
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.module.domain.entity.page.PageLibria
+import tv.anilibria.feature.page.data.domain.PageLibria
 import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import javax.inject.Inject

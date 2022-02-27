@@ -2,7 +2,7 @@ package tv.anilibria.feature.page.data
 
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.page.data.remote.PageRemoteDataSource
-import tv.anilibria.module.domain.entity.page.PageLibria
+import tv.anilibria.feature.page.data.domain.PageLibria
 import javax.inject.Inject
 
 /**

@@ -1,7 +1,7 @@
 package tv.anilibria.feature.page.data.remote
 
 import tv.anilibria.core.types.asHtmlText
-import tv.anilibria.module.domain.entity.page.PageLibria
+import tv.anilibria.feature.page.data.domain.PageLibria
 
 fun PageLibriaResponse.toDomain() = PageLibria(
     title = title,

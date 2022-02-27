@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.page
+package tv.anilibria.feature.page.data.domain
 
 import tv.anilibria.core.types.HtmlText
 
