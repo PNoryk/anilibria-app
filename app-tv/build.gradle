@@ -62,6 +62,7 @@ dependencies {
     implementation project(":feature-appupdates-data")
     implementation project(":feature-downloads-data")
     implementation project(":feature-user-data")
+    implementation project(":feature-donation-data")
 
 
     implementation project(":shared-android-ktx")
