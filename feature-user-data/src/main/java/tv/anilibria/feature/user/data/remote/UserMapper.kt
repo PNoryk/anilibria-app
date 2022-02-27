@@ -1,7 +1,7 @@
-package tv.anilibria.module.data.restapi.entity.mapper
+package tv.anilibria.feature.user.data
 
 import tv.anilibria.core.types.asRelativeUrl
-import tv.anilibria.module.data.restapi.entity.app.other.UserResponse
+import tv.anilibria.feature.user.data.remote.UserResponse
 import tv.anilibria.module.domain.entity.other.User
 import tv.anilibria.module.domain.entity.other.UserId
 

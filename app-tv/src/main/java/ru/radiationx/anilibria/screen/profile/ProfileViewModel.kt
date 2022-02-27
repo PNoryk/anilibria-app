@@ -11,9 +11,9 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.AuthGuidedScreen
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
+import tv.anilibria.feature.user.data.UserRepository
 import tv.anilibria.module.data.AuthStateHolder
 import tv.anilibria.module.data.repos.AuthRepository
-import tv.anilibria.module.data.repos.UserRepository
 
 @InjectConstructor
 class ProfileViewModel(

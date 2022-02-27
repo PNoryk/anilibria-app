@@ -1,10 +1,9 @@
-package tv.anilibria.module.data.restapi.datasource.remote.api
+package tv.anilibria.feature.user.data.remote
 
-import tv.anilibria.module.data.restapi.datasource.remote.retrofit.UserApi
-import tv.anilibria.module.data.restapi.entity.mapper.toDomain
+import tv.anilibria.feature.user.data.toDomain
 import tv.anilibria.module.domain.entity.other.User
-import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 

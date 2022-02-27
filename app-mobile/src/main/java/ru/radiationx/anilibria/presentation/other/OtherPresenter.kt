@@ -24,7 +24,7 @@ import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.repos.AuthRepository
 import tv.anilibria.module.data.repos.MenuRepository
-import tv.anilibria.module.data.repos.UserRepository
+import tv.anilibria.feature.user.data.UserRepository
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import tv.anilibria.module.domain.entity.other.User
@@ -35,7 +35,7 @@ class OtherPresenter @Inject constructor(
     private val router: Router,
     private val systemMessenger: SystemMessenger,
     private val authStateHolder: AuthStateHolder,
-    private val userRepository: UserRepository,
+    private val userRepository: tv.anilibria.feature.user.data.UserRepository,
     private val authRepository: AuthRepository,
     private val errorHandler: IErrorHandler,
     private val menuRepository: MenuRepository,

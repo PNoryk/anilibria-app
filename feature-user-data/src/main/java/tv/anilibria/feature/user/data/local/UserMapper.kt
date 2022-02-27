@@ -1,7 +1,6 @@
-package tv.anilibria.module.data.local.mappers
+package tv.anilibria.feature.user.data.local
 
 import tv.anilibria.core.types.asRelativeUrl
-import tv.anilibria.module.data.local.entity.UserLocal
 import tv.anilibria.module.domain.entity.other.User
 import tv.anilibria.module.domain.entity.other.UserId
 

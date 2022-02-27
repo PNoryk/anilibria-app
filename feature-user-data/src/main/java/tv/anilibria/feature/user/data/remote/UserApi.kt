@@ -1,9 +1,8 @@
-package tv.anilibria.module.data.restapi.datasource.remote.retrofit
+package tv.anilibria.feature.user.data.remote
 
 import okhttp3.FormBody
 import retrofit2.http.Body
 import retrofit2.http.POST
-import tv.anilibria.module.data.restapi.entity.app.other.UserResponse
 import tv.anilibria.plugin.data.restapi.ApiResponse
 
 interface UserApi {

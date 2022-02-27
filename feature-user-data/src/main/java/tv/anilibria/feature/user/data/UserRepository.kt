@@ -1,9 +1,9 @@
-package tv.anilibria.module.data.repos
+package tv.anilibria.feature.user.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
-import tv.anilibria.module.data.local.holders.UserLocalDataSource
-import tv.anilibria.module.data.restapi.datasource.remote.api.UserRemoteDataSource
+import tv.anilibria.feature.user.data.local.UserLocalDataSource
+import tv.anilibria.feature.user.data.remote.UserRemoteDataSource
 import tv.anilibria.module.domain.entity.other.User
 import javax.inject.Inject
 
