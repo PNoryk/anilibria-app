@@ -23,8 +23,7 @@ import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.repos.AuthRepository
-import tv.anilibria.module.data.repos.MenuRepository
-import tv.anilibria.feature.user.data.UserRepository
+import tv.anilibria.feature.menu.data.MenuRepository
 import tv.anilibria.module.domain.entity.AuthState
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import tv.anilibria.module.domain.entity.other.User

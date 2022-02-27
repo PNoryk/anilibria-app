@@ -1,8 +1,9 @@
-package tv.anilibria.module.data.local.mappers
+package tv.anilibria.feature.menu.data.local
 
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.core.types.asRelativeUrl
-import tv.anilibria.module.data.local.entity.LinkMenuItemLocal
+import tv.anilibria.module.data.local.mappers.toDataIcon
+import tv.anilibria.module.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
 
 fun LinkMenuItem.toLocal() = LinkMenuItemLocal(

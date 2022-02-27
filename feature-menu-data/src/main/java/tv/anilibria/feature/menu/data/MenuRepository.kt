@@ -1,8 +1,8 @@
-package tv.anilibria.module.data.repos
+package tv.anilibria.feature.menu.data
 
 import kotlinx.coroutines.flow.Flow
-import tv.anilibria.module.data.local.holders.LinkMenuLocalDataSource
-import tv.anilibria.module.data.restapi.datasource.remote.api.MenuRemoteDataSource
+import tv.anilibria.feature.menu.data.local.LinkMenuLocalDataSource
+import tv.anilibria.feature.menu.data.remote.MenuRemoteDataSource
 import tv.anilibria.module.domain.entity.other.LinkMenuItem
 import javax.inject.Inject
 
