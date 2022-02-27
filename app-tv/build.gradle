@@ -65,6 +65,7 @@ dependencies {
     implementation project(":feature-donation-data")
     implementation project(":feature-menu-data")
     implementation project(":feature-auth-data")
+    implementation project(":feature-vkcomments-data")
 
 
     implementation project(":shared-android-ktx")
