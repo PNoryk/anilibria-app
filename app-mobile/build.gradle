@@ -131,6 +131,7 @@ dependencies {
     implementation project(":feature-menu-data")
     implementation project(":feature-auth-data")
     implementation project(":feature-vkcomments-data")
+    implementation project(":feature-page-data")
 
     implementation project(":shared-android-ktx")
     implementation project(":shared-app")
