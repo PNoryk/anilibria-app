@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity.page
+package tv.anilibria.feature.vkcomments.data.domain
 
 import tv.anilibria.core.types.BaseUrl
 

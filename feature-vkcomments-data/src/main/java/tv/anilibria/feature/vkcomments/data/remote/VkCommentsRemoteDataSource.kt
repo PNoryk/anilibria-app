@@ -2,7 +2,7 @@ package tv.anilibria.feature.vkcomments.data.remote
 
 import kotlinx.coroutines.withTimeout
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.domain.entity.page.VkComments
+import tv.anilibria.feature.vkcomments.data.domain.VkComments
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

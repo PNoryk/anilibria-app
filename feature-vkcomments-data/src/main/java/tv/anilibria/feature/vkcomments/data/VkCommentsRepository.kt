@@ -2,7 +2,7 @@ package tv.anilibria.feature.vkcomments.data
 
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.vkcomments.data.remote.VkCommentsRemoteDataSource
-import tv.anilibria.module.domain.entity.page.VkComments
+import tv.anilibria.feature.vkcomments.data.domain.VkComments
 import javax.inject.Inject
 
 /**
