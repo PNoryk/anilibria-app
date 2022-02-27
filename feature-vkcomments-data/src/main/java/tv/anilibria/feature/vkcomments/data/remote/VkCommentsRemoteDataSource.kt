@@ -2,9 +2,7 @@ package tv.anilibria.feature.vkcomments.data.remote
 
 import kotlinx.coroutines.withTimeout
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.page.data.remote.PagesParser
 import tv.anilibria.module.domain.entity.page.VkComments
-import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
@@ -17,16 +15,14 @@ import kotlin.time.Duration.Companion.seconds
  */
 // todo проверить, что при ошибке body не возвращается
 class VkCommentsRemoteDataSource @Inject constructor(
-    private val pagesParser: tv.anilibria.feature.page.data.remote.PagesParser,
-    private val urlProvider: NetworkUrlProvider,
-    private val otherApi: NetworkWrapper<tv.anilibria.feature.vkcomments.data.remote.VkCommentsApi>
+    private val commentsApi: NetworkWrapper<VkCommentsApi>
 ) {
 
     suspend fun getComments(): VkComments {
         val args = formBodyOf(
             "query" to "vkcomments"
         )
-        return otherApi.proxy()
+        return commentsApi.proxy()
             .getVkComments(args)
             .handleApiResponse()
             .toDomain()
@@ -34,7 +30,7 @@ class VkCommentsRemoteDataSource @Inject constructor(
 
     suspend fun checkVkBlocked(): Boolean = try {
         withTimeout(15L.seconds) {
-            otherApi.direct().checkVkBlocked("https://vk.com/")
+            commentsApi.direct().checkVkBlocked("https://vk.com/")
         }
         false
     } catch (ex: Exception) {
@@ -42,6 +38,6 @@ class VkCommentsRemoteDataSource @Inject constructor(
     }
 
     suspend fun getDirectBody(url: AbsoluteUrl): String {
-        return otherApi.direct().getBody(url.value).string()
+        return commentsApi.direct().getBody(url.value).string()
     }
 }
