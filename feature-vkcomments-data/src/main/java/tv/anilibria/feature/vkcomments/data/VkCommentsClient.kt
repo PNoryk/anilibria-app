@@ -1,4 +1,4 @@
-package tv.anilibria.module.data
+package tv.anilibria.feature.vkcomments.data
 
 import tv.anilibria.core.types.AbsoluteUrl
 

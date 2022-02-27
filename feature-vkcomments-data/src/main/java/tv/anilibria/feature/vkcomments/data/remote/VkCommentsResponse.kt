@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.entity.app.page
+package tv.anilibria.feature.vkcomments.data.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

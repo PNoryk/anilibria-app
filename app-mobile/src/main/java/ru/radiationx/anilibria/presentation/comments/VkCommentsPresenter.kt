@@ -19,6 +19,7 @@ import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
@@ -31,7 +32,7 @@ import javax.inject.Inject
 @InjectViewState
 class VkCommentsPresenter @Inject constructor(
     private val authStateHolder: AuthStateHolder,
-    private val pageRepository: OtherRepository,
+    private val vkCommentsRepository: VkCommentsRepository,
     private val releaseInteractor: ReleaseInteractor,
     private val authHolder: AuthVkNotifier,
     private val router: Router,
@@ -91,7 +92,7 @@ class VkCommentsPresenter @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                pageRepository.checkVkBlocked()
+                vkCommentsRepository.checkVkBlocked()
             }.onSuccess { vkBlocked ->
                 hasVkBlockedError = vkBlocked
                 updateVkBlockedState()
@@ -175,7 +176,7 @@ class VkCommentsPresenter @Inject constructor(
 
     private suspend fun getDataSource(): VkCommentsState {
         return try {
-            val commentsSource = pageRepository.getComments()
+            val commentsSource = vkCommentsRepository.getComments()
             val releaseSource = releaseInteractor.getItem(releaseId, releaseIdCode)
                 ?: releaseInteractor.loadRelease(releaseId, releaseIdCode).first()
             VkCommentsState(
