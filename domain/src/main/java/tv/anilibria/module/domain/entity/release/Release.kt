@@ -1,7 +1,5 @@
 package tv.anilibria.module.domain.entity.release
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import tv.anilibria.core.types.AbsoluteUrl
@@ -10,12 +8,6 @@ import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.module.domain.entity.ReleaseSeason
 import tv.anilibria.module.domain.entity.ReleaseYear
-
-@Parcelize
-data class ReleaseId(val id: Long) : Parcelable
-
-@Parcelize
-data class ReleaseCode(val code: String) : Parcelable
 
 data class Release(
     val id: ReleaseId,

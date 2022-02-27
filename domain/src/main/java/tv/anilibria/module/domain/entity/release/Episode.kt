@@ -1,14 +1,6 @@
 package tv.anilibria.module.domain.entity.release
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 import tv.anilibria.core.types.AbsoluteUrl
-
-@Parcelize
-data class EpisodeId(
-    val id: Long,
-    val releaseId: ReleaseId
-) : Parcelable
 
 data class Episode(
     val id: EpisodeId,
