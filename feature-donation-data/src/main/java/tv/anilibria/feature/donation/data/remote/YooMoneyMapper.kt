@@ -1,6 +1,6 @@
-package tv.anilibria.module.data.restapi.entity.mapper.donation
+package tv.anilibria.feature.donation.data.remote
 
-import tv.anilibria.module.data.restapi.entity.app.donation.content_data.YooMoneyDialogResponse
+import tv.anilibria.feature.donation.data.remote.entity.content_data.YooMoneyDialogResponse
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
 fun YooMoneyDialogResponse.toDomain() = YooMoneyDialog(

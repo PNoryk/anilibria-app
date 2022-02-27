@@ -1,9 +1,9 @@
-package tv.anilibria.module.data.restapi.entity.app.donation
+package tv.anilibria.feature.donation.data.remote.entity
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import tv.anilibria.module.data.restapi.entity.app.donation.content_data.DonationDialogResponse
-import tv.anilibria.module.data.restapi.entity.app.donation.content_data.YooMoneyDialogResponse
+import tv.anilibria.feature.donation.data.remote.entity.content_data.DonationDialogResponse
+import tv.anilibria.feature.donation.data.remote.entity.content_data.YooMoneyDialogResponse
 
 @JsonClass(generateAdapter = true)
 data class DonationDetailResponse(

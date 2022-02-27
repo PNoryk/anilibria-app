@@ -10,7 +10,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
-import tv.anilibria.module.data.repos.DonationRepository
+import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.domain.entity.donation.DonationContentButton
 import tv.anilibria.module.domain.entity.donation.DonationDialog
 

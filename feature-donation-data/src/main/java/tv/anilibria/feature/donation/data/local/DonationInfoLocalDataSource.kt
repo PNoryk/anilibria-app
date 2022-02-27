@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.local.holders
+package tv.anilibria.feature.donation.data.local
 
 import kotlinx.coroutines.flow.Flow
 import tv.anilibria.module.domain.entity.donation.DonationInfo

@@ -1,10 +1,8 @@
-package tv.anilibria.module.data.restapi.datasource.remote.api
+package tv.anilibria.feature.donation.data.remote
 
 import retrofit2.HttpException
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.restapi.datasource.remote.retrofit.DonationApi
-import tv.anilibria.module.data.restapi.entity.mapper.donation.toDomain
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 import tv.anilibria.plugin.data.network.NetworkWrapper

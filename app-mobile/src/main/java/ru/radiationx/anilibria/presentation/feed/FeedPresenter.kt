@@ -32,7 +32,7 @@ import tv.anilibria.module.data.BaseUrlHelper
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.*
 import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.module.data.repos.DonationRepository
+import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.data.repos.FeedRepository
 import tv.anilibria.module.data.repos.ScheduleRepository
 import tv.anilibria.module.domain.entity.feed.Feed

@@ -13,7 +13,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.module.data.analytics.features.DonationYooMoneyAnalytics
 import tv.anilibria.module.data.analytics.features.model.AnalyticsDonationAmountType
 import tv.anilibria.module.data.analytics.features.model.AnalyticsDonationPaymentType
-import tv.anilibria.module.data.repos.DonationRepository
+import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
 @InjectConstructor

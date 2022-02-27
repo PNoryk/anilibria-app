@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.restapi.entity.app.donation.content
+package tv.anilibria.feature.donation.data.remote.entity.content
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

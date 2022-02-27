@@ -1,11 +1,11 @@
-package tv.anilibria.module.data.repos
+package tv.anilibria.feature.donation.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.data.local.holders.DonationInfoLocalDataSource
-import tv.anilibria.module.data.restapi.datasource.remote.api.DonationRemoteDataSource
+import tv.anilibria.feature.donation.data.local.DonationInfoLocalDataSource
+import tv.anilibria.feature.donation.data.remote.DonationRemoteDataSource
 import tv.anilibria.module.domain.entity.donation.DonationInfo
 import tv.anilibria.module.domain.entity.donation.yoomoney.YooMoneyDialog
 
