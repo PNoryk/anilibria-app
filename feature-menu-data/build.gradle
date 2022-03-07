@@ -44,7 +44,7 @@ dependencies {
     implementation project(":plugin:data-storage")
     implementation project(":plugin:data-analytics")
     implementation project(":core-types")
-    implementation project(":feature-content:data-restapi")
+    implementation project(':feature-content:data-remote')
     implementation project(":feature-content:data-local")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
