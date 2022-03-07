@@ -31,7 +31,7 @@ dependencies {
 
     implementation project(":core-types")
     implementation project(':feature-content:data')
-    implementation project(':feature-analytics')
+    implementation project(':feature-analytics-api')
     implementation project(":data-network")
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation project(":plugin:data-analytics")
