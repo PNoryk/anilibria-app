@@ -2,15 +2,15 @@ package tv.anilibria.feature.menu.data.local
 
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.core.types.asRelativeUrl
-import tv.anilibria.feature.content.data.local.mappers.toDataIcon
-import tv.anilibria.feature.content.data.local.mappers.toLocal
+import tv.anilibria.feature.content.types.other.toDataIcon
+import tv.anilibria.feature.content.types.other.toKey
 import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 
 fun LinkMenuItem.toLocal() = LinkMenuItemLocal(
     title = title,
     absoluteLink = absoluteLink?.value,
     sitePagePath = sitePagePath?.value,
-    icon = icon?.toLocal()
+    icon = icon?.toKey()
 )
 
 fun LinkMenuItemLocal.toDomain() = LinkMenuItem(

@@ -2,9 +2,9 @@ package tv.anilibria.feature.auth.data.local
 
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.auth.data.domain.SocialAuthService
-import tv.anilibria.feature.content.data.local.mappers.toDataColor
-import tv.anilibria.feature.content.data.local.mappers.toDataIcon
-import tv.anilibria.feature.content.data.local.mappers.toLocal
+import tv.anilibria.feature.content.types.other.toDataColor
+import tv.anilibria.feature.content.types.other.toDataIcon
+import tv.anilibria.feature.content.types.other.toKey
 
 fun SocialAuthService.toLocal() = SocialAuthServiceLocal(
     key = key,
@@ -12,8 +12,8 @@ fun SocialAuthService.toLocal() = SocialAuthServiceLocal(
     socialUrl = socialUrl.value,
     resultPattern = resultPattern.pattern,
     errorUrlPattern = errorUrlPattern.pattern,
-    color = color.toLocal(),
-    icon = icon.toLocal()
+    color = color.toKey(),
+    icon = icon.toKey()
 )
 
 fun SocialAuthServiceLocal.toDomain() = SocialAuthService(

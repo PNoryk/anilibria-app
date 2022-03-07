@@ -6,6 +6,8 @@ import tv.anilibria.feature.content.data.remote.entity.app.release.*
 import tv.anilibria.feature.content.types.ReleaseGenre
 import tv.anilibria.feature.content.types.ReleaseSeason
 import tv.anilibria.feature.content.types.ReleaseYear
+import tv.anilibria.feature.content.types.other.toDataColor
+import tv.anilibria.feature.content.types.other.toDataIcon
 import tv.anilibria.feature.content.types.release.*
 
 fun RandomReleaseResponse.toDomain() = RandomRelease(
