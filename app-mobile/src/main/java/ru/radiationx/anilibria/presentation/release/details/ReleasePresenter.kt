@@ -12,15 +12,15 @@ import ru.radiationx.anilibria.ui.fragments.release.details.ReleasePagerState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.BaseUrlHelper
-import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.CommentsAnalytics
-import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
-import tv.anilibria.module.data.repos.HistoryRepository
-import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.entity.release.ReleaseCode
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.data.BaseUrlHelper
+import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.data.analytics.features.CommentsAnalytics
+import tv.anilibria.feature.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.feature.data.repos.HistoryRepository
+import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.release.ReleaseCode
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 /* Created by radiationx on 18.11.17. */

@@ -2,9 +2,9 @@ package ru.radiationx.anilibria.presentation.release.details
 
 import kotlinx.datetime.DayOfWeek
 import ru.radiationx.anilibria.model.DonationCardItemState
-import tv.anilibria.module.domain.entity.release.EpisodeId
-import tv.anilibria.module.domain.entity.release.ReleaseId
-import tv.anilibria.module.domain.entity.release.TorrentId
+import tv.anilibria.feature.domain.entity.release.EpisodeId
+import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.domain.entity.release.TorrentId
 
 data class ReleaseDetailScreenState(
     val data: ReleaseDetailState? = null,

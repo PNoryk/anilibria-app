@@ -5,10 +5,10 @@ import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.SkipStrategy
 import moxy.viewstate.strategy.StateStrategyType
 import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
-import tv.anilibria.module.domain.entity.ReleaseGenre
-import tv.anilibria.module.domain.entity.ReleaseSeason
-import tv.anilibria.module.domain.entity.ReleaseYear
-import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.feature.domain.entity.ReleaseGenre
+import tv.anilibria.feature.domain.entity.ReleaseSeason
+import tv.anilibria.feature.domain.entity.ReleaseYear
+import tv.anilibria.feature.domain.entity.SearchForm
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface SearchCatalogView : MvpView {

@@ -3,10 +3,10 @@ package ru.radiationx.anilibria.common
 import android.text.Html
 import kotlinx.datetime.DayOfWeek
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.BaseUrlHelper
+import tv.anilibria.feature.data.BaseUrlHelper
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.entity.release.ReleaseStatus
+import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.release.ReleaseStatus
 import java.text.NumberFormat
 
 @InjectConstructor

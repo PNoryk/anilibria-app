@@ -12,8 +12,8 @@ import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.shared.ktx.asDayName
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.repos.ScheduleRepository
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.data.repos.ScheduleRepository
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class ScheduleViewModel(

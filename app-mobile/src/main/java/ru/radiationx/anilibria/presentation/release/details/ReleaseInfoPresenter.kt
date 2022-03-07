@@ -22,19 +22,19 @@ import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.player.data.PlayerPreferencesStorage
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
-import tv.anilibria.module.data.BaseUrlHelper
-import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.*
-import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
-import tv.anilibria.module.data.analytics.features.model.AnalyticsPlayer
-import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
-import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.feature.data.BaseUrlHelper
+import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.data.analytics.features.*
+import tv.anilibria.feature.data.analytics.features.mapper.toAnalyticsQuality
+import tv.anilibria.feature.data.analytics.features.model.AnalyticsPlayer
+import tv.anilibria.feature.data.analytics.features.model.AnalyticsQuality
+import tv.anilibria.feature.data.preferences.PreferencesStorage
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
-import tv.anilibria.module.data.repos.FavoriteRepository
-import tv.anilibria.module.data.repos.HistoryRepository
+import tv.anilibria.feature.data.repos.FavoriteRepository
+import tv.anilibria.feature.data.repos.HistoryRepository
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.module.domain.entity.release.*
+import tv.anilibria.feature.domain.entity.release.*
 import javax.inject.Inject
 
 @InjectViewState

@@ -5,8 +5,8 @@ import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.module.domain.entity.release.EpisodeId
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.domain.entity.release.EpisodeId
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData

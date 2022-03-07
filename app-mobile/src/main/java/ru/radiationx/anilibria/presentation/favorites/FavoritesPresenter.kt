@@ -17,13 +17,13 @@ import ru.radiationx.anilibria.ui.fragments.favorites.FavoritesScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.BaseUrlHelper
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.FavoritesAnalytics
-import tv.anilibria.module.data.analytics.features.ReleaseAnalytics
-import tv.anilibria.module.data.repos.FavoriteRepository
-import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.data.BaseUrlHelper
+import tv.anilibria.feature.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.data.analytics.features.FavoritesAnalytics
+import tv.anilibria.feature.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.feature.data.repos.FavoriteRepository
+import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 /**

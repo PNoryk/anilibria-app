@@ -1,8 +1,8 @@
 package tv.anilibria.feature.content.data.local
 
 import tv.anilibria.feature.content.data.local.holders.ReleaseUpdatesLocalDataSource
-import tv.anilibria.module.domain.entity.ReleaseUpdate
-import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.ReleaseUpdate
+import tv.anilibria.feature.domain.entity.release.Release
 
 class ReleaseUpdateHelper(
     private val dataSource: ReleaseUpdatesLocalDataSource

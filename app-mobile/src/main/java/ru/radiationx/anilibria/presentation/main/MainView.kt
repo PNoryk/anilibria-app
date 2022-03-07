@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.presentation.main
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import tv.anilibria.module.data.preferences.AppTheme
+import tv.anilibria.feature.data.preferences.AppTheme
 
 /**
  * Created by radiationx on 17.12.17.

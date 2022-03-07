@@ -15,9 +15,9 @@ import kotlinx.coroutines.runBlocking
 import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.contentprovider.SystemSuggestionEntity
 import ru.radiationx.shared_app.di.DI
-import tv.anilibria.module.data.BaseUrlHelper
-import tv.anilibria.module.data.repos.SearchRepository
-import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.feature.data.BaseUrlHelper
+import tv.anilibria.feature.data.repos.SearchRepository
+import tv.anilibria.feature.domain.entity.release.Release
 
 class SuggestionsContentProvider : ContentProvider() {
 

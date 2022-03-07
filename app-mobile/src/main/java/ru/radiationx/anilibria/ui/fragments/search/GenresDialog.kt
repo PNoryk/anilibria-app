@@ -20,10 +20,10 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.fillNavigationBarColor
 import ru.radiationx.anilibria.extension.getColorFromAttr
 import ru.radiationx.shared.ktx.android.visible
-import tv.anilibria.module.domain.entity.ReleaseGenre
-import tv.anilibria.module.domain.entity.ReleaseSeason
-import tv.anilibria.module.domain.entity.ReleaseYear
-import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.feature.domain.entity.ReleaseGenre
+import tv.anilibria.feature.domain.entity.ReleaseSeason
+import tv.anilibria.feature.domain.entity.ReleaseYear
+import tv.anilibria.feature.domain.entity.SearchForm
 
 
 class GenresDialog(

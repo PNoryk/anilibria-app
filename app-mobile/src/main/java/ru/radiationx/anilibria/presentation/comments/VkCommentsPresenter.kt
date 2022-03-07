@@ -20,12 +20,12 @@ import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
-import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.AuthVkAnalytics
-import tv.anilibria.module.data.analytics.features.CommentsAnalytics
-import tv.anilibria.module.domain.entity.release.ReleaseCode
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.data.analytics.features.AuthVkAnalytics
+import tv.anilibria.feature.data.analytics.features.CommentsAnalytics
+import tv.anilibria.feature.domain.entity.release.ReleaseCode
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 @InjectViewState

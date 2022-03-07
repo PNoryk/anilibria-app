@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.*
 import ru.radiationx.anilibria.common.BaseRowsViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
-import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.repos.HistoryRepository
-import tv.anilibria.module.domain.entity.release.ReleaseCode
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.data.repos.HistoryRepository
+import tv.anilibria.feature.domain.entity.release.ReleaseCode
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class DetailsViewModel(

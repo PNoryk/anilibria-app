@@ -3,7 +3,7 @@ package ru.radiationx.shared_app
 import ru.radiationx.shared_app.common.SystemUtils
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.module.data.BaseUrlHelper
+import tv.anilibria.feature.data.BaseUrlHelper
 
 class AppLinkHelper(
     val urlHelper: BaseUrlHelper,

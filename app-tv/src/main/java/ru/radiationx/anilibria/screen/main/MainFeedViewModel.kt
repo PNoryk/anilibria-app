@@ -8,9 +8,9 @@ import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.repos.FeedRepository
-import tv.anilibria.module.domain.entity.release.ReleaseId
-import tv.anilibria.module.domain.entity.youtube.Youtube
+import tv.anilibria.feature.data.repos.FeedRepository
+import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.domain.entity.youtube.Youtube
 
 @InjectConstructor
 class MainFeedViewModel(

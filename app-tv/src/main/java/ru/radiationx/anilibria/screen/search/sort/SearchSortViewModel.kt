@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
 import toothpick.InjectConstructor
-import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.feature.domain.entity.SearchForm
 
 @InjectConstructor
 class SearchSortViewModel(

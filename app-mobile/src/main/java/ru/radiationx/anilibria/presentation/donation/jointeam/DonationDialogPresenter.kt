@@ -12,7 +12,7 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.donation.data.domain.DonationContentButton
 import tv.anilibria.feature.donation.data.domain.DonationDialog
-import tv.anilibria.module.data.analytics.features.DonationDialogAnalytics
+import tv.anilibria.feature.data.analytics.features.DonationDialogAnalytics
 
 @InjectConstructor
 class DonationDialogPresenter(

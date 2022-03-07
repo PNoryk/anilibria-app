@@ -2,8 +2,8 @@ package tv.anilibria.feature.content.data.local.mappers
 
 import kotlinx.datetime.Instant
 import tv.anilibria.feature.content.data.local.entity.ReleaseUpdateLocal
-import tv.anilibria.module.domain.entity.ReleaseUpdate
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.domain.entity.ReleaseUpdate
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 fun ReleaseUpdate.toLocal() = ReleaseUpdateLocal(
     id = id.id,

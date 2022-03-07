@@ -11,9 +11,9 @@ import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.SuggestionsScreen
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.repos.SearchRepository
-import tv.anilibria.module.domain.entity.SearchForm
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.data.repos.SearchRepository
+import tv.anilibria.feature.domain.entity.SearchForm
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class SearchViewModel(

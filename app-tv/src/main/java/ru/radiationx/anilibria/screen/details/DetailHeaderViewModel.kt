@@ -21,12 +21,12 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.feature.data.ReleaseInteractor
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
-import tv.anilibria.module.data.repos.FavoriteRepository
+import tv.anilibria.feature.data.repos.FavoriteRepository
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class DetailHeaderViewModel(

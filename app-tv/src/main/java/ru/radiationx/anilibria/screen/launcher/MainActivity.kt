@@ -15,7 +15,7 @@ import ru.radiationx.shared_app.screen.ScopedFragmentActivity
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import toothpick.ktp.binding.module
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 import javax.inject.Inject
 
 class MainActivity : ScopedFragmentActivity() {

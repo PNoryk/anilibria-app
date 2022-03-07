@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.*
 import toothpick.InjectConstructor
-import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.feature.domain.entity.SearchForm
 
 @InjectConstructor
 class SearchFormViewModel(

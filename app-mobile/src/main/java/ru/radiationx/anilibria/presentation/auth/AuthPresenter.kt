@@ -17,10 +17,10 @@ import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.AuthMainAnalytics
-import tv.anilibria.module.data.analytics.features.AuthSocialAnalytics
-import tv.anilibria.module.domain.errors.EmptyFieldException
+import tv.anilibria.feature.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.data.analytics.features.AuthMainAnalytics
+import tv.anilibria.feature.data.analytics.features.AuthSocialAnalytics
+import tv.anilibria.feature.domain.errors.EmptyFieldException
 import javax.inject.Inject
 
 /**

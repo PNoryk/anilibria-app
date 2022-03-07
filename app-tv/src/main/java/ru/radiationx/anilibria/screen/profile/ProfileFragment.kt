@@ -13,7 +13,7 @@ import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModelFromParent
 import ru.radiationx.shared_app.screen.ScopedFragment
 import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.module.data.BaseUrlHelper
+import tv.anilibria.feature.data.BaseUrlHelper
 import javax.inject.Inject
 
 class ProfileFragment : ScopedFragment(R.layout.fragment_profile),

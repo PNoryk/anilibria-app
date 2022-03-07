@@ -2,7 +2,7 @@ package ru.radiationx.anilibria.screen.suggestions
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import toothpick.InjectConstructor
-import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.release.Release
 
 @InjectConstructor
 class SuggestionsController {

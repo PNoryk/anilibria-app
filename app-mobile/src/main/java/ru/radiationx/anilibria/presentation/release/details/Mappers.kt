@@ -6,7 +6,7 @@ import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.shared.ktx.asTimeSecString
 import ru.radiationx.shared_app.common.SystemUtils
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.module.domain.entity.release.*
+import tv.anilibria.feature.domain.entity.release.*
 import java.util.*
 
 fun Release.toState(

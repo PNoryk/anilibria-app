@@ -7,8 +7,8 @@ import moxy.viewstate.strategy.StateStrategyType
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
-import tv.anilibria.module.domain.entity.release.Episode
-import tv.anilibria.module.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.release.Episode
+import tv.anilibria.feature.domain.entity.release.Release
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface ReleaseInfoView : MvpView {

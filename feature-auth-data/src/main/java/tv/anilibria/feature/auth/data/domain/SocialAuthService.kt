@@ -1,8 +1,8 @@
 package tv.anilibria.feature.auth.data.domain
 
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.module.domain.entity.other.DataColor
-import tv.anilibria.module.domain.entity.other.DataIcon
+import tv.anilibria.feature.domain.entity.other.DataColor
+import tv.anilibria.feature.domain.entity.other.DataIcon
 
 data class SocialAuthService(
     val key: String,

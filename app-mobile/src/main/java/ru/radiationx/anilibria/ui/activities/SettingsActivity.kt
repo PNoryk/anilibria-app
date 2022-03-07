@@ -11,8 +11,8 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.getPrefStyleRes
 import ru.radiationx.anilibria.ui.fragments.settings.SettingsFragment
 import ru.radiationx.shared_app.di.injectDependencies
-import tv.anilibria.module.data.preferences.AppTheme
-import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.feature.data.preferences.AppTheme
+import tv.anilibria.feature.data.preferences.PreferencesStorage
 import javax.inject.Inject
 
 

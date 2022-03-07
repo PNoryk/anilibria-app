@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.screen.player
 import ru.radiationx.anilibria.common.fragment.scoped.ScopedGuidedStepFragment
 import ru.radiationx.anilibria.screen.player.BasePlayerGuidedFragment.Companion.ARG_EPISODE_ID
 import ru.radiationx.shared.ktx.android.putExtra
-import tv.anilibria.module.domain.entity.release.EpisodeId
+import tv.anilibria.feature.domain.entity.release.EpisodeId
 
 abstract class BasePlayerGuidedFragment : ScopedGuidedStepFragment() {
 

@@ -27,10 +27,10 @@ import ru.radiationx.anilibria.ui.fragments.release.list.ReleasesAdapter
 import ru.radiationx.anilibria.utils.DimensionHelper
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared_app.di.injectDependencies
-import tv.anilibria.module.domain.entity.ReleaseGenre
-import tv.anilibria.module.domain.entity.ReleaseSeason
-import tv.anilibria.module.domain.entity.ReleaseYear
-import tv.anilibria.module.domain.entity.SearchForm
+import tv.anilibria.feature.domain.entity.ReleaseGenre
+import tv.anilibria.feature.domain.entity.ReleaseSeason
+import tv.anilibria.feature.domain.entity.ReleaseYear
+import tv.anilibria.feature.domain.entity.SearchForm
 
 
 class SearchCatalogFragment : BaseFragment(), SearchCatalogView, FastSearchView, SharedProvider,

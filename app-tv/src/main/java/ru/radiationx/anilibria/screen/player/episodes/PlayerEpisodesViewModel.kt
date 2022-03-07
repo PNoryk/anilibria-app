@@ -8,10 +8,10 @@ import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.player.PlayerController
 import ru.radiationx.shared.ktx.asTimeSecString
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.ReleaseInteractor
+import tv.anilibria.feature.data.ReleaseInteractor
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
-import tv.anilibria.module.domain.entity.release.Episode
-import tv.anilibria.module.domain.entity.release.EpisodeId
+import tv.anilibria.feature.domain.entity.release.Episode
+import tv.anilibria.feature.domain.entity.release.EpisodeId
 import java.util.*
 
 @InjectConstructor

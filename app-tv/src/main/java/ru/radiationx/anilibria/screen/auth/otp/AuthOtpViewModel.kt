@@ -11,8 +11,8 @@ import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.domain.OtpInfo
-import tv.anilibria.module.domain.errors.OtpNotAcceptedException
-import tv.anilibria.module.domain.errors.OtpNotFoundException
+import tv.anilibria.feature.domain.errors.OtpNotAcceptedException
+import tv.anilibria.feature.domain.errors.OtpNotFoundException
 import java.util.*
 
 @InjectConstructor

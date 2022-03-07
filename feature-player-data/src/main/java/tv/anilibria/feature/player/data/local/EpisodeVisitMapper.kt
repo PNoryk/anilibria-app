@@ -2,8 +2,8 @@ package tv.anilibria.feature.player.data.local
 
 import kotlinx.datetime.Instant
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.module.domain.entity.release.EpisodeId
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.domain.entity.release.EpisodeId
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 fun EpisodeVisit.toLocal() = EpisodeVisitLocal(
     id = id.id,

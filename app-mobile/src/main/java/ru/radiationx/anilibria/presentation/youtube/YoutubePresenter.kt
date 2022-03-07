@@ -14,12 +14,12 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeScreenState
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.module.data.BaseUrlHelper
-import tv.anilibria.module.data.analytics.AnalyticsConstants
-import tv.anilibria.module.data.analytics.features.YoutubeAnalytics
-import tv.anilibria.module.data.analytics.features.YoutubeVideosAnalytics
-import tv.anilibria.module.data.repos.YoutubeRepository
-import tv.anilibria.module.domain.entity.youtube.Youtube
+import tv.anilibria.feature.data.BaseUrlHelper
+import tv.anilibria.feature.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.data.analytics.features.YoutubeAnalytics
+import tv.anilibria.feature.data.analytics.features.YoutubeVideosAnalytics
+import tv.anilibria.feature.data.repos.YoutubeRepository
+import tv.anilibria.feature.domain.entity.youtube.Youtube
 import javax.inject.Inject
 
 @InjectViewState

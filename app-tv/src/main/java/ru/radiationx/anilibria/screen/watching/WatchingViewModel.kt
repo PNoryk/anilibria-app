@@ -9,7 +9,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
-import tv.anilibria.module.data.repos.HistoryRepository
+import tv.anilibria.feature.data.repos.HistoryRepository
 
 @InjectConstructor
 class WatchingViewModel(

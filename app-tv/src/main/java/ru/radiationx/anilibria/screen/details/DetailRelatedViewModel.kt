@@ -11,9 +11,9 @@ import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.repos.ReleaseRepository
-import tv.anilibria.module.domain.entity.release.ReleaseId
+import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.data.repos.ReleaseRepository
+import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 @InjectConstructor
 class DetailRelatedViewModel(

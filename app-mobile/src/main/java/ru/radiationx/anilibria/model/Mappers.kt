@@ -5,10 +5,10 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import tv.anilibria.feature.user.data.domain.User
-import tv.anilibria.module.data.BaseUrlHelper
-import tv.anilibria.module.domain.entity.feed.Feed
-import tv.anilibria.module.domain.entity.release.Release
-import tv.anilibria.module.domain.entity.youtube.Youtube
+import tv.anilibria.feature.data.BaseUrlHelper
+import tv.anilibria.feature.domain.entity.feed.Feed
+import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.domain.entity.youtube.Youtube
 
 //todo map isnew
 fun Release.toState(urlHelper: BaseUrlHelper): ReleaseItemState {

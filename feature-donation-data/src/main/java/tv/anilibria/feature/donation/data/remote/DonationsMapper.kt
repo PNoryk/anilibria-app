@@ -8,8 +8,8 @@ import tv.anilibria.feature.donation.data.remote.entity.DonationContentItemRespo
 import tv.anilibria.feature.donation.data.remote.entity.DonationInfoResponse
 import tv.anilibria.feature.donation.data.remote.entity.content.*
 import tv.anilibria.feature.donation.data.remote.entity.content_data.DonationDialogResponse
-import tv.anilibria.module.data.restapi.entity.mapper.toDataColor
-import tv.anilibria.module.data.restapi.entity.mapper.toDataIcon
+import tv.anilibria.feature.data.restapi.entity.mapper.toDataColor
+import tv.anilibria.feature.data.restapi.entity.mapper.toDataIcon
 
 fun DonationInfoResponse.toDomain() = DonationInfo(
     cardNewDonations = cards.newDonations?.toDomain(),
