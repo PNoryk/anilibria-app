@@ -1,4 +1,4 @@
-package tv.anilibria.feature.analytics.api
+package tv.anilibria.feature.analytics.impl
 
 import toothpick.InjectConstructor
 import tv.anilibria.app.mobile.preferences.PreferencesStorage

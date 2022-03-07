@@ -1,4 +1,4 @@
-package ru.radiationx.shared_app.analytics.events
+package tv.anilibria.feature.analytics.impl.events
 
 import com.yandex.metrica.YandexMetrica
 import toothpick.InjectConstructor

@@ -1,4 +1,4 @@
-package ru.radiationx.shared_app.analytics.errors
+package tv.anilibria.feature.analytics.impl.errors
 
 import android.util.Log
 import toothpick.InjectConstructor

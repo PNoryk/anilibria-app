@@ -1,4 +1,4 @@
-package ru.radiationx.shared_app.analytics.profile
+package tv.anilibria.feature.analytics.impl.profile
 
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.profile.Attribute
@@ -7,7 +7,7 @@ import com.yandex.metrica.profile.UserProfileUpdate
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import toothpick.InjectConstructor
-import tv.anilibria.feature.analytics.api.AnalyticsProfileDataSource
+import tv.anilibria.feature.analytics.impl.AnalyticsProfileDataSource
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 
 @InjectConstructor
