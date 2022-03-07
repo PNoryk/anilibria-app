@@ -1,6 +1,6 @@
 package tv.anilibria.feature.content.data.repos
 
-import tv.anilibria.feature.content.data.restapi.datasource.remote.api.YoutubeRemoteDataSource
+import tv.anilibria.feature.content.data.remote.datasource.remote.api.YoutubeRemoteDataSource
 import tv.anilibria.feature.domain.entity.Page
 import tv.anilibria.feature.domain.entity.youtube.Youtube
 import javax.inject.Inject

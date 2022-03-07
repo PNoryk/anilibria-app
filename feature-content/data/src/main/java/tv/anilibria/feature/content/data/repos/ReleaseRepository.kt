@@ -1,7 +1,7 @@
 package tv.anilibria.feature.content.data.repos
 
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
-import tv.anilibria.feature.content.data.restapi.datasource.remote.api.ReleaseRemoteDataSource
+import tv.anilibria.feature.content.data.remote.datasource.remote.api.ReleaseRemoteDataSource
 import tv.anilibria.feature.domain.entity.Page
 import tv.anilibria.feature.domain.entity.release.RandomRelease
 import tv.anilibria.feature.domain.entity.release.Release
