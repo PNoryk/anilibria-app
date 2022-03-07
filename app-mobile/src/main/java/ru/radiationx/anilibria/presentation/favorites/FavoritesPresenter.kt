@@ -22,8 +22,8 @@ import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.FavoritesAnalytics
 import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
 /**

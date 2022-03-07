@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.ScheduleRemoteDataSource
-import tv.anilibria.feature.domain.entity.schedule.ScheduleDay
+import tv.anilibria.feature.content.types.schedule.ScheduleDay
 import tv.anilibria.plugin.data.storage.ObservableData
 import javax.inject.Inject
 

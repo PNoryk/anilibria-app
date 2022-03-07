@@ -1,7 +1,7 @@
 package tv.anilibria.feature.content.data.local.mappers
 
-import tv.anilibria.feature.domain.entity.other.DataColor
-import tv.anilibria.feature.domain.entity.other.DataIcon
+import tv.anilibria.feature.content.types.other.DataColor
+import tv.anilibria.feature.content.types.other.DataIcon
 
 fun DataIcon.toLocal(): String = when (this) {
     DataIcon.VK -> "vk"

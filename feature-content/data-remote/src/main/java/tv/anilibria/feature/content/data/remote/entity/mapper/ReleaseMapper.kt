@@ -3,10 +3,10 @@ package tv.anilibria.feature.content.data.remote.entity.mapper
 import kotlinx.datetime.Instant
 import tv.anilibria.core.types.*
 import tv.anilibria.feature.content.data.remote.entity.app.release.*
-import tv.anilibria.feature.domain.entity.ReleaseGenre
-import tv.anilibria.feature.domain.entity.ReleaseSeason
-import tv.anilibria.feature.domain.entity.ReleaseYear
-import tv.anilibria.feature.domain.entity.release.*
+import tv.anilibria.feature.content.types.ReleaseGenre
+import tv.anilibria.feature.content.types.ReleaseSeason
+import tv.anilibria.feature.content.types.ReleaseYear
+import tv.anilibria.feature.content.types.release.*
 
 fun RandomReleaseResponse.toDomain() = RandomRelease(
     code = ReleaseCode(code)

@@ -62,9 +62,9 @@ import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsSeaso
 import tv.anilibria.feature.content.data.preferences.PreferencesStorage
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.feature.domain.entity.release.Episode
-import tv.anilibria.feature.domain.entity.release.EpisodeId
-import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.content.types.release.Episode
+import tv.anilibria.feature.content.types.release.EpisodeId
+import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import tv.anilibria.plugin.data.analytics.TimeCounter

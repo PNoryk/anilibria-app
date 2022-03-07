@@ -35,11 +35,11 @@ import tv.anilibria.feature.content.data.analytics.features.*
 import tv.anilibria.feature.content.data.preferences.PreferencesStorage
 import tv.anilibria.feature.content.data.repos.FeedRepository
 import tv.anilibria.feature.content.data.repos.ScheduleRepository
-import tv.anilibria.feature.domain.entity.feed.Feed
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseId
-import tv.anilibria.feature.domain.entity.youtube.Youtube
-import tv.anilibria.feature.domain.entity.youtube.YoutubeId
+import tv.anilibria.feature.content.types.feed.Feed
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseId
+import tv.anilibria.feature.content.types.youtube.Youtube
+import tv.anilibria.feature.content.types.youtube.YoutubeId
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 

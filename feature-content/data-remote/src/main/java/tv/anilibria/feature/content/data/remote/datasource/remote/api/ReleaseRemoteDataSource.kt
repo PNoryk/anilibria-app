@@ -2,9 +2,9 @@ package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.ReleaseApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
-import tv.anilibria.feature.domain.entity.Page
-import tv.anilibria.feature.domain.entity.release.RandomRelease
-import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.content.types.Page
+import tv.anilibria.feature.content.types.release.RandomRelease
+import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

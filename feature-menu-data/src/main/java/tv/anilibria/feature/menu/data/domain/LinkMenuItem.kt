@@ -2,7 +2,7 @@ package tv.anilibria.feature.menu.data.domain
 
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.feature.domain.entity.other.DataIcon
+import tv.anilibria.feature.content.types.other.DataIcon
 
 data class LinkMenuItem(
     val title: String,

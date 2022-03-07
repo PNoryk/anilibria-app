@@ -12,10 +12,10 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.data.repos.SearchRepository
-import tv.anilibria.feature.domain.entity.ReleaseGenre
-import tv.anilibria.feature.domain.entity.SearchForm
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.ReleaseGenre
+import tv.anilibria.feature.content.types.SearchForm
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 @InjectConstructor
 class DetailRecommendsViewModel(

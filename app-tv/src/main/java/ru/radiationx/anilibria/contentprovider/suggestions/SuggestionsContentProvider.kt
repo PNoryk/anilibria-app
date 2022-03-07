@@ -17,7 +17,7 @@ import ru.radiationx.anilibria.contentprovider.SystemSuggestionEntity
 import ru.radiationx.shared_app.di.DI
 import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.repos.SearchRepository
-import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.content.types.release.Release
 
 class SuggestionsContentProvider : ContentProvider() {
 

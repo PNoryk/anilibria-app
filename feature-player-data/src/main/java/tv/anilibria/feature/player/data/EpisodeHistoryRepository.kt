@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 import tv.anilibria.feature.player.data.local.EpisodeHistoryLocalDataSource
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.feature.domain.entity.release.EpisodeId
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.EpisodeId
+import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
 /**

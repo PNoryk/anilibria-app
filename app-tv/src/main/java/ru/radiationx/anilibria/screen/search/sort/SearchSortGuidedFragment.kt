@@ -8,7 +8,7 @@ import ru.radiationx.anilibria.common.fragment.scoped.ScopedGuidedStepFragment
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel
-import tv.anilibria.feature.domain.entity.SearchForm
+import tv.anilibria.feature.content.types.SearchForm
 
 class SearchSortGuidedFragment : ScopedGuidedStepFragment() {
 

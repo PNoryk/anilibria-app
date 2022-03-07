@@ -25,9 +25,9 @@ import ru.radiationx.anilibria.ui.fragments.search.SearchCatalogFragment
 import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeFragment
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.feature.domain.entity.ReleaseGenre
-import tv.anilibria.feature.domain.entity.release.ReleaseCode
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.ReleaseGenre
+import tv.anilibria.feature.content.types.release.ReleaseCode
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 /**
  * Created by radiationx on 17.11.17.

@@ -2,7 +2,7 @@ package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.FeedApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
-import tv.anilibria.feature.domain.entity.feed.Feed
+import tv.anilibria.feature.content.types.feed.Feed
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

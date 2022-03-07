@@ -9,8 +9,8 @@ import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.repos.FeedRepository
-import tv.anilibria.feature.domain.entity.release.ReleaseId
-import tv.anilibria.feature.domain.entity.youtube.Youtube
+import tv.anilibria.feature.content.types.release.ReleaseId
+import tv.anilibria.feature.content.types.youtube.Youtube
 
 @InjectConstructor
 class MainFeedViewModel(

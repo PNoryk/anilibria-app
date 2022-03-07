@@ -5,9 +5,9 @@ import tv.anilibria.core.types.asCount
 import tv.anilibria.core.types.asHtmlText
 import tv.anilibria.core.types.asRelativeUrl
 import tv.anilibria.feature.content.data.remote.entity.app.youtube.YoutubeResponse
-import tv.anilibria.feature.domain.entity.youtube.Youtube
-import tv.anilibria.feature.domain.entity.youtube.YoutubeId
-import tv.anilibria.feature.domain.entity.youtube.YoutubeVideoId
+import tv.anilibria.feature.content.types.youtube.Youtube
+import tv.anilibria.feature.content.types.youtube.YoutubeId
+import tv.anilibria.feature.content.types.youtube.YoutubeVideoId
 
 fun YoutubeResponse.toDomain() = Youtube(
     id = YoutubeId(id),

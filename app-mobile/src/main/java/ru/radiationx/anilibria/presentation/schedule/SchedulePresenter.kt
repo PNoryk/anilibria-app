@@ -22,7 +22,7 @@ import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.analytics.features.ScheduleAnalytics
 import tv.anilibria.feature.content.data.repos.ScheduleRepository
-import tv.anilibria.feature.domain.entity.schedule.ScheduleDay
+import tv.anilibria.feature.content.types.schedule.ScheduleDay
 import javax.inject.Inject
 
 @InjectViewState

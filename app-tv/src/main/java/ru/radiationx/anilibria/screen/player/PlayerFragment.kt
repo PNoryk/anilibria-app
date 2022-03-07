@@ -7,7 +7,7 @@ import com.google.android.exoplayer2.PlaybackParameters
 import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel
-import tv.anilibria.feature.domain.entity.release.EpisodeId
+import tv.anilibria.feature.content.types.release.EpisodeId
 
 class PlayerFragment : BasePlayerFragment() {
 

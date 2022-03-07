@@ -3,8 +3,8 @@ package ru.radiationx.anilibria.model
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import ru.radiationx.anilibria.R
-import tv.anilibria.feature.domain.entity.other.DataColor
-import tv.anilibria.feature.domain.entity.other.DataIcon
+import tv.anilibria.feature.content.types.other.DataColor
+import tv.anilibria.feature.content.types.other.DataIcon
 
 @DrawableRes
 fun DataIcon.asDataIconRes(): Int? = when (this) {

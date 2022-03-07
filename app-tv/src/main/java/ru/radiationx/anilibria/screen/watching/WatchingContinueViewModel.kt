@@ -10,7 +10,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.content.data.repos.HistoryRepository
 import tv.anilibria.feature.content.data.repos.ReleaseRepository
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 @InjectConstructor
 class WatchingContinueViewModel(

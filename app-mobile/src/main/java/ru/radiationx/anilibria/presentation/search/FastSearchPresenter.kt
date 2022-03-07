@@ -20,7 +20,7 @@ import tv.anilibria.feature.content.data.analytics.features.CatalogAnalytics
 import tv.anilibria.feature.content.data.analytics.features.FastSearchAnalytics
 import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.repos.SearchRepository
-import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.content.types.release.Release
 import java.net.URLEncoder
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds

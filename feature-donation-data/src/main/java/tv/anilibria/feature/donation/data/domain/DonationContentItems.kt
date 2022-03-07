@@ -2,8 +2,8 @@ package tv.anilibria.feature.donation.data.domain
 
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.HtmlText
-import tv.anilibria.feature.domain.entity.other.DataColor
-import tv.anilibria.feature.domain.entity.other.DataIcon
+import tv.anilibria.feature.content.types.other.DataColor
+import tv.anilibria.feature.content.types.other.DataIcon
 
 sealed class DonationContentItem
 

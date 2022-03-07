@@ -18,9 +18,9 @@ import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.CommentsAnalytics
 import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.repos.HistoryRepository
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseCode
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseCode
+import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
 /* Created by radiationx on 18.11.17. */

@@ -1,7 +1,7 @@
 package tv.anilibria.feature.content.data.remote.entity.mapper
 
 import tv.anilibria.feature.content.data.remote.entity.app.schedule.ScheduleDayResponse
-import tv.anilibria.feature.domain.entity.schedule.ScheduleDay
+import tv.anilibria.feature.content.types.schedule.ScheduleDay
 
 fun ScheduleDayResponse.toDomain() = ScheduleDay(
     day = day.asWeekDay(),

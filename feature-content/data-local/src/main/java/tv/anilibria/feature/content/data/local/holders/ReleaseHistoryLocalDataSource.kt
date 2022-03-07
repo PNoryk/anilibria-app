@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.map
 import tv.anilibria.feature.content.data.local.entity.ReleaseVisitLocal
 import tv.anilibria.feature.content.data.local.mappers.toDomain
 import tv.anilibria.feature.content.data.local.mappers.toLocal
-import tv.anilibria.feature.domain.entity.ReleaseVisit
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.ReleaseVisit
+import tv.anilibria.feature.content.types.release.ReleaseId
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData

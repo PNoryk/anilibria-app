@@ -26,12 +26,12 @@ import tv.anilibria.feature.content.data.analytics.features.FastSearchAnalytics
 import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.preferences.PreferencesStorage
 import tv.anilibria.feature.content.data.repos.SearchRepository
-import tv.anilibria.feature.domain.entity.ReleaseGenre
-import tv.anilibria.feature.domain.entity.ReleaseSeason
-import tv.anilibria.feature.domain.entity.ReleaseYear
-import tv.anilibria.feature.domain.entity.SearchForm
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.ReleaseGenre
+import tv.anilibria.feature.content.types.ReleaseSeason
+import tv.anilibria.feature.content.types.ReleaseYear
+import tv.anilibria.feature.content.types.SearchForm
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseId
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import javax.inject.Inject
 

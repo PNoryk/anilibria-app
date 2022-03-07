@@ -2,7 +2,7 @@ package ru.radiationx.anilibria.common
 
 import androidx.leanback.widget.Row
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 data class LibriaDetails(
     val id: ReleaseId,

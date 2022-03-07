@@ -20,8 +20,8 @@ import tv.anilibria.feature.content.data.analytics.features.HistoryAnalytics
 import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.repos.HistoryRepository
 import tv.anilibria.feature.content.data.repos.ReleaseRepository
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
 /**

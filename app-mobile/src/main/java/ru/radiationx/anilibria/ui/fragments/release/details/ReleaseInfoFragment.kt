@@ -43,8 +43,8 @@ import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsPl
 import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
-import tv.anilibria.feature.domain.entity.release.Episode
-import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.content.types.release.Episode
+import tv.anilibria.feature.content.types.release.Release
 import java.net.URLConnection
 import java.util.regex.Pattern
 import javax.inject.Inject

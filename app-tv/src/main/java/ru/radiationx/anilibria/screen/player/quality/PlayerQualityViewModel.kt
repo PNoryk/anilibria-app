@@ -11,7 +11,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.player.data.PlayerPreferencesStorage
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.content.data.ReleaseInteractor
-import tv.anilibria.feature.domain.entity.release.EpisodeId
+import tv.anilibria.feature.content.types.release.EpisodeId
 
 @InjectConstructor
 class PlayerQualityViewModel(

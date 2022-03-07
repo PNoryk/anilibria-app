@@ -34,7 +34,7 @@ import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
 import tv.anilibria.feature.content.data.repos.HistoryRepository
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.feature.domain.entity.release.*
+import tv.anilibria.feature.content.types.release.*
 import javax.inject.Inject
 
 @InjectViewState

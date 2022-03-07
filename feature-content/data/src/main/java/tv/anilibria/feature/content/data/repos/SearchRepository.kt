@@ -5,8 +5,8 @@ import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.local.holders.GenresLocalDataSource
 import tv.anilibria.feature.content.data.local.holders.YearsLocalDataSource
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.SearchRemoteDataSource
-import tv.anilibria.feature.domain.entity.*
-import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.content.types.*
+import tv.anilibria.feature.content.types.release.Release
 import javax.inject.Inject
 
 class SearchRepository @Inject constructor(

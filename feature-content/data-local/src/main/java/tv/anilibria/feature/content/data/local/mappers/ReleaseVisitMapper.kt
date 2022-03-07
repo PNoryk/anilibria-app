@@ -2,8 +2,8 @@ package tv.anilibria.feature.content.data.local.mappers
 
 import kotlinx.datetime.Instant
 import tv.anilibria.feature.content.data.local.entity.ReleaseVisitLocal
-import tv.anilibria.feature.domain.entity.ReleaseVisit
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.ReleaseVisit
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 fun ReleaseVisit.toLocal() = ReleaseVisitLocal(
     id = id.id,

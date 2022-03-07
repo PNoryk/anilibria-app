@@ -49,7 +49,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
     implementation project(':feature-content:data')
     implementation project(":core-types")
-    implementation project(":feature-content:domain")
+    implementation project(':feature-content:types')
     implementation project(':feature-content:data-remote')
     implementation project(":data-network")
     implementation project(":feature-content:data-local")

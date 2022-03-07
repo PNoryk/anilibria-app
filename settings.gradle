@@ -2,7 +2,7 @@ include ':app-mobile', ':bottomsheet', ':shared-ktx', ':shared-android-ktx', ':l
 include ':feature-content:data-remote'
 include ':feature-content:data-local'
 include ':feature-content:data'
-include ':feature-content:domain'
+include ':feature-content:types'
 include ':feature-network-config-data'
 include ':feature-appupdates-data'
 include ':core-types'

@@ -25,8 +25,8 @@ import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 @InjectConstructor
 class DetailHeaderViewModel(

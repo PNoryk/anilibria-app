@@ -20,7 +20,7 @@ import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.AuthMainAnalytics
 import tv.anilibria.feature.content.data.analytics.features.AuthSocialAnalytics
-import tv.anilibria.feature.domain.errors.EmptyFieldException
+import tv.anilibria.feature.content.errors.EmptyFieldException
 import javax.inject.Inject
 
 /**

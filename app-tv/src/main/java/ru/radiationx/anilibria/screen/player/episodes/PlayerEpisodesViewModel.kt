@@ -10,8 +10,8 @@ import ru.radiationx.shared.ktx.asTimeSecString
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
-import tv.anilibria.feature.domain.entity.release.Episode
-import tv.anilibria.feature.domain.entity.release.EpisodeId
+import tv.anilibria.feature.content.types.release.Episode
+import tv.anilibria.feature.content.types.release.EpisodeId
 import java.util.*
 
 @InjectConstructor

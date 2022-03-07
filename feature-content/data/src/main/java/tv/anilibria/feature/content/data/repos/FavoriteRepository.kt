@@ -2,9 +2,9 @@ package tv.anilibria.feature.content.data.repos
 
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.FavoriteRemoteDataSource
-import tv.anilibria.feature.domain.entity.Page
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.Page
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
 class FavoriteRepository @Inject constructor(

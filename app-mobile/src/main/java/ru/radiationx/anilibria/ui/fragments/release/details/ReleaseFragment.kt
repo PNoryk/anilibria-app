@@ -33,8 +33,8 @@ import ru.radiationx.shared.ktx.android.putExtra
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.feature.content.data.analytics.features.CommentsAnalytics
-import tv.anilibria.feature.domain.entity.release.ReleaseCode
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.ReleaseCode
+import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
 

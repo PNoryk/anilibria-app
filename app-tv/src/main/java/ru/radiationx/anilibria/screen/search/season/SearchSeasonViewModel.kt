@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.screen.search.BaseSearchValuesViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.repos.SearchRepository
-import tv.anilibria.feature.domain.entity.ReleaseSeason
+import tv.anilibria.feature.content.types.ReleaseSeason
 
 @InjectConstructor
 class SearchSeasonViewModel(

@@ -3,11 +3,11 @@ package tv.anilibria.feature.content.data.remote.datasource.remote.api
 import org.json.JSONObject
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.SearchApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
-import tv.anilibria.feature.domain.entity.Page
-import tv.anilibria.feature.domain.entity.ReleaseGenre
-import tv.anilibria.feature.domain.entity.ReleaseYear
-import tv.anilibria.feature.domain.entity.SearchForm
-import tv.anilibria.feature.domain.entity.release.Release
+import tv.anilibria.feature.content.types.Page
+import tv.anilibria.feature.content.types.ReleaseGenre
+import tv.anilibria.feature.content.types.ReleaseYear
+import tv.anilibria.feature.content.types.SearchForm
+import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

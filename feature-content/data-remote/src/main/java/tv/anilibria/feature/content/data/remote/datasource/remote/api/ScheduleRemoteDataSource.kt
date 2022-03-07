@@ -2,7 +2,7 @@ package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.ScheduleApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
-import tv.anilibria.feature.domain.entity.schedule.ScheduleDay
+import tv.anilibria.feature.content.types.schedule.ScheduleDay
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

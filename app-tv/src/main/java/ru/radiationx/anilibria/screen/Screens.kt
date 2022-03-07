@@ -31,12 +31,12 @@ import ru.radiationx.anilibria.screen.trash.VerticalGridTestFragment
 import ru.radiationx.anilibria.screen.update.UpdateFragment
 import ru.radiationx.anilibria.screen.update.source.UpdateSourceGuidedFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
-import tv.anilibria.feature.domain.entity.ReleaseGenre
-import tv.anilibria.feature.domain.entity.ReleaseSeason
-import tv.anilibria.feature.domain.entity.ReleaseYear
-import tv.anilibria.feature.domain.entity.SearchForm
-import tv.anilibria.feature.domain.entity.release.EpisodeId
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.ReleaseGenre
+import tv.anilibria.feature.content.types.ReleaseSeason
+import tv.anilibria.feature.content.types.ReleaseYear
+import tv.anilibria.feature.content.types.SearchForm
+import tv.anilibria.feature.content.types.release.EpisodeId
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 class ConfigScreen() : SupportAppScreen() {
     override fun getFragment(): Fragment {

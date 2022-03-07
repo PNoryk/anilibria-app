@@ -5,8 +5,8 @@ import kotlinx.datetime.DayOfWeek
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
-import tv.anilibria.feature.domain.entity.release.Release
-import tv.anilibria.feature.domain.entity.release.ReleaseStatus
+import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.content.types.release.ReleaseStatus
 import java.text.NumberFormat
 
 @InjectConstructor

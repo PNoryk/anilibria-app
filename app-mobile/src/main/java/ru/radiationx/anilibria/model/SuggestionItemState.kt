@@ -1,7 +1,7 @@
 package ru.radiationx.anilibria.model
 
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 data class SuggestionItemState(
     val id: ReleaseId,

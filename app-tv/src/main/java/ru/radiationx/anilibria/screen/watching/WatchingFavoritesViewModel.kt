@@ -15,7 +15,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.ReleaseId
 
 @InjectConstructor
 class WatchingFavoritesViewModel(

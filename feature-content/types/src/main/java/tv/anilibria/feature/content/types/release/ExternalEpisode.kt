@@ -1,0 +1,9 @@
+package tv.anilibria.feature.content.types.release
+
+import tv.anilibria.core.types.AbsoluteUrl
+
+data class ExternalEpisode(
+    val id: EpisodeId,
+    val title: String?,
+    val url: AbsoluteUrl?
+)

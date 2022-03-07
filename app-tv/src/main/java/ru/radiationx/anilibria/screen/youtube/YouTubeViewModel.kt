@@ -6,7 +6,7 @@ import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.shared_app.AppLinkHelper
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.repos.YoutubeRepository
-import tv.anilibria.feature.domain.entity.youtube.Youtube
+import tv.anilibria.feature.content.types.youtube.Youtube
 
 @InjectConstructor
 class YouTubeViewModel(

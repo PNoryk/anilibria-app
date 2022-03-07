@@ -24,8 +24,8 @@ import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.AuthVkAnalytics
 import tv.anilibria.feature.content.data.analytics.features.CommentsAnalytics
-import tv.anilibria.feature.domain.entity.release.ReleaseCode
-import tv.anilibria.feature.domain.entity.release.ReleaseId
+import tv.anilibria.feature.content.types.release.ReleaseCode
+import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
 @InjectViewState

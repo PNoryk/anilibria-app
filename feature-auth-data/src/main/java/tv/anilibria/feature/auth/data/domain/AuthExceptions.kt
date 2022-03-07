@@ -1,4 +1,4 @@
-package tv.anilibria.feature.domain.errors
+package tv.anilibria.feature.content.errors
 
 class AlreadyAuthorizedException(message: String) : RuntimeException(message)
 class EmptyFieldException(message: String) : RuntimeException(message)

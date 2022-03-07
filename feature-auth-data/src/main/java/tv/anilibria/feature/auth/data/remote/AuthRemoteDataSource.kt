@@ -5,7 +5,7 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import tv.anilibria.feature.auth.data.domain.OtpInfo
 import tv.anilibria.feature.auth.data.domain.SocialAuthService
-import tv.anilibria.feature.domain.errors.SocialAuthException
+import tv.anilibria.feature.content.errors.SocialAuthException
 import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf

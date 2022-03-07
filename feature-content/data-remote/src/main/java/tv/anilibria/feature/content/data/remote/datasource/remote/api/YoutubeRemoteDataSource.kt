@@ -2,8 +2,8 @@ package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.YoutubeApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
-import tv.anilibria.feature.domain.entity.Page
-import tv.anilibria.feature.domain.entity.youtube.Youtube
+import tv.anilibria.feature.content.types.Page
+import tv.anilibria.feature.content.types.youtube.Youtube
 import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse

@@ -10,7 +10,7 @@ import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.content.data.analytics.features.AuthMainAnalytics
-import tv.anilibria.feature.domain.errors.WrongPasswordException
+import tv.anilibria.feature.content.errors.WrongPasswordException
 import javax.inject.Inject
 
 /**

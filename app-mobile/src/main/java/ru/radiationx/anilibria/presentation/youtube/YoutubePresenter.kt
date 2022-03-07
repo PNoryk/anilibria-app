@@ -19,7 +19,7 @@ import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.YoutubeAnalytics
 import tv.anilibria.feature.content.data.analytics.features.YoutubeVideosAnalytics
 import tv.anilibria.feature.content.data.repos.YoutubeRepository
-import tv.anilibria.feature.domain.entity.youtube.Youtube
+import tv.anilibria.feature.content.types.youtube.Youtube
 import javax.inject.Inject
 
 @InjectViewState
