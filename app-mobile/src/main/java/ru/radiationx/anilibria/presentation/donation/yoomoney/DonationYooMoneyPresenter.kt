@@ -12,9 +12,9 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
-import tv.anilibria.feature.content.data.analytics.features.DonationYooMoneyAnalytics
-import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsDonationAmountType
-import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsDonationPaymentType
+import tv.anilibria.feature.analytics.features.DonationYooMoneyAnalytics
+import tv.anilibria.feature.analytics.features.model.AnalyticsDonationAmountType
+import tv.anilibria.feature.analytics.features.model.AnalyticsDonationPaymentType
 
 @InjectConstructor
 class DonationYooMoneyPresenter(

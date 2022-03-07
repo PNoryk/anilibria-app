@@ -15,10 +15,10 @@ import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
-import tv.anilibria.feature.content.data.analytics.features.CatalogAnalytics
-import tv.anilibria.feature.content.data.analytics.features.FastSearchAnalytics
-import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.feature.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.features.CatalogAnalytics
+import tv.anilibria.feature.analytics.features.FastSearchAnalytics
+import tv.anilibria.feature.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.content.types.release.Release
 import java.net.URLEncoder

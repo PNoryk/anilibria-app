@@ -19,7 +19,7 @@ import ru.radiationx.anilibria.ui.activities.main.IntentActivity
 import ru.radiationx.anilibria.ui.activities.main.MainActivity
 import ru.radiationx.shared_app.di.DI
 import tv.anilibria.feature.content.data.ApiConfigPushHandler
-import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.AnalyticsConstants
 
 class NotificationService : FirebaseMessagingService() {
 

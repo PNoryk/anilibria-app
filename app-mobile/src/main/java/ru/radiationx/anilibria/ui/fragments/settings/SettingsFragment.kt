@@ -16,11 +16,11 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.player.data.PlayerPreferencesStorage
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
-import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
-import tv.anilibria.feature.content.data.analytics.features.SettingsAnalytics
-import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsPlayer
-import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsQuality
-import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsAppTheme
+import tv.anilibria.feature.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.features.SettingsAnalytics
+import tv.anilibria.feature.analytics.features.mapper.toAnalyticsPlayer
+import tv.anilibria.feature.analytics.features.mapper.toAnalyticsQuality
+import tv.anilibria.feature.analytics.features.model.AnalyticsAppTheme
 import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject

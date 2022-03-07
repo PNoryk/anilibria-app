@@ -15,9 +15,9 @@ import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
-import tv.anilibria.feature.content.data.analytics.features.HistoryAnalytics
-import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.feature.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.features.HistoryAnalytics
+import tv.anilibria.feature.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.content.data.repos.HistoryRepository
 import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.types.release.Release

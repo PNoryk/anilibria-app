@@ -131,6 +131,7 @@ dependencies {
     implementation project(":feature-vkcomments-data")
     implementation project(":feature-page-data")
     implementation project(":feature-player-data")
+    implementation project(':feature-analytics')
 
     implementation project(":shared-android-ktx")
     implementation project(":shared-app")

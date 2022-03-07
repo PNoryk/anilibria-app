@@ -21,9 +21,9 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
 import tv.anilibria.feature.content.data.ReleaseInteractor
-import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
-import tv.anilibria.feature.content.data.analytics.features.AuthVkAnalytics
-import tv.anilibria.feature.content.data.analytics.features.CommentsAnalytics
+import tv.anilibria.feature.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.features.AuthVkAnalytics
+import tv.anilibria.feature.analytics.features.CommentsAnalytics
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
