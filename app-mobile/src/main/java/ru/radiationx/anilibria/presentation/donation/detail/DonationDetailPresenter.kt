@@ -12,10 +12,10 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.donation.data.domain.DonationContentButton
 import tv.anilibria.feature.donation.data.domain.DonationInfo
-import tv.anilibria.feature.analytics.AnalyticsConstants
-import tv.anilibria.feature.analytics.features.DonationDetailAnalytics
-import tv.anilibria.feature.analytics.features.DonationDialogAnalytics
-import tv.anilibria.feature.analytics.features.DonationYooMoneyAnalytics
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.DonationDetailAnalytics
+import tv.anilibria.feature.analytics.api.features.DonationDialogAnalytics
+import tv.anilibria.feature.analytics.api.features.DonationYooMoneyAnalytics
 
 @InjectConstructor
 class DonationDetailPresenter(

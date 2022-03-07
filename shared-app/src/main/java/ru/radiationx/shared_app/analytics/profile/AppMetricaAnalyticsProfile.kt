@@ -7,7 +7,7 @@ import com.yandex.metrica.profile.UserProfileUpdate
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import toothpick.InjectConstructor
-import tv.anilibria.feature.analytics.AnalyticsProfileDataSource
+import tv.anilibria.feature.analytics.api.AnalyticsProfileDataSource
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 
 @InjectConstructor
@@ -28,16 +28,16 @@ class AppMetricaAnalyticsProfile(
     private suspend fun unsafeUpdate() {
         val singleSources = with(dataSource) {
             listOf<UserProfileUpdate<*>>(
-                getApiAddressTag().mapStringAttr(tv.anilibria.feature.analytics.ProfileConstants.address_tag),
-                getAppTheme().mapStringAttr(tv.anilibria.feature.analytics.ProfileConstants.app_theme),
-                getQualitySettings().mapStringAttr(tv.anilibria.feature.analytics.ProfileConstants.quality),
-                getPlayerSettings().mapStringAttr(tv.anilibria.feature.analytics.ProfileConstants.player),
-                getPipSettings().mapStringAttr(tv.anilibria.feature.analytics.ProfileConstants.pip),
-                getPlaySpeedSettings().mapFloatAttr(tv.anilibria.feature.analytics.ProfileConstants.play_speed),
-                getNotificationsAllSettings().mapBoolAttr(tv.anilibria.feature.analytics.ProfileConstants.notification_all),
-                getNotificationsServiceSettings().mapBoolAttr(tv.anilibria.feature.analytics.ProfileConstants.notification_service),
-                getEpisodeOrderSettings().mapBoolAttr(tv.anilibria.feature.analytics.ProfileConstants.episode_order),
-                getAuthState().mapStringAttr(tv.anilibria.feature.analytics.ProfileConstants.auth_state),
+                getApiAddressTag().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.address_tag),
+                getAppTheme().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.app_theme),
+                getQualitySettings().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.quality),
+                getPlayerSettings().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.player),
+                getPipSettings().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.pip),
+                getPlaySpeedSettings().mapFloatAttr(tv.anilibria.feature.analytics.api.ProfileConstants.play_speed),
+                getNotificationsAllSettings().mapBoolAttr(tv.anilibria.feature.analytics.api.ProfileConstants.notification_all),
+                getNotificationsServiceSettings().mapBoolAttr(tv.anilibria.feature.analytics.api.ProfileConstants.notification_service),
+                getEpisodeOrderSettings().mapBoolAttr(tv.anilibria.feature.analytics.api.ProfileConstants.episode_order),
+                getAuthState().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.auth_state),
             )
         }
 

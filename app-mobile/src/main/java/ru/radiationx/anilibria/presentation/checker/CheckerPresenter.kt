@@ -6,7 +6,7 @@ import moxy.MvpPresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.presentation.common.viewModelScope
 import tv.anilibria.feature.appupdates.data.CheckerRepository
-import tv.anilibria.feature.analytics.features.UpdaterAnalytics
+import tv.anilibria.feature.analytics.api.features.UpdaterAnalytics
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 

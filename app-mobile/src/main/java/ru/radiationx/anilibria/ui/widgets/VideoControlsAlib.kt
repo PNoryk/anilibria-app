@@ -21,7 +21,7 @@ import ru.radiationx.anilibria.ui.widgets.gestures.VideoGestureEventsListener
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared.ktx.asTimeSecString
-import tv.anilibria.feature.analytics.features.PlayerAnalytics
+import tv.anilibria.feature.analytics.api.features.PlayerAnalytics
 import java.lang.Math.pow
 import java.util.*
 import java.util.concurrent.TimeUnit

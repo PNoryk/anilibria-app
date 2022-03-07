@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.page.data.PageRepository
-import tv.anilibria.feature.analytics.features.PageAnalytics
+import tv.anilibria.feature.analytics.api.features.PageAnalytics
 import javax.inject.Inject
 
 /**

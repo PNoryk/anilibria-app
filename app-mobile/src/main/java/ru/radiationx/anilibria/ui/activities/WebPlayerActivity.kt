@@ -16,7 +16,7 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.analytics.features.WebPlayerAnalytics
+import tv.anilibria.feature.analytics.api.features.WebPlayerAnalytics
 import tv.anilibria.app.mobile.preferences.AppTheme
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import java.util.regex.Pattern

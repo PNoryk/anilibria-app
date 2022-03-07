@@ -18,9 +18,9 @@ import ru.radiationx.anilibria.ui.fragments.schedule.ScheduleScreenState
 import ru.radiationx.shared.ktx.asDayName
 import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.analytics.AnalyticsConstants
-import tv.anilibria.feature.analytics.features.ReleaseAnalytics
-import tv.anilibria.feature.analytics.features.ScheduleAnalytics
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.ReleaseAnalytics
+import tv.anilibria.feature.analytics.api.features.ScheduleAnalytics
 import tv.anilibria.feature.content.data.repos.ScheduleRepository
 import tv.anilibria.feature.content.types.schedule.ScheduleDay
 import javax.inject.Inject

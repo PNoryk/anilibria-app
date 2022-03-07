@@ -1,0 +1,88 @@
+package tv.anilibria.feature.analytics.api.features
+
+import toothpick.InjectConstructor
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.extensions.*
+import tv.anilibria.feature.analytics.api.features.model.AnalyticsAppTheme
+import tv.anilibria.feature.analytics.api.features.model.AnalyticsPlayer
+import tv.anilibria.feature.analytics.api.features.model.AnalyticsQuality
+import tv.anilibria.plugin.data.analytics.AnalyticsSender
+
+@InjectConstructor
+class SettingsAnalytics(
+    private val sender: AnalyticsSender
+) {
+
+    private companion object {
+        const val PARAM_VALUE = "value"
+    }
+
+    fun open(from: String) {
+        sender.send(
+            AnalyticsConstants.settings_open,
+            from.toNavFromParam()
+        )
+    }
+
+    fun notificationMainChange(value: Boolean) {
+        sender.send(
+            AnalyticsConstants.settings_notification_main_change,
+            value.toParam(PARAM_VALUE)
+        )
+    }
+
+    fun notificationSystemChange(value: Boolean) {
+        sender.send(
+            AnalyticsConstants.settings_notification_system_change,
+            value.toParam(PARAM_VALUE)
+        )
+    }
+
+    fun themeChange(theme: AnalyticsAppTheme) {
+        sender.send(
+            AnalyticsConstants.settings_theme_change,
+            theme.toThemeParam()
+        )
+    }
+
+    fun episodesOrderChange(value: Boolean) {
+        sender.send(
+            AnalyticsConstants.settings_reverse_order_change,
+            value.toParam(PARAM_VALUE)
+        )
+    }
+
+    fun qualityClick() {
+        sender.send(AnalyticsConstants.settings_quality_click)
+    }
+
+    fun qualityChange(quality: AnalyticsQuality) {
+        sender.send(
+            AnalyticsConstants.settings_quality_change,
+            quality.toQualityParam()
+        )
+    }
+
+    fun playerClick() {
+        sender.send(AnalyticsConstants.settings_player_click)
+    }
+
+    fun playerChange(player: AnalyticsPlayer) {
+        sender.send(
+            AnalyticsConstants.settings_player_change,
+            player.toPlayerParam()
+        )
+    }
+
+    fun checkUpdatesClick() {
+        sender.send(AnalyticsConstants.settings_check_updates_click)
+    }
+
+    fun otherAppsClick() {
+        sender.send(AnalyticsConstants.settings_other_apps_click)
+    }
+
+    fun fourPdaClick() {
+        sender.send(AnalyticsConstants.settings_4pda_click)
+    }
+}

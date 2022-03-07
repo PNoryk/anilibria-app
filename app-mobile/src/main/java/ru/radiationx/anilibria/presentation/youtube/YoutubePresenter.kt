@@ -15,9 +15,9 @@ import ru.radiationx.anilibria.ui.fragments.youtube.YoutubeScreenState
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.analytics.AnalyticsConstants
-import tv.anilibria.feature.analytics.features.YoutubeAnalytics
-import tv.anilibria.feature.analytics.features.YoutubeVideosAnalytics
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.YoutubeAnalytics
+import tv.anilibria.feature.analytics.api.features.YoutubeVideosAnalytics
 import tv.anilibria.feature.content.data.repos.YoutubeRepository
 import tv.anilibria.feature.content.types.youtube.Youtube
 import javax.inject.Inject

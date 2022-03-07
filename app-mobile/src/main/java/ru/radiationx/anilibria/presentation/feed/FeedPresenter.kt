@@ -30,9 +30,9 @@ import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.ReleaseInteractor
-import tv.anilibria.feature.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.app.mobile.preferences.PreferencesStorage
-import tv.anilibria.feature.analytics.features.*
+import tv.anilibria.feature.analytics.api.features.*
 import tv.anilibria.feature.content.data.repos.FeedRepository
 import tv.anilibria.feature.content.data.repos.ScheduleRepository
 import tv.anilibria.feature.content.types.feed.Feed

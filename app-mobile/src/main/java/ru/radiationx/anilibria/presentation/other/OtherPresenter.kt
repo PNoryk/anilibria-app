@@ -18,7 +18,6 @@ import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.feature.analytics.features.*
 import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
@@ -26,7 +25,8 @@ import tv.anilibria.feature.menu.data.MenuRepository
 import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 import tv.anilibria.feature.user.data.domain.User
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.*
 import javax.inject.Inject
 
 @InjectViewState

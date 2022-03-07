@@ -17,9 +17,9 @@ import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.feature.analytics.AnalyticsConstants
-import tv.anilibria.feature.analytics.features.AuthMainAnalytics
-import tv.anilibria.feature.analytics.features.AuthSocialAnalytics
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.AuthMainAnalytics
+import tv.anilibria.feature.analytics.api.features.AuthSocialAnalytics
 import tv.anilibria.feature.content.errors.EmptyFieldException
 import javax.inject.Inject
 

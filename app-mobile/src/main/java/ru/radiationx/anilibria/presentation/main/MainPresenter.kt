@@ -14,9 +14,9 @@ import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
-import tv.anilibria.feature.analytics.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.app.mobile.preferences.PreferencesStorage
-import tv.anilibria.feature.analytics.features.*
+import tv.anilibria.feature.analytics.api.features.*
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 import javax.inject.Inject
 
