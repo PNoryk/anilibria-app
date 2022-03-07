@@ -1,7 +1,7 @@
 /*
 package tv.anilibria.module.data.merger
 
-import tv.anilibria.module.domain.entity.release.Release
+import Release
 
 interface EntityMerger<T> {
 

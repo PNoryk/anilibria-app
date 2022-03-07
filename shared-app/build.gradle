@@ -30,7 +30,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation project(":core-types")
-    implementation project(":data-new")
+    implementation project(":feature-content:data-new")
     implementation project(":data-network")
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation project(":plugin:data-analytics")

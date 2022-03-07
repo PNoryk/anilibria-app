@@ -47,12 +47,12 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
-    implementation project(":data-new")
+    implementation project(":feature-content:data-new")
     implementation project(":core-types")
-    implementation project(":domain")
+    implementation project(":feature-content:domain")
     implementation project(":feature-content:data-restapi")
     implementation project(":data-network")
-    implementation project(":data-local")
+    implementation project(":feature-content:data-local")
     implementation project(":data-preferences")
     implementation project(":plugin:shared-appinfo")
     implementation project(":plugin:data-storage")
