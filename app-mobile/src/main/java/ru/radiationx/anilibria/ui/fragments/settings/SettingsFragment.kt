@@ -13,14 +13,15 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 import tv.anilibria.module.data.analytics.AnalyticsConstants
 import tv.anilibria.module.data.analytics.features.SettingsAnalytics
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsAppTheme
 import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
-import tv.anilibria.module.data.preferences.PrefferedPlayerType
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
@@ -32,6 +33,9 @@ class SettingsFragment : BaseSettingFragment() {
 
     @Inject
     lateinit var preferencesStorage: PreferencesStorage
+
+    @Inject
+    lateinit var playerPreferencesStorage: PlayerPreferencesStorage
 
     @Inject
     lateinit var errorHandler: IErrorHandler
@@ -86,7 +90,7 @@ class SettingsFragment : BaseSettingFragment() {
         }
 
         findPreference<Preference>("quality")?.apply {
-            val savedQuality = preferencesStorage.quality.blockingGet()
+            val savedQuality = playerPreferencesStorage.quality.blockingGet()
             icon = getQualityIcon(savedQuality)
             summary = getQualityTitle(savedQuality)
             setOnPreferenceClickListener { preference ->
@@ -104,7 +108,7 @@ class SettingsFragment : BaseSettingFragment() {
                     .setItems(titles) { _, which ->
                         val quality = values[which]
                         settingsAnalytics.qualityChange(quality.toAnalyticsQuality())
-                        preferencesStorage.quality.blockingSet(quality)
+                        playerPreferencesStorage.quality.blockingSet(quality)
                         icon = getQualityIcon(quality)
                         summary = getQualityTitle(quality)
                     }
@@ -114,7 +118,7 @@ class SettingsFragment : BaseSettingFragment() {
         }
 
         findPreference<Preference>("player_type")?.apply {
-            val savedPlayerType = preferencesStorage.playerType.blockingGet()
+            val savedPlayerType = playerPreferencesStorage.playerType.blockingGet()
             icon = this.context.getCompatDrawable(R.drawable.ic_play_circle_outline)
             summary = getPlayerTypeTitle(savedPlayerType)
             setOnPreferenceClickListener { preference ->
@@ -131,7 +135,7 @@ class SettingsFragment : BaseSettingFragment() {
                     .setItems(titles) { dialog, which ->
                         val playerType = values[which]
                         settingsAnalytics.playerChange(playerType.toAnalyticsPlayer())
-                        preferencesStorage.playerType.blockingSet(playerType)
+                        playerPreferencesStorage.playerType.blockingSet(playerType)
                         summary = getPlayerTypeTitle(playerType)
                     }
                     .show()

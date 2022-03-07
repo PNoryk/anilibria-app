@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.preferences
+package tv.anilibria.feature.player.data.prefs
 
 enum class PrefferedPlayerQuality {
     NOT_SELECTED,

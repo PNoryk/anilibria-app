@@ -8,15 +8,15 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
 import tv.anilibria.module.domain.entity.release.EpisodeId
 
 @InjectConstructor
 class PlayerQualityViewModel(
     private val releaseInteractor: ReleaseInteractor,
-    private val preferencesStorage: PreferencesStorage,
+    private val playerPreferencesStorage: PlayerPreferencesStorage,
     private val guidedRouter: GuidedRouter
 ) : LifecycleViewModel() {
 
@@ -36,7 +36,7 @@ class PlayerQualityViewModel(
 
         updateAvailable()
 
-        preferencesStorage.quality.observe()
+        playerPreferencesStorage.quality.observe()
             .onEach {
                 update(it)
             }
@@ -51,7 +51,7 @@ class PlayerQualityViewModel(
                 FULL_HD_ACTION_ID -> PrefferedPlayerQuality.FULL_HD
                 else -> PrefferedPlayerQuality.SD
             }
-            preferencesStorage.quality.put(value)
+            playerPreferencesStorage.quality.put(value)
             guidedRouter.close()
         }
     }

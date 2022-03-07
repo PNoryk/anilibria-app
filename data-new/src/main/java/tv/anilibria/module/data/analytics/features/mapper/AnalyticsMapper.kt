@@ -1,11 +1,11 @@
 package tv.anilibria.module.data.analytics.features.mapper
 
+import tv.anilibria.feature.auth.data.domain.AuthState
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerPipMode
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 import tv.anilibria.module.data.analytics.features.model.*
 import tv.anilibria.module.data.preferences.AppTheme
-import tv.anilibria.module.data.preferences.PrefferedPlayerPipMode
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
-import tv.anilibria.module.data.preferences.PrefferedPlayerType
-import tv.anilibria.feature.auth.data.domain.AuthState
 
 fun AppTheme.toAnalyticsAppTheme(): AnalyticsAppTheme = when (this) {
     AppTheme.LIGHT -> AnalyticsAppTheme.LIGHT

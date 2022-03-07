@@ -47,6 +47,9 @@ import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerPipMode
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.module.data.ReleaseInteractor
 import tv.anilibria.module.data.analytics.ErrorReporterConstants
 import tv.anilibria.module.data.analytics.features.PlayerAnalytics
@@ -57,10 +60,8 @@ import tv.anilibria.module.data.analytics.features.model.AnalyticsEpisodeFinishA
 import tv.anilibria.module.data.analytics.features.model.AnalyticsQuality
 import tv.anilibria.module.data.analytics.features.model.AnalyticsSeasonFinishAction
 import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.module.data.preferences.PrefferedPlayerPipMode
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
-import tv.anilibria.module.data.repos.EpisodeHistoryRepository
-import tv.anilibria.module.domain.entity.EpisodeVisit
+import tv.anilibria.feature.player.data.EpisodeHistoryRepository
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Episode
 import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.Release
@@ -119,6 +120,9 @@ class MyPlayerActivity : BaseActivity() {
 
     @Inject
     lateinit var preferencesStorage: PreferencesStorage
+
+    @Inject
+    lateinit var playerPreferencesStorage: PlayerPreferencesStorage
 
     @Inject
     lateinit var defaultPreferences: SharedPreferences
@@ -386,19 +390,19 @@ class MyPlayerActivity : BaseActivity() {
 
     private fun savePlaySpeed() {
         playerAnalytics.settingsSpeedChange(currentPlaySpeed)
-        preferencesStorage.playSpeed.blockingSet(currentPlaySpeed)
+        playerPreferencesStorage.playSpeed.blockingSet(currentPlaySpeed)
     }
 
     private fun loadPlaySpeed(): Float {
-        return preferencesStorage.playSpeed.blockingGet()
+        return playerPreferencesStorage.playSpeed.blockingGet()
     }
 
     private fun savePIPControl() {
-        preferencesStorage.pipControl.blockingSet(currentPipControl)
+        playerPreferencesStorage.pipControl.blockingSet(currentPipControl)
     }
 
     private fun loadPIPControl(): PrefferedPlayerPipMode {
-        return preferencesStorage.pipControl.blockingGet()
+        return playerPreferencesStorage.pipControl.blockingGet()
     }
 
     private fun updateScale(scale: ScaleType) {
@@ -415,7 +419,7 @@ class MyPlayerActivity : BaseActivity() {
     private fun updateQuality(newQuality: PrefferedPlayerQuality) {
         this.currentQuality = newQuality
         playerAnalytics.settingsQualityChange(newQuality.toAnalyticsQuality())
-        preferencesStorage.quality.blockingSet(newQuality)
+        playerPreferencesStorage.quality.blockingSet(newQuality)
         saveEpisode()
         updateAndPlayRelease()
     }

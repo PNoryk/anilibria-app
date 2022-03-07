@@ -6,11 +6,11 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
-import tv.anilibria.module.data.preferences.PreferencesStorage
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
 
 @InjectConstructor
 class PlayerSpeedViewModel(
-    private val preferencesStorage: PreferencesStorage,
+    private val playerPreferencesStorage: PlayerPreferencesStorage,
     private val guidedRouter: GuidedRouter
 ) : LifecycleViewModel() {
 
@@ -29,13 +29,13 @@ class PlayerSpeedViewModel(
                     "${it}x"
                 }
             }
-            selectedIndex.value = speedList.indexOf(preferencesStorage.playSpeed.get())
+            selectedIndex.value = speedList.indexOf(playerPreferencesStorage.playSpeed.get())
         }
     }
 
     fun applySpeed(index: Int) {
         viewModelScope.launch {
-            preferencesStorage.playSpeed.put(speedList[index])
+            playerPreferencesStorage.playSpeed.put(speedList[index])
             guidedRouter.close()
         }
     }

@@ -1,8 +1,7 @@
-package tv.anilibria.module.data.local.mappers
+package tv.anilibria.feature.player.data.local
 
 import kotlinx.datetime.Instant
-import tv.anilibria.module.data.local.entity.EpisodeVisitLocal
-import tv.anilibria.module.domain.entity.EpisodeVisit
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.ReleaseId
 

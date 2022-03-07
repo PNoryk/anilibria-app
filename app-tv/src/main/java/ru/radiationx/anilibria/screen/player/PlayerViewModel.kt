@@ -9,11 +9,11 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.*
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.module.data.ReleaseInteractor
-import tv.anilibria.module.data.preferences.PreferencesStorage
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
-import tv.anilibria.module.data.repos.EpisodeHistoryRepository
-import tv.anilibria.module.domain.entity.EpisodeVisit
+import tv.anilibria.feature.player.data.EpisodeHistoryRepository
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.Episode
 import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.Release
@@ -22,7 +22,7 @@ import tv.anilibria.module.domain.entity.release.Release
 class PlayerViewModel(
     private val releaseInteractor: ReleaseInteractor,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
-    private val preferencesStorage: PreferencesStorage,
+    private val playerPreferencesStorage: PlayerPreferencesStorage,
     private val guidedRouter: GuidedRouter,
     private val playerController: PlayerController
 ) : LifecycleViewModel() {
@@ -44,8 +44,8 @@ class PlayerViewModel(
         super.onCreate()
 
         viewModelScope.launch {
-            qualityState.value = preferencesStorage.quality.get()
-            speedState.value = preferencesStorage.playSpeed.get()
+            qualityState.value = playerPreferencesStorage.quality.get()
+            speedState.value = playerPreferencesStorage.playSpeed.get()
         }
 
         playerController
@@ -58,7 +58,7 @@ class PlayerViewModel(
             }
             .launchIn(viewModelScope)
 
-        preferencesStorage
+        playerPreferencesStorage
             .quality.observe()
             .distinctUntilChanged()
             .onEach {
@@ -68,7 +68,7 @@ class PlayerViewModel(
             }
             .launchIn(viewModelScope)
 
-        preferencesStorage
+        playerPreferencesStorage
             .playSpeed.observe()
             .distinctUntilChanged()
             .onEach {

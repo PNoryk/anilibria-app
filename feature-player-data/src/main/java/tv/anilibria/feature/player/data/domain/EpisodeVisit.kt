@@ -1,4 +1,4 @@
-package tv.anilibria.module.domain.entity
+package tv.anilibria.feature.player.data.domain
 
 import kotlinx.datetime.Instant
 import tv.anilibria.module.domain.entity.release.EpisodeId

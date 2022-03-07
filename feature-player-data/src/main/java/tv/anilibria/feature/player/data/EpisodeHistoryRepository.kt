@@ -1,10 +1,10 @@
-package tv.anilibria.module.data.repos
+package tv.anilibria.feature.player.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
-import tv.anilibria.module.data.local.holders.EpisodeHistoryLocalDataSource
-import tv.anilibria.module.domain.entity.EpisodeVisit
+import tv.anilibria.feature.player.data.local.EpisodeHistoryLocalDataSource
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.EpisodeId
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject

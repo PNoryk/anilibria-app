@@ -5,7 +5,7 @@ import ru.radiationx.anilibria.model.asDataColorRes
 import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.shared.ktx.asTimeSecString
 import ru.radiationx.shared_app.common.SystemUtils
-import tv.anilibria.module.domain.entity.EpisodeVisit
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.module.domain.entity.release.*
 import java.util.*
 

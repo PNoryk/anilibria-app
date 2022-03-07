@@ -22,7 +22,7 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.leanback.widget.PlaybackControlsRow.*
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import java.util.concurrent.TimeUnit
 
 /**

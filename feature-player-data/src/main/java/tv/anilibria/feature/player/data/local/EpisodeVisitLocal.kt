@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.local.entity
+package tv.anilibria.feature.player.data.local
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

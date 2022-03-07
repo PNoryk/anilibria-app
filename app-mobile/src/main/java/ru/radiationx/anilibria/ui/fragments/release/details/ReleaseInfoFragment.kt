@@ -41,8 +41,8 @@ import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsPlayer
 import tv.anilibria.module.data.analytics.features.mapper.toAnalyticsQuality
-import tv.anilibria.module.data.preferences.PrefferedPlayerQuality
-import tv.anilibria.module.data.preferences.PrefferedPlayerType
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 import tv.anilibria.module.domain.entity.release.Episode
 import tv.anilibria.module.domain.entity.release.Release
 import java.net.URLConnection

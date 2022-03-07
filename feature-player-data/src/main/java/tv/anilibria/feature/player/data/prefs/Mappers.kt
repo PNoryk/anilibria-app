@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.preferences
+package tv.anilibria.feature.player.data.prefs
 
 object PrefsConstants {
     const val QUALITY_NO = -1
