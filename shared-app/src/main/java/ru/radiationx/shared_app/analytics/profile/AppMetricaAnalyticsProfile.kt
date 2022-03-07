@@ -1,5 +1,6 @@
 package ru.radiationx.shared_app.analytics.profile
 
+import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.profile.Attribute
 import com.yandex.metrica.profile.UserProfile
 import com.yandex.metrica.profile.UserProfileUpdate
@@ -41,7 +42,7 @@ class AppMetricaAnalyticsProfile(
             )
         }
 
-        singleSources.let { attributes ->
+        val profile = singleSources.let { attributes ->
             UserProfile.newBuilder().run {
                 attributes.forEach { attribute ->
                     apply(attribute)
@@ -49,6 +50,7 @@ class AppMetricaAnalyticsProfile(
                 build()
             }
         }
+        YandexMetrica.reportUserProfile(profile)
     }
 
     private fun String.mapStringAttr(name: String) = this
