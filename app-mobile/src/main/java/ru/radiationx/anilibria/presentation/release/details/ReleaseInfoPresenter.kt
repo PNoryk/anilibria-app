@@ -29,7 +29,7 @@ import tv.anilibria.feature.content.data.analytics.features.*
 import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsPlayer
 import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsQuality
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
 import tv.anilibria.feature.content.data.repos.HistoryRepository

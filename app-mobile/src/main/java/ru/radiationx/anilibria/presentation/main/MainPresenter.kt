@@ -16,7 +16,7 @@ import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.*
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 import javax.inject.Inject
 

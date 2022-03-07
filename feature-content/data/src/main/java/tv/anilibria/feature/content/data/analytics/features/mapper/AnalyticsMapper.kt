@@ -5,11 +5,11 @@ import tv.anilibria.feature.player.data.prefs.PrefferedPlayerPipMode
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 import tv.anilibria.feature.content.data.analytics.features.model.*
-import tv.anilibria.feature.content.data.preferences.AppTheme
+import tv.anilibria.app.mobile.preferences.AppTheme
 
-fun AppTheme.toAnalyticsAppTheme(): AnalyticsAppTheme = when (this) {
-    AppTheme.LIGHT -> AnalyticsAppTheme.LIGHT
-    AppTheme.DARK -> AnalyticsAppTheme.DARK
+fun tv.anilibria.app.mobile.preferences.AppTheme.toAnalyticsAppTheme(): AnalyticsAppTheme = when (this) {
+    tv.anilibria.app.mobile.preferences.AppTheme.LIGHT -> AnalyticsAppTheme.LIGHT
+    tv.anilibria.app.mobile.preferences.AppTheme.DARK -> AnalyticsAppTheme.DARK
     else -> AnalyticsAppTheme.UNKNOWN
 }
 

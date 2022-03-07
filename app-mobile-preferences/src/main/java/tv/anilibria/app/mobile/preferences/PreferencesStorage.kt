@@ -1,4 +1,4 @@
-package tv.anilibria.feature.content.data.preferences
+package tv.anilibria.app.mobile.preferences
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

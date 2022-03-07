@@ -3,7 +3,7 @@ package ru.radiationx.anilibria.extension
 import androidx.annotation.StyleRes
 import biz.source_code.miniTemplator.MiniTemplator
 import ru.radiationx.anilibria.R
-import tv.anilibria.feature.content.data.preferences.AppTheme
+import tv.anilibria.app.mobile.preferences.AppTheme
 
 
 @StyleRes

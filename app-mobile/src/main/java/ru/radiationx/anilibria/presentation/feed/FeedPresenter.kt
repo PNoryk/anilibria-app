@@ -32,7 +32,7 @@ import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
 import tv.anilibria.feature.content.data.analytics.features.*
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.feature.content.data.repos.FeedRepository
 import tv.anilibria.feature.content.data.repos.ScheduleRepository
 import tv.anilibria.feature.content.types.feed.Feed

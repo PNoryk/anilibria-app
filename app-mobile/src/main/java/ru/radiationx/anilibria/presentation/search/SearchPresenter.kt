@@ -24,7 +24,7 @@ import tv.anilibria.feature.content.data.analytics.features.CatalogAnalytics
 import tv.anilibria.feature.content.data.analytics.features.CatalogFilterAnalytics
 import tv.anilibria.feature.content.data.analytics.features.FastSearchAnalytics
 import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.content.types.ReleaseGenre
 import tv.anilibria.feature.content.types.ReleaseSeason

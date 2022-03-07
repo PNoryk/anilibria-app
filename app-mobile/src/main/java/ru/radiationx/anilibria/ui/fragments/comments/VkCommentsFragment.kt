@@ -38,7 +38,7 @@ import ru.radiationx.shared_app.di.injectDependencies
 import toothpick.Toothpick
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.vkcomments.data.VkCommentsClient
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject

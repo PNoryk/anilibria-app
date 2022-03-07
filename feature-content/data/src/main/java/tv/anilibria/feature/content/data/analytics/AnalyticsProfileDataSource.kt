@@ -1,11 +1,11 @@
 package tv.anilibria.feature.content.data.analytics
 
 import toothpick.InjectConstructor
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.content.data.analytics.features.mapper.*
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.feature.player.data.PlayerPreferencesStorage
-import tv.anilibria.feature.content.data.analytics.features.mapper.*
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
 
 @InjectConstructor
 class AnalyticsProfileDataSource(

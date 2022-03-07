@@ -59,7 +59,7 @@ import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsSc
 import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsEpisodeFinishAction
 import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsQuality
 import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsSeasonFinishAction
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.Episode

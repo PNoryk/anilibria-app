@@ -44,7 +44,8 @@ dependencies {
     implementation project(':feature-content:data-remote')
     implementation project(":feature-content:data-local")
     implementation project(":data-network")
-    implementation project(":data-preferences")
+    //todo delete
+    implementation project(":app-mobile-preferences")
     implementation project(":plugin:shared-appinfo")
     implementation project(":plugin:data-storage")
     implementation project(":plugin:data-analytics")

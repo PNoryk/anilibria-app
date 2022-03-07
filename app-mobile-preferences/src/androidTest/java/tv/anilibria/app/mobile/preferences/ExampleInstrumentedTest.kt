@@ -1,4 +1,4 @@
-package tv.anilibria.feature.content.data.preferences
+package tv.anilibria.app.mobile.preferences
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("tv.anilibria.module.data.preferences.test", appContext.packageName)
+        assertEquals("tv.anilibria.app.mobile.preferences.test", appContext.packageName)
     }
 }

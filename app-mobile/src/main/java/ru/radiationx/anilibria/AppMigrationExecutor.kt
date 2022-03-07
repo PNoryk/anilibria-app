@@ -3,7 +3,7 @@ package ru.radiationx.anilibria
 import com.nostra13.universalimageloader.core.ImageLoader
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.migration.MigrationExecutor
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 
 @InjectConstructor
 class AppMigrationExecutor(

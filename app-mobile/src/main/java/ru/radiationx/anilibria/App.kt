@@ -25,7 +25,7 @@ import toothpick.Toothpick
 import toothpick.configuration.Configuration
 import tv.anilibria.feature.content.data.analytics.features.AppAnalytics
 import tv.anilibria.feature.content.data.migration.MigrationDataSource
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.ByteArrayInputStream
 import java.io.IOException

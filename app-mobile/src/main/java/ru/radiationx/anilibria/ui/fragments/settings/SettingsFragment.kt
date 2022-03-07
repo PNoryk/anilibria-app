@@ -21,7 +21,7 @@ import tv.anilibria.feature.content.data.analytics.features.SettingsAnalytics
 import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsPlayer
 import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.feature.content.data.analytics.features.model.AnalyticsAppTheme
-import tv.anilibria.feature.content.data.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject
 
