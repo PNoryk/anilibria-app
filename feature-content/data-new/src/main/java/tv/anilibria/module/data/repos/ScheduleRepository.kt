@@ -2,7 +2,7 @@ package tv.anilibria.module.data.repos
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
-import tv.anilibria.module.data.local.ReleaseUpdateHelper
+import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.module.data.restapi.datasource.remote.api.ScheduleRemoteDataSource
 import tv.anilibria.module.domain.entity.schedule.ScheduleDay
 import tv.anilibria.plugin.data.storage.ObservableData

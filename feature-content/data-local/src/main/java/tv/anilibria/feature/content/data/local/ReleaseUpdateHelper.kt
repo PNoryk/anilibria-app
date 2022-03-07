@@ -1,6 +1,6 @@
-package tv.anilibria.module.data.local
+package tv.anilibria.feature.content.data.local
 
-import tv.anilibria.module.data.local.holders.ReleaseUpdatesLocalDataSource
+import tv.anilibria.feature.content.data.local.holders.ReleaseUpdatesLocalDataSource
 import tv.anilibria.module.domain.entity.ReleaseUpdate
 import tv.anilibria.module.domain.entity.release.Release
 

@@ -2,8 +2,8 @@ package tv.anilibria.feature.menu.data.local
 
 import tv.anilibria.core.types.asAbsoluteUrl
 import tv.anilibria.core.types.asRelativeUrl
-import tv.anilibria.module.data.local.mappers.toDataIcon
-import tv.anilibria.module.data.local.mappers.toLocal
+import tv.anilibria.feature.content.data.local.mappers.toDataIcon
+import tv.anilibria.feature.content.data.local.mappers.toLocal
 import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 
 fun LinkMenuItem.toLocal() = LinkMenuItemLocal(

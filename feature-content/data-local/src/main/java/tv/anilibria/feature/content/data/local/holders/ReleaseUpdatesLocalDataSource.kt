@@ -1,12 +1,12 @@
-package tv.anilibria.module.data.local.holders
+package tv.anilibria.feature.content.data.local.holders
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import tv.anilibria.module.data.local.entity.ReleaseUpdateLocal
-import tv.anilibria.module.data.local.mappers.toDomain
-import tv.anilibria.module.data.local.mappers.toLocal
+import tv.anilibria.feature.content.data.local.entity.ReleaseUpdateLocal
+import tv.anilibria.feature.content.data.local.mappers.toDomain
+import tv.anilibria.feature.content.data.local.mappers.toLocal
 import tv.anilibria.module.domain.entity.ReleaseUpdate
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import tv.anilibria.plugin.data.storage.DataStorage

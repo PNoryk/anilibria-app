@@ -2,7 +2,7 @@ package tv.anilibria.module.data.repos
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Clock
-import tv.anilibria.module.data.local.holders.ReleaseHistoryLocalDataSource
+import tv.anilibria.feature.content.data.local.holders.ReleaseHistoryLocalDataSource
 import tv.anilibria.module.domain.entity.ReleaseVisit
 import tv.anilibria.module.domain.entity.release.ReleaseId
 import javax.inject.Inject

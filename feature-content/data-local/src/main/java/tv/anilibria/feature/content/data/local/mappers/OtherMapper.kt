@@ -1,4 +1,4 @@
-package tv.anilibria.module.data.local.mappers
+package tv.anilibria.feature.content.data.local.mappers
 
 import tv.anilibria.module.domain.entity.other.DataColor
 import tv.anilibria.module.domain.entity.other.DataIcon

@@ -1,16 +1,16 @@
-package tv.anilibria.module.data.local.holders
+package tv.anilibria.feature.content.data.local.holders
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import tv.anilibria.module.domain.entity.ReleaseYear
+import tv.anilibria.module.domain.entity.ReleaseGenre
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.storageStringKey
 
-class YearsLocalDataSource(
+class GenresLocalDataSource(
     private val storage: DataStorage,
     private val moshi: Moshi
 ) {
@@ -20,23 +20,21 @@ class YearsLocalDataSource(
         moshi.adapter<List<String>>(type)
     }
 
-    private val persistableData = MoshiStorageDataHolder<List<String>, List<ReleaseYear>>(
-        key = storageStringKey("refactor.years"),
+    private val persistableData = MoshiStorageDataHolder<List<String>, List<ReleaseGenre>>(
+        key = storageStringKey("refactor.genres"),
         adapter = adapter,
         storage = storage,
-        read = { data -> data?.map { ReleaseYear(it) } },
+        read = { data -> data?.map { ReleaseGenre(it) } },
         write = { data -> data?.map { it.value } }
     )
 
     private val observableData = ObservableData(persistableData)
 
-    fun observe(): Flow<List<ReleaseYear>> = observableData
+    fun observe(): Flow<List<ReleaseGenre>> = observableData
         .observe()
         .map { it.orEmpty() }
 
-    suspend fun get(): List<ReleaseYear> = observableData
-        .get()
-        .orEmpty()
+    suspend fun get(): List<ReleaseGenre> = observableData.get().orEmpty()
 
-    suspend fun put(data: List<ReleaseYear>) = observableData.put(data)
+    suspend fun put(data: List<ReleaseGenre>) = observableData.put(data)
 }

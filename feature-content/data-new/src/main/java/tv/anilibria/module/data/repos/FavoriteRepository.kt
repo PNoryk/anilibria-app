@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.repos
 
-import tv.anilibria.module.data.local.ReleaseUpdateHelper
+import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.module.data.restapi.datasource.remote.api.FavoriteRemoteDataSource
 import tv.anilibria.module.domain.entity.Page
 import tv.anilibria.module.domain.entity.release.Release

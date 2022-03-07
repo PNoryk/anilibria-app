@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tv.anilibria.module.data.local">
+    package="tv.anilibria.feature.content.data.local">
 
 </manifest>

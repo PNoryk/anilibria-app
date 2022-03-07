@@ -1,6 +1,6 @@
 package tv.anilibria.module.data.repos
 
-import tv.anilibria.module.data.local.ReleaseUpdateHelper
+import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.module.data.restapi.datasource.remote.api.FeedRemoteDataSource
 import tv.anilibria.module.domain.entity.feed.Feed
 import javax.inject.Inject
