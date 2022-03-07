@@ -32,7 +32,7 @@ import tv.anilibria.core.types.HtmlText
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.feature.appupdates.data.domain.UpdateLink
 import tv.anilibria.feature.appupdates.data.domain.UpdateLinkType
-import tv.anilibria.feature.data.analytics.features.UpdaterAnalytics
+import tv.anilibria.feature.content.data.analytics.features.UpdaterAnalytics
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 import javax.inject.Inject

@@ -1,7 +1,7 @@
 package ru.radiationx.anilibria
 
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.migration.MigrationExecutor
+import tv.anilibria.feature.content.data.migration.MigrationExecutor
 
 @InjectConstructor
 class AppMigrationExecutor : MigrationExecutor {

@@ -12,7 +12,7 @@ import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.shared.ktx.asDayName
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.repos.ScheduleRepository
+import tv.anilibria.feature.content.data.repos.ScheduleRepository
 import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 @InjectConstructor

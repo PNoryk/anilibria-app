@@ -28,9 +28,9 @@ import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.page.data.domain.PageLibria
-import tv.anilibria.feature.data.BaseUrlsProvider
-import tv.anilibria.feature.data.analytics.features.PageAnalytics
-import tv.anilibria.feature.data.preferences.PreferencesStorage
+import tv.anilibria.feature.content.data.BaseUrlsProvider
+import tv.anilibria.feature.content.data.analytics.features.PageAnalytics
+import tv.anilibria.feature.content.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import javax.inject.Inject
 

@@ -18,7 +18,7 @@ import ru.radiationx.shared_app.di.injectDependencies
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import tv.anilibria.feature.data.preferences.PreferencesStorage
+import tv.anilibria.feature.content.data.preferences.PreferencesStorage
 import javax.inject.Inject
 
 

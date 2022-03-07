@@ -10,7 +10,7 @@ import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.feature.player.data.PlayerPreferencesStorage
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
-import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.domain.entity.release.EpisodeId
 
 @InjectConstructor

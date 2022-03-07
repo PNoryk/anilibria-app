@@ -5,7 +5,7 @@ import ru.radiationx.anilibria.common.CardsDataConverter
 import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.shared_app.AppLinkHelper
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.repos.YoutubeRepository
+import tv.anilibria.feature.content.data.repos.YoutubeRepository
 import tv.anilibria.feature.domain.entity.youtube.Youtube
 
 @InjectConstructor

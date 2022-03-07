@@ -23,9 +23,9 @@ import ru.radiationx.shared_app.common.SimpleActivityLifecycleCallbacks
 import ru.radiationx.shared_app.di.DI
 import toothpick.Toothpick
 import toothpick.configuration.Configuration
-import tv.anilibria.feature.data.analytics.features.AppAnalytics
-import tv.anilibria.feature.data.migration.MigrationDataSource
-import tv.anilibria.feature.data.preferences.PreferencesStorage
+import tv.anilibria.feature.content.data.analytics.features.AppAnalytics
+import tv.anilibria.feature.content.data.migration.MigrationDataSource
+import tv.anilibria.feature.content.data.preferences.PreferencesStorage
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.ByteArrayInputStream
 import java.io.IOException

@@ -6,10 +6,10 @@ import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.ReleaseInteractor
-import tv.anilibria.feature.data.repos.HistoryRepository
-import tv.anilibria.feature.data.repos.ReleaseRepository
-import tv.anilibria.feature.data.repos.SearchRepository
+import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.HistoryRepository
+import tv.anilibria.feature.content.data.repos.ReleaseRepository
+import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.domain.entity.ReleaseGenre
 import tv.anilibria.feature.domain.entity.SearchForm
 import tv.anilibria.feature.domain.entity.release.ReleaseId

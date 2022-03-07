@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.terrakok.cicerone.Router
 import tv.anilibria.feature.auth.data.AuthRepository
-import tv.anilibria.feature.data.analytics.features.AuthDeviceAnalytics
+import tv.anilibria.feature.content.data.analytics.features.AuthDeviceAnalytics
 import tv.anilibria.feature.domain.errors.OtpAcceptedException
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds

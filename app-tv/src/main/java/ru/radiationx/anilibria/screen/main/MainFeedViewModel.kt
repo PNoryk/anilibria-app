@@ -8,7 +8,7 @@ import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.repos.FeedRepository
+import tv.anilibria.feature.content.data.repos.FeedRepository
 import tv.anilibria.feature.domain.entity.release.ReleaseId
 import tv.anilibria.feature.domain.entity.youtube.Youtube
 

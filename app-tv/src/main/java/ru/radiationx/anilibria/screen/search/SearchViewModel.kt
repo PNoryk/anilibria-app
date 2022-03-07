@@ -11,7 +11,7 @@ import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.SuggestionsScreen
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.repos.SearchRepository
+import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.domain.entity.SearchForm
 import tv.anilibria.feature.domain.entity.release.ReleaseId
 

@@ -6,7 +6,7 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.search.BaseSearchValuesViewModel
 import ru.radiationx.anilibria.screen.search.SearchController
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.repos.SearchRepository
+import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.domain.entity.ReleaseSeason
 
 @InjectConstructor

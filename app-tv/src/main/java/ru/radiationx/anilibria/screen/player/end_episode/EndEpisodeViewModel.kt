@@ -6,7 +6,7 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.player.PlayerController
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.domain.entity.release.Episode
 import tv.anilibria.feature.domain.entity.release.EpisodeId

@@ -9,8 +9,8 @@ import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.BaseUrlHelper
-import tv.anilibria.feature.data.repos.SearchRepository
+import tv.anilibria.feature.content.data.BaseUrlHelper
+import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.domain.entity.release.Release
 import tv.anilibria.feature.domain.entity.release.ReleaseId
 import kotlin.time.Duration.Companion.milliseconds

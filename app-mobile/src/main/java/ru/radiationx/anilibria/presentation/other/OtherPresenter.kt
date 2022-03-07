@@ -24,9 +24,9 @@ import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.menu.data.MenuRepository
 import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 import tv.anilibria.feature.user.data.domain.User
-import tv.anilibria.feature.data.BaseUrlHelper
-import tv.anilibria.feature.data.analytics.AnalyticsConstants
-import tv.anilibria.feature.data.analytics.features.*
+import tv.anilibria.feature.content.data.BaseUrlHelper
+import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.content.data.analytics.features.*
 import javax.inject.Inject
 
 @InjectViewState

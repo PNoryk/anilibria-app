@@ -11,7 +11,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.player.data.PlayerPreferencesStorage
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
-import tv.anilibria.feature.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.domain.entity.release.Episode

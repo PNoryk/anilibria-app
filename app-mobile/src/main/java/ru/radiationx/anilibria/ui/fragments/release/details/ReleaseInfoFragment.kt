@@ -39,8 +39,8 @@ import ru.radiationx.shared_app.common.SystemUtils
 import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.feature.data.analytics.features.mapper.toAnalyticsPlayer
-import tv.anilibria.feature.data.analytics.features.mapper.toAnalyticsQuality
+import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsPlayer
+import tv.anilibria.feature.content.data.analytics.features.mapper.toAnalyticsQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 import tv.anilibria.feature.domain.entity.release.Episode

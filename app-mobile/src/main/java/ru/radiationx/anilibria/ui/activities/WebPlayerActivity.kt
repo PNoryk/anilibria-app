@@ -15,9 +15,9 @@ import ru.radiationx.shared_app.di.injectDependencies
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
-import tv.anilibria.feature.data.BaseUrlHelper
-import tv.anilibria.feature.data.analytics.features.WebPlayerAnalytics
-import tv.anilibria.feature.data.preferences.AppTheme
+import tv.anilibria.feature.content.data.BaseUrlHelper
+import tv.anilibria.feature.content.data.analytics.features.WebPlayerAnalytics
+import tv.anilibria.feature.content.data.preferences.AppTheme
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import java.util.regex.Pattern
 import javax.inject.Inject

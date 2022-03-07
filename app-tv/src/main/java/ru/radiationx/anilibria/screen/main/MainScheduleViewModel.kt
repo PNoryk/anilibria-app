@@ -13,8 +13,8 @@ import ru.radiationx.shared.ktx.asDayNameDeclension
 import ru.radiationx.shared.ktx.asDayPretext
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.ReleaseInteractor
-import tv.anilibria.feature.data.repos.ScheduleRepository
+import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ScheduleRepository
 import tv.anilibria.feature.domain.entity.release.ReleaseId
 
 @InjectConstructor

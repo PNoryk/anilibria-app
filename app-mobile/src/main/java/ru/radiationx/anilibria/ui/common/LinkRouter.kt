@@ -4,8 +4,8 @@ import ru.radiationx.anilibria.navigation.BaseAppScreen
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.terrakok.cicerone.Router
-import tv.anilibria.feature.data.analytics.AnalyticsConstants
-import tv.anilibria.feature.data.analytics.features.ReleaseAnalytics
+import tv.anilibria.feature.content.data.analytics.AnalyticsConstants
+import tv.anilibria.feature.content.data.analytics.features.ReleaseAnalytics
 import tv.anilibria.feature.domain.entity.release.ReleaseCode
 import java.util.regex.Pattern
 import javax.inject.Inject

@@ -6,8 +6,8 @@ import com.yandex.metrica.profile.UserProfileUpdate
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import toothpick.InjectConstructor
-import tv.anilibria.feature.data.analytics.AnalyticsProfileDataSource
-import tv.anilibria.feature.data.analytics.ProfileConstants
+import tv.anilibria.feature.content.data.analytics.AnalyticsProfileDataSource
+import tv.anilibria.feature.content.data.analytics.ProfileConstants
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 
 @InjectConstructor

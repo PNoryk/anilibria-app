@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.feature.data.network.CookieData
-import tv.anilibria.feature.data.network.CookiesStorage
+import tv.anilibria.feature.content.data.network.CookieData
+import tv.anilibria.feature.content.data.network.CookiesStorage
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.StorageDataHolder
