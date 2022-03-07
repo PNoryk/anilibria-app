@@ -115,7 +115,7 @@ dependencies {
     implementation project(":data-new")
     implementation project(":core-types")
     implementation project(":domain")
-    implementation project(":data-restapi")
+    implementation project(":feature-content:data-restapi")
     implementation project(":data-network")
     implementation project(":data-local")
     implementation project(":data-preferences")

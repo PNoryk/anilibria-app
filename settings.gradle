@@ -1,5 +1,5 @@
 include ':app-mobile', ':bottomsheet', ':shared-ktx', ':shared-android-ktx', ':lapism-search', ':app-tv', ':shared-app'
-include ':data-restapi'
+include ':feature-content:data-restapi'
 include ':domain'
 include ':feature-network-config-data'
 include ':feature-appupdates-data'
