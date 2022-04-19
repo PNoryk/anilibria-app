@@ -7,7 +7,7 @@ import android.util.Log
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.YandexMetricaConfig
 import kotlinx.coroutines.flow.MutableStateFlow
-import ru.radiationx.anilibria.di.AppModule
+import ru.radiationx.anilibria.di.TvAppModule
 import ru.radiationx.shared_app.common.ImageLoaderConfig
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
 import ru.radiationx.shared_app.di.DI
@@ -56,7 +56,7 @@ class App : Application() {
     private fun initDependencies() {
         Toothpick.setConfiguration(Configuration.forProduction())
         val scope = Toothpick.openScope(DI.DEFAULT_SCOPE)
-        scope.installModules(AppModule(this))
+        scope.installModules(TvAppModule(this))
 
         Log.e("lalala", "initDependencies ${Toothpick.openScope(DI.DEFAULT_SCOPE)}")
     }

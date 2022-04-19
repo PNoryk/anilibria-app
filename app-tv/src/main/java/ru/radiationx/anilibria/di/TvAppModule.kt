@@ -22,7 +22,7 @@ import tv.anilibria.plugin.data.analytics.AnalyticsSender
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 
-class AppModule(context: Context) : Module() {
+class TvAppModule(context: Context) : Module() {
 
 
     init {

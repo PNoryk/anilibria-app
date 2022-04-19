@@ -16,7 +16,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import ru.radiationx.anilibria.di.AppModule
+import ru.radiationx.anilibria.di.MobileAppModule
 import ru.radiationx.shared_app.common.ImageLoaderConfig
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
 import ru.radiationx.shared_app.common.SimpleActivityLifecycleCallbacks
@@ -157,7 +157,7 @@ class App : Application() {
     private fun initDependencies() {
         Toothpick.setConfiguration(Configuration.forProduction())
         val scope = Toothpick.openScope(DI.DEFAULT_SCOPE)
-        scope.installModules(AppModule(this))
+        scope.installModules(MobileAppModule(this))
     }
 
     private fun appVersionCheck() {

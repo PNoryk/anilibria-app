@@ -36,9 +36,9 @@ import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.di.DI
 import ru.radiationx.shared_app.di.injectDependencies
 import toothpick.Toothpick
-import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.vkcomments.data.VkCommentsClient
 import tv.anilibria.app.mobile.preferences.PreferencesStorage
+import tv.anilibria.core.types.AbsoluteUrl
+import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
@@ -285,12 +285,12 @@ class VkCommentsFragment : BaseFragment(), VkCommentsView {
             return if (needIntercept) {
                 Log.d("kekeke", "tryInterceptComments $url")
                 val client = Toothpick.openScopes(DI.DEFAULT_SCOPE, screenScope)
-                    .getInstance(VkCommentsClient::class.java)
+                    .getInstance(VkCommentsRepository::class.java)
 
                 Log.d("S_DEF_LOG", "CHANGE CSS")
                 val cssSrc = try {
                     runBlocking {
-                        client.getBody(AbsoluteUrl(url.orEmpty()))
+                        client.getDirectBody(AbsoluteUrl(url.orEmpty()))
                     }
                 } catch (ex: Throwable) {
                     ex.printStackTrace()

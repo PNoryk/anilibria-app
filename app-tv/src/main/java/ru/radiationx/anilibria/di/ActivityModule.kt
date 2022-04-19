@@ -15,6 +15,5 @@ class ActivityModule(activity: FragmentActivity) : Module() {
         bind(SystemUtils::class.java).singleton()
         bind(CardsDataConverter::class.java).singleton()
         bind(DetailDataConverter::class.java).singleton()
-        Formatter.formatFileSize(activity, 0L)
     }
 }
