@@ -9,10 +9,21 @@ import tv.anilibria.feature.auth.data.local.SocialAuthLocalDataSource
 import tv.anilibria.feature.auth.data.remote.AuthApiWrapper
 import tv.anilibria.feature.auth.data.remote.AuthParser
 import tv.anilibria.feature.auth.data.remote.AuthRemoteDataSource
+import tv.anilibria.plugin.data.storage.DataStorage
 
 class AuthDataFeatureModule : Module() {
 
     init {
+        bind(DataStorage::class.java)
+            .withName(AuthStorageQualifier::class.java)
+            .toProvider(AuthDataStorageProvider::class.java)
+            .providesSingleton()
+
+        bind(DataStorage::class.java)
+            .withName(SocialAuthStorageQualifier::class.java)
+            .toProvider(SocialAuthDataStorageProvider::class.java)
+            .providesSingleton()
+
         bind(AuthParser::class.java)
         bind(AuthApiWrapper::class.java)
         bind(AuthRemoteDataSource::class.java)

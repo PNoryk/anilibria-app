@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tv.anilibria.feature.content.data.local.di.ReleaseUpdatesStorageQualifier
 import tv.anilibria.feature.content.data.local.entity.ReleaseUpdateLocal
 import tv.anilibria.feature.content.data.local.mappers.toDomain
 import tv.anilibria.feature.content.data.local.mappers.toLocal
@@ -15,7 +16,7 @@ import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.storageStringKey
 
 class ReleaseUpdatesLocalDataSource(
-    private val storage: DataStorage,
+    @ReleaseUpdatesStorageQualifier private val storage: DataStorage,
     private val moshi: Moshi
 ) {
 

@@ -3,6 +3,7 @@ package tv.anilibria.feature.auth.data
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import tv.anilibria.feature.auth.data.di.AuthStorageQualifier
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.content.data.network.CookieData
 import tv.anilibria.feature.content.data.network.CookiesStorage
@@ -13,7 +14,7 @@ import tv.anilibria.plugin.data.storage.storageBooleanKey
 
 class AuthStateHolderImpl(
     private val cookiesStorage: CookiesStorage,
-    private val storage: DataStorage
+    @AuthStorageQualifier private val storage: DataStorage
 ) : AuthStateHolder {
 
     private companion object {

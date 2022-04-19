@@ -6,13 +6,14 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import toothpick.InjectConstructor
+import tv.anilibria.feature.player.data.di.PlayerPrefsStorageQualifier
 import tv.anilibria.feature.player.data.prefs.*
 import tv.anilibria.plugin.data.storage.*
 
 // todo переделать на нормальную подписку обновлений
 @InjectConstructor
 class PlayerPreferencesStorage(
-    private val storage: DataStorage
+    @PlayerPrefsStorageQualifier private val storage: DataStorage
 ) {
 
     companion object {

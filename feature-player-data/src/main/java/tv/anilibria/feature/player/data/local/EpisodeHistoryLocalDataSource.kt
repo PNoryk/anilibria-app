@@ -7,13 +7,14 @@ import kotlinx.coroutines.flow.map
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.ReleaseId
+import tv.anilibria.feature.player.data.di.EpisodeHistoryStorageQualifier
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.storageStringKey
 
 class EpisodeHistoryLocalDataSource(
-    private val storage: DataStorage,
+    @EpisodeHistoryStorageQualifier private val storage: DataStorage,
     private val moshi: Moshi
 ) {
 

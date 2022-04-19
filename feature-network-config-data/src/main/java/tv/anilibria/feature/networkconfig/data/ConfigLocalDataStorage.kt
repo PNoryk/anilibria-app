@@ -1,13 +1,14 @@
 package tv.anilibria.feature.networkconfig.data
 
 import kotlinx.coroutines.flow.Flow
+import tv.anilibria.feature.networkconfig.data.di.ConfigStorageQualifier
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.ObservableData
 
 //todo добавить сохранение
 class ConfigLocalDataStorage(
-    private val storage: DataStorage,
+    @ConfigStorageQualifier private val storage: DataStorage,
 ) {
 
     private val observableData = ObservableData<List<ApiAddress>>()
