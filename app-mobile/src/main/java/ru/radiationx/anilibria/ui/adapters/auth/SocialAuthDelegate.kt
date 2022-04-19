@@ -5,9 +5,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_social_auth.*
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.extension.getColorFromAttr
-import ru.radiationx.anilibria.extension.getCompatColor
-import ru.radiationx.anilibria.extension.getCompatDrawable
+import ru.radiationx.shared.ktx.android.getColorFromAttr
+import ru.radiationx.shared.ktx.android.getCompatColor
+import ru.radiationx.shared.ktx.android.getCompatDrawable
 import ru.radiationx.anilibria.model.SocialAuthItemState
 import ru.radiationx.anilibria.ui.adapters.ListItem
 import ru.radiationx.anilibria.ui.adapters.SocialAuthListItem

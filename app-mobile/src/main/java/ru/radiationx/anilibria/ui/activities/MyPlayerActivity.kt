@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.michaelbel.bottomsheet.BottomSheet
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.extension.getColorFromAttr
+import ru.radiationx.shared.ktx.android.getColorFromAttr
 import ru.radiationx.anilibria.extension.isDark
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
 import ru.radiationx.shared.ktx.android.gone

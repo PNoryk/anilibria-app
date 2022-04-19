@@ -18,7 +18,7 @@ import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.dialog_genres.view.*
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.extension.fillNavigationBarColor
-import ru.radiationx.anilibria.extension.getColorFromAttr
+import ru.radiationx.shared.ktx.android.getColorFromAttr
 import ru.radiationx.shared.ktx.android.visible
 import tv.anilibria.feature.content.types.ReleaseGenre
 import tv.anilibria.feature.content.types.ReleaseSeason

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.leanback.widget.GuidedAction
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.extension.getCompatDrawable
+import ru.radiationx.shared.ktx.android.getCompatDrawable
 import ru.radiationx.anilibria.screen.player.BasePlayerGuidedFragment
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel

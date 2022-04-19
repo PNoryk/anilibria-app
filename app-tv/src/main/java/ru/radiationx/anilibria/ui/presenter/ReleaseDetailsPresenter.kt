@@ -18,8 +18,8 @@ import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.common.DetailsState
 import ru.radiationx.anilibria.common.LibriaDetails
 import ru.radiationx.anilibria.common.LibriaDetailsRow
-import ru.radiationx.anilibria.extension.getCompatColor
-import ru.radiationx.anilibria.extension.getCompatDrawable
+import ru.radiationx.shared.ktx.android.getCompatColor
+import ru.radiationx.shared.ktx.android.getCompatDrawable
 
 class ReleaseDetailsPresenter(
     private val continueClickListener: () -> Unit,

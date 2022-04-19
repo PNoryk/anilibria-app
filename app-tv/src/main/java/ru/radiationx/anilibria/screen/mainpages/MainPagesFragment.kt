@@ -17,8 +17,8 @@ import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import ru.radiationx.anilibria.R
 import ru.radiationx.anilibria.common.fragment.scoped.ScopedBrowseFragment
-import ru.radiationx.anilibria.extension.getCompatColor
-import ru.radiationx.anilibria.extension.getCompatDrawable
+import ru.radiationx.shared.ktx.android.getCompatColor
+import ru.radiationx.shared.ktx.android.getCompatDrawable
 import ru.radiationx.anilibria.ui.widget.BrowseTitleView
 import ru.radiationx.shared.ktx.android.subscribeTo
 import ru.radiationx.shared_app.di.viewModel

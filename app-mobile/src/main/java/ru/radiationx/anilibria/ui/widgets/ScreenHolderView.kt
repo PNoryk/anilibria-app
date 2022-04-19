@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_screenholder.view.*
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.extension.getCompatDrawable
+import ru.radiationx.shared.ktx.android.getCompatDrawable
 
 class ScreenHolderView @JvmOverloads constructor(
     context: Context,

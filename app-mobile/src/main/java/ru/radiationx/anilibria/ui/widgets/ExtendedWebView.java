@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import ru.radiationx.anilibria.extension.ContextKt;
+import ru.radiationx.shared.ktx.android.ContextKt;
 
 /**
  * Created by radiationx on 01.11.16.

@@ -16,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.extension.getCompatColor
+import ru.radiationx.shared.ktx.android.getCompatColor
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import kotlin.time.Duration.Companion.milliseconds

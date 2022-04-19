@@ -9,7 +9,7 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_feed_schedule.*
 import ru.radiationx.anilibria.R
-import ru.radiationx.anilibria.extension.dpToPx
+import ru.radiationx.shared.ktx.android.dpToPx
 import ru.radiationx.anilibria.model.ScheduleItemState
 import ru.radiationx.anilibria.ui.adapters.FeedScheduleListItem
 import ru.radiationx.anilibria.ui.adapters.ListItem
