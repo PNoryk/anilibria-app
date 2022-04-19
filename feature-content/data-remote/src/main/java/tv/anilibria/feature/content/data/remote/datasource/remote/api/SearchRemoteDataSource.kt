@@ -8,13 +8,13 @@ import tv.anilibria.feature.content.types.ReleaseGenre
 import tv.anilibria.feature.content.types.ReleaseYear
 import tv.anilibria.feature.content.types.SearchForm
 import tv.anilibria.feature.content.types.release.Release
-import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class SearchRemoteDataSource @Inject constructor(
-    private val searchApi: NetworkWrapper<SearchApi>
+    private val searchApi: ApiWrapper<SearchApi>
 ) {
 
     suspend fun getGenres(): List<ReleaseGenre> {

@@ -2,15 +2,16 @@ package tv.anilibria.feature.user.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
+import toothpick.InjectConstructor
 import tv.anilibria.feature.user.data.domain.User
 import tv.anilibria.feature.user.data.local.UserLocalDataSource
 import tv.anilibria.feature.user.data.remote.UserRemoteDataSource
-import javax.inject.Inject
 
 /**
  * Created by radiationx on 30.12.17.
  */
-class UserRepository @Inject constructor(
+@InjectConstructor
+class UserRepository(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val userHolder: UserLocalDataSource,
 ) {

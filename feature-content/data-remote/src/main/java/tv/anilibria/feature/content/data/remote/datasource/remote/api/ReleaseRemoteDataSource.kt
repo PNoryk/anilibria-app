@@ -5,7 +5,7 @@ import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.release.RandomRelease
 import tv.anilibria.feature.content.types.release.Release
-import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 /* Created by radiationx on 31.10.17. */
 
 class ReleaseRemoteDataSource @Inject constructor(
-    private val releaseApi: NetworkWrapper<ReleaseApi>
+    private val releaseApi: ApiWrapper<ReleaseApi>
 ) {
 
     suspend fun getRandomRelease(): RandomRelease {

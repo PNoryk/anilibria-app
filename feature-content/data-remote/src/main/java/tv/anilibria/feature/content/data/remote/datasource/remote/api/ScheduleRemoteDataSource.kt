@@ -3,13 +3,13 @@ package tv.anilibria.feature.content.data.remote.datasource.remote.api
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.ScheduleApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.schedule.ScheduleDay
-import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class ScheduleRemoteDataSource @Inject constructor(
-    private val scheduleApi: NetworkWrapper<ScheduleApi>
+    private val scheduleApi: ApiWrapper<ScheduleApi>
 ) {
 
     suspend fun getSchedule(): List<ScheduleDay> {

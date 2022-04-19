@@ -1,17 +1,13 @@
 package tv.anilibria.feature.user.data.remote
 
+import toothpick.InjectConstructor
 import tv.anilibria.feature.user.data.domain.User
-import tv.anilibria.feature.user.data.toDomain
-import tv.anilibria.plugin.data.network.NetworkWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 30.12.17.
- */
-class UserRemoteDataSource @Inject constructor(
-    private val userApi: NetworkWrapper<UserApi>
+@InjectConstructor
+class UserRemoteDataSource(
+    private val userApi: UserApiWrapper
 ) {
 
     suspend fun loadUser(): User {

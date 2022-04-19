@@ -5,13 +5,13 @@ import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseId
-import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class FavoriteRemoteDataSource @Inject constructor(
-    private val favoriteApi: NetworkWrapper<FavoriteApi>,
+    private val favoriteApi: ApiWrapper<FavoriteApi>,
 ) {
 
     suspend fun getFavorites(page: Int): Page<Release> {

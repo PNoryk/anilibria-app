@@ -10,7 +10,7 @@ import javax.inject.Inject
  * Created by radiationx on 30.12.17.
  */
 //todo change to lazy init and smh else
-class LagacyCookiesStorage @Inject constructor(
+class LegacyCookiesStorage @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : LegacyCookieHolder {
 

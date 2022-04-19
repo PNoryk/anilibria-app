@@ -2,8 +2,10 @@ package tv.anilibria.feature.content.data.network
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import toothpick.InjectConstructor
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 
+@InjectConstructor
 class AppInfoInterceptor(
     private val sharedBuildConfig: SharedBuildConfig
 ) : Interceptor {

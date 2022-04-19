@@ -3,7 +3,7 @@ package tv.anilibria.feature.page.data.remote
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.page.data.domain.PageLibria
 import tv.anilibria.plugin.data.network.NetworkUrlProvider
-import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.ApiWrapper
 import javax.inject.Inject
 
 /**
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class PageRemoteDataSource @Inject constructor(
     private val pagesParser: PagesParser,
     private val urlProvider: NetworkUrlProvider,
-    private val pageApi: NetworkWrapper<PageApi>
+    private val pageApi: ApiWrapper<PageApi>
 ) {
 
     suspend fun getLibriaPage(pagePath: RelativeUrl): PageLibria {

@@ -4,13 +4,13 @@ import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.Youtu
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.youtube.Youtube
-import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class YoutubeRemoteDataSource @Inject constructor(
-    private val youtubeApi: NetworkWrapper<YoutubeApi>
+    private val youtubeApi: ApiWrapper<YoutubeApi>
 ) {
 
     suspend fun getYoutubeList(page: Int): Page<Youtube> {

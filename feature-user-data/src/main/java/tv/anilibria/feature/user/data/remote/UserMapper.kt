@@ -1,4 +1,4 @@
-package tv.anilibria.feature.user.data
+package tv.anilibria.feature.user.data.remote
 
 import tv.anilibria.core.types.asRelativeUrl
 import tv.anilibria.feature.user.data.domain.User

@@ -2,12 +2,14 @@ package tv.anilibria.feature.user.data.local
 
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.Flow
+import toothpick.InjectConstructor
 import tv.anilibria.feature.user.data.domain.User
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.storageStringKey
 
+@InjectConstructor
 class UserLocalDataSource(
     private val storage: DataStorage,
     private val moshi: Moshi

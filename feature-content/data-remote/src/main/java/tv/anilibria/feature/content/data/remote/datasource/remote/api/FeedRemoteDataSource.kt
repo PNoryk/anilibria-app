@@ -3,13 +3,13 @@ package tv.anilibria.feature.content.data.remote.datasource.remote.api
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.FeedApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.feed.Feed
-import tv.anilibria.plugin.data.network.NetworkWrapper
+import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import javax.inject.Inject
 
 class FeedRemoteDataSource @Inject constructor(
-    private val feedApi: NetworkWrapper<FeedApi>
+    private val feedApi: ApiWrapper<FeedApi>
 ) {
 
     suspend fun getFeed(page: Int): List<Feed> {
