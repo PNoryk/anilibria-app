@@ -4,13 +4,11 @@ import android.content.SharedPreferences
 import android.util.Log
 import okhttp3.Cookie
 import okhttp3.HttpUrl
-import javax.inject.Inject
+import toothpick.InjectConstructor
 
-/**
- * Created by radiationx on 30.12.17.
- */
 //todo change to lazy init and smh else
-class LegacyCookiesStorage @Inject constructor(
+@InjectConstructor
+class LegacyCookiesStorage(
     private val sharedPreferences: SharedPreferences
 ) : LegacyCookieHolder {
 

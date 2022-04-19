@@ -1,9 +1,10 @@
 package ru.radiationx.anilibria
 
+import toothpick.InjectConstructor
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
-import javax.inject.Inject
 
-class AppBuildConfig @Inject constructor() : SharedBuildConfig {
+@InjectConstructor
+class AppBuildConfig : SharedBuildConfig {
 
     override val applicationId: String = BuildConfig.APPLICATION_ID
 

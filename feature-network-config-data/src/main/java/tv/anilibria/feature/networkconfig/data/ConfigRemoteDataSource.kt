@@ -3,14 +3,15 @@ package tv.anilibria.feature.networkconfig.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-class ConfigRemoteDataSource @Inject constructor(
+@InjectConstructor
+class ConfigRemoteDataSource(
     private val configApi: ApiWrapper<ConfigApi>,
     private val reserveSources: ApiConfigReserveSources
 ) {

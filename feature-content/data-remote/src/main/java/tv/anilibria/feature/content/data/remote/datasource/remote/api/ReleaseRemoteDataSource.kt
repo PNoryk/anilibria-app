@@ -1,5 +1,6 @@
 package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.ReleaseApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
@@ -8,11 +9,9 @@ import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import javax.inject.Inject
 
-/* Created by radiationx on 31.10.17. */
-
-class ReleaseRemoteDataSource @Inject constructor(
+@InjectConstructor
+class ReleaseRemoteDataSource(
     private val releaseApi: ApiWrapper<ReleaseApi>
 ) {
 

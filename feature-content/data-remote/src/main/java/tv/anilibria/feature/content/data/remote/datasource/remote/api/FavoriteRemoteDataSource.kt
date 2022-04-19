@@ -1,5 +1,6 @@
 package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.FavoriteApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
@@ -8,9 +9,9 @@ import tv.anilibria.feature.content.types.release.ReleaseId
 import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import javax.inject.Inject
 
-class FavoriteRemoteDataSource @Inject constructor(
+@InjectConstructor
+class FavoriteRemoteDataSource(
     private val favoriteApi: ApiWrapper<FavoriteApi>,
 ) {
 

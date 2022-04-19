@@ -4,16 +4,14 @@ import ru.radiationx.anilibria.navigation.BaseAppScreen
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.ReleaseAnalytics
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import java.util.regex.Pattern
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 03.02.18.
- */
-class LinkRouter @Inject constructor(
+@InjectConstructor
+class LinkRouter(
     private val releaseAnalytics: ReleaseAnalytics
 ) : ILinkHandler {
 

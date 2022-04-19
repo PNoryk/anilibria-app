@@ -1,12 +1,13 @@
 package tv.anilibria.feature.menu.data.remote
 
+import toothpick.InjectConstructor
 import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import javax.inject.Inject
 
-class MenuRemoteDataSource @Inject constructor(
+@InjectConstructor
+class MenuRemoteDataSource(
     private val otherApi: ApiWrapper<MenuApi>
 ) {
 

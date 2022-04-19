@@ -2,11 +2,11 @@ package tv.anilibria.feature.content.data.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import javax.inject.Inject
+import toothpick.InjectConstructor
 import javax.inject.Provider
 
-
-class MainOkHttpProvider @Inject constructor(
+@InjectConstructor
+class MainOkHttpProvider(
     private val httpLoggingInterceptor: HttpLoggingInterceptor,
     private val remoteAddressInterceptor: RemoteAddressInterceptor
 ) : Provider<OkHttpClient> {

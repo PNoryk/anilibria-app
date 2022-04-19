@@ -9,11 +9,12 @@ import moxy.InjectViewState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.ConfiguringInteractor
-import javax.inject.Inject
 
 @InjectViewState
-class ConfiguringPresenter @Inject constructor(
+@InjectConstructor
+class ConfiguringPresenter(
     private val router: Router,
     private val configuringInteractor: ConfiguringInteractor,
     private val errorHandler: IErrorHandler

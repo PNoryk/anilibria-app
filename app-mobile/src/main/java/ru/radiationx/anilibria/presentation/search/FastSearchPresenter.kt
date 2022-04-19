@@ -13,20 +13,21 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.CatalogAnalytics
 import tv.anilibria.feature.analytics.api.features.FastSearchAnalytics
 import tv.anilibria.feature.analytics.api.features.ReleaseAnalytics
+import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.content.types.release.Release
 import java.net.URLEncoder
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 @InjectViewState
-class FastSearchPresenter @Inject constructor(
+@InjectConstructor
+class FastSearchPresenter(
     private val searchRepository: SearchRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,

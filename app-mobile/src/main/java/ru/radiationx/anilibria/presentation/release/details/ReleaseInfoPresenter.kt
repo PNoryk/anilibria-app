@@ -15,30 +15,31 @@ import ru.radiationx.anilibria.ui.adapters.release.detail.EpisodeControlPlace
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.radiationx.shared_app.common.SystemUtils
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.auth.data.AuthStateHolder
-import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.feature.donation.data.DonationRepository
-import tv.anilibria.feature.player.data.PlayerPreferencesStorage
-import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
-import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
-import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.*
 import tv.anilibria.feature.analytics.api.features.mapper.toAnalyticsQuality
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsPlayer
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsQuality
-import tv.anilibria.app.mobile.preferences.PreferencesStorage
-import tv.anilibria.feature.analytics.api.features.*
-import tv.anilibria.feature.player.data.EpisodeHistoryRepository
+import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.auth.data.domain.AuthState
+import tv.anilibria.feature.content.data.BaseUrlHelper
+import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
 import tv.anilibria.feature.content.data.repos.HistoryRepository
-import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.*
-import javax.inject.Inject
+import tv.anilibria.feature.donation.data.DonationRepository
+import tv.anilibria.feature.player.data.EpisodeHistoryRepository
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 
 @InjectViewState
-class ReleaseInfoPresenter @Inject constructor(
+@InjectConstructor
+class ReleaseInfoPresenter(
     private val releaseInteractor: ReleaseInteractor,
     private val historyRepository: HistoryRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,

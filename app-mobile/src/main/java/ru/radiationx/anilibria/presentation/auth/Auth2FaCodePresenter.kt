@@ -6,18 +6,19 @@ import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
+import tv.anilibria.feature.analytics.api.features.AuthMainAnalytics
 import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.feature.analytics.api.features.AuthMainAnalytics
 import tv.anilibria.feature.content.errors.WrongPasswordException
-import javax.inject.Inject
 
 /**
  * Created by radiationx on 30.12.17.
  */
 @InjectViewState
-class Auth2FaCodePresenter @Inject constructor(
+@InjectConstructor
+class Auth2FaCodePresenter(
     private val router: Router,
     private val systemMessenger: SystemMessenger,
     private val authRepository: AuthRepository,

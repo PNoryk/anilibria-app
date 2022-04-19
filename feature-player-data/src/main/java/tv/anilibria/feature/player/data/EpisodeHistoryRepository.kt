@@ -3,16 +3,14 @@ package tv.anilibria.feature.player.data
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
-import tv.anilibria.feature.player.data.local.EpisodeHistoryLocalDataSource
-import tv.anilibria.feature.player.data.domain.EpisodeVisit
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.ReleaseId
-import javax.inject.Inject
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
+import tv.anilibria.feature.player.data.local.EpisodeHistoryLocalDataSource
 
-/**
- * Created by radiationx on 18.02.18.
- */
-class EpisodeHistoryRepository @Inject constructor(
+@InjectConstructor
+class EpisodeHistoryRepository(
     private val historyStorage: EpisodeHistoryLocalDataSource
 ) {
 

@@ -3,9 +3,10 @@ package tv.anilibria.feature.content.data.network
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
-import javax.inject.Inject
+import toothpick.InjectConstructor
 
-class AppCookieJar @Inject constructor(
+@InjectConstructor
+class AppCookieJar(
     private val cookieHolder: LegacyCookieHolder
 ) : CookieJar {
 

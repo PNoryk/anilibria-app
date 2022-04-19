@@ -4,11 +4,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.runBlocking
+import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.ConfigLocalDataStorage
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
-import javax.inject.Inject
 
-class ApiConfigController @Inject constructor(
+@InjectConstructor
+class ApiConfigController(
     private val configChanger: ApiConfigChanger,
     private val apiConfigStorage: ConfigLocalDataStorage
 ) {

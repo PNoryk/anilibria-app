@@ -26,13 +26,13 @@ import ru.radiationx.shared.ktx.asDayNameDeclension
 import ru.radiationx.shared.ktx.asDayPretext
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
+import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.analytics.api.features.*
 import tv.anilibria.feature.appupdates.data.CheckerRepository
-import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.ReleaseInteractor
-import tv.anilibria.feature.analytics.api.AnalyticsConstants
-import tv.anilibria.app.mobile.preferences.PreferencesStorage
-import tv.anilibria.feature.analytics.api.features.*
 import tv.anilibria.feature.content.data.repos.FeedRepository
 import tv.anilibria.feature.content.data.repos.ScheduleRepository
 import tv.anilibria.feature.content.types.feed.Feed
@@ -40,13 +40,14 @@ import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseId
 import tv.anilibria.feature.content.types.youtube.Youtube
 import tv.anilibria.feature.content.types.youtube.YoutubeId
+import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
-import javax.inject.Inject
 
 /* Created by radiationx on 05.11.17. */
 
 @InjectViewState
-class FeedPresenter @Inject constructor(
+@InjectConstructor
+class FeedPresenter(
     private val feedRepository: FeedRepository,
     private val releaseInteractor: ReleaseInteractor,
     private val scheduleRepository: ScheduleRepository,

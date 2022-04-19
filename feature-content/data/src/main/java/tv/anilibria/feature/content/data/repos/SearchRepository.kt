@@ -1,15 +1,16 @@
 package tv.anilibria.feature.content.data.repos
 
 import kotlinx.coroutines.flow.Flow
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.local.holders.GenresLocalDataSource
 import tv.anilibria.feature.content.data.local.holders.YearsLocalDataSource
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.SearchRemoteDataSource
 import tv.anilibria.feature.content.types.*
 import tv.anilibria.feature.content.types.release.Release
-import javax.inject.Inject
 
-class SearchRepository @Inject constructor(
+@InjectConstructor
+class SearchRepository(
     private val searchApi: SearchRemoteDataSource,
     private val genresHolder: GenresLocalDataSource,
     private val yearsHolder: YearsLocalDataSource,

@@ -17,20 +17,18 @@ import ru.radiationx.anilibria.ui.fragments.favorites.FavoritesScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.feature.content.data.BaseUrlHelper
+import toothpick.InjectConstructor
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.FavoritesAnalytics
 import tv.anilibria.feature.analytics.api.features.ReleaseAnalytics
+import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseId
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 13.01.18.
- */
 @InjectViewState
-class FavoritesPresenter @Inject constructor(
+@InjectConstructor
+class FavoritesPresenter(
     private val favoriteRepository: FavoriteRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,

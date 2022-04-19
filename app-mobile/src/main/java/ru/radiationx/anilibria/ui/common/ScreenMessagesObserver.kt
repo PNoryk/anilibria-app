@@ -12,10 +12,10 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.*
 import ru.radiationx.anilibria.utils.messages.SystemMessage
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
-import javax.inject.Inject
+import toothpick.InjectConstructor
 
-
-class ScreenMessagesObserver @Inject constructor(
+@InjectConstructor
+class ScreenMessagesObserver(
     private val context: Context,
     private val screenMessenger: SystemMessenger
 ) : LifecycleObserver {

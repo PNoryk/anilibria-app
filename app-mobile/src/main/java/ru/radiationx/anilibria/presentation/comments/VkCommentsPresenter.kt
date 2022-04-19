@@ -17,19 +17,20 @@ import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsScreenState
 import ru.radiationx.anilibria.ui.fragments.comments.VkCommentsState
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.auth.data.AuthStateHolder
-import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
-import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.AuthVkAnalytics
 import tv.anilibria.feature.analytics.api.features.CommentsAnalytics
+import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
-import javax.inject.Inject
+import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
 
 @InjectViewState
-class VkCommentsPresenter @Inject constructor(
+@InjectConstructor
+class VkCommentsPresenter(
     private val authStateHolder: AuthStateHolder,
     private val vkCommentsRepository: VkCommentsRepository,
     private val releaseInteractor: ReleaseInteractor,

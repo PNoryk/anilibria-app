@@ -1,12 +1,13 @@
 package tv.anilibria.feature.menu.data
 
 import kotlinx.coroutines.flow.Flow
+import toothpick.InjectConstructor
+import tv.anilibria.feature.menu.data.domain.LinkMenuItem
 import tv.anilibria.feature.menu.data.local.LinkMenuLocalDataSource
 import tv.anilibria.feature.menu.data.remote.MenuRemoteDataSource
-import tv.anilibria.feature.menu.data.domain.LinkMenuItem
-import javax.inject.Inject
 
-class MenuRepository @Inject constructor(
+@InjectConstructor
+class MenuRepository(
     private val menuApi: MenuRemoteDataSource,
     private val menuHolder: LinkMenuLocalDataSource
 ) {

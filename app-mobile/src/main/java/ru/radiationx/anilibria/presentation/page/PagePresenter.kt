@@ -5,16 +5,14 @@ import moxy.InjectViewState
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.core.types.RelativeUrl
-import tv.anilibria.feature.page.data.PageRepository
 import tv.anilibria.feature.analytics.api.features.PageAnalytics
-import javax.inject.Inject
+import tv.anilibria.feature.page.data.PageRepository
 
-/**
- * Created by radiationx on 13.01.18.
- */
 @InjectViewState
-class PagePresenter @Inject constructor(
+@InjectConstructor
+class PagePresenter(
     private val pageRepository: PageRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,

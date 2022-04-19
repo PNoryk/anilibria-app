@@ -5,16 +5,14 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.presentation.common.viewModelScope
-import tv.anilibria.feature.appupdates.data.CheckerRepository
+import toothpick.InjectConstructor
 import tv.anilibria.feature.analytics.api.features.UpdaterAnalytics
+import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 28.01.18.
- */
 @InjectViewState
-class CheckerPresenter @Inject constructor(
+@InjectConstructor
+class CheckerPresenter(
     private val checkerRepository: CheckerRepository,
     private val errorHandler: IErrorHandler,
     private val updaterAnalytics: UpdaterAnalytics,

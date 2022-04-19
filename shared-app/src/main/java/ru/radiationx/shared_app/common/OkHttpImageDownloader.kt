@@ -5,11 +5,12 @@ import com.nostra13.universalimageloader.core.assist.ContentLengthInputStream
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import toothpick.InjectConstructor
 import java.io.InputStream
-import javax.inject.Inject
 import javax.inject.Provider
 
-class OkHttpImageDownloader @Inject constructor(
+@InjectConstructor
+class OkHttpImageDownloader(
     private val context: Context,
     private val okHttpProvider: Provider<OkHttpClient>
 ) : BaseImageDownloader(context) {

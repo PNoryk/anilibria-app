@@ -10,14 +10,15 @@ import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.ui.common.webpage.WebPageViewState
 import ru.radiationx.anilibria.ui.fragments.auth.social.AuthSocialScreenState
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
+import tv.anilibria.feature.analytics.api.features.AuthSocialAnalytics
 import tv.anilibria.feature.auth.data.AuthRepository
 import tv.anilibria.feature.auth.data.domain.SocialAuthService
-import tv.anilibria.feature.analytics.api.features.AuthSocialAnalytics
 import tv.anilibria.feature.content.errors.SocialAuthException
-import javax.inject.Inject
 
 @InjectViewState
-class AuthSocialPresenter @Inject constructor(
+@InjectConstructor
+class AuthSocialPresenter(
     private val authRepository: AuthRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,

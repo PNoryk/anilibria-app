@@ -5,12 +5,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import toothpick.InjectConstructor
 import tv.anilibria.feature.player.data.prefs.*
 import tv.anilibria.plugin.data.storage.*
-import javax.inject.Inject
 
 // todo переделать на нормальную подписку обновлений
-class PlayerPreferencesStorage @Inject constructor(
+@InjectConstructor
+class PlayerPreferencesStorage(
     private val storage: DataStorage
 ) {
 

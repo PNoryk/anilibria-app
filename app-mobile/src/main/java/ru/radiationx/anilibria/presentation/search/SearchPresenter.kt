@@ -18,13 +18,14 @@ import ru.radiationx.anilibria.ui.fragments.search.SearchScreenState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
-import tv.anilibria.feature.content.data.BaseUrlHelper
+import toothpick.InjectConstructor
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.CatalogAnalytics
 import tv.anilibria.feature.analytics.api.features.CatalogFilterAnalytics
 import tv.anilibria.feature.analytics.api.features.FastSearchAnalytics
 import tv.anilibria.feature.analytics.api.features.ReleaseAnalytics
-import tv.anilibria.app.mobile.preferences.PreferencesStorage
+import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.content.types.ReleaseGenre
 import tv.anilibria.feature.content.types.ReleaseSeason
@@ -33,10 +34,10 @@ import tv.anilibria.feature.content.types.SearchForm
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseId
 import tv.anilibria.plugin.data.analytics.TimeCounter
-import javax.inject.Inject
 
 @InjectViewState
-class SearchPresenter @Inject constructor(
+@InjectConstructor
+class SearchPresenter(
     private val searchRepository: SearchRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,

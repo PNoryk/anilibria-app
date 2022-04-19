@@ -10,6 +10,7 @@ import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.presentation.common.BasePresenter
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.Screen
+import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.donation.data.DonationRepository
@@ -20,11 +21,9 @@ import tv.anilibria.feature.analytics.api.features.*
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
 import javax.inject.Inject
 
-/**
- * Created by radiationx on 17.12.17.
- */
 @InjectViewState
-class MainPresenter @Inject constructor(
+@InjectConstructor
+class MainPresenter(
     private val router: Router,
     private val authStateHolder: AuthStateHolder,
     private val donationRepository: DonationRepository,

@@ -5,9 +5,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import toothpick.InjectConstructor
 
-class SystemMessenger @Inject constructor() {
+@InjectConstructor
+class SystemMessenger {
     private val messagesRelay = MutableSharedFlow<SystemMessage>()
 
     fun observe(): SharedFlow<SystemMessage> = messagesRelay.asSharedFlow()

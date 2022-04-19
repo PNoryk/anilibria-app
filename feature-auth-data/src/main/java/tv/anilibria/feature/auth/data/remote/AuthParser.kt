@@ -1,16 +1,13 @@
 package tv.anilibria.feature.auth.data.remote
 
 import org.json.JSONObject
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.errors.*
 import tv.anilibria.plugin.data.restapi.ApiException
-import javax.inject.Inject
-
-/**
- * Created by radiationx on 31.12.17.
- */
 
 // todo update handling on retrofit
-class AuthParser @Inject constructor() {
+@InjectConstructor
+class AuthParser {
 
 
     fun checkOtpError(error: Throwable): Throwable = if (error is ApiException) {

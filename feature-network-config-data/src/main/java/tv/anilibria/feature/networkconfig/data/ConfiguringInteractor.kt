@@ -2,15 +2,16 @@ package tv.anilibria.feature.networkconfig.data
 
 import android.util.Log
 import kotlinx.coroutines.flow.*
+import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.IOException
 import java.util.concurrent.TimeoutException
-import javax.inject.Inject
 import javax.net.ssl.*
 
-class ConfiguringInteractor @Inject constructor(
+@InjectConstructor
+class ConfiguringInteractor(
     private val apiConfig: ApiConfigController,
     private val configurationRepository: ConfigurationRepository,
     private val analytics: ConfiguringAnalytics

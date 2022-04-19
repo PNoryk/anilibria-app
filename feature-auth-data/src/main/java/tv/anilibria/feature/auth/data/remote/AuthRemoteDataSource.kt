@@ -3,20 +3,18 @@ package tv.anilibria.feature.auth.data.remote
 import android.net.Uri
 import org.json.JSONObject
 import retrofit2.HttpException
+import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.domain.OtpInfo
 import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import tv.anilibria.feature.content.errors.SocialAuthException
-import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.ApiWrapper
+import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.ApiException
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 30.12.17.
- */
-class AuthRemoteDataSource @Inject constructor(
+@InjectConstructor
+class AuthRemoteDataSource(
     private val authParser: AuthParser,
     private val urlProvider: NetworkUrlProvider,
     private val authApi: ApiWrapper<AuthApi>

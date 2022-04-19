@@ -1,9 +1,10 @@
 package tv.anilibria.plugin.data.network
 
-import javax.inject.Inject
+import toothpick.InjectConstructor
 import javax.inject.Provider
 
-class NetworkAwareProvider<T> @Inject constructor(
+@InjectConstructor
+class NetworkAwareProvider<T>(
     private val configHash: ConfigHash,
     private val provider: Provider<T>
 ) : Provider<T> {

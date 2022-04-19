@@ -2,9 +2,11 @@ package ru.radiationx.anilibria.navigation
 
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import javax.inject.Inject
 
-class CiceroneHolder @Inject constructor() {
+@InjectConstructor
+class CiceroneHolder {
     private val containers: MutableMap<String, Cicerone<Router>> = mutableMapOf()
 
     fun getCicerone(containerTag: String): Cicerone<Router> {

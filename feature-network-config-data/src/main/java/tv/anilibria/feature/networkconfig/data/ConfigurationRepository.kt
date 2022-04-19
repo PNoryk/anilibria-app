@@ -4,12 +4,13 @@ import com.stealthcopter.networktools.ping.PingOptions
 import com.stealthcopter.networktools.ping.PingResult
 import com.stealthcopter.networktools.ping.PingTools
 import kotlinx.coroutines.withTimeout
+import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import java.net.InetAddress
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-class ConfigurationRepository @Inject constructor(
+@InjectConstructor
+class ConfigurationRepository(
     private val configurationApi: ConfigRemoteDataSource,
     private val pingCache: ConfigPingCache
 ) {

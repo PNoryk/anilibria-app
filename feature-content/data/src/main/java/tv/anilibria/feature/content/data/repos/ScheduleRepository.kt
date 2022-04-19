@@ -2,13 +2,14 @@ package tv.anilibria.feature.content.data.repos
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.ScheduleRemoteDataSource
 import tv.anilibria.feature.content.types.schedule.ScheduleDay
 import tv.anilibria.plugin.data.storage.ObservableData
-import javax.inject.Inject
 
-class ScheduleRepository @Inject constructor(
+@InjectConstructor
+class ScheduleRepository(
     private val scheduleApi: ScheduleRemoteDataSource,
     private val releaseUpdateHolder: ReleaseUpdateHelper
 ) {

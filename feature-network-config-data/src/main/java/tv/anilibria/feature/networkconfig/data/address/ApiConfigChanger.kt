@@ -3,9 +3,10 @@ package tv.anilibria.feature.networkconfig.data.address
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import javax.inject.Inject
+import toothpick.InjectConstructor
 
-class ApiConfigChanger @Inject constructor() {
+@InjectConstructor
+class ApiConfigChanger {
 
     private val relay = MutableSharedFlow<Unit>()
 

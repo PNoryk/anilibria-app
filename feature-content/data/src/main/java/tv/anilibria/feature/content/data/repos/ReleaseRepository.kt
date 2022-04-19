@@ -1,5 +1,6 @@
 package tv.anilibria.feature.content.data.repos
 
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.ReleaseRemoteDataSource
 import tv.anilibria.feature.content.types.Page
@@ -7,12 +8,9 @@ import tv.anilibria.feature.content.types.release.RandomRelease
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 17.12.17.
- */
-class ReleaseRepository @Inject constructor(
+@InjectConstructor
+class ReleaseRepository(
     private val releaseApi: ReleaseRemoteDataSource,
     private val releaseUpdateHolder: ReleaseUpdateHelper
 ) {

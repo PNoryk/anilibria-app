@@ -2,15 +2,13 @@ package tv.anilibria.feature.content.data.repos
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Clock
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.local.holders.ReleaseHistoryLocalDataSource
 import tv.anilibria.feature.content.types.ReleaseVisit
 import tv.anilibria.feature.content.types.release.ReleaseId
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 18.02.18.
- */
-class HistoryRepository @Inject constructor(
+@InjectConstructor
+class HistoryRepository(
     private val historyStorage: ReleaseHistoryLocalDataSource
 ) {
 

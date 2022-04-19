@@ -2,12 +2,10 @@ package ru.radiationx.anilibria.utils
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
+import toothpick.InjectConstructor
 
-/**
- * Created by radiationx on 09.01.18.
- */
-class DimensionsProvider @Inject constructor() {
+@InjectConstructor
+class DimensionsProvider {
 
     private val relay = MutableStateFlow(DimensionHelper.Dimensions())
 

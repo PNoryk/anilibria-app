@@ -1,12 +1,10 @@
 package tv.anilibria.feature.page.data.remote
 
+import toothpick.InjectConstructor
 import java.util.regex.Pattern
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 13.01.18.
- */
-class PagesParser @Inject constructor() {
+@InjectConstructor
+class PagesParser {
 
     private val pagePatternSource =
         "(<div[^>]*?class=\"[^\"]*?news-body[^\"]*?\"[^>]*?>[\\s\\S]*?<\\/div>)[^<]*?<div[^>]*?(?:id=\"vk_comments|class=\"[^\"]*?side[^\"]*?\")"

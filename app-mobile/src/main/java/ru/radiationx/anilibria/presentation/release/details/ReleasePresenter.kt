@@ -12,6 +12,7 @@ import ru.radiationx.anilibria.ui.fragments.release.details.ReleasePagerState
 import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
@@ -23,9 +24,9 @@ import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
 import javax.inject.Inject
 
-/* Created by radiationx on 18.11.17. */
 @InjectViewState
-class ReleasePresenter @Inject constructor(
+@InjectConstructor
+class ReleasePresenter(
     private val releaseInteractor: ReleaseInteractor,
     private val historyRepository: HistoryRepository,
     private val router: Router,

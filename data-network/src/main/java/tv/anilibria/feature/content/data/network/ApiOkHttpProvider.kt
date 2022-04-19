@@ -2,11 +2,12 @@ package tv.anilibria.feature.content.data.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.okhttp.OkHttpProxyAppender
-import javax.inject.Inject
 import javax.inject.Provider
 
-class ApiOkHttpProvider @Inject constructor(
+@InjectConstructor
+class ApiOkHttpProvider(
     private val appCookieJar: AppCookieJar,
     private val proxyAppender: OkHttpProxyAppender,
     private val httpLoggingInterceptor: HttpLoggingInterceptor,

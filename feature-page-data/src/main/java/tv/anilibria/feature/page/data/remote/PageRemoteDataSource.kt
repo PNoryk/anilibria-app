@@ -1,16 +1,14 @@
 package tv.anilibria.feature.page.data.remote
 
+import toothpick.InjectConstructor
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.page.data.domain.PageLibria
-import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.ApiWrapper
-import javax.inject.Inject
+import tv.anilibria.plugin.data.network.NetworkUrlProvider
 
-/**
- * Created by radiationx on 13.01.18.
- */
 // todo проверить, что при ошибке body не возвращается
-class PageRemoteDataSource @Inject constructor(
+@InjectConstructor
+class PageRemoteDataSource(
     private val pagesParser: PagesParser,
     private val urlProvider: NetworkUrlProvider,
     private val pageApi: ApiWrapper<PageApi>

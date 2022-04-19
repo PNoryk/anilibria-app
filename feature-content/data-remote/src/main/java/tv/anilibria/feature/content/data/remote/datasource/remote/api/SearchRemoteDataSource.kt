@@ -1,6 +1,7 @@
 package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
 import org.json.JSONObject
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.SearchApi
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
@@ -11,9 +12,9 @@ import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
-import javax.inject.Inject
 
-class SearchRemoteDataSource @Inject constructor(
+@InjectConstructor
+class SearchRemoteDataSource(
     private val searchApi: ApiWrapper<SearchApi>
 ) {
 

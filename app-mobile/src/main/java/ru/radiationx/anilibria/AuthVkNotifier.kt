@@ -3,12 +3,11 @@ package ru.radiationx.anilibria
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import toothpick.InjectConstructor
 import javax.inject.Inject
 
-/**
- * Created by radiationx on 30.12.17.
- */
-class AuthVkNotifier @Inject constructor() {
+@InjectConstructor
+class AuthVkNotifier {
 
     private val vkAuthRelay = MutableSharedFlow<Boolean>()
 

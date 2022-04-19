@@ -2,6 +2,7 @@ package tv.anilibria.feature.content.data
 
 import android.util.Log
 import kotlinx.coroutines.flow.*
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.release.RandomRelease
@@ -9,12 +10,9 @@ import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 17.02.18.
- */
-class ReleaseInteractor @Inject constructor(
+@InjectConstructor
+class ReleaseInteractor(
     private val releaseRepository: ReleaseRepository,
 ) {
 

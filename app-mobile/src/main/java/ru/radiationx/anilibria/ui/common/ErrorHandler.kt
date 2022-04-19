@@ -2,14 +2,13 @@ package ru.radiationx.anilibria.ui.common
 
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
+import toothpick.InjectConstructor
 import java.io.IOException
 import javax.inject.Inject
 
-/**
- * Created by radiationx on 23.02.18.
- */
 // todo обновить логику обрбаотки ошибок
-class ErrorHandler @Inject constructor(
+@InjectConstructor
+class ErrorHandler(
     private val systemMessenger: SystemMessenger
 ) : IErrorHandler {
 

@@ -6,12 +6,8 @@ import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import tv.anilibria.feature.auth.data.local.DeviceIdLocalDataSource
 import tv.anilibria.feature.auth.data.local.SocialAuthLocalDataSource
 import tv.anilibria.feature.auth.data.remote.AuthRemoteDataSource
-import javax.inject.Inject
 
-/**
- * Created by radiationx on 30.12.17.
- */
-class AuthRepository @Inject constructor(
+class AuthRepository(
     private val authApi: AuthRemoteDataSource,
     private val authLocalDataSource: SocialAuthLocalDataSource,
     private val deviceIdLocalDataSource: DeviceIdLocalDataSource
