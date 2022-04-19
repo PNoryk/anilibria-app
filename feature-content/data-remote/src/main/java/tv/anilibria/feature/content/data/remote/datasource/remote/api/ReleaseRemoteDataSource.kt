@@ -1,18 +1,17 @@
 package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.ReleaseApi
+import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.ReleaseApiWrapper
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.release.RandomRelease
 import tv.anilibria.feature.content.types.release.Release
-import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class ReleaseRemoteDataSource(
-    private val releaseApi: ApiWrapper<ReleaseApi>
+    private val releaseApi: ReleaseApiWrapper
 ) {
 
     suspend fun getRandomRelease(): RandomRelease {

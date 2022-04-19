@@ -7,7 +7,6 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.domain.OtpInfo
 import tv.anilibria.feature.auth.data.domain.SocialAuthService
 import tv.anilibria.feature.content.errors.SocialAuthException
-import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.NetworkUrlProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.ApiException
@@ -17,7 +16,7 @@ import tv.anilibria.plugin.data.restapi.handleApiResponse
 class AuthRemoteDataSource(
     private val authParser: AuthParser,
     private val urlProvider: NetworkUrlProvider,
-    private val authApi: ApiWrapper<AuthApi>
+    private val authApi: AuthApiWrapper
 ) {
 
     suspend fun loadOtpInfo(deviceId: String): OtpInfo = try {

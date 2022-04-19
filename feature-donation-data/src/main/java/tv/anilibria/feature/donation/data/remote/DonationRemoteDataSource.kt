@@ -5,13 +5,12 @@ import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.donation.data.domain.DonationInfo
 import tv.anilibria.feature.donation.data.domain.yoomoney.YooMoneyDialog
-import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class DonationRemoteDataSource(
-    private val donationApi: ApiWrapper<DonationApi>
+    private val donationApi: DonationApiWrapper
 ) {
 
     suspend fun getDonationDetail(): DonationInfo {

@@ -1,10 +1,10 @@
-package tv.anilibria.feature.user.data.remote
+package tv.anilibria.feature.donation.data.remote
 
 import toothpick.InjectConstructor
 import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.ApiWrapperDeps
 
 @InjectConstructor
-class UserApiWrapper(
+class DonationApiWrapper(
     apiWrapperDeps: ApiWrapperDeps
-) : ApiWrapper<UserApi>(UserApi::class.java, apiWrapperDeps)
+) : ApiWrapper<DonationApi>(DonationApi::class.java, apiWrapperDeps)

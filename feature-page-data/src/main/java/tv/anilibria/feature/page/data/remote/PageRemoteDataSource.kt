@@ -3,7 +3,6 @@ package tv.anilibria.feature.page.data.remote
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.page.data.domain.PageLibria
-import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.NetworkUrlProvider
 
 // todo проверить, что при ошибке body не возвращается
@@ -11,7 +10,7 @@ import tv.anilibria.plugin.data.network.NetworkUrlProvider
 class PageRemoteDataSource(
     private val pagesParser: PagesParser,
     private val urlProvider: NetworkUrlProvider,
-    private val pageApi: ApiWrapper<PageApi>
+    private val pageApi: PageApiWrapper
 ) {
 
     suspend fun getLibriaPage(pagePath: RelativeUrl): PageLibria {

@@ -1,16 +1,15 @@
 package tv.anilibria.feature.content.data.remote.datasource.remote.api
 
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.FeedApi
+import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.FeedApiWrapper
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.feed.Feed
-import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class FeedRemoteDataSource(
-    private val feedApi: ApiWrapper<FeedApi>
+    private val feedApi: FeedApiWrapper
 ) {
 
     suspend fun getFeed(page: Int): List<Feed> {

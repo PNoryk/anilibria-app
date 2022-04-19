@@ -1,15 +1,10 @@
 package tv.anilibria.feature.vkcomments.data.remote
 
-import retrofit2.Retrofit
 import toothpick.InjectConstructor
-import tv.anilibria.plugin.data.network.*
+import tv.anilibria.plugin.data.network.ApiWrapper
+import tv.anilibria.plugin.data.network.ApiWrapperDeps
 
 @InjectConstructor
 class VkCommentsApiWrapper(
-    private val configHash: ConfigHash,
-    @ProxyNetworkQualifier private val proxyProvider: NetworkAwareProvider<Retrofit>,
-    @DirectNetworkQualifier private val directProvider: NetworkAwareProvider<Retrofit>,
-) : ApiWrapper<VkCommentsApi>(configHash, proxyProvider, directProvider) {
-
-    override val apiClass: Class<VkCommentsApi> = VkCommentsApi::class.java
-}
+    apiWrapperDeps: ApiWrapperDeps
+) : ApiWrapper<VkCommentsApi>(VkCommentsApi::class.java, apiWrapperDeps)

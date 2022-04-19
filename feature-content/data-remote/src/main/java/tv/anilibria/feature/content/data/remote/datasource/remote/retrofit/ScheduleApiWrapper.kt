@@ -1,10 +1,10 @@
-package tv.anilibria.feature.user.data.remote
+package tv.anilibria.feature.content.data.remote.datasource.remote.retrofit
 
 import toothpick.InjectConstructor
 import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.ApiWrapperDeps
 
 @InjectConstructor
-class UserApiWrapper(
+class ScheduleApiWrapper(
     apiWrapperDeps: ApiWrapperDeps
-) : ApiWrapper<UserApi>(UserApi::class.java, apiWrapperDeps)
+) : ApiWrapper<ScheduleApi>(ScheduleApi::class.java, apiWrapperDeps)

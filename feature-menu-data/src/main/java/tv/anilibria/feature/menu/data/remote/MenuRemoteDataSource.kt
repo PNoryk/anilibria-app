@@ -2,13 +2,12 @@ package tv.anilibria.feature.menu.data.remote
 
 import toothpick.InjectConstructor
 import tv.anilibria.feature.menu.data.domain.LinkMenuItem
-import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class MenuRemoteDataSource(
-    private val otherApi: ApiWrapper<MenuApi>
+    private val otherApi: MenuApiWrapper
 ) {
 
     suspend fun getMenu(): List<LinkMenuItem> {

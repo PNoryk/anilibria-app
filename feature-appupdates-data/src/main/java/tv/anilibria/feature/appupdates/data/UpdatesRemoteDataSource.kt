@@ -2,13 +2,12 @@ package tv.anilibria.feature.appupdates.data
 
 import toothpick.InjectConstructor
 import tv.anilibria.feature.appupdates.data.domain.UpdateData
-import tv.anilibria.plugin.data.network.ApiWrapper
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class UpdatesRemoteDataSource(
-    private val updaterApi: ApiWrapper<UpdaterApi>,
+    private val updaterApi: UpdaterApiWrapper,
     private val reserveSources: CheckerReserveSources
 ) {
 
