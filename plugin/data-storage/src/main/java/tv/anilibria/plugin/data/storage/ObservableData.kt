@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ObservableData<T>(
-    private val persistableData: DataHolder<T> = InMemoryDataHolder()
+    private val persistableData: DataHolder<T>
 ) {
 
     private val needUpdate = AtomicBoolean(true)

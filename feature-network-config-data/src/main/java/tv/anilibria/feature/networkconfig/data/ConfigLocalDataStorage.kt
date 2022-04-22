@@ -5,6 +5,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.di.ConfigStorageQualifier
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.storage.DataStorage
+import tv.anilibria.plugin.data.storage.InMemoryDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
 //todo добавить сохранение
@@ -13,9 +14,9 @@ class ConfigLocalDataStorage(
     @ConfigStorageQualifier private val storage: DataStorage,
 ) {
 
-    private val observableData = ObservableData<List<ApiAddress>>()
+    private val observableData = ObservableData<List<ApiAddress>>(InMemoryDataHolder(emptyList()))
 
-    private val observableActive = ObservableData<String>()
+    private val observableActive = ObservableData<String>(InMemoryDataHolder(null))
 
     fun observe(): Flow<List<ApiAddress>?> = observableData.observe()
 

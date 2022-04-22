@@ -1,10 +1,7 @@
 package ru.radiationx.anilibria.di
 
 import android.content.Context
-import ru.radiationx.anilibria.AppBuildConfig
-import ru.radiationx.anilibria.AppMigrationExecutor
-import ru.radiationx.anilibria.BuildConfig
-import ru.radiationx.anilibria.MobileCheckerSources
+import ru.radiationx.anilibria.*
 import ru.radiationx.anilibria.navigation.CiceroneHolder
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
 import ru.radiationx.anilibria.presentation.common.ILinkHandler
@@ -12,6 +9,10 @@ import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.anilibria.ui.common.LinkRouter
 import ru.radiationx.anilibria.utils.DimensionsProvider
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
+import ru.radiationx.shared_app.common.OkHttpImageDownloader
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
+import toothpick.config.Module
 import tv.anilibria.feature.analytics.impl.errors.AppMetricaErrorReporter
 import tv.anilibria.feature.analytics.impl.errors.CombinedErrorReporter
 import tv.anilibria.feature.analytics.impl.errors.LoggingErrorReporter
@@ -21,12 +22,9 @@ import tv.anilibria.feature.analytics.impl.events.LoggingAnalyticsSender
 import tv.anilibria.feature.analytics.impl.profile.AppMetricaAnalyticsProfile
 import tv.anilibria.feature.analytics.impl.profile.CombinedAnalyticsProfile
 import tv.anilibria.feature.analytics.impl.profile.LoggingAnalyticsProfile
-import ru.radiationx.shared_app.common.OkHttpImageDownloader
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.Router
-import toothpick.config.Module
 import tv.anilibria.feature.appupdates.data.CheckerReserveSources
 import tv.anilibria.feature.content.data.migration.MigrationExecutor
+import tv.anilibria.feature.networkconfig.data.ApiConfigReserveSources
 import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
 import tv.anilibria.plugin.data.analytics.AnalyticsSender
 import tv.anilibria.plugin.data.analytics.profile.AnalyticsProfile
@@ -40,6 +38,7 @@ class MobileAppModule(context: Context) : Module() {
 
         bind(SharedBuildConfig::class.java).to(AppBuildConfig::class.java).singleton()
         bind(CheckerReserveSources::class.java).to(MobileCheckerSources::class.java).singleton()
+        bind(ApiConfigReserveSources::class.java).to(MobileConfigSources::class.java).singleton()
         bind(MigrationExecutor::class.java).to(AppMigrationExecutor::class.java).singleton()
 
         bind(SystemMessenger::class.java).singleton()
@@ -71,11 +70,14 @@ class MobileAppModule(context: Context) : Module() {
         if (BuildConfig.DEBUG) {
             bind(AnalyticsSender::class.java).to(CombinedAnalyticsSender::class.java).singleton()
             bind(AnalyticsProfile::class.java).to(CombinedAnalyticsProfile::class.java).singleton()
-            bind(AnalyticsErrorReporter::class.java).to(CombinedErrorReporter::class.java).singleton()
+            bind(AnalyticsErrorReporter::class.java).to(CombinedErrorReporter::class.java)
+                .singleton()
         } else {
             bind(AnalyticsSender::class.java).to(AppMetricaAnalyticsSender::class.java).singleton()
-            bind(AnalyticsProfile::class.java).to(AppMetricaAnalyticsProfile::class.java).singleton()
-            bind(AnalyticsErrorReporter::class.java).to(AppMetricaErrorReporter::class.java).singleton()
+            bind(AnalyticsProfile::class.java).to(AppMetricaAnalyticsProfile::class.java)
+                .singleton()
+            bind(AnalyticsErrorReporter::class.java).to(AppMetricaErrorReporter::class.java)
+                .singleton()
         }
     }
 

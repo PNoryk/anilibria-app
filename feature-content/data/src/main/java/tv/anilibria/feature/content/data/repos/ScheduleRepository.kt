@@ -6,6 +6,7 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.ScheduleRemoteDataSource
 import tv.anilibria.feature.content.types.schedule.ScheduleDay
+import tv.anilibria.plugin.data.storage.InMemoryDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 
 @InjectConstructor
@@ -14,7 +15,7 @@ class ScheduleRepository(
     private val releaseUpdateHolder: ReleaseUpdateHelper
 ) {
 
-    private val dataRelay = ObservableData<List<ScheduleDay>>()
+    private val dataRelay = ObservableData<List<ScheduleDay>?>(InMemoryDataHolder())
 
     fun observeSchedule(): Flow<List<ScheduleDay>> {
         return dataRelay.observe().filterNotNull()
