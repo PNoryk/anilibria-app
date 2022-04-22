@@ -12,6 +12,6 @@ class MobileAppPreferencesModule : Module() {
             .toProvider(PreferencesDataStorageProvider::class.java)
             .providesSingleton()
 
-        bind(PreferencesStorage::class.java)
+        bind(PreferencesStorage::class.java).singleton()
     }
 }

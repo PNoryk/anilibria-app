@@ -1,5 +1,7 @@
 package tv.anilibria.feature.content.data.network.di
 
+import android.util.Log
+import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import toothpick.InjectConstructor
@@ -14,8 +16,10 @@ class ProxyRetrofitProvider(
 ) : Provider<Retrofit> {
 
     override fun get(): Retrofit {
+        val httpUrl = requireNotNull(HttpUrl.parse(networkUrlProvider.apiUrl))
+        val baseUrl = requireNotNull(httpUrl.resolve("/"))
         return Retrofit.Builder()
-            .baseUrl(networkUrlProvider.apiUrl)
+            .baseUrl(baseUrl)
             .client(proxyOkHttpProvider.get())
             .addConverterFactory(converterFactory)
             .build()

@@ -1,8 +1,7 @@
 package ru.radiationx.anilibria.presentation.main
 
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import android.util.Log
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import moxy.InjectViewState
@@ -52,8 +51,8 @@ class MainPresenter(
 
         apiConfig
             .observeNeedConfig()
-            .distinctUntilChanged()
             .onEach {
+                Log.d("kekeke", "observeNeedConfig $it, $firstLaunch")
                 if (it) {
                     viewState.showConfiguring()
                 } else {
@@ -62,6 +61,12 @@ class MainPresenter(
                         initMain()
                     }
                 }
+            }
+            .catch {
+                Log.d("kekeke", "observeNeedConfig catch $it")
+            }
+            .onCompletion {
+                Log.d("kekeke", "observeNeedConfig onCompletion $it")
             }
             .launchIn(viewModelScope)
 

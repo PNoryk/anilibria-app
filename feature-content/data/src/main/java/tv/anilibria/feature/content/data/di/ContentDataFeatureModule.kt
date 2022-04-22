@@ -13,23 +13,27 @@ import tv.anilibria.plugin.data.storage.DataStorage
 class ContentDataFeatureModule : Module() {
 
     init {
-        bind(FavoriteRepository::class.java)
-        bind(FeedRepository::class.java)
-        bind(HistoryRepository::class.java)
-        bind(ReleaseRepository::class.java)
-        bind(ScheduleRepository::class.java)
-        bind(SearchRepository::class.java)
-        bind(YoutubeRepository::class.java)
-        bind(ReleaseInteractor::class.java)
+        bind(FavoriteRepository::class.java).singleton()
+        bind(FeedRepository::class.java).singleton()
+        bind(HistoryRepository::class.java).singleton()
+        bind(ReleaseRepository::class.java).singleton()
+        bind(ScheduleRepository::class.java).singleton()
+        bind(SearchRepository::class.java).singleton()
+        bind(YoutubeRepository::class.java).singleton()
+        bind(ReleaseInteractor::class.java).singleton()
 
-        bind(ApiConfigPushHandler::class.java).to(ApiConfigPushHandlerImpl::class.java)
+        bind(ApiConfigPushHandler::class.java)
+            .to(ApiConfigPushHandlerImpl::class.java)
+            .singleton()
 
-        bind(BaseUrlHelper::class.java)
+        bind(BaseUrlHelper::class.java).singleton()
 
         bind(DataStorage::class.java)
             .withName(MigrationStorageQualifier::class.java)
             .toProvider(MigrationDataStorageProvider::class.java)
             .providesSingleton()
-        bind(MigrationDataSource::class.java).to(MigrationDataSourceImpl::class.java).singleton()
+        bind(MigrationDataSource::class.java)
+            .to(MigrationDataSourceImpl::class.java)
+            .singleton()
     }
 }

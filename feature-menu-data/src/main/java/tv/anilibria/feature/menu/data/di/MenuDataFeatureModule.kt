@@ -15,9 +15,9 @@ class MenuDataFeatureModule : Module() {
             .toProvider(MenuDataStorageProvider::class.java)
             .providesSingleton()
 
-        bind(MenuApiWrapper::class.java)
-        bind(MenuRemoteDataSource::class.java)
-        bind(LinkMenuLocalDataSource::class.java)
-        bind(MenuRepository::class.java)
+        bind(MenuApiWrapper::class.java).singleton()
+        bind(MenuRemoteDataSource::class.java).singleton()
+        bind(LinkMenuLocalDataSource::class.java).singleton()
+        bind(MenuRepository::class.java).singleton()
     }
 }

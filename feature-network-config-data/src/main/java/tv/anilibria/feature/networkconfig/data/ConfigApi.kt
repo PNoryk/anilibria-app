@@ -14,7 +14,7 @@ interface ConfigApi {
     suspend fun checkAvailable(
         @Url url: String,
         @Body body: FormBody
-    ): ApiResponse<ApiConfigResponse>
+    ): ApiResponse<Any>
 
     @POST
     suspend fun getConfig(

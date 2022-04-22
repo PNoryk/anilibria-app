@@ -15,8 +15,10 @@ class DownloadsDataFeatureModule : Module() {
             .toProvider(DownloadsDataStorageProvider::class.java)
             .providesSingleton()
 
-        bind(DownloadsDataSource::class.java)
-        bind(DownloadsStorage::class.java)
-        bind(DownloadController::class.java).to(DownloadControllerImpl::class.java)
+        bind(DownloadsDataSource::class.java).singleton()
+        bind(DownloadsStorage::class.java).singleton()
+        bind(DownloadController::class.java)
+            .to(DownloadControllerImpl::class.java)
+            .singleton()
     }
 }

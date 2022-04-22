@@ -24,12 +24,14 @@ class AuthDataFeatureModule : Module() {
             .toProvider(SocialAuthDataStorageProvider::class.java)
             .providesSingleton()
 
-        bind(AuthParser::class.java)
-        bind(AuthApiWrapper::class.java)
-        bind(AuthRemoteDataSource::class.java)
-        bind(DeviceIdLocalDataSource::class.java)
-        bind(SocialAuthLocalDataSource::class.java)
-        bind(AuthRepository::class.java)
-        bind(AuthStateHolder::class.java).to(AuthStateHolderImpl::class.java)
+        bind(AuthParser::class.java).singleton()
+        bind(AuthApiWrapper::class.java).singleton()
+        bind(AuthRemoteDataSource::class.java).singleton()
+        bind(DeviceIdLocalDataSource::class.java).singleton()
+        bind(SocialAuthLocalDataSource::class.java).singleton()
+        bind(AuthRepository::class.java).singleton()
+        bind(AuthStateHolder::class.java)
+            .to(AuthStateHolderImpl::class.java)
+            .singleton()
     }
 }

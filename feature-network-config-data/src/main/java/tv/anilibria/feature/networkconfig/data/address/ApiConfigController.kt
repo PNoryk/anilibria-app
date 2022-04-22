@@ -1,9 +1,10 @@
 package tv.anilibria.feature.networkconfig.data.address
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onEach
 import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.ConfigLocalDataStorage
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
@@ -14,14 +15,19 @@ class ApiConfigController(
     private val apiConfigStorage: ConfigLocalDataStorage
 ) {
 
-    private val needConfigRelay = MutableSharedFlow<Boolean>()
-    var needConfig = true
+    private val needConfigRelay = MutableStateFlow(true)
 
-    fun observeNeedConfig(): Flow<Boolean> = needConfigRelay.asSharedFlow()
+    val needConfig: Boolean
+        get() = needConfigRelay.value
 
-    suspend fun updateNeedConfig(state: Boolean) {
-        needConfig = state
-        needConfigRelay.emit(needConfig)
+    fun observeNeedConfig(): Flow<Boolean> = needConfigRelay.asStateFlow().onEach {
+        Log.d("kekeke", "contr observeNeedConfig $it")
+    }
+
+    fun updateNeedConfig(state: Boolean) {
+        Log.d("kekeke", "updateNeedConfig $state")
+        needConfigRelay.value = state
+        Log.d("kekeke", "success updateNeedConfig ${needConfigRelay.value}")
     }
 
     suspend fun updateActiveAddress(address: ApiAddress) {
@@ -42,8 +48,4 @@ class ApiConfigController(
     }
 
     suspend fun getTag() = getActive().tag
-
-    @Deprecated("use suspend")
-    fun getActiveBlocking() = runBlocking { getActive() }
-
 }

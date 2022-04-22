@@ -14,9 +14,9 @@ class UserDataFeatureModule : Module() {
             .withName(UserStorageQualifier::class.java)
             .toProvider(UserDataStorageProvider::class.java)
             .providesSingleton()
-        bind(UserApiWrapper::class.java)
-        bind(UserLocalDataSource::class.java)
-        bind(UserRemoteDataSource::class.java)
-        bind(UserRepository::class.java)
+        bind(UserApiWrapper::class.java).singleton()
+        bind(UserLocalDataSource::class.java).singleton()
+        bind(UserRemoteDataSource::class.java).singleton()
+        bind(UserRepository::class.java).singleton()
     }
 }

@@ -34,8 +34,10 @@ class ObservableData<T>(
     }
 
     fun triggerUpdate() {
-        needUpdate.set(true)
-        triggerFlow.tryEmit(Unit)
+        runBlocking {
+            needUpdate.set(true)
+            triggerFlow.emit(Unit)
+        }
     }
 
     private suspend fun getActualData(): T {

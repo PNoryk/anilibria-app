@@ -8,8 +8,8 @@ import tv.anilibria.feature.page.data.remote.PageRemoteDataSource
 class PageDataFeatureModule : Module() {
 
     init {
-        bind(PageApiWrapper::class.java)
-        bind(PageRemoteDataSource::class.java)
-        bind(PageRepository::class.java)
+        bind(PageApiWrapper::class.java).singleton()
+        bind(PageRemoteDataSource::class.java).singleton()
+        bind(PageRepository::class.java).singleton()
     }
 }

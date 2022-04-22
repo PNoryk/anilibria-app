@@ -8,8 +8,8 @@ import tv.anilibria.feature.vkcomments.data.remote.VkCommentsRemoteDataSource
 class VkCommentsDataFeatureModule : Module() {
 
     init {
-        bind(VkCommentsApiWrapper::class.java)
-        bind(VkCommentsRemoteDataSource::class.java)
-        bind(VkCommentsRepository::class.java)
+        bind(VkCommentsApiWrapper::class.java).singleton()
+        bind(VkCommentsRemoteDataSource::class.java).singleton()
+        bind(VkCommentsRepository::class.java).singleton()
     }
 }

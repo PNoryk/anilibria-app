@@ -9,9 +9,9 @@ import tv.anilibria.feature.donation.data.remote.DonationRemoteDataSource
 class DonationDataFeatureModule : Module() {
 
     init {
-        bind(DonationApiWrapper::class.java)
-        bind(DonationRemoteDataSource::class.java)
-        bind(DonationInfoLocalDataSource::class.java)
-        bind(DonationRepository::class.java)
+        bind(DonationApiWrapper::class.java).singleton()
+        bind(DonationRemoteDataSource::class.java).singleton()
+        bind(DonationInfoLocalDataSource::class.java).singleton()
+        bind(DonationRepository::class.java).singleton()
     }
 }

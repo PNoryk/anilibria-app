@@ -8,8 +8,8 @@ import tv.anilibria.feature.appupdates.data.UpdatesRemoteDataSource
 class AppUpdatesDataFeatureModule : Module() {
 
     init {
-        bind(UpdaterApiWrapper::class.java)
-        bind(UpdatesRemoteDataSource::class.java)
-        bind(CheckerRepository::class.java)
+        bind(UpdaterApiWrapper::class.java).singleton()
+        bind(UpdatesRemoteDataSource::class.java).singleton()
+        bind(CheckerRepository::class.java).singleton()
     }
 }

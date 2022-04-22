@@ -13,26 +13,35 @@ import tv.anilibria.plugin.data.network.NetworkUrlProvider
 class DataNetworkModule : Module() {
 
     init {
-        bind(Moshi::class.java).toProviderInstance { Moshi.Builder().build() }.providesSingleton()
-        bind(MoshiConverterFactory::class.java).toProvider(ConverterFactoryProvider::class.java)
+        bind(Moshi::class.java)
+            .toProviderInstance { Moshi.Builder().build() }
+            .providesSingleton()
+        bind(MoshiConverterFactory::class.java)
+            .toProvider(ConverterFactoryProvider::class.java)
             .providesSingleton()
 
-        bind(AppInfoInterceptor::class.java)
-        bind(RemoteAddressInterceptor::class.java)
-        bind(HttpLoggingInterceptor::class.java).toInstance(HttpLoggingInterceptor())
-        bind(OkHttpProxyAppender::class.java)
+        bind(AppInfoInterceptor::class.java).singleton()
+        bind(RemoteAddressInterceptor::class.java).singleton()
+        bind(HttpLoggingInterceptor::class.java)
+            .toProvider(LoggingInterceptorProvider::class.java)
+            .providesSingleton()
+        bind(OkHttpProxyAppender::class.java).singleton()
 
-        bind(AppCookieJar::class.java)
+        bind(AppCookieJar::class.java).singleton()
         bind(CookiesStorage::class.java).singleton()
-        bind(LegacyCookieHolder::class.java).to(LegacyCookiesStorage::class.java)
+        bind(LegacyCookieHolder::class.java)
+            .to(LegacyCookiesStorage::class.java)
+            .singleton()
 
-        bind(ProxyOkHttpProvider::class.java)
-        bind(DirectOkHttpProvider::class.java)
+        bind(ProxyOkHttpProvider::class.java).singleton()
+        bind(DirectOkHttpProvider::class.java).singleton()
 
-        bind(ProxyRetrofitProvider::class.java)
-        bind(DirectRetrofitProvider::class.java)
+        bind(ProxyRetrofitProvider::class.java).singleton()
+        bind(DirectRetrofitProvider::class.java).singleton()
 
-        bind(NetworkUrlProvider::class.java).to(NetworkUrlProviderImpl::class.java).singleton()
+        bind(NetworkUrlProvider::class.java)
+            .to(NetworkUrlProviderImpl::class.java)
+            .singleton()
         bind(ConfigHash::class.java).to(ConfigHashImpl::class.java).singleton()
         bind(ApiWrapperDeps::class.java)
             .toProvider(ApiWrapperDepsProvider::class.java)

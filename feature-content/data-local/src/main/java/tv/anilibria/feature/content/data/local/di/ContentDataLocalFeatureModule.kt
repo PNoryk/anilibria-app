@@ -28,11 +28,11 @@ class ContentDataLocalFeatureModule : Module() {
             .toProvider(YearsDataStorageProvider::class.java)
             .providesSingleton()
 
-        bind(GenresLocalDataSource::class.java)
-        bind(ReleaseHistoryLocalDataSource::class.java)
-        bind(ReleaseUpdatesLocalDataSource::class.java)
-        bind(YearsLocalDataSource::class.java)
+        bind(GenresLocalDataSource::class.java).singleton()
+        bind(ReleaseHistoryLocalDataSource::class.java).singleton()
+        bind(ReleaseUpdatesLocalDataSource::class.java).singleton()
+        bind(YearsLocalDataSource::class.java).singleton()
 
-        bind(ReleaseUpdateHelper::class.java)
+        bind(ReleaseUpdateHelper::class.java).singleton()
     }
 }

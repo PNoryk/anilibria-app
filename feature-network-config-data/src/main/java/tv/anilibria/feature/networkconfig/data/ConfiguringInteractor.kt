@@ -21,14 +21,14 @@ class ConfiguringInteractor(
 
     private var currentState = State.CHECK_LAST
 
-    private val screenState = ConfigScreenState()
-
     private val fullTimeCounter = TimeCounter()
 
     private var isFullSuccess = false
     private var startAddressTag: String? = null
 
-    fun observeScreenState(): Flow<ConfigScreenState> = subject
+    fun observeScreenState(): Flow<ConfigScreenState> = subject.onEach {
+        Log.d("kekeke", "config status ${it.status}")
+    }
 
     // todo error handling in presentation
     suspend fun initCheck() {
@@ -70,14 +70,9 @@ class ConfiguringInteractor(
         )
     }
 
-    private fun notifyScreenChanged() {
-        subject.value = screenState
-    }
-
     private fun updateState(newState: State) {
         currentState = newState
-        screenState.hasNext = getNextState() != null
-        notifyScreenChanged()
+        subject.update { it.copy(hasNext = getNextState() != null) }
     }
 
     private suspend fun doByState(anchor: State = currentState) = when (anchor) {
@@ -107,9 +102,13 @@ class ConfiguringInteractor(
         val timeCounter = TimeCounter()
 
         timeCounter.start()
-        screenState.status = "Проверка доступности сервера"
-        screenState.needRefresh = false
-        notifyScreenChanged()
+
+        subject.update {
+            it.copy(
+                status = "Проверка доступности сервера",
+                needRefresh = false
+            )
+        }
 
         runCatching {
             zipLastCheck()
@@ -118,18 +117,17 @@ class ConfiguringInteractor(
             analytics.checkLast(apiConfig.getTag(), timeCounter.elapsed(), it, null)
             if (it) {
                 isFullSuccess = true
-                screenState.status = "Сервер доступен"
-                notifyScreenChanged()
+                subject.update { it.copy(status = "Сервер доступен") }
                 apiConfig.updateNeedConfig(false)
             } else {
                 loadConfig()
             }
-        }.onFailure {
+        }.onFailure { ex ->
             timeCounter.pause()
-            Log.e("bobobo", "error on $currentState: $it, ${it is IOException}")
-            analytics.checkLast(apiConfig.getTag(), timeCounter.elapsed(), false, it)
-            it.printStackTrace()
-            when (it) {
+            Log.e("bobobo", "error on $currentState: $ex, ${ex is IOException}")
+            analytics.checkLast(apiConfig.getTag(), timeCounter.elapsed(), false, ex)
+            ex.printStackTrace()
+            when (ex) {
                 is TimeoutException -> loadConfig()
                 is IOException,
                 is SSLException,
@@ -138,15 +136,12 @@ class ConfiguringInteractor(
                 is SSLProtocolException,
                 is SSLPeerUnverifiedException -> loadConfig()
                 else -> {
-                    screenState.status =
-                        "Ошибка проверки доступности сервера: ${it.message}".also {
-                            Log.e(
-                                "bobobo",
-                                it
-                            )
-                        }
-                    screenState.needRefresh = true
-                    notifyScreenChanged()
+                    subject.update {
+                        it.copy(
+                            needRefresh = true,
+                            status = "Ошибка проверки доступности сервера: ${ex.message}"
+                        )
+                    }
                 }
             }
         }
@@ -158,9 +153,12 @@ class ConfiguringInteractor(
 
 
         timeCounter.start()
-        screenState.status = "Загрузка списка адресов"
-        screenState.needRefresh = false
-        notifyScreenChanged()
+        subject.update {
+            it.copy(
+                status = "Загрузка списка адресов",
+                needRefresh = false
+            )
+        }
 
         runCatching {
             configurationRepository.getConfiguration()
@@ -169,23 +167,22 @@ class ConfiguringInteractor(
             analytics.loadConfig(timeCounter.elapsed(), true, null)
             val addresses = apiConfig.getAddresses()
             val proxies = addresses.sumOf { it.proxies.size }
-            screenState.status = "Загружено адресов: ${addresses.size}; прокси: $proxies".also {
-                Log.e(
-                    "bobobo",
-                    it
+            subject.update {
+                it.copy(status = "Загружено адресов: ${addresses.size}; прокси: $proxies")
+            }
+            checkAvail()
+        }.onFailure { ex ->
+            timeCounter.pause()
+            Log.e("bobobo", "error on $currentState: $ex")
+            analytics.loadConfig(timeCounter.elapsed(), false, ex)
+            ex.printStackTrace()
+
+            subject.update {
+                it.copy(
+                    status = "Ошибка загрузки списка адресов: ${ex.message}",
+                    needRefresh = true
                 )
             }
-            notifyScreenChanged()
-            checkAvail()
-        }.onFailure {
-            timeCounter.pause()
-            Log.e("bobobo", "error on $currentState: $it")
-            analytics.loadConfig(timeCounter.elapsed(), false, it)
-            it.printStackTrace()
-            screenState.status =
-                "Ошибка загрузки списка адресов: ${it.message}".also { Log.e("bobobo", it) }
-            screenState.needRefresh = true
-            notifyScreenChanged()
         }
     }
 
@@ -196,9 +193,12 @@ class ConfiguringInteractor(
 
 
         timeCounter.start()
-        screenState.status = "Проверка доступных адресов"
-        screenState.needRefresh = false
-        notifyScreenChanged()
+        subject.update {
+            it.copy(
+                status = "Проверка доступных адресов",
+                needRefresh = false
+            )
+        }
 
         runCatching {
             mergeAvailCheck(addresses)
@@ -206,27 +206,30 @@ class ConfiguringInteractor(
             timeCounter.pause()
             isFullSuccess = true
             analytics.checkAvail(activeAddress.tag, timeCounter.elapsed(), true, null)
-            screenState.status = "Найдет доступный адрес".also { Log.e("bobobo", it) }
-            notifyScreenChanged()
+            subject.update {
+                it.copy(status = "Найдет доступный адрес")
+            }
             Log.e("boboob", "checkAvail $activeAddress")
             apiConfig.updateActiveAddress(activeAddress)
             apiConfig.updateNeedConfig(false)
-        }.onFailure {
+        }.onFailure { ex ->
             timeCounter.pause()
-            Log.e("bobobo", "error on $currentState: $it")
-            analytics.checkAvail(null, timeCounter.elapsed(), false, it)
-            it.printStackTrace()
-            when (it) {
+            Log.e("bobobo", "error on $currentState: $ex")
+            analytics.checkAvail(null, timeCounter.elapsed(), false, ex)
+            ex.printStackTrace()
+            when (ex) {
                 // from mergeAvailCheck
                 is NoSuchElementException -> {
                     checkProxies()
                 }
                 else -> {
-                    screenState.status =
-                        "Ошибка проверки доступности адресов: ${it.message}"
-                            .also { Log.e("bobobo", it) }
-                    screenState.needRefresh = true
-                    notifyScreenChanged()
+
+                    subject.update {
+                        it.copy(
+                            status = "Ошибка проверки доступности адресов: ${ex.message}",
+                            needRefresh = true
+                        )
+                    }
                 }
             }
         }
@@ -237,9 +240,12 @@ class ConfiguringInteractor(
         val timeCounter = TimeCounter()
 
         timeCounter.start()
-        screenState.status = "Проверка доступных прокси"
-        screenState.needRefresh = false
-        notifyScreenChanged()
+        subject.update {
+            it.copy(
+                status = "Проверка доступных прокси",
+                needRefresh = false
+            )
+        }
 
         runCatching {
             val proxies = apiConfig.getAddresses()
@@ -253,43 +259,40 @@ class ConfiguringInteractor(
                 .map { Pair(it, configurationRepository.getPingHost(it.ip)) }
                 .filter { !it.second.hasError() }
                 .toList()
-        }.onSuccess {
+        }.onSuccess { proxies ->
             timeCounter.pause()
-            val bestProxy = it.minByOrNull { it.second.timeTaken }
+            val bestProxy = proxies.minByOrNull { it.second.timeTaken }
             val addressByProxy =
                 apiConfig.getAddresses().find { it.proxies.contains(bestProxy?.first) }
             analytics.checkProxies(addressByProxy?.tag, timeCounter.elapsed(), true, null)
             if (bestProxy != null && addressByProxy != null) {
                 isFullSuccess = true
                 apiConfig.updateActiveAddress(addressByProxy)
-                screenState.status =
-                    "Доступнные прокси: ${it.size}; будет использован ${bestProxy.first.tag} адреса ${addressByProxy.tag}".also {
-                        Log.e(
-                            "bobobo",
-                            it
-                        )
-                    }
-                notifyScreenChanged()
-                apiConfig.updateNeedConfig(false)
-            } else {
-                screenState.status = "Не найдены доступные прокси"
-                screenState.needRefresh = true
-                notifyScreenChanged()
-            }
-        }.onFailure {
-            timeCounter.pause()
-            Log.e("bobobo", "error on $currentState: $it")
-            analytics.checkProxies(null, timeCounter.elapsed(), false, it)
-            it.printStackTrace()
-            screenState.status =
-                "Ошибка проверки доступности прокси-серверов: ${it.message}".also {
-                    Log.e(
-                        "bobobo",
-                        it
+                subject.update {
+                    it.copy(
+                        status = "Доступнные прокси: ${proxies.size}; будет использован ${bestProxy.first.tag} адреса ${addressByProxy.tag}"
                     )
                 }
-            screenState.needRefresh = true
-            notifyScreenChanged()
+                apiConfig.updateNeedConfig(false)
+            } else {
+                subject.update {
+                    it.copy(
+                        status = "Не найдены доступные прокси",
+                        needRefresh = true
+                    )
+                }
+            }
+        }.onFailure { ex ->
+            timeCounter.pause()
+            Log.e("bobobo", "error on $currentState: $ex")
+            analytics.checkProxies(null, timeCounter.elapsed(), false, ex)
+            ex.printStackTrace()
+            subject.update {
+                it.copy(
+                    status = "Ошибка проверки доступности прокси-серверов: ${ex.message}",
+                    needRefresh = true
+                )
+            }
         }
     }
 

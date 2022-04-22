@@ -17,8 +17,8 @@ class NetworkAwareProvider<T>(
         val oldHash = currentHash
         val newHash = configHash.getHash()
         if (oldHash != newHash) {
-            currentHash = newHash
             currentValue = provider.get()
+            currentHash = newHash
         }
         return requireNotNull(currentValue) {
             "NetworkAwareProvider can not return null"

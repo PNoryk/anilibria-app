@@ -20,8 +20,8 @@ class PlayerDataFeatureModule : Module() {
             .providesSingleton()
 
 
-        bind(PlayerPreferencesStorage::class.java)
-        bind(EpisodeHistoryLocalDataSource::class.java)
-        bind(EpisodeHistoryRepository::class.java)
+        bind(PlayerPreferencesStorage::class.java).singleton()
+        bind(EpisodeHistoryLocalDataSource::class.java).singleton()
+        bind(EpisodeHistoryRepository::class.java).singleton()
     }
 }
