@@ -209,12 +209,12 @@ class App : Application() {
             template = try {
                 MiniTemplator.Builder().build(stream, charset)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.d("App", "findTemplate MiniTemplator error", e)
                 MiniTemplator.Builder()
                     .build(ByteArrayInputStream("Template error!".toByteArray(charset)), charset)
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.d("App", "findTemplate error", e)
         }
         return template
     }

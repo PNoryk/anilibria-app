@@ -13,13 +13,13 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.runBlocking
-import ru.radiationx.shared.ktx.android.getCompatColor
 import ru.radiationx.anilibria.navigation.Screens
 import ru.radiationx.anilibria.ui.activities.main.IntentActivity
 import ru.radiationx.anilibria.ui.activities.main.MainActivity
+import ru.radiationx.shared.ktx.android.getCompatColor
 import ru.radiationx.shared_app.di.DI
-import tv.anilibria.feature.content.data.ApiConfigPushHandler
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
+import tv.anilibria.feature.content.data.ApiConfigPushHandler
 
 class NotificationService : FirebaseMessagingService() {
 
@@ -71,7 +71,7 @@ class NotificationService : FirebaseMessagingService() {
                     handler.handlePushData(payload)
                 }
             } catch (ex: Exception) {
-                ex.printStackTrace()
+                Log.e("NotificationService", "onMessageReceived", ex)
             }
         }
     }
