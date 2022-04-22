@@ -123,10 +123,10 @@ class ConfiguringInteractor(
                 loadConfig()
             }
         }.onFailure { ex ->
+            ex.printStackTrace()
             timeCounter.pause()
             Log.e("bobobo", "error on $currentState: $ex, ${ex is IOException}")
             analytics.checkLast(apiConfig.getTag(), timeCounter.elapsed(), false, ex)
-            ex.printStackTrace()
             when (ex) {
                 is TimeoutException -> loadConfig()
                 is IOException,
@@ -172,10 +172,10 @@ class ConfiguringInteractor(
             }
             checkAvail()
         }.onFailure { ex ->
+            ex.printStackTrace()
             timeCounter.pause()
             Log.e("bobobo", "error on $currentState: $ex")
             analytics.loadConfig(timeCounter.elapsed(), false, ex)
-            ex.printStackTrace()
 
             subject.update {
                 it.copy(
@@ -213,10 +213,10 @@ class ConfiguringInteractor(
             apiConfig.updateActiveAddress(activeAddress)
             apiConfig.updateNeedConfig(false)
         }.onFailure { ex ->
+            ex.printStackTrace()
             timeCounter.pause()
             Log.e("bobobo", "error on $currentState: $ex")
             analytics.checkAvail(null, timeCounter.elapsed(), false, ex)
-            ex.printStackTrace()
             when (ex) {
                 // from mergeAvailCheck
                 is NoSuchElementException -> {
@@ -283,10 +283,10 @@ class ConfiguringInteractor(
                 }
             }
         }.onFailure { ex ->
+            ex.printStackTrace()
             timeCounter.pause()
             Log.e("bobobo", "error on $currentState: $ex")
             analytics.checkProxies(null, timeCounter.elapsed(), false, ex)
-            ex.printStackTrace()
             subject.update {
                 it.copy(
                     status = "Ошибка проверки доступности прокси-серверов: ${ex.message}",
@@ -299,6 +299,7 @@ class ConfiguringInteractor(
     private suspend fun mergeAvailCheck(addresses: List<ApiAddress>): ApiAddress {
         val addressesSources = addresses.map { address ->
             val result = runCatching { configurationRepository.checkAvailable(address.api) }
+                .onFailure { it.printStackTrace() }
             Pair(address, result.getOrNull() ?: false)
         }
         return addressesSources

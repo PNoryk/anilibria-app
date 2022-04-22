@@ -4,12 +4,14 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.FeedApiWrapper
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.feed.Feed
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class FeedRemoteDataSource(
-    private val feedApi: FeedApiWrapper
+    private val feedApi: FeedApiWrapper,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun getFeed(page: Int): List<Feed> {
@@ -20,7 +22,7 @@ class FeedRemoteDataSource(
             "rm" to "true"
         )
         return feedApi.proxy()
-            .getFeed(args)
+            .getFeed(urlsProvider.api.value, args)
             .handleApiResponse()
             .map { it.toDomain() }
     }

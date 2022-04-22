@@ -19,7 +19,6 @@ class PlayerDataFeatureModule : Module() {
             .toProvider(EpisodeHistoryDataStorageProvider::class.java)
             .providesSingleton()
 
-
         bind(PlayerPreferencesStorage::class.java).singleton()
         bind(EpisodeHistoryLocalDataSource::class.java).singleton()
         bind(EpisodeHistoryRepository::class.java).singleton()

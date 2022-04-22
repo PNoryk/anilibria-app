@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.local.di.YearsStorageQualifier
 import tv.anilibria.feature.content.types.ReleaseYear
 import tv.anilibria.plugin.data.storage.DataStorage
@@ -11,6 +12,7 @@ import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.storageStringKey
 
+@InjectConstructor
 class YearsLocalDataSource(
     @YearsStorageQualifier private val storage: DataStorage,
     private val moshi: Moshi

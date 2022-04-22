@@ -15,7 +15,7 @@ import tv.anilibria.plugin.data.restapi.handleApiResponse
 @InjectConstructor
 class AuthRemoteDataSource(
     private val authParser: AuthParser,
-    private val urlProvider: BaseUrlsProvider,
+    private val urlsProvider: BaseUrlsProvider,
     private val authApi: AuthApiWrapper
 ) {
 
@@ -25,7 +25,7 @@ class AuthRemoteDataSource(
             "deviceId" to deviceId
         )
         authApi.proxy()
-            .getOtpInfo(args)
+            .getOtpInfo(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain()
     } catch (ex: Exception) {
@@ -38,7 +38,7 @@ class AuthRemoteDataSource(
             "code" to code
         )
         authApi.proxy()
-            .acceptOtp(args)
+            .acceptOtp(urlsProvider.api.value, args)
             .handleApiResponse()
     } catch (ex: Exception) {
         throw authParser.checkOtpError(ex)
@@ -51,7 +51,7 @@ class AuthRemoteDataSource(
             "code" to code
         )
         authApi.proxy()
-            .signInOtp(args)
+            .signInOtp(urlsProvider.api.value, args)
             .handleApiResponse()
     } catch (ex: Exception) {
         throw authParser.checkOtpError(ex)
@@ -63,7 +63,7 @@ class AuthRemoteDataSource(
             "passwd" to password,
             "fa2code" to code2fa
         )
-        val url = "${urlProvider.base.value}/public/login.php"
+        val url = "${urlsProvider.base.value}/public/login.php"
         return authApi.proxy()
             .signIn(url, args)
             .let { authParser.authResult(it.string()) }
@@ -74,13 +74,13 @@ class AuthRemoteDataSource(
             "query" to "social_auth"
         )
         return authApi.proxy()
-            .getSocialAuthServices(args)
+            .getSocialAuthServices(urlsProvider.api.value, args)
             .handleApiResponse()
             .map { it.toDomain() }
     }
 
     suspend fun signInSocial(resultUrl: String, item: SocialAuthService) {
-        val fixedUrl = Uri.parse(urlProvider.base.value).host?.let { redirectDomain ->
+        val fixedUrl = Uri.parse(urlsProvider.base.value).host?.let { redirectDomain ->
             resultUrl.replace("www.anilibria.tv", redirectDomain)
         } ?: resultUrl
 
@@ -105,7 +105,7 @@ class AuthRemoteDataSource(
     }
 
     suspend fun signOut() {
-        authApi.proxy().signOut("${urlProvider.base.value}/public/logout.php")
+        authApi.proxy().signOut("${urlsProvider.base.value}/public/logout.php")
     }
 
 }

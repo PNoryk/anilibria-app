@@ -4,6 +4,7 @@ import kotlinx.coroutines.withTimeout
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.feature.vkcomments.data.domain.VkComments
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import java.net.UnknownHostException
@@ -12,7 +13,8 @@ import kotlin.time.Duration.Companion.seconds
 // todo проверить, что при ошибке body не возвращается
 @InjectConstructor
 class VkCommentsRemoteDataSource(
-    private val commentsApi: VkCommentsApiWrapper
+    private val commentsApi: VkCommentsApiWrapper,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun getComments(): VkComments {
@@ -20,7 +22,7 @@ class VkCommentsRemoteDataSource(
             "query" to "vkcomments"
         )
         return commentsApi.proxy()
-            .getVkComments(args)
+            .getVkComments(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain()
     }

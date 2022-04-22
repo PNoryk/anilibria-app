@@ -8,6 +8,7 @@ import ru.radiationx.anilibria.presentation.common.ILinkHandler
 import ru.radiationx.anilibria.ui.common.ErrorHandler
 import ru.radiationx.anilibria.ui.common.LinkRouter
 import ru.radiationx.anilibria.utils.DimensionsProvider
+import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.anilibria.utils.messages.SystemMessenger
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
 import ru.terrakok.cicerone.NavigatorHolder
@@ -56,6 +57,8 @@ class MobileAppModule(context: Context) : Module() {
         bind(ILinkHandler::class.java).to(LinkRouter::class.java).singleton()
         bind(IErrorHandler::class.java).to(ErrorHandler::class.java).singleton()
         bind(OkHttpImageDownloader::class.java).singleton()
+
+        bind(ShortcutHelper::class.java).singleton()
 
         /* Analytics */
         bind(AppMetricaAnalyticsSender::class.java).singleton()

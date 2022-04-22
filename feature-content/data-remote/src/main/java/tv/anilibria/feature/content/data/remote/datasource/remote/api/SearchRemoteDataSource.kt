@@ -9,12 +9,14 @@ import tv.anilibria.feature.content.types.ReleaseGenre
 import tv.anilibria.feature.content.types.ReleaseYear
 import tv.anilibria.feature.content.types.SearchForm
 import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class SearchRemoteDataSource(
-    private val searchApi: SearchApiWrapper
+    private val searchApi: SearchApiWrapper,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun getGenres(): List<ReleaseGenre> {
@@ -22,7 +24,7 @@ class SearchRemoteDataSource(
             "query" to "genres"
         )
         return searchApi.proxy()
-            .getGenres(args)
+            .getGenres(urlsProvider.api.value, args)
             .handleApiResponse()
             .map { ReleaseGenre(it) }
     }
@@ -32,7 +34,7 @@ class SearchRemoteDataSource(
             "query" to "years"
         )
         return searchApi.proxy()
-            .getYears(args)
+            .getYears(urlsProvider.api.value, args)
             .handleApiResponse()
             .map { ReleaseYear(it) }
     }
@@ -44,7 +46,7 @@ class SearchRemoteDataSource(
             "filter" to "id,code,names,poster"
         )
         return searchApi.proxy()
-            .fastSearch(args)
+            .fastSearch(urlsProvider.api.value, args)
             .handleApiResponse()
             .map { it.toDomain() }
     }
@@ -77,7 +79,7 @@ class SearchRemoteDataSource(
             "rm" to "true"
         )
         return searchApi.proxy()
-            .search(args)
+            .search(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain { it.toDomain() }
     }

@@ -18,6 +18,7 @@ interface ConfigApi {
 
     @POST
     suspend fun getConfig(
+        @Url url: String,
         @Body body: FormBody
     ): ApiResponse<ApiConfigResponse>
 

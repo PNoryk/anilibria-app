@@ -5,12 +5,14 @@ import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.Youtu
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.youtube.Youtube
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class YoutubeRemoteDataSource(
-    private val youtubeApi: YoutubeApiWrapper
+    private val youtubeApi: YoutubeApiWrapper,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun getYoutubeList(page: Int): Page<Youtube> {
@@ -19,7 +21,7 @@ class YoutubeRemoteDataSource(
             "page" to page.toString()
         )
         return youtubeApi.proxy()
-            .getYoutube(args)
+            .getYoutube(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain { it.toDomain() }
     }

@@ -6,12 +6,14 @@ import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseId
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class FavoriteRemoteDataSource(
-    private val favoriteApi: FavoriteApiWrapper
+    private val favoriteApi: FavoriteApiWrapper,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun getFavorites(page: Int): Page<Release> {
@@ -22,7 +24,7 @@ class FavoriteRemoteDataSource(
             "rm" to "true"
         )
         return favoriteApi.proxy()
-            .getFavorites(args)
+            .getFavorites(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain {
                 it.toDomain()
@@ -36,7 +38,7 @@ class FavoriteRemoteDataSource(
             "id" to releaseId.id.toString()
         )
         return favoriteApi.proxy()
-            .addFavorite(args)
+            .addFavorite(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain()
     }
@@ -48,7 +50,7 @@ class FavoriteRemoteDataSource(
             "id" to releaseId.id.toString()
         )
         return favoriteApi.proxy()
-            .deleteFavorite(args)
+            .deleteFavorite(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain()
     }

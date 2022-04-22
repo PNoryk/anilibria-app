@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 import kotlin.time.Duration.Companion.seconds
@@ -12,7 +13,8 @@ import kotlin.time.Duration.Companion.seconds
 @InjectConstructor
 class ConfigRemoteDataSource(
     private val configApi: ConfigApiWrapper,
-    private val reserveSources: ApiConfigReserveSources
+    private val reserveSources: ApiConfigReserveSources,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun checkAvailable(apiUrl: String): Boolean = withTimeout(15L.seconds) {
@@ -20,17 +22,21 @@ class ConfigRemoteDataSource(
     }
 
     suspend fun checkApiAvailable(apiUrl: String): Boolean = withTimeout(15L.seconds) {
-        runCatching { check(configApi.proxy(), apiUrl) }.isSuccess
+        runCatching { check(configApi.proxy(), apiUrl) }
+            .onFailure { it.printStackTrace() }
+            .isSuccess
     }
 
     suspend fun getConfiguration(): List<ApiAddress> {
         val fromApi = withContext(Dispatchers.IO) {
             runCatching { getConfigFromApi() }
+                .onFailure { it.printStackTrace() }
                 .getOrNull()
                 .orEmpty()
         }
         val fromReserve = withContext(Dispatchers.IO) {
             runCatching { getConfigFromReserve() }
+                .onFailure { it.printStackTrace() }
                 .getOrNull()
                 .orEmpty()
         }
@@ -47,14 +53,18 @@ class ConfigRemoteDataSource(
     private suspend fun getConfigFromApi(): List<ApiAddress> = withTimeout(10L.seconds) {
         val body = formBodyOf("query" to "config")
         configApi.proxy()
-            .getConfig(body)
+            .getConfig(urlsProvider.api.value, body)
             .handleApiResponse()
             .toDomain().addresses
     }
 
     private suspend fun getConfigFromReserve(): List<ApiAddress> {
         val singleSources = reserveSources.sources.map { source ->
-            runCatching { getReserve(source) }
+            runCatching {
+                getReserve(source)
+            }.onFailure {
+                it.printStackTrace()
+            }
         }
         return singleSources
             .map { it.getOrNull() }

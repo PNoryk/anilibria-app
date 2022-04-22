@@ -4,12 +4,14 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.remote.datasource.remote.retrofit.ScheduleApiWrapper
 import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.schedule.ScheduleDay
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class ScheduleRemoteDataSource(
-    private val scheduleApi: ScheduleApiWrapper
+    private val scheduleApi: ScheduleApiWrapper,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun getSchedule(): List<ScheduleDay> {
@@ -19,7 +21,7 @@ class ScheduleRemoteDataSource(
             "rm" to "true"
         )
         return scheduleApi.proxy()
-            .getSchedule(args)
+            .getSchedule(urlsProvider.api.value, args)
             .handleApiResponse()
             .map { it.toDomain() }
     }

@@ -6,12 +6,14 @@ import tv.anilibria.feature.content.data.remote.entity.mapper.toDomain
 import tv.anilibria.feature.content.types.Page
 import tv.anilibria.feature.content.types.release.RandomRelease
 import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.plugin.data.network.formBodyOf
 import tv.anilibria.plugin.data.restapi.handleApiResponse
 
 @InjectConstructor
 class ReleaseRemoteDataSource(
-    private val releaseApi: ReleaseApiWrapper
+    private val releaseApi: ReleaseApiWrapper,
+    private val urlsProvider: BaseUrlsProvider
 ) {
 
     suspend fun getRandomRelease(): RandomRelease {
@@ -19,7 +21,7 @@ class ReleaseRemoteDataSource(
             "query" to "random_release"
         )
         return releaseApi.proxy()
-            .getRandom(args)
+            .getRandom(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain()
     }
@@ -30,7 +32,7 @@ class ReleaseRemoteDataSource(
             "id" to releaseId.toString()
         )
         return releaseApi.proxy()
-            .getRelease(args)
+            .getRelease(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain()
     }
@@ -41,7 +43,7 @@ class ReleaseRemoteDataSource(
             "code" to releaseCode
         )
         return releaseApi.proxy()
-            .getRelease(args)
+            .getRelease(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain()
     }
@@ -54,7 +56,7 @@ class ReleaseRemoteDataSource(
             "rm" to "true"
         )
         return releaseApi.proxy()
-            .getReleases(args)
+            .getReleases(urlsProvider.api.value, args)
             .handleApiResponse()
             .map { it.toDomain() }
     }
@@ -67,7 +69,7 @@ class ReleaseRemoteDataSource(
             "rm" to "true"
         )
         return releaseApi.proxy()
-            .getPagesReleases(args)
+            .getPagesReleases(urlsProvider.api.value, args)
             .handleApiResponse()
             .toDomain { it.toDomain() }
     }

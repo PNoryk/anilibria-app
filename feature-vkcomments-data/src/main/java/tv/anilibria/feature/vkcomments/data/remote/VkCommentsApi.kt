@@ -17,6 +17,7 @@ interface VkCommentsApi {
 
     @POST
     suspend fun getVkComments(
+        @Url url: String,
         @Body body: FormBody
     ): ApiResponse<VkCommentsResponse>
 

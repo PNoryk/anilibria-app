@@ -15,7 +15,7 @@ class PageRemoteDataSource(
 
     suspend fun getLibriaPage(pagePath: RelativeUrl): PageLibria {
         return pageApi.proxy()
-            .getBody("${urlProvider.base}/${pagePath.value}")
+            .getBody("${urlProvider.base.value}/${pagePath.value}")
             .let { pagesParser.baseParse(it.string()) }
             .toDomain()
     }

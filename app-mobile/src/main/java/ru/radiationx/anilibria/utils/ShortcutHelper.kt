@@ -16,10 +16,12 @@ import ru.radiationx.anilibria.App
 import ru.radiationx.anilibria.ui.activities.main.IntentActivity
 import ru.radiationx.shared.ktx.android.centerCrop
 import ru.radiationx.shared.ktx.android.createAvatar
+import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.types.release.Release
 import kotlin.math.min
 
+@InjectConstructor
 class ShortcutHelper(
     private val urlHelper: BaseUrlHelper
 ) {

@@ -13,6 +13,7 @@ interface DonationApi {
 
     @POST
     suspend fun getDetails(
+        @Url url: String,
         @Body body: FormBody
     ): ApiResponse<DonationInfoResponse>
 

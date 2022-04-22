@@ -72,6 +72,7 @@ class DataLoadingController<T>(
                 updateStateByAction(dataAction)
                 currentPage = page
             }.onFailure {
+                it.printStackTrace()
                 updateStateByAction(ScreenStateAction.Error(it))
             }
         }

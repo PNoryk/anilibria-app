@@ -12,21 +12,25 @@ interface AuthApi {
 
     @POST
     suspend fun getOtpInfo(
+        @Url url: String,
         @Body body: FormBody
     ): ApiResponse<OtpInfoResponse>
 
     @POST
     suspend fun acceptOtp(
+        @Url url: String,
         @Body body: FormBody
     ): ApiResponse<Unit>
 
     @POST
     suspend fun signInOtp(
+        @Url url: String,
         @Body body: FormBody
     ): ApiResponse<Unit>
 
     @POST
     suspend fun getSocialAuthServices(
+        @Url url: String,
         @Body body: FormBody
     ): ApiResponse<List<SocialAuthServiceResponse>>
 

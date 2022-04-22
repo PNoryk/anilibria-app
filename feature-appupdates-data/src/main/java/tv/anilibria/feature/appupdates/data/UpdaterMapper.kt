@@ -6,7 +6,10 @@ import tv.anilibria.feature.appupdates.data.domain.UpdateData
 import tv.anilibria.feature.appupdates.data.domain.UpdateLink
 import tv.anilibria.feature.appupdates.data.domain.UpdateLinkType
 import tv.anilibria.feature.appupdates.data.response.UpdateDataResponse
+import tv.anilibria.feature.appupdates.data.response.UpdateDataWrapperResponse
 import tv.anilibria.feature.appupdates.data.response.UpdateLinkResponse
+
+fun UpdateDataWrapperResponse.toDomain() = update.toDomain()
 
 fun UpdateDataResponse.toDomain() = UpdateData(
     code = code,

@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import toothpick.InjectConstructor
 import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.ReleaseId
@@ -13,6 +14,7 @@ import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
 import tv.anilibria.plugin.data.storage.storageStringKey
 
+@InjectConstructor
 class EpisodeHistoryLocalDataSource(
     @EpisodeHistoryStorageQualifier private val storage: DataStorage,
     private val moshi: Moshi

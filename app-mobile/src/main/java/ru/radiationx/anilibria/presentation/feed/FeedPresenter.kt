@@ -295,7 +295,7 @@ class FeedPresenter(
     private suspend fun getScheduleSource(): FeedScheduleState = scheduleRepository
         .loadSchedule()
         .let { scheduleDays ->
-            val mskDay = Clock.System.todayAt(TimeZone.of("MSK")).dayOfWeek
+            val mskDay = Clock.System.todayAt(TimeZone.of("Europe/Moscow")).dayOfWeek
             val currentDay = Clock.System.todayAt(TimeZone.currentSystemDefault()).dayOfWeek
 
             val dayTitle = if (currentDay == mskDay) {

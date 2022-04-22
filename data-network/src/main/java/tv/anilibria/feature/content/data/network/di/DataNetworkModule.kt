@@ -13,7 +13,9 @@ import tv.anilibria.plugin.data.network.ConfigHash
 class DataNetworkModule : Module() {
 
     init {
-        bind(BaseUrlsProvider::class.java).to(BaseUrlProviderImpl::class.java).singleton()
+        bind(BaseUrlsProvider::class.java)
+            .to(BaseUrlProviderImpl::class.java)
+            .singleton()
 
         bind(Moshi::class.java)
             .toProviderInstance { Moshi.Builder().build() }
@@ -31,9 +33,6 @@ class DataNetworkModule : Module() {
 
         bind(AppCookieJar::class.java).singleton()
         bind(CookiesStorage::class.java).singleton()
-        bind(LegacyCookieHolder::class.java)
-            .to(LegacyCookiesStorage::class.java)
-            .singleton()
 
         bind(ProxyOkHttpProvider::class.java).singleton()
         bind(DirectOkHttpProvider::class.java).singleton()
@@ -41,7 +40,9 @@ class DataNetworkModule : Module() {
         bind(ProxyRetrofitProvider::class.java).singleton()
         bind(DirectRetrofitProvider::class.java).singleton()
 
-        bind(ConfigHash::class.java).to(ConfigHashImpl::class.java).singleton()
+        bind(ConfigHash::class.java)
+            .to(ConfigHashImpl::class.java)
+            .singleton()
         bind(ApiWrapperDeps::class.java)
             .toProvider(ApiWrapperDepsProvider::class.java)
             .providesSingleton()
