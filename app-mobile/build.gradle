@@ -112,9 +112,11 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
-    implementation project(':feature-content:data')
-    implementation project(":core-types")
     implementation project(':feature-content:types')
+    implementation project(':feature-content:data')
+    implementation project(':feature-content:data-local')
+    implementation project(':feature-content:data-remote')
+    implementation project(":core-types")
     implementation project(":data-network")
     implementation project(":app-mobile-preferences")
     implementation project(":plugin:shared-appinfo")

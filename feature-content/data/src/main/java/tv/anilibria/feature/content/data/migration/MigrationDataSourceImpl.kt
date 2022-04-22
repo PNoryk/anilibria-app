@@ -1,38 +1,40 @@
 package tv.anilibria.feature.content.data.migration
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.text.TextUtils
 import android.widget.Toast
 import toothpick.InjectConstructor
+import tv.anilibria.feature.content.data.di.MigrationStorageQualifier
 import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
+import tv.anilibria.plugin.data.storage.DataStorage
+import tv.anilibria.plugin.data.storage.storageStringKey
 import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 
 @InjectConstructor
 class MigrationDataSourceImpl(
     private val context: Context,
-    private val defaultPreferences: SharedPreferences,
+    @MigrationStorageQualifier private val storage: DataStorage,
     private val sharedBuildConfig: SharedBuildConfig,
     private val migrationExecutor: MigrationExecutor,
     private val errorReporter: AnalyticsErrorReporter
 ) : MigrationDataSource {
 
     companion object {
-        private const val PREF_KEY = "app.versions.history"
+        private val PREF_KEY = storageStringKey("app.versions.history")
         private const val INITIAL_VERSION = 0
         private const val ANALYTIC_GROUP = "migration"
     }
 
-    override fun getHistory(): List<Int> {
-        return defaultPreferences
-            .getString(PREF_KEY, "")
+    override suspend fun getHistory(): List<Int> {
+        return storage
+            .get(PREF_KEY)
             ?.split(";")
             ?.filter { it.isNotBlank() }
             ?.map { it.toInt() }
             ?: emptyList()
     }
 
-    override fun update() {
+    override suspend fun update() {
         try {
             val history = getHistory()
             val currentVersion = sharedBuildConfig.versionCode
@@ -72,10 +74,7 @@ class MigrationDataSourceImpl(
         return false
     }
 
-    private fun saveHistory(history: List<Int>) {
-        defaultPreferences
-            .edit()
-            .putString(PREF_KEY, TextUtils.join(";", history.map { it.toString() }))
-            .apply()
+    private suspend fun saveHistory(history: List<Int>) {
+        storage.set(PREF_KEY, TextUtils.join(";", history.map { it.toString() }))
     }
 }

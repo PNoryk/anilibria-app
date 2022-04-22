@@ -3,8 +3,10 @@ package tv.anilibria.feature.content.data.network
 import kotlinx.coroutines.flow.Flow
 import okhttp3.Cookie
 import okhttp3.HttpUrl
+import toothpick.InjectConstructor
 import tv.anilibria.plugin.data.storage.ObservableData
 
+@InjectConstructor
 class CookiesStorage {
 
     private val data = ObservableData<List<CookieData>>()

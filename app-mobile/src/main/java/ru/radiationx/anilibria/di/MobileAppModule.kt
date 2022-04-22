@@ -71,14 +71,11 @@ class MobileAppModule(context: Context) : Module() {
         if (BuildConfig.DEBUG) {
             bind(AnalyticsSender::class.java).to(CombinedAnalyticsSender::class.java).singleton()
             bind(AnalyticsProfile::class.java).to(CombinedAnalyticsProfile::class.java).singleton()
-            bind(AnalyticsErrorReporter::class.java).to(CombinedErrorReporter::class.java)
-                .singleton()
+            bind(AnalyticsErrorReporter::class.java).to(CombinedErrorReporter::class.java).singleton()
         } else {
             bind(AnalyticsSender::class.java).to(AppMetricaAnalyticsSender::class.java).singleton()
-            bind(AnalyticsProfile::class.java).to(AppMetricaAnalyticsProfile::class.java)
-                .singleton()
-            bind(AnalyticsErrorReporter::class.java).to(AppMetricaErrorReporter::class.java)
-                .singleton()
+            bind(AnalyticsProfile::class.java).to(AppMetricaAnalyticsProfile::class.java).singleton()
+            bind(AnalyticsErrorReporter::class.java).to(AppMetricaErrorReporter::class.java).singleton()
         }
     }
 

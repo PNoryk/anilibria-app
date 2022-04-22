@@ -1,5 +1,6 @@
 package tv.anilibria.feature.content.data.network
 
+import kotlinx.coroutines.runBlocking
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
@@ -7,7 +8,7 @@ import toothpick.InjectConstructor
 
 @InjectConstructor
 class AppCookieJar(
-    private val cookieHolder: LegacyCookieHolder
+    private val cookieHolder: CookiesStorage
 ) : CookieJar {
 
     companion object {
@@ -15,16 +16,20 @@ class AppCookieJar(
     }
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        for (cookie in cookies) {
-            if (cookie.value() == COOKIE_DELETED) {
-                cookieHolder.remove(cookie.name())
-            } else {
-                cookieHolder.put(url.toString(), cookie)
+        runBlocking {
+            for (cookie in cookies) {
+                if (cookie.value() == COOKIE_DELETED) {
+                    cookieHolder.remove(CookieData(url, cookie))
+                } else {
+                    cookieHolder.put(CookieData(url, cookie))
+                }
             }
         }
     }
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        return cookieHolder.get().values.map { it }
+        return runBlocking {
+            cookieHolder.get().map { it.cookie }
+        }
     }
 }

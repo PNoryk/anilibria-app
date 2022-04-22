@@ -5,7 +5,10 @@ import tv.anilibria.feature.content.data.ApiConfigPushHandler
 import tv.anilibria.feature.content.data.ApiConfigPushHandlerImpl
 import tv.anilibria.feature.content.data.BaseUrlHelper
 import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.migration.MigrationDataSource
+import tv.anilibria.feature.content.data.migration.MigrationDataSourceImpl
 import tv.anilibria.feature.content.data.repos.*
+import tv.anilibria.plugin.data.storage.DataStorage
 
 class ContentDataFeatureModule : Module() {
 
@@ -22,5 +25,11 @@ class ContentDataFeatureModule : Module() {
         bind(ApiConfigPushHandler::class.java).to(ApiConfigPushHandlerImpl::class.java)
 
         bind(BaseUrlHelper::class.java)
+
+        bind(DataStorage::class.java)
+            .withName(MigrationStorageQualifier::class.java)
+            .toProvider(MigrationDataStorageProvider::class.java)
+            .providesSingleton()
+        bind(MigrationDataSource::class.java).to(MigrationDataSourceImpl::class.java).singleton()
     }
 }

@@ -6,6 +6,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import biz.source_code.miniTemplator.MiniTemplator
@@ -16,6 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 import ru.radiationx.anilibria.di.MobileAppModule
 import ru.radiationx.shared_app.common.ImageLoaderConfig
 import ru.radiationx.shared_app.common.OkHttpImageDownloader
@@ -23,9 +25,23 @@ import ru.radiationx.shared_app.common.SimpleActivityLifecycleCallbacks
 import ru.radiationx.shared_app.di.DI
 import toothpick.Toothpick
 import toothpick.configuration.Configuration
-import tv.anilibria.feature.analytics.api.features.AppAnalytics
-import tv.anilibria.feature.content.data.migration.MigrationDataSource
 import tv.anilibria.app.mobile.preferences.PreferencesStorage
+import tv.anilibria.app.mobile.preferences.di.MobileAppPreferencesModule
+import tv.anilibria.feature.analytics.api.features.AppAnalytics
+import tv.anilibria.feature.appupdates.data.di.AppUpdatesDataFeatureModule
+import tv.anilibria.feature.auth.data.di.AuthDataFeatureModule
+import tv.anilibria.feature.content.data.di.ContentDataFeatureModule
+import tv.anilibria.feature.content.data.local.di.ContentDataLocalFeatureModule
+import tv.anilibria.feature.content.data.migration.MigrationDataSource
+import tv.anilibria.feature.content.data.network.di.DataNetworkModule
+import tv.anilibria.feature.content.data.remote.di.ContentDataRemoteFeatureModule
+import tv.anilibria.feature.donation.data.di.DonationDataFeatureModule
+import tv.anilibria.feature.menu.data.di.MenuDataFeatureModule
+import tv.anilibria.feature.networkconfig.data.di.NetworkConfigDataFeatureModule
+import tv.anilibria.feature.page.data.di.PageDataFeatureModule
+import tv.anilibria.feature.player.data.di.PlayerDataFeatureModule
+import tv.anilibria.feature.user.data.di.UserDataFeatureModule
+import tv.anilibria.feature.vkcomments.data.di.VkCommentsDataFeatureModule
 import tv.anilibria.plugin.data.analytics.TimeCounter
 import java.io.ByteArrayInputStream
 import java.io.IOException
@@ -157,12 +173,32 @@ class App : Application() {
     private fun initDependencies() {
         Toothpick.setConfiguration(Configuration.forProduction())
         val scope = Toothpick.openScope(DI.DEFAULT_SCOPE)
+        scope.installModules(
+            DataNetworkModule(),
+            MobileAppPreferencesModule(),
+            AppUpdatesDataFeatureModule(),
+            AuthDataFeatureModule(),
+            ContentDataFeatureModule(),
+            ContentDataLocalFeatureModule(),
+            ContentDataRemoteFeatureModule(),
+            DonationDataFeatureModule(),
+            MenuDataFeatureModule(),
+            NetworkConfigDataFeatureModule(),
+            PageDataFeatureModule(),
+            PlayerDataFeatureModule(),
+            UserDataFeatureModule(),
+            VkCommentsDataFeatureModule()
+        )
         scope.installModules(MobileAppModule(this))
+
+        Log.d("kekeke", "created scope $scope")
     }
 
     private fun appVersionCheck() {
         val migrationDataSource = DI.get(MigrationDataSource::class.java)
-        migrationDataSource.update()
+        runBlocking {
+            migrationDataSource.update()
+        }
     }
 
     private fun findTemplate(name: String): MiniTemplator? {

@@ -1,11 +1,13 @@
 package tv.anilibria.plugin.data.network
 
 import retrofit2.Retrofit
-import toothpick.InjectConstructor
+import javax.inject.Provider
 
-@InjectConstructor
 class ApiWrapperDeps(
     val configHash: ConfigHash,
-    @ProxyNetworkQualifier val proxyProvider: NetworkAwareProvider<Retrofit>,
-    @DirectNetworkQualifier val directProvider: NetworkAwareProvider<Retrofit>,
-)
+    private val proxyProvider: Provider<Retrofit>,
+    private val directProvider: Provider<Retrofit>,
+) {
+    val awareProxyProvider = NetworkAwareProvider(configHash, proxyProvider)
+    val awareDirectProvider = NetworkAwareProvider(configHash, directProvider)
+}

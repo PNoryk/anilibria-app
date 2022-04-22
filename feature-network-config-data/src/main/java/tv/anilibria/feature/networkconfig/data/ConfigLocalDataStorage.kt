@@ -1,12 +1,14 @@
 package tv.anilibria.feature.networkconfig.data
 
 import kotlinx.coroutines.flow.Flow
+import toothpick.InjectConstructor
 import tv.anilibria.feature.networkconfig.data.di.ConfigStorageQualifier
 import tv.anilibria.feature.networkconfig.data.domain.ApiAddress
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.ObservableData
 
 //todo добавить сохранение
+@InjectConstructor
 class ConfigLocalDataStorage(
     @ConfigStorageQualifier private val storage: DataStorage,
 ) {

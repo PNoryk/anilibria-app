@@ -6,14 +6,18 @@ abstract class ApiWrapper<T>(
 ) {
 
     private val awareProxyProvider = NetworkAwareProvider(apiWrapperDeps.configHash) {
-        apiWrapperDeps.proxyProvider.get().create(apiClass)
+        apiWrapperDeps.awareProxyProvider.get().create(apiClass)
     }
 
     private val awareDirectProvider = NetworkAwareProvider(apiWrapperDeps.configHash) {
-        apiWrapperDeps.directProvider.get().create(apiClass)
+        apiWrapperDeps.awareDirectProvider.get().create(apiClass)
     }
 
-    fun proxy(): T = awareProxyProvider.get()
+    fun proxy(): T {
+        return awareProxyProvider.get()
+    }
 
-    fun direct(): T = awareDirectProvider.get()
+    fun direct(): T {
+        return awareDirectProvider.get()
+    }
 }
