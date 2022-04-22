@@ -3,6 +3,7 @@ package tv.anilibria.feature.networkconfig.data.di
 import toothpick.config.Module
 import tv.anilibria.feature.networkconfig.data.*
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigChanger
+import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 import tv.anilibria.plugin.data.storage.DataStorage
 
 class NetworkConfigDataFeatureModule : Module() {
@@ -22,6 +23,6 @@ class NetworkConfigDataFeatureModule : Module() {
         bind(ConfiguringAnalytics::class.java).singleton()
 
         bind(ApiConfigChanger::class.java).singleton()
-        bind(ApiConfigChanger::class.java).singleton()
+        bind(ApiConfigController::class.java).singleton()
     }
 }

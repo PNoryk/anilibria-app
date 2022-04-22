@@ -23,6 +23,7 @@ import tv.anilibria.feature.analytics.impl.profile.AppMetricaAnalyticsProfile
 import tv.anilibria.feature.analytics.impl.profile.CombinedAnalyticsProfile
 import tv.anilibria.feature.analytics.impl.profile.LoggingAnalyticsProfile
 import tv.anilibria.feature.appupdates.data.CheckerReserveSources
+import tv.anilibria.feature.content.data.BaseUrlsProvider
 import tv.anilibria.feature.content.data.migration.MigrationExecutor
 import tv.anilibria.feature.networkconfig.data.ApiConfigReserveSources
 import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
@@ -57,6 +58,7 @@ class MobileAppModule(context: Context) : Module() {
         bind(IErrorHandler::class.java).to(ErrorHandler::class.java).singleton()
         bind(OkHttpImageDownloader::class.java).singleton()
 
+        bind(BaseUrlsProvider::class.java).to(BaseUrlProviderImpl::class.java).singleton()
 
         /* Analytics */
         bind(AppMetricaAnalyticsSender::class.java).singleton()

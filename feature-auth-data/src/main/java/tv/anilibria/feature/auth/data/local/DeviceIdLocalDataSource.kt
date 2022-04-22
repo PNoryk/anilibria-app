@@ -1,10 +1,12 @@
 package tv.anilibria.feature.auth.data.local
 
+import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.di.AuthStorageQualifier
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.storageStringKey
 import java.util.*
 
+@InjectConstructor
 class DeviceIdLocalDataSource(
     @AuthStorageQualifier private val storage: DataStorage
 ) {

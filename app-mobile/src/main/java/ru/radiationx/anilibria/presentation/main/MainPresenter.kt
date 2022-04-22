@@ -52,7 +52,7 @@ class MainPresenter(
         apiConfig
             .observeNeedConfig()
             .onEach {
-                Log.d("kekeke", "observeNeedConfig $it, $firstLaunch")
+                Log.d("kekeke", "observeNeedConfig $it, $firstLaunch at $apiConfig")
                 if (it) {
                     viewState.showConfiguring()
                 } else {

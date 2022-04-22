@@ -21,11 +21,11 @@ class ApiConfigController(
         get() = needConfigRelay.value
 
     fun observeNeedConfig(): Flow<Boolean> = needConfigRelay.asStateFlow().onEach {
-        Log.d("kekeke", "contr observeNeedConfig $it")
+        Log.d("kekeke", "contr observeNeedConfig $it at $this")
     }
 
     fun updateNeedConfig(state: Boolean) {
-        Log.d("kekeke", "updateNeedConfig $state")
+        Log.d("kekeke", "updateNeedConfig $state at $this")
         needConfigRelay.value = state
         Log.d("kekeke", "success updateNeedConfig ${needConfigRelay.value}")
     }

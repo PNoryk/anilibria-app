@@ -1,16 +1,18 @@
 package tv.anilibria.feature.content.data
 
+import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.BaseUrl
 import tv.anilibria.core.types.RelativeUrl
 
-class BaseUrlsProvider(
-    val widgetsSite: BaseUrl,
-    val site: BaseUrl,
-    val baseImages: BaseUrl,
-    val base: BaseUrl,
-)
+interface BaseUrlsProvider {
+    val widgetsSite: BaseUrl
+    val site: BaseUrl
+    val baseImages: BaseUrl
+    val base: BaseUrl
+}
 
+@InjectConstructor
 class BaseUrlHelper(
     private val urls: BaseUrlsProvider
 ) {

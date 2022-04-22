@@ -1,10 +1,12 @@
 package ru.radiationx.shared_app
 
 import ru.radiationx.shared_app.common.SystemUtils
+import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
 import tv.anilibria.core.types.RelativeUrl
 import tv.anilibria.feature.content.data.BaseUrlHelper
 
+@InjectConstructor
 class AppLinkHelper(
     val urlHelper: BaseUrlHelper,
     val systemUtils: SystemUtils
