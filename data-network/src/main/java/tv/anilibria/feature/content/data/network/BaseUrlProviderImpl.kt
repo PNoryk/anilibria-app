@@ -1,10 +1,10 @@
-package ru.radiationx.anilibria.di
+package tv.anilibria.feature.content.data.network
 
 import kotlinx.coroutines.runBlocking
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.BaseUrl
 import tv.anilibria.core.types.asBaseUrl
-import tv.anilibria.feature.content.data.BaseUrlsProvider
+import tv.anilibria.plugin.data.network.BaseUrlsProvider
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
 
 @InjectConstructor
@@ -23,4 +23,7 @@ class BaseUrlProviderImpl(
 
     override val base: BaseUrl
         get() = runBlocking { apiConfigController.getActive().widgetsSite.asBaseUrl() }
+
+    override val api: BaseUrl
+        get() = runBlocking { apiConfigController.getActive().api.asBaseUrl() }
 }

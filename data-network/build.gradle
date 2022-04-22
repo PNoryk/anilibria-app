@@ -39,6 +39,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
+    implementation project(":core-types")
     implementation project(":plugin:data-network")
     implementation project(":plugin:shared-appinfo")
     implementation project(":plugin:data-storage")

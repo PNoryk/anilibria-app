@@ -36,6 +36,7 @@ ext {
 dependencies {
     implementation 'javax.inject:javax.inject:1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation project(":core-types")
 
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
