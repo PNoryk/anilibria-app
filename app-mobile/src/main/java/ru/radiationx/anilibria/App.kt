@@ -143,7 +143,7 @@ class App : Application() {
         preferencesHolder
             .notificationsAll.observe()
             .onEach { changeSubscribeStatus(it, "all") }
-            .catch { it.printStackTrace() }
+            .catch { Log.e("App", "notificationsAll", it) }
             .launchIn(GlobalScope)
 
         preferencesHolder
@@ -153,7 +153,7 @@ class App : Application() {
                 changeSubscribeStatus(it, "app_update")
                 changeSubscribeStatus(it, "config")
             }
-            .catch { it.printStackTrace() }
+            .catch { Log.e("App", "notificationsService", it) }
             .launchIn(GlobalScope)
 
     }

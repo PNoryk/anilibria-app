@@ -5,13 +5,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
-import java.util.concurrent.atomic.AtomicBoolean
 
 class ObservableData<T>(
     private val persistableData: DataHolder<T>
 ) {
 
-    private val needUpdate = AtomicBoolean(true)
+    private var needUpdate = true
 
     private val triggerFlow = MutableSharedFlow<Unit>()
 
@@ -25,7 +24,7 @@ class ObservableData<T>(
 
     suspend fun put(data: T) {
         persistableData.save(data)
-        needUpdate.set(true)
+        needUpdate = true
         triggerFlow.emit(Unit)
     }
 
@@ -35,17 +34,17 @@ class ObservableData<T>(
 
     fun triggerUpdate() {
         runBlocking {
-            needUpdate.set(true)
+            needUpdate = true
             triggerFlow.emit(Unit)
         }
     }
 
     private suspend fun getActualData(): T {
-        if (needUpdate.compareAndSet(true, false)) {
-            persistableData.get().also {
-                inMemoryData.save(it)
-            }
+        if (needUpdate) {
+            val savedData = persistableData.get()
+            inMemoryData.save(savedData)
         }
+        needUpdate = false
         return inMemoryData.get()
     }
 

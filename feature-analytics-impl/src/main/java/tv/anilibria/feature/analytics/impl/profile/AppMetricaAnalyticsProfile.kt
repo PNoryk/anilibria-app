@@ -1,9 +1,9 @@
 package tv.anilibria.feature.analytics.impl.profile
 
+import android.util.Log
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.profile.Attribute
 import com.yandex.metrica.profile.UserProfile
-import com.yandex.metrica.profile.UserProfileUpdate
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import toothpick.InjectConstructor
@@ -26,28 +26,29 @@ class AppMetricaAnalyticsProfile(
     }
 
     private suspend fun unsafeUpdate() {
-        val singleSources = with(dataSource) {
-            listOf<UserProfileUpdate<*>>(
-                getApiAddressTag().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.address_tag),
-                getAppTheme().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.app_theme),
-                getQualitySettings().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.quality),
-                getPlayerSettings().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.player),
-                getPipSettings().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.pip),
-                getPlaySpeedSettings().mapFloatAttr(tv.anilibria.feature.analytics.api.ProfileConstants.play_speed),
-                getNotificationsAllSettings().mapBoolAttr(tv.anilibria.feature.analytics.api.ProfileConstants.notification_all),
-                getNotificationsServiceSettings().mapBoolAttr(tv.anilibria.feature.analytics.api.ProfileConstants.notification_service),
-                getEpisodeOrderSettings().mapBoolAttr(tv.anilibria.feature.analytics.api.ProfileConstants.episode_order),
-                getAuthState().mapStringAttr(tv.anilibria.feature.analytics.api.ProfileConstants.auth_state),
-            )
-        }
-
-        val profile = singleSources.let { attributes ->
-            UserProfile.newBuilder().run {
-                attributes.forEach { attribute ->
-                    apply(attribute)
+        val attributes = dataSource
+            .getAttributes()
+            .mapNotNull { entry ->
+                when (val value = entry.value) {
+                    is String -> value.mapStringAttr(entry.key)
+                    is Int -> value.mapIntAttr(entry.key)
+                    is Float -> value.mapFloatAttr(entry.key)
+                    is Boolean -> value.mapBoolAttr(entry.key)
+                    else -> {
+                        Log.e(
+                            "AppMetricaAnalytics",
+                            "Unknown type for ${entry.key} = ${entry.value}"
+                        )
+                        null
+                    }
                 }
-                build()
             }
+
+        val profile = UserProfile.newBuilder().run {
+            attributes.forEach { attribute ->
+                apply(attribute)
+            }
+            build()
         }
         YandexMetrica.reportUserProfile(profile)
     }

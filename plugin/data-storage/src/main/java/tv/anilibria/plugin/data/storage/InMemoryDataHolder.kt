@@ -11,6 +11,6 @@ class InMemoryDataHolder<T>(defaultValue: T? = null) : DataHolder<T> {
     }
 
     override suspend fun save(data: T) {
-        atomicReference.lazySet(data)
+        atomicReference.set(data)
     }
 }

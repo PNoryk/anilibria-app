@@ -1,7 +1,9 @@
 package tv.anilibria.feature.analytics.impl
 
+import android.util.Log
 import toothpick.InjectConstructor
 import tv.anilibria.app.mobile.preferences.PreferencesStorage
+import tv.anilibria.feature.analytics.api.ProfileConstants
 import tv.anilibria.feature.analytics.api.features.mapper.*
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.networkconfig.data.address.ApiConfigController
@@ -15,43 +17,69 @@ class AnalyticsProfileDataSource(
     private val userHolder: AuthStateHolder,
 ) {
 
-    suspend fun getApiAddressTag(): String {
+    suspend fun getAttributes(): Map<String, Any> {
+        val attributeSources = mapOf(
+            ProfileConstants.address_tag to ::getApiAddressTag,
+            ProfileConstants.app_theme to ::getAppTheme,
+            ProfileConstants.quality to ::getQualitySettings,
+            ProfileConstants.player to ::getPlayerSettings,
+            ProfileConstants.pip to ::getPipSettings,
+            ProfileConstants.play_speed to ::getPlaySpeedSettings,
+            ProfileConstants.notification_all to ::getNotificationsAllSettings,
+            ProfileConstants.notification_service to ::getNotificationsServiceSettings,
+            ProfileConstants.episode_order to ::getEpisodeOrderSettings,
+            ProfileConstants.auth_state to ::getAuthState,
+        )
+        return attributeSources
+            .map { entry ->
+                val value = runCatching { entry.value.invoke() }
+                    .onFailure {
+                        Log.e("AnalyticsProfile", "Error for attribute '${entry.key}'", it)
+                    }
+                    .getOrNull()
+                entry.key to (value ?: "error")
+            }
+            .toMap()
+    }
+
+
+    private suspend fun getApiAddressTag(): String {
         return apiConfig.getActive().tag
     }
 
-    suspend fun getAppTheme(): String {
+    private suspend fun getAppTheme(): String {
         return preferencesStorage.appTheme.get().toAnalyticsAppTheme().value
     }
 
-    suspend fun getQualitySettings(): String {
+    private suspend fun getQualitySettings(): String {
         return playerPreferencesStorage.quality.get().toAnalyticsQuality().value
     }
 
-    suspend fun getPlayerSettings(): String {
+    private suspend fun getPlayerSettings(): String {
         return playerPreferencesStorage.playerType.get().toAnalyticsPlayer().value
     }
 
-    suspend fun getPipSettings(): String {
+    private suspend fun getPipSettings(): String {
         return playerPreferencesStorage.pipControl.get().toAnalyticsPip().value
     }
 
-    suspend fun getPlaySpeedSettings(): Float {
+    private suspend fun getPlaySpeedSettings(): Float {
         return playerPreferencesStorage.playSpeed.get()
     }
 
-    suspend fun getNotificationsAllSettings(): Boolean {
+    private suspend fun getNotificationsAllSettings(): Boolean {
         return preferencesStorage.notificationsAll.get()
     }
 
-    suspend fun getNotificationsServiceSettings(): Boolean {
+    private suspend fun getNotificationsServiceSettings(): Boolean {
         return preferencesStorage.notificationsService.get()
     }
 
-    suspend fun getEpisodeOrderSettings(): Boolean {
+    private suspend fun getEpisodeOrderSettings(): Boolean {
         return preferencesStorage.episodesIsReverse.get()
     }
 
-    suspend fun getAuthState(): String {
+    private suspend fun getAuthState(): String {
         return userHolder.get().toAnalyticsAuthState().value
     }
 

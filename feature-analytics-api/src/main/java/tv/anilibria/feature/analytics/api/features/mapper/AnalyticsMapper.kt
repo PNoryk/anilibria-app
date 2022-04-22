@@ -1,14 +1,15 @@
 package tv.anilibria.feature.analytics.api.features.mapper
 
+import tv.anilibria.app.mobile.preferences.AppTheme
 import tv.anilibria.feature.analytics.api.features.model.*
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerPipMode
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 
-fun tv.anilibria.app.mobile.preferences.AppTheme.toAnalyticsAppTheme(): AnalyticsAppTheme = when (this) {
-    tv.anilibria.app.mobile.preferences.AppTheme.LIGHT -> AnalyticsAppTheme.LIGHT
-    tv.anilibria.app.mobile.preferences.AppTheme.DARK -> AnalyticsAppTheme.DARK
+fun AppTheme.toAnalyticsAppTheme(): AnalyticsAppTheme = when (this) {
+    AppTheme.LIGHT -> AnalyticsAppTheme.LIGHT
+    AppTheme.DARK -> AnalyticsAppTheme.DARK
     else -> AnalyticsAppTheme.UNKNOWN
 }
 

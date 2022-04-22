@@ -2,6 +2,7 @@ package tv.anilibria.feature.content.data.migration
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import toothpick.InjectConstructor
 import tv.anilibria.feature.content.data.di.MigrationStorageQualifier
@@ -55,8 +56,8 @@ class MigrationDataSourceImpl(
                 Toast.makeText(context, errMsg, Toast.LENGTH_SHORT).show()
             }
         } catch (ex: Throwable) {
-            ex.printStackTrace()
             val errMsg = "Сбой при проверке локальной версии."
+            Log.e("MigrationDataSource", errMsg, ex)
             errorReporter.report(ANALYTIC_GROUP, errMsg, ex)
             val uiErr = "$errMsg\nПрограмма может работать не стабильно! Переустановите программу."
             Toast.makeText(context, uiErr, Toast.LENGTH_LONG).show()
