@@ -55,6 +55,6 @@ class ReleaseUpdatesLocalDataSource(
     }
 
     suspend fun remove(releaseId: ReleaseId) = observableData.update { currentData ->
-        currentData?.filter { it.id == releaseId }
+        currentData?.filter { it.id != releaseId }
     }
 }

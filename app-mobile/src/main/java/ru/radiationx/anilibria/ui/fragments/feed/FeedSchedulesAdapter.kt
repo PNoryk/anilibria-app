@@ -8,7 +8,7 @@ import ru.radiationx.anilibria.ui.common.adapters.ListItemAdapter
 
 class FeedSchedulesAdapter(
     clickListener: (ScheduleItemState, View, Int) -> Unit
-) : ListItemAdapter() {
+) : ListItemAdapter(true) {
 
     init {
         addDelegate(FeedScheduleDelegate(clickListener))

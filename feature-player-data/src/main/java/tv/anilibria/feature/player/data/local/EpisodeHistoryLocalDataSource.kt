@@ -60,11 +60,10 @@ class EpisodeHistoryLocalDataSource(
     }
 
     suspend fun remove(episodeId: EpisodeId) = observableData.update { currentData ->
-        currentData?.filter { it.id == episodeId }
+        currentData?.filter { it.id != episodeId }
     }
 
     suspend fun removeByRelease(releaseId: ReleaseId) = observableData.update { currentData ->
-        currentData?.filter { it.id.releaseId == releaseId }
-
+        currentData?.filter { it.id.releaseId != releaseId }
     }
 }

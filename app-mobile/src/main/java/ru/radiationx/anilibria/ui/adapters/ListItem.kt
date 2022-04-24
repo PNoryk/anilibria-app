@@ -37,6 +37,7 @@ open class ListItem(private val idData: Any?) {
 data class ProfileListItem(val id: Any, val state: ProfileItemState) : ListItem(id)
 data class MenuListItem(val menuItem: OtherMenuItemState) : ListItem(menuItem.title)
 data class DividerShadowListItem(val id: Any) : ListItem(id)
+data class DiffUtilWorkaroundListItem(val id: Any) : ListItem(id)
 
 
 /* Common */

@@ -23,7 +23,7 @@ class ReleaseInfoAdapter(
     private val commentsClickListener: () -> Unit,
     private val episodesTabListener: (String) -> Unit,
     private val remindCloseListener: () -> Unit
-) : ListItemAdapter() {
+) : ListItemAdapter(true) {
 
     init {
         addDelegate(ReleaseHeadDelegate(headListener))

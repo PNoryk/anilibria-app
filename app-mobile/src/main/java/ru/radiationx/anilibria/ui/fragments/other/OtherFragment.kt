@@ -65,7 +65,7 @@ class OtherFragment : BaseFragment(), OtherView {
         return false
     }
 
-    inner class OtherAdapter : ListItemAdapter() {
+    inner class OtherAdapter : ListItemAdapter(true) {
 
         private val profileClickListener = { _: ProfileItemState -> presenter.onProfileClick() }
 

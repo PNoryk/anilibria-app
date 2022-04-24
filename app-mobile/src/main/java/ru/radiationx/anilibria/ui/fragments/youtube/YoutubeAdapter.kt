@@ -15,7 +15,7 @@ class YoutubeAdapter(
     private val listener: ItemListener,
     private val emptyPlaceHolder: PlaceholderListItem,
     private val errorPlaceHolder: PlaceholderListItem
-) : ListItemAdapter() {
+) : ListItemAdapter(true) {
 
     init {
         addDelegate(YoutubeDelegate(listener))

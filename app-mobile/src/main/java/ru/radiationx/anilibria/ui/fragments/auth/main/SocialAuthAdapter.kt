@@ -7,7 +7,7 @@ import ru.radiationx.anilibria.ui.common.adapters.ListItemAdapter
 
 class SocialAuthAdapter(
     private val clickListener: (SocialAuthItemState) -> Unit
-) : ListItemAdapter() {
+) : ListItemAdapter(false) {
 
     init {
         delegatesManager.apply {

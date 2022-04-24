@@ -6,7 +6,7 @@ import tv.anilibria.feature.donation.data.domain.*
 class DonationContentAdapter(
     private val buttonClickListener: (DonationContentButton) -> Unit,
     private val linkClickListener: (String) -> Unit
-) : ListItemAdapter() {
+) : ListItemAdapter(true) {
 
     init {
         addDelegate(DonationButtonDelegate(buttonClickListener))

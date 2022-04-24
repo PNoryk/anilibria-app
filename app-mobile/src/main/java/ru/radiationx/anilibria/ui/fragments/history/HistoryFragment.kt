@@ -1,12 +1,14 @@
 package ru.radiationx.anilibria.ui.fragments.history
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.lapism.search.behavior.SearchBehavior
 import com.lapism.search.internal.SearchLayout
 import com.lapism.search.widget.SearchMenuItem
@@ -63,7 +65,7 @@ class HistoryFragment : BaseFragment(), HistoryView, SharedProvider, ReleasesAda
         )
     )
 
-    private val searchAdapter = ListItemAdapter().apply {
+    private val searchAdapter = ListItemAdapter(true).apply {
         addDelegate(ReleaseItemDelegate(this@HistoryFragment))
     }
 

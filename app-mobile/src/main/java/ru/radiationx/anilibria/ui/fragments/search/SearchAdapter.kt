@@ -19,7 +19,7 @@ class SearchAdapter(
     private val remindCloseListener: () -> Unit,
     private val emptyPlaceHolder: PlaceholderListItem,
     private val errorPlaceHolder: PlaceholderListItem
-) : ListItemAdapter() {
+) : ListItemAdapter(true) {
 
     init {
         delegatesManager.run {

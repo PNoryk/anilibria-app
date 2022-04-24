@@ -54,7 +54,7 @@ class FavoritesFragment : BaseFragment(), SharedProvider, FavoritesView,
         )
     )
 
-    private val searchAdapter = ListItemAdapter().apply {
+    private val searchAdapter = ListItemAdapter(true).apply {
         addDelegate(ReleaseItemDelegate(this@FavoritesFragment))
     }
 

@@ -9,7 +9,7 @@ import ru.radiationx.anilibria.ui.common.adapters.ListItemAdapter
  */
 class BottomTabsAdapter(
     private val listener: BottomTabDelegate.Listener
-) : ListItemAdapter() {
+) : ListItemAdapter(false) {
 
     private var currentScreenKey: String? = null
 

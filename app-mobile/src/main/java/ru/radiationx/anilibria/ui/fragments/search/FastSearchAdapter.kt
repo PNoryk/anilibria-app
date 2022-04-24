@@ -16,7 +16,7 @@ import ru.radiationx.anilibria.ui.common.adapters.ListItemAdapter
 class FastSearchAdapter(
     clickListener: (SuggestionItemState) -> Unit,
     localClickListener: (SuggestionLocalItemState) -> Unit
-) : ListItemAdapter() {
+) : ListItemAdapter(true) {
 
     init {
         addDelegate(SuggestionDelegate(clickListener))

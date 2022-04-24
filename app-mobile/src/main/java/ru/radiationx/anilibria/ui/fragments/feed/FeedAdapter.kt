@@ -28,7 +28,7 @@ class FeedAdapter(
     scheduleClickListener: (ScheduleItemState, View, Int) -> Unit,
     private val emptyPlaceHolder: PlaceholderListItem,
     private val errorPlaceHolder: PlaceholderListItem
-) : ListItemAdapter() {
+) : ListItemAdapter(true) {
 
     companion object {
         private const val TAG_SCHEDULE_SECTION = "schedule"
