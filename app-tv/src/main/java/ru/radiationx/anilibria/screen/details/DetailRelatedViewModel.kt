@@ -3,6 +3,7 @@ package ru.radiationx.anilibria.screen.details
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.common.BaseCardsViewModel
@@ -35,7 +36,8 @@ class DetailRelatedViewModel(
         cardsData.value = listOf(loadingCard)
 
         releaseInteractor
-            .observeFull(releaseId)
+            .observeRelease(releaseId, null)
+            .filterNotNull()
             .distinctUntilChanged()
             .onEach {
                 onRefreshClick()
@@ -44,16 +46,14 @@ class DetailRelatedViewModel(
     }
 
     override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> {
-        val release = releaseInteractor.getFull(releaseId) ?: releaseInteractor.getItem(releaseId)
-        val releaseCodes =
-            DetailsViewModel.getReleasesFromDesc(release?.description?.text.orEmpty())
+        val release = releaseInteractor.awaitRelease(releaseId, null))
+        val releaseCodes = DetailsViewModel.getReleasesFromDesc(release.description?.text.orEmpty())
         if (releaseCodes.isEmpty()) {
             return emptyList()
         }
         return releaseCodes
             .map { releaseRepository.getRelease(it) }
             .let { releases ->
-                releaseInteractor.updateItemsCache(releases)
                 Log.e("kekeke", "related releases ${releases.map { it.id }}")
                 releases.map { converter.toCard(it) }
             }

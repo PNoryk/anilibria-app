@@ -2,6 +2,7 @@ package ru.radiationx.anilibria.screen.details
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.radiationx.anilibria.common.BaseCardsViewModel
@@ -37,7 +38,8 @@ class DetailRecommendsViewModel(
         cardsData.value = listOf(loadingCard)
 
         releaseInteractor
-            .observeFull(releaseId)
+            .observeRelease(releaseId, null)
+            .filterNotNull()
             .distinctUntilChanged()
             .onEach { onRefreshClick() }
             .launchIn(viewModelScope)
@@ -58,16 +60,13 @@ class DetailRecommendsViewModel(
             .ifEmpty {
                 searchGenres(2, requestPage)
             }
-            .also {
-                releaseInteractor.updateItemsCache(it)
-            }
             .let { result ->
                 result.map { converter.toCard(it) }
             }
     }
 
-    private fun getGenres(count: Int): List<ReleaseGenre> {
-        val release = releaseInteractor.getFull(releaseId) ?: return emptyList()
+    private suspend fun getGenres(count: Int): List<ReleaseGenre> {
+        val release = releaseInteractor.awaitRelease(releaseId, null)
         return release.genres?.take(count).orEmpty()
     }
 

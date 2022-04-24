@@ -2,6 +2,7 @@ package ru.radiationx.anilibria.screen.details
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.BaseRowsViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
@@ -39,6 +40,7 @@ class DetailsViewModel(
     override fun onCreate() {
         super.onCreate()
 
+        observeRelease()
         loadRelease()
 
         authStateHolder
@@ -49,24 +51,24 @@ class DetailsViewModel(
                 loadRelease()
             }
             .launchIn(viewModelScope)
+    }
 
-        (releaseInteractor.getFull(releaseId) ?: releaseInteractor.getItem(releaseId))?.also {
-            val releases = getReleasesFromDesc(it.description?.text.orEmpty())
-            updateAvailableRow(RELATED_ROW_ID, releases.isNotEmpty())
-        }
-
+    private fun observeRelease() {
         releaseInteractor
-            .observeFull(releaseId)
+            .observeRelease(releaseId, null)
+            .filterNotNull()
             .map { getReleasesFromDesc(it.description?.text.orEmpty()) }
             .onEach { updateAvailableRow(RELATED_ROW_ID, it.isNotEmpty()) }
             .launchIn(viewModelScope)
     }
 
     private fun loadRelease() {
-        releaseInteractor
-            .loadRelease(releaseId)
-            .take(1)
-            .onEach { historyRepository.putRelease(it.id) }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            runCatching {
+                releaseInteractor.fetchRelease(releaseId, null)
+            }.onSuccess {
+                historyRepository.putRelease(it.id)
+            }
+        }
     }
 }

@@ -37,20 +37,16 @@ import com.google.android.exoplayer2.analytics.AnalyticsListener
 import com.google.android.exoplayer2.source.MediaSourceEventListener
 import kotlinx.android.synthetic.main.activity_myplayer.*
 import kotlinx.android.synthetic.main.view_video_control.*
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.michaelbel.bottomsheet.BottomSheet
 import ru.radiationx.anilibria.R
-import ru.radiationx.shared.ktx.android.getColorFromAttr
 import ru.radiationx.anilibria.extension.isDark
 import ru.radiationx.anilibria.ui.widgets.VideoControlsAlib
+import ru.radiationx.shared.ktx.android.getColorFromAttr
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared_app.di.injectDependencies
-import tv.anilibria.feature.player.data.PlayerPreferencesStorage
-import tv.anilibria.feature.player.data.prefs.PrefferedPlayerPipMode
-import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.app.mobile.preferences.PreferencesStorage
 import tv.anilibria.feature.analytics.api.ErrorReporterConstants
 import tv.anilibria.feature.analytics.api.features.PlayerAnalytics
 import tv.anilibria.feature.analytics.api.features.mapper.toAnalyticsPip
@@ -59,12 +55,15 @@ import tv.anilibria.feature.analytics.api.features.mapper.toAnalyticsScale
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsEpisodeFinishAction
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsQuality
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsSeasonFinishAction
-import tv.anilibria.app.mobile.preferences.PreferencesStorage
-import tv.anilibria.feature.player.data.EpisodeHistoryRepository
-import tv.anilibria.feature.player.data.domain.EpisodeVisit
+import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.types.release.Episode
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.player.data.EpisodeHistoryRepository
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerPipMode
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.plugin.data.analytics.AnalyticsErrorReporter
 import tv.anilibria.plugin.data.analytics.LifecycleTimeCounter
 import tv.anilibria.plugin.data.analytics.TimeCounter
@@ -347,8 +346,8 @@ class MyPlayerActivity : BaseActivity() {
                 requireNotNull(intent.getSerializableExtra(ARG_QUALITY) as? PrefferedPlayerQuality?)
             val playFlagArg = intent.getIntExtra(ARG_PLAY_FLAG, PLAY_FLAG_DEFAULT)
 
-            val release = releaseInteractor.getFull(episodeIdArg.releaseId)
-                ?: releaseInteractor.loadRelease(episodeIdArg.releaseId).first()
+            val release = releaseInteractor.getRelease(episodeIdArg.releaseId, null)
+                ?: releaseInteractor.fetchRelease(episodeIdArg.releaseId, null)
             val visits = episodeHistoryRepository.getByRelease(episodeIdArg.releaseId)
 
             currentEpisodes.clear()

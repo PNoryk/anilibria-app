@@ -30,7 +30,6 @@ class SuggestionsRecommendsViewModel(
 
     override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = searchRepository
         .searchReleases(SearchForm(sort = SearchForm.Sort.RATING), requestPage)
-        .also { releaseInteractor.updateItemsCache(it.items) }
         .let { result -> result.items.map { converter.toCard(it) } }
 
     override fun onLibriaCardClick(card: LibriaCard) {

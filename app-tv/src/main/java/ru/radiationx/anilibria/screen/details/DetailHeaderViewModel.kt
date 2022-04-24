@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -22,11 +23,11 @@ import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.content.data.ReleaseInteractor
-import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
-import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseId
+import tv.anilibria.feature.player.data.EpisodeHistoryRepository
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 
 @InjectConstructor
 class DetailHeaderViewModel(
@@ -53,11 +54,6 @@ class DetailHeaderViewModel(
 
     override fun onCreate() {
         super.onCreate()
-
-        (releaseInteractor.getFull(releaseId) ?: releaseInteractor.getItem(releaseId))?.also {
-            currentRelease = it
-            update()
-        }
         updateProgress()
 
         episodeHistoryRepository
@@ -70,7 +66,8 @@ class DetailHeaderViewModel(
             .launchIn(viewModelScope)
 
         releaseInteractor
-            .observeFull(releaseId)
+            .observeRelease(releaseId, null)
+            .filterNotNull()
             .onEach {
                 Log.e("kekeke", "observeFull")
                 currentRelease = it

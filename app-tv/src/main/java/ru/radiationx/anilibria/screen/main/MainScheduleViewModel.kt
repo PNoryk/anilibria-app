@@ -39,10 +39,6 @@ class MainScheduleViewModel(
 
     override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> = scheduleRepository
         .loadSchedule()
-        .also {
-            val allReleases = it.map { it.items }.flatten()
-            releaseInteractor.updateItemsCache(allReleases)
-        }
         .let { schedueDays ->
             val mskDay = Clock.System.todayAt(TimeZone.of("MSK")).dayOfWeek
             val currentDay = Clock.System.todayAt(TimeZone.currentSystemDefault()).dayOfWeek

@@ -9,14 +9,14 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.*
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.player.data.PlayerPreferencesStorage
-import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 import tv.anilibria.feature.content.data.ReleaseInteractor
-import tv.anilibria.feature.player.data.EpisodeHistoryRepository
-import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.Episode
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.Release
+import tv.anilibria.feature.player.data.EpisodeHistoryRepository
+import tv.anilibria.feature.player.data.PlayerPreferencesStorage
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
+import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 
 @InjectConstructor
 class PlayerViewModel(
@@ -77,7 +77,8 @@ class PlayerViewModel(
             .launchIn(viewModelScope)
 
         releaseInteractor
-            .observeFull(argEpisodeId.releaseId)
+            .observeRelease(argEpisodeId.releaseId, null)
+            .filterNotNull()
             .flatMapLatest { release ->
                 episodeHistoryRepository
                     .observeByRelease(argEpisodeId.releaseId)

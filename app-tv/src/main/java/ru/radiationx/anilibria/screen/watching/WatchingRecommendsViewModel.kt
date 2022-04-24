@@ -54,9 +54,6 @@ class WatchingRecommendsViewModel(
                 )
                 searchRepository.searchReleases(form, requestPage)
             }
-            .also {
-                releaseInteractor.updateItemsCache(it.items)
-            }
             .let { result ->
                 result.items.map { converter.toCard(it) }
             }

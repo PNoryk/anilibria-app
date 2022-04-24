@@ -174,10 +174,7 @@ class VkCommentsPresenter(
     private suspend fun getDataSource(): VkCommentsState {
         return try {
             val commentsSource = vkCommentsRepository.getComments()
-            val releaseSource = releaseInteractor
-                .observeRelease(releaseId, releaseIdCode)
-                .filterNotNull()
-                .first()
+            val releaseSource = releaseInteractor.awaitRelease(releaseId, releaseIdCode)
             VkCommentsState(
                 url = "${commentsSource.baseUrl}release/${releaseSource.code.code}.html",
                 script = commentsSource.script
