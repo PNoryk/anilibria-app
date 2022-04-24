@@ -4,7 +4,7 @@ import toothpick.config.Module
 import tv.anilibria.feature.content.data.ApiConfigPushHandler
 import tv.anilibria.feature.content.data.ApiConfigPushHandlerImpl
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.data.migration.MigrationDataSource
 import tv.anilibria.feature.content.data.migration.MigrationDataSourceImpl
 import tv.anilibria.feature.content.data.repos.*
@@ -20,7 +20,7 @@ class ContentDataFeatureModule : Module() {
         bind(ScheduleRepository::class.java).singleton()
         bind(SearchRepository::class.java).singleton()
         bind(YoutubeRepository::class.java).singleton()
-        bind(ReleaseInteractor::class.java).singleton()
+        bind(ReleaseCacheRepository::class.java).singleton()
 
         bind(ApiConfigPushHandler::class.java)
             .to(ApiConfigPushHandlerImpl::class.java)

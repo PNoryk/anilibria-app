@@ -20,7 +20,7 @@ import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.AuthVkAnalytics
 import tv.anilibria.feature.analytics.api.features.CommentsAnalytics
 import tv.anilibria.feature.auth.data.AuthStateHolder
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
 import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
@@ -30,7 +30,7 @@ import tv.anilibria.feature.vkcomments.data.VkCommentsRepository
 class VkCommentsPresenter(
     private val authStateHolder: AuthStateHolder,
     private val vkCommentsRepository: VkCommentsRepository,
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val authHolder: AuthVkNotifier,
     private val router: Router,
     private val errorHandler: IErrorHandler,
@@ -174,7 +174,7 @@ class VkCommentsPresenter(
     private suspend fun getDataSource(): VkCommentsState {
         return try {
             val commentsSource = vkCommentsRepository.getComments()
-            val releaseSource = releaseInteractor.awaitRelease(releaseId, releaseIdCode)
+            val releaseSource = releaseCacheRepository.awaitRelease(releaseId, releaseIdCode)
             VkCommentsState(
                 url = "${commentsSource.baseUrl}release/${releaseSource.code.code}.html",
                 script = commentsSource.script

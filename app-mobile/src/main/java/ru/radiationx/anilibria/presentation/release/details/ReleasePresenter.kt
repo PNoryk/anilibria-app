@@ -16,8 +16,9 @@ import tv.anilibria.feature.analytics.api.features.CommentsAnalytics
 import tv.anilibria.feature.analytics.api.features.ReleaseAnalytics
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.data.repos.HistoryRepository
+import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
@@ -25,7 +26,8 @@ import tv.anilibria.feature.content.types.release.ReleaseId
 @InjectViewState
 @InjectConstructor
 class ReleasePresenter(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
+    private val releaseRepository: ReleaseRepository,
     private val historyRepository: HistoryRepository,
     private val router: Router,
     private val errorHandler: IErrorHandler,
@@ -70,7 +72,7 @@ class ReleasePresenter(
     private fun loadRelease() {
         viewModelScope.launch {
             runCatching {
-                releaseInteractor.fetchRelease(releaseId, releaseIdCode)
+                releaseRepository.getRelease(releaseId, releaseIdCode)
             }.onSuccess {
                 viewState.setRefreshing(false)
                 historyRepository.putRelease(it.id)
@@ -82,7 +84,7 @@ class ReleasePresenter(
     }
 
     private fun observeRelease() {
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(releaseId, releaseIdCode)
             .filterNotNull()
             .onEach { release ->

@@ -6,7 +6,6 @@ import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.data.repos.HistoryRepository
 import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.data.repos.SearchRepository
@@ -18,7 +17,6 @@ import tv.anilibria.feature.content.types.release.ReleaseId
 class WatchingRecommendsViewModel(
     private val historyRepository: HistoryRepository,
     private val searchRepository: SearchRepository,
-    private val releaseInteractor: ReleaseInteractor,
     private val releaseRepository: ReleaseRepository,
     private val converter: CardsDataConverter,
     private val router: Router

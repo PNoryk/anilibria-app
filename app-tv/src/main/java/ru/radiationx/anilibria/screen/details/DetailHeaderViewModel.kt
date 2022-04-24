@@ -22,7 +22,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseId
@@ -31,7 +31,7 @@ import tv.anilibria.feature.player.data.domain.EpisodeVisit
 
 @InjectConstructor
 class DetailHeaderViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val favoriteRepository: FavoriteRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
     private val authStateHolder: AuthStateHolder,
@@ -65,7 +65,7 @@ class DetailHeaderViewModel(
             }
             .launchIn(viewModelScope)
 
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(releaseId, null)
             .filterNotNull()
             .onEach {

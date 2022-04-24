@@ -32,8 +32,8 @@ import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.*
 import tv.anilibria.feature.appupdates.data.CheckerRepository
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.data.repos.FeedRepository
+import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.data.repos.ScheduleRepository
 import tv.anilibria.feature.content.types.feed.Feed
 import tv.anilibria.feature.content.types.release.Release
@@ -49,7 +49,7 @@ import tv.anilibria.plugin.shared.appinfo.SharedBuildConfig
 @InjectConstructor
 class FeedPresenter(
     private val feedRepository: FeedRepository,
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseRepository: ReleaseRepository,
     private val scheduleRepository: ScheduleRepository,
     private val checkerRepository: CheckerRepository,
     private val sharedBuildConfig: SharedBuildConfig,
@@ -199,7 +199,7 @@ class FeedPresenter(
         }
         randomJob = viewModelScope.launch {
             runCatching {
-                releaseInteractor.getRandomRelease()
+                releaseRepository.getRandomRelease()
             }.onSuccess {
                 releaseAnalytics.open(AnalyticsConstants.screen_feed, null, it.code.code)
                 router.navigateTo(Screens.ReleaseDetails(code = it.code))

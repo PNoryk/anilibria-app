@@ -11,7 +11,7 @@ import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.data.repos.SearchRepository
 import tv.anilibria.feature.content.types.ReleaseGenre
 import tv.anilibria.feature.content.types.SearchForm
@@ -20,7 +20,7 @@ import tv.anilibria.feature.content.types.release.ReleaseId
 
 @InjectConstructor
 class DetailRecommendsViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val searchRepository: SearchRepository,
     private val converter: CardsDataConverter,
     private val router: Router
@@ -37,7 +37,7 @@ class DetailRecommendsViewModel(
 
         cardsData.value = listOf(loadingCard)
 
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(releaseId, null)
             .filterNotNull()
             .distinctUntilChanged()
@@ -66,7 +66,7 @@ class DetailRecommendsViewModel(
     }
 
     private suspend fun getGenres(count: Int): List<ReleaseGenre> {
-        val release = releaseInteractor.awaitRelease(releaseId, null)
+        val release = releaseCacheRepository.awaitRelease(releaseId, null)
         return release.genres?.take(count).orEmpty()
     }
 

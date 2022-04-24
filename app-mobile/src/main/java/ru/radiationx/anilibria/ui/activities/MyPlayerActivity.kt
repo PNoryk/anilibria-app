@@ -55,7 +55,8 @@ import tv.anilibria.feature.analytics.api.features.mapper.toAnalyticsScale
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsEpisodeFinishAction
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsQuality
 import tv.anilibria.feature.analytics.api.features.model.AnalyticsSeasonFinishAction
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
+import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.types.release.Episode
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.Release
@@ -115,7 +116,10 @@ class MyPlayerActivity : BaseActivity() {
     lateinit var episodeHistoryRepository: EpisodeHistoryRepository
 
     @Inject
-    lateinit var releaseInteractor: ReleaseInteractor
+    lateinit var releaseCacheRepository: ReleaseCacheRepository
+
+    @Inject
+    lateinit var releaseRepository: ReleaseRepository
 
     @Inject
     lateinit var preferencesStorage: PreferencesStorage
@@ -346,8 +350,8 @@ class MyPlayerActivity : BaseActivity() {
                 requireNotNull(intent.getSerializableExtra(ARG_QUALITY) as? PrefferedPlayerQuality?)
             val playFlagArg = intent.getIntExtra(ARG_PLAY_FLAG, PLAY_FLAG_DEFAULT)
 
-            val release = releaseInteractor.getRelease(episodeIdArg.releaseId, null)
-                ?: releaseInteractor.fetchRelease(episodeIdArg.releaseId, null)
+            val release = releaseCacheRepository.getRelease(episodeIdArg.releaseId, null)
+                ?: releaseRepository.getRelease(episodeIdArg.releaseId)
             val visits = episodeHistoryRepository.getByRelease(episodeIdArg.releaseId)
 
             currentEpisodes.clear()

@@ -9,14 +9,14 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.player.PlayerController
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.types.release.Episode
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
 
 @InjectConstructor
 class EndEpisodeViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
     private val guidedRouter: GuidedRouter,
     private val playerController: PlayerController
@@ -30,7 +30,7 @@ class EndEpisodeViewModel(
 
     override fun onCreate() {
         super.onCreate()
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(argEpisodeId.releaseId, null)
             .filterNotNull()
             .onEach {

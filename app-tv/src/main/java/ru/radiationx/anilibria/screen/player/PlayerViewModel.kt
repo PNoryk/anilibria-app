@@ -9,7 +9,7 @@ import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.*
 import toothpick.InjectConstructor
 import tv.anilibria.core.types.AbsoluteUrl
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.types.release.Episode
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.Release
@@ -20,7 +20,7 @@ import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 
 @InjectConstructor
 class PlayerViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
     private val playerPreferencesStorage: PlayerPreferencesStorage,
     private val guidedRouter: GuidedRouter,
@@ -76,7 +76,7 @@ class PlayerViewModel(
             }
             .launchIn(viewModelScope)
 
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(argEpisodeId.releaseId, null)
             .filterNotNull()
             .flatMapLatest { release ->

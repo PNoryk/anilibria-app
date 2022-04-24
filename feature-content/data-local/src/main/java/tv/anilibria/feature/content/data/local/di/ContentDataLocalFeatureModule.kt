@@ -1,11 +1,9 @@
 package tv.anilibria.feature.content.data.local.di
 
 import toothpick.config.Module
+import tv.anilibria.feature.content.data.local.ReleaseCacheHelper
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
-import tv.anilibria.feature.content.data.local.holders.GenresLocalDataSource
-import tv.anilibria.feature.content.data.local.holders.ReleaseHistoryLocalDataSource
-import tv.anilibria.feature.content.data.local.holders.ReleaseUpdatesLocalDataSource
-import tv.anilibria.feature.content.data.local.holders.YearsLocalDataSource
+import tv.anilibria.feature.content.data.local.holders.*
 import tv.anilibria.plugin.data.storage.DataStorage
 
 class ContentDataLocalFeatureModule : Module() {
@@ -29,10 +27,12 @@ class ContentDataLocalFeatureModule : Module() {
             .providesSingleton()
 
         bind(GenresLocalDataSource::class.java).singleton()
+        bind(ReleaseCacheLocalDataSource::class.java).singleton()
         bind(ReleaseHistoryLocalDataSource::class.java).singleton()
         bind(ReleaseUpdatesLocalDataSource::class.java).singleton()
         bind(YearsLocalDataSource::class.java).singleton()
 
         bind(ReleaseUpdateHelper::class.java).singleton()
+        bind(ReleaseCacheHelper::class.java).singleton()
     }
 }

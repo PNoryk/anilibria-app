@@ -22,6 +22,17 @@ class ReleaseRepository(
         return releaseApi.getRandomRelease()
     }
 
+    suspend fun getRelease(
+        releaseId: ReleaseId?,
+        releaseCode: ReleaseCode?
+    ): Release {
+        return when {
+            releaseId != null -> getRelease(releaseId)
+            releaseCode != null -> getRelease(releaseCode)
+            else -> throw Exception("Unknown id=$releaseId or code=$releaseCode")
+        }
+    }
+
     suspend fun getRelease(releaseId: ReleaseId): Release {
         return releaseApi.getRelease(releaseId.id).also {
             releaseCacheHelper.update(listOf(it), CacheUpdateStrategy.REPLACE)

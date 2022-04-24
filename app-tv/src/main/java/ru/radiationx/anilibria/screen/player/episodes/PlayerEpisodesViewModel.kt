@@ -8,7 +8,7 @@ import ru.radiationx.anilibria.screen.LifecycleViewModel
 import ru.radiationx.anilibria.screen.player.PlayerController
 import ru.radiationx.shared.ktx.asTimeSecString
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.types.release.Episode
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
@@ -16,7 +16,7 @@ import java.util.*
 
 @InjectConstructor
 class PlayerEpisodesViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
     private val guidedRouter: GuidedRouter,
     private val playerController: PlayerController
@@ -33,7 +33,7 @@ class PlayerEpisodesViewModel(
         super.onCreate()
 
         viewModelScope.launch {
-            releaseInteractor.awaitRelease(argEpisodeId.releaseId, null).also {
+            releaseCacheRepository.awaitRelease(argEpisodeId.releaseId, null).also {
                 currentEpisodes.clear()
                 currentEpisodes.addAll(it.episodes?.reversed().orEmpty())
             }

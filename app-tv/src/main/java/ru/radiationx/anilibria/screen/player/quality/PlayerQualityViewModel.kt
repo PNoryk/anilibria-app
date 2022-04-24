@@ -8,14 +8,14 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.fragment.GuidedRouter
 import ru.radiationx.anilibria.screen.LifecycleViewModel
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.player.data.PlayerPreferencesStorage
 import tv.anilibria.feature.player.data.prefs.PrefferedPlayerQuality
 
 @InjectConstructor
 class PlayerQualityViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val playerPreferencesStorage: PlayerPreferencesStorage,
     private val guidedRouter: GuidedRouter
 ) : LifecycleViewModel() {
@@ -59,7 +59,7 @@ class PlayerQualityViewModel(
     private fun updateAvailable() {
         viewModelScope.launch {
             val available = mutableListOf(SD_ACTION_ID, HD_ACTION_ID, FULL_HD_ACTION_ID)
-            val release = releaseInteractor.awaitRelease(argEpisodeId.releaseId, null)
+            val release = releaseCacheRepository.awaitRelease(argEpisodeId.releaseId, null)
             release.episodes?.find { it.id == argEpisodeId }?.also {
                 if (it.urlFullHd?.value.isNullOrEmpty()) {
                     available.remove(FULL_HD_ACTION_ID)

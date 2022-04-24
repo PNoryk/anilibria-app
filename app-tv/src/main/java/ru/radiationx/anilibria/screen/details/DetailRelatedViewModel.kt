@@ -12,13 +12,13 @@ import ru.radiationx.anilibria.common.LibriaCard
 import ru.radiationx.anilibria.screen.DetailsScreen
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.types.release.ReleaseId
 
 @InjectConstructor
 class DetailRelatedViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val releaseRepository: ReleaseRepository,
     private val converter: CardsDataConverter,
     private val router: Router
@@ -35,7 +35,7 @@ class DetailRelatedViewModel(
 
         cardsData.value = listOf(loadingCard)
 
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(releaseId, null)
             .filterNotNull()
             .distinctUntilChanged()
@@ -46,7 +46,7 @@ class DetailRelatedViewModel(
     }
 
     override suspend fun getCoLoader(requestPage: Int): List<LibriaCard> {
-        val release = releaseInteractor.awaitRelease(releaseId, null))
+        val release = releaseCacheRepository.awaitRelease(releaseId, null)
         val releaseCodes = DetailsViewModel.getReleasesFromDesc(release.description?.text.orEmpty())
         if (releaseCodes.isEmpty()) {
             return emptyList()

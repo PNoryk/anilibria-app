@@ -26,9 +26,8 @@ import tv.anilibria.feature.analytics.api.features.model.AnalyticsQuality
 import tv.anilibria.feature.auth.data.AuthStateHolder
 import tv.anilibria.feature.auth.data.domain.AuthState
 import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.data.repos.FavoriteRepository
-import tv.anilibria.feature.content.data.repos.HistoryRepository
 import tv.anilibria.feature.content.types.release.*
 import tv.anilibria.feature.donation.data.DonationRepository
 import tv.anilibria.feature.player.data.EpisodeHistoryRepository
@@ -40,8 +39,7 @@ import tv.anilibria.feature.player.data.prefs.PrefferedPlayerType
 @InjectViewState
 @InjectConstructor
 class ReleaseInfoPresenter(
-    private val releaseInteractor: ReleaseInteractor,
-    private val historyRepository: HistoryRepository,
+    private val releaseCacheRepository: ReleaseCacheRepository,
     private val episodeHistoryRepository: EpisodeHistoryRepository,
     private val authStateHolder: AuthStateHolder,
     private val favoriteRepository: FavoriteRepository,
@@ -140,7 +138,7 @@ class ReleaseInfoPresenter(
         playerPreferencesStorage.playerType.blockingSet(value)
 
     private fun observeRelease() {
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(releaseId, releaseIdCode)
             .filterNotNull()
             .flatMapLatest { release ->

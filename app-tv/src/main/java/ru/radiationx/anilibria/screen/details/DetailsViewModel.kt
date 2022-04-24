@@ -6,14 +6,16 @@ import kotlinx.coroutines.launch
 import ru.radiationx.anilibria.common.BaseRowsViewModel
 import toothpick.InjectConstructor
 import tv.anilibria.feature.auth.data.AuthStateHolder
-import tv.anilibria.feature.content.data.ReleaseInteractor
+import tv.anilibria.feature.content.data.repos.ReleaseCacheRepository
 import tv.anilibria.feature.content.data.repos.HistoryRepository
+import tv.anilibria.feature.content.data.repos.ReleaseRepository
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
 
 @InjectConstructor
 class DetailsViewModel(
-    private val releaseInteractor: ReleaseInteractor,
+    private val releaseCacheRepository: ReleaseCacheRepository,
+    private val releaseRepository: ReleaseRepository,
     private val historyRepository: HistoryRepository,
     private val authStateHolder: AuthStateHolder
 ) : BaseRowsViewModel() {
@@ -30,7 +32,7 @@ class DetailsViewModel(
         }
     }
 
-    var releaseId: ReleaseId? = null
+    lateinit var releaseId: ReleaseId
 
     override val rowIds: List<Long> = listOf(RELEASE_ROW_ID, RELATED_ROW_ID, RECOMMENDS_ROW_ID)
 
@@ -54,7 +56,7 @@ class DetailsViewModel(
     }
 
     private fun observeRelease() {
-        releaseInteractor
+        releaseCacheRepository
             .observeRelease(releaseId, null)
             .filterNotNull()
             .map { getReleasesFromDesc(it.description?.text.orEmpty()) }
@@ -65,7 +67,7 @@ class DetailsViewModel(
     private fun loadRelease() {
         viewModelScope.launch {
             runCatching {
-                releaseInteractor.fetchRelease(releaseId, null)
+                releaseRepository.getRelease(releaseId)
             }.onSuccess {
                 historyRepository.putRelease(it.id)
             }
