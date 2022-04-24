@@ -84,6 +84,7 @@ class ReleaseInfoPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        observeRelease()
 
         stateController
             .observeState()
@@ -126,9 +127,6 @@ class ReleaseInfoPresenter(
             }
             .launchIn(viewModelScope)
 
-        observeRelease()
-        loadRelease()
-        subscribeAuth()
     }
 
     fun getQuality() = playerPreferencesStorage.quality.blockingGet()
@@ -141,30 +139,10 @@ class ReleaseInfoPresenter(
     fun setPlayerType(value: PrefferedPlayerType) =
         playerPreferencesStorage.playerType.blockingSet(value)
 
-
-    private fun subscribeAuth() {
-        authStateHolder
-            .observe()
-            .distinctUntilChanged()
-            .drop(1)
-            .onEach {
-                loadRelease()
-            }
-            .launchIn(viewModelScope)
-    }
-
-    private fun loadRelease() {
-        releaseInteractor
-            .loadRelease(releaseId, releaseIdCode)
-            .take(1)
-            .onEach { historyRepository.putRelease(it.id) }
-            .catch { errorHandler.handle(it) }
-            .launchIn(viewModelScope)
-    }
-
     private fun observeRelease() {
         releaseInteractor
-            .observeFull(releaseId, releaseIdCode)
+            .observeRelease(releaseId, releaseIdCode)
+            .filterNotNull()
             .flatMapLatest { release ->
                 episodeHistoryRepository
                     .observeByRelease(release.id)

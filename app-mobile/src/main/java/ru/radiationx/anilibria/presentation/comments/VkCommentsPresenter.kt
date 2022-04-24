@@ -1,9 +1,6 @@
 package ru.radiationx.anilibria.presentation.comments
 
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.AuthVkNotifier
@@ -177,10 +174,12 @@ class VkCommentsPresenter(
     private suspend fun getDataSource(): VkCommentsState {
         return try {
             val commentsSource = vkCommentsRepository.getComments()
-            val releaseSource = releaseInteractor.getItem(releaseId, releaseIdCode)
-                ?: releaseInteractor.loadRelease(releaseId, releaseIdCode).first()
+            val releaseSource = releaseInteractor
+                .observeRelease(releaseId, releaseIdCode)
+                .filterNotNull()
+                .first()
             VkCommentsState(
-                url = "${commentsSource.baseUrl}release/${releaseSource.code?.code}.html",
+                url = "${commentsSource.baseUrl}release/${releaseSource.code.code}.html",
                 script = commentsSource.script
             )
         } catch (ex: Exception) {

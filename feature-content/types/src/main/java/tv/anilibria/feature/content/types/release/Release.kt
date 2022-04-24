@@ -11,7 +11,7 @@ import tv.anilibria.feature.content.types.ReleaseYear
 
 data class Release(
     val id: ReleaseId,
-    val code: ReleaseCode?,
+    val code: ReleaseCode,
     val names: List<HtmlText>?,
     val series: String?,
     val poster: RelativeUrl?,
@@ -35,9 +35,7 @@ data class Release(
     val torrents: List<Torrent>?,
 ) {
 
-    val link: RelativeUrl? = code?.let {
-        RelativeUrl("/release/${it.code}.html")
-    }
+    val link: RelativeUrl = RelativeUrl("/release/${code.code}.html")
 
     val nameRus: HtmlText? = names?.getOrNull(0)
     val nameEng: HtmlText? = names?.getOrNull(1)

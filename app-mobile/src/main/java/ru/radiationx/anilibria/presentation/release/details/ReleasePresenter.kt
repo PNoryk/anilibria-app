@@ -1,9 +1,7 @@
 package ru.radiationx.anilibria.presentation.release.details
 
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.radiationx.anilibria.model.loading.StateController
 import ru.radiationx.anilibria.presentation.common.BasePresenter
@@ -13,16 +11,16 @@ import ru.radiationx.anilibria.utils.ShortcutHelper
 import ru.radiationx.shared_app.AppLinkHelper
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
-import tv.anilibria.feature.content.data.BaseUrlHelper
-import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.analytics.api.AnalyticsConstants
 import tv.anilibria.feature.analytics.api.features.CommentsAnalytics
 import tv.anilibria.feature.analytics.api.features.ReleaseAnalytics
+import tv.anilibria.feature.auth.data.AuthStateHolder
+import tv.anilibria.feature.content.data.BaseUrlHelper
+import tv.anilibria.feature.content.data.ReleaseInteractor
 import tv.anilibria.feature.content.data.repos.HistoryRepository
 import tv.anilibria.feature.content.types.release.Release
 import tv.anilibria.feature.content.types.release.ReleaseCode
 import tv.anilibria.feature.content.types.release.ReleaseId
-import javax.inject.Inject
 
 @InjectViewState
 @InjectConstructor
@@ -35,7 +33,8 @@ class ReleasePresenter(
     private val releaseAnalytics: ReleaseAnalytics,
     private val appLinkHelper: AppLinkHelper,
     private val shortcutHelper: ShortcutHelper,
-    private val urlHelper: BaseUrlHelper
+    private val urlHelper: BaseUrlHelper,
+    private val authStateHolder: AuthStateHolder
 ) : BasePresenter<ReleaseView>(router) {
 
     private var currentData: Release? = null
@@ -46,12 +45,9 @@ class ReleasePresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-
-        releaseInteractor.getItem(releaseId, releaseIdCode)?.also {
-            updateLocalRelease(it)
-        }
         observeRelease()
         loadRelease()
+        subscribeAuth()
 
         stateController
             .observeState()
@@ -59,30 +55,38 @@ class ReleasePresenter(
             .launchIn(viewModelScope)
     }
 
-    private fun loadRelease() {
-        releaseInteractor
-            .loadRelease(releaseId, releaseIdCode)
-            .take(1)
+
+    private fun subscribeAuth() {
+        authStateHolder
+            .observe()
+            .distinctUntilChanged()
+            .drop(1)
             .onEach {
-                viewState.setRefreshing(false)
-                historyRepository.putRelease(it.id)
-            }
-            .catch {
-                viewState.setRefreshing(false)
-                errorHandler.handle(it)
+                loadRelease()
             }
             .launchIn(viewModelScope)
     }
 
+    private fun loadRelease() {
+        viewModelScope.launch {
+            runCatching {
+                releaseInteractor.fetchRelease(releaseId, releaseIdCode)
+            }.onSuccess {
+                viewState.setRefreshing(false)
+                historyRepository.putRelease(it.id)
+            }.onFailure {
+                viewState.setRefreshing(false)
+                errorHandler.handle(it)
+            }
+        }
+    }
+
     private fun observeRelease() {
         releaseInteractor
-            .observeFull(releaseId, releaseIdCode)
+            .observeRelease(releaseId, releaseIdCode)
+            .filterNotNull()
             .onEach { release ->
                 updateLocalRelease(release)
-                historyRepository.putRelease(release.id)
-            }
-            .catch {
-                errorHandler.handle(it)
             }
             .launchIn(viewModelScope)
     }

@@ -18,7 +18,7 @@ fun ReleaseResponse.toDomain(): Release {
     val releaseId = ReleaseId(id)
     return Release(
         id = releaseId,
-        code = code?.let { ReleaseCode(it) },
+        code = ReleaseCode(code),
         names = names?.map { it.asHtmlText() },
         series = series,
         poster = poster?.asRelativeUrl(),
