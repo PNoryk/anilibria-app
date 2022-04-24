@@ -2,6 +2,8 @@ package tv.anilibria.feature.content.data.repos
 
 import kotlinx.coroutines.flow.Flow
 import toothpick.InjectConstructor
+import tv.anilibria.feature.content.data.local.CacheUpdateStrategy
+import tv.anilibria.feature.content.data.local.ReleaseCacheHelper
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.local.holders.GenresLocalDataSource
 import tv.anilibria.feature.content.data.local.holders.YearsLocalDataSource
@@ -14,7 +16,8 @@ class SearchRepository(
     private val searchApi: SearchRemoteDataSource,
     private val genresHolder: GenresLocalDataSource,
     private val yearsHolder: YearsLocalDataSource,
-    private val releaseUpdateHolder: ReleaseUpdateHelper
+    private val releaseUpdateHolder: ReleaseUpdateHelper,
+    private val releaseCacheHelper: ReleaseCacheHelper
 ) {
 
     fun observeGenres(): Flow<List<ReleaseGenre>> {
@@ -27,12 +30,14 @@ class SearchRepository(
 
     suspend fun fastSearch(query: String): List<Release> {
         return searchApi.fastSearch(query).also {
+            releaseCacheHelper.update(it, CacheUpdateStrategy.MERGE)
             releaseUpdateHolder.update(it)
         }
     }
 
     suspend fun searchReleases(form: SearchForm, page: Int): Page<Release> {
         return searchApi.searchReleases(form, page).also {
+            releaseCacheHelper.update(it.items, CacheUpdateStrategy.MERGE)
             releaseUpdateHolder.update(it.items)
         }
     }

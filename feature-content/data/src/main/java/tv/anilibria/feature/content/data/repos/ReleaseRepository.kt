@@ -1,6 +1,8 @@
 package tv.anilibria.feature.content.data.repos
 
 import toothpick.InjectConstructor
+import tv.anilibria.feature.content.data.local.CacheUpdateStrategy
+import tv.anilibria.feature.content.data.local.ReleaseCacheHelper
 import tv.anilibria.feature.content.data.local.ReleaseUpdateHelper
 import tv.anilibria.feature.content.data.remote.datasource.remote.api.ReleaseRemoteDataSource
 import tv.anilibria.feature.content.types.Page
@@ -12,7 +14,8 @@ import tv.anilibria.feature.content.types.release.ReleaseId
 @InjectConstructor
 class ReleaseRepository(
     private val releaseApi: ReleaseRemoteDataSource,
-    private val releaseUpdateHolder: ReleaseUpdateHelper
+    private val releaseUpdateHolder: ReleaseUpdateHelper,
+    private val releaseCacheHelper: ReleaseCacheHelper
 ) {
 
     suspend fun getRandomRelease(): RandomRelease {
@@ -21,24 +24,28 @@ class ReleaseRepository(
 
     suspend fun getRelease(releaseId: ReleaseId): Release {
         return releaseApi.getRelease(releaseId.id).also {
+            releaseCacheHelper.update(listOf(it), CacheUpdateStrategy.REPLACE)
             releaseUpdateHolder.update(listOf(it))
         }
     }
 
     suspend fun getRelease(code: ReleaseCode): Release {
         return releaseApi.getRelease(code.code).also {
+            releaseCacheHelper.update(listOf(it), CacheUpdateStrategy.REPLACE)
             releaseUpdateHolder.update(listOf(it))
         }
     }
 
     suspend fun getReleasesById(ids: List<ReleaseId>): List<Release> {
         return releaseApi.getReleasesByIds(ids.map { it.id }).also {
+            releaseCacheHelper.update(it, CacheUpdateStrategy.MERGE)
             releaseUpdateHolder.update(it)
         }
     }
 
     suspend fun getReleases(page: Int): Page<Release> {
         return releaseApi.getReleases(page).also {
+            releaseCacheHelper.update(it.items, CacheUpdateStrategy.MERGE)
             releaseUpdateHolder.update(it.items)
         }
     }
