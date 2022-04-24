@@ -47,7 +47,7 @@ class ReleaseHistoryLocalDataSource(
         .orEmpty()
 
     suspend fun put(data: ReleaseVisit) = observableData.update { currentData ->
-        currentData?.toMutableList()?.apply {
+        (currentData?.toMutableList() ?: mutableListOf()).apply {
             removeAll { it.id == data.id }
             add(data)
         }

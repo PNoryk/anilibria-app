@@ -5,10 +5,10 @@ import com.squareup.moshi.Types
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import toothpick.InjectConstructor
-import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.EpisodeId
 import tv.anilibria.feature.content.types.release.ReleaseId
 import tv.anilibria.feature.player.data.di.EpisodeHistoryStorageQualifier
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.plugin.data.storage.DataStorage
 import tv.anilibria.plugin.data.storage.MoshiStorageDataHolder
 import tv.anilibria.plugin.data.storage.ObservableData
@@ -45,14 +45,14 @@ class EpisodeHistoryLocalDataSource(
         .orEmpty()
 
     suspend fun put(data: EpisodeVisit) = observableData.update { currentData ->
-        currentData?.toMutableList()?.apply {
+        (currentData?.toMutableList() ?: mutableListOf()).apply {
             removeAll { it.id == data.id }
             add(data)
         }
     }
 
     suspend fun put(data: List<EpisodeVisit>) = observableData.update { currentData ->
-        currentData?.toMutableList()?.apply {
+        (currentData?.toMutableList() ?: mutableListOf()).apply {
             val newIds = data.map { it.id }
             removeAll { newIds.contains(it.id) }
             addAll(data)

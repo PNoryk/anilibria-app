@@ -47,7 +47,7 @@ class ReleaseUpdatesLocalDataSource(
         .orEmpty()
 
     suspend fun put(data: List<ReleaseUpdate>) = observableData.update { currentData ->
-        currentData?.toMutableList()?.apply {
+        (currentData?.toMutableList() ?: mutableListOf()).apply {
             val dataIds = data.map { it.id }.toSet()
             removeAll { dataIds.contains(it.id) }
             addAll(data)

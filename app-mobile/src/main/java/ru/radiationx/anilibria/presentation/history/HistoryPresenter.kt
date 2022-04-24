@@ -1,5 +1,6 @@
 package ru.radiationx.anilibria.presentation.history
 
+import android.util.Log
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -55,6 +56,7 @@ class HistoryPresenter(
     private fun observeReleases() {
         historyRepository
             .observeReleases()
+            .onEach { Log.d("kekeke","history $it") }
             .map { releaseRepository.getReleasesById(it.map { it.id }) }
             .onEach { releases ->
                 currentReleases.clear()
