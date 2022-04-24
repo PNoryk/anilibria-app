@@ -39,11 +39,11 @@ ext {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api project(":shared-ktx")
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     api "androidx.core:core-ktx:1.2.0"
-    api "androidx.collection:collection-ktx:1.1.0"
+    api "androidx.collection:collection-ktx:1.2.0"
     api "androidx.fragment:fragment-ktx:1.2.4"
     api "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
     api "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
