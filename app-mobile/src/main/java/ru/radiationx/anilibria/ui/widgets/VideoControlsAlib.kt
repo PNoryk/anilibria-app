@@ -8,16 +8,19 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
+import androidx.core.view.children
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import com.devbrackets.android.exomedia.listener.VideoControlsSeekListener
 import com.devbrackets.android.exomedia.ui.animation.BottomViewHideShowAnimation
 import com.devbrackets.android.exomedia.ui.animation.TopViewHideShowAnimation
 import com.devbrackets.android.exomedia.ui.widget.VideoControls
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsMobile
-import kotlinx.android.synthetic.main.view_video_control.view.*
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.view_video_control.*
 import ru.radiationx.anilibria.R
-import ru.radiationx.shared.ktx.android.getCompatDrawable
 import ru.radiationx.anilibria.ui.widgets.gestures.VideoGestureEventsListener
+import ru.radiationx.shared.ktx.android.getCompatDrawable
 import ru.radiationx.shared.ktx.android.gone
 import ru.radiationx.shared.ktx.android.visible
 import ru.radiationx.shared.ktx.asTimeSecString
@@ -32,7 +35,7 @@ class VideoControlsAlib @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : VideoControlsMobile(context, attrs, defStyleAttr) {
+) : VideoControlsMobile(context, attrs, defStyleAttr), LayoutContainer {
 
     private var alibControlsListener: AlibControlsListener? = null
     private var pictureInPictureMenuItem: MenuItem? = null
@@ -90,6 +93,12 @@ class VideoControlsAlib @JvmOverloads constructor(
 
     override fun retrieveViews() {
         super.retrieveViews()
+        Log.d("kekeke", "container: $containerView")
+        Log.d("kekeke", "this: $this")
+        Log.d("kekeke", "root: ${videoControlsRoot}")
+        children.forEach {
+            Log.d("kekeke", "children $it")
+        }
         textContainer = appbarLayout
 
         appbarLayout.apply {
@@ -405,4 +414,7 @@ class VideoControlsAlib @JvmOverloads constructor(
 
         fun onPlaybackStateChanged(isPlaying: Boolean)
     }
+
+    override val containerView: View
+        get() = this
 }

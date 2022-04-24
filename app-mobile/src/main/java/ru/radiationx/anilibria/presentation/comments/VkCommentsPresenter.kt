@@ -1,5 +1,6 @@
 package ru.radiationx.anilibria.presentation.comments
 
+import android.util.Log
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import moxy.InjectViewState
@@ -176,9 +177,9 @@ class VkCommentsPresenter(
             val commentsSource = vkCommentsRepository.getComments()
             val releaseSource = releaseCacheRepository.awaitRelease(releaseId, releaseIdCode)
             VkCommentsState(
-                url = "${commentsSource.baseUrl}release/${releaseSource.code.code}.html",
+                url = "${commentsSource.baseUrl.value}release/${releaseSource.code.code}.html",
                 script = commentsSource.script
-            )
+            ).also { Log.d("kekeke", "VkCommentsState $it") }
         } catch (ex: Exception) {
             commentsAnalytics.error(ex)
             errorHandler.handle(ex)

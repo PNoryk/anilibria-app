@@ -1,6 +1,8 @@
 package ru.radiationx.anilibria.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import ru.radiationx.anilibria.*
 import ru.radiationx.anilibria.navigation.CiceroneHolder
 import ru.radiationx.anilibria.presentation.common.IErrorHandler
@@ -35,7 +37,11 @@ class MobileAppModule(context: Context) : Module() {
 
 
     init {
+
         bind(Context::class.java).toInstance(context)
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        bind(SharedPreferences::class.java).toInstance(sharedPreferences)
 
         bind(SharedBuildConfig::class.java).to(AppBuildConfig::class.java).singleton()
         bind(CheckerReserveSources::class.java).to(MobileCheckerSources::class.java).singleton()

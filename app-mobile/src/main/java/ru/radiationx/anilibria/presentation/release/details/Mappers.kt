@@ -5,8 +5,8 @@ import ru.radiationx.anilibria.model.asDataColorRes
 import ru.radiationx.anilibria.model.asDataIconRes
 import ru.radiationx.shared.ktx.asTimeSecString
 import ru.radiationx.shared_app.common.SystemUtils
-import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import tv.anilibria.feature.content.types.release.*
+import tv.anilibria.feature.player.data.domain.EpisodeVisit
 import java.util.*
 
 fun Release.toState(
@@ -22,7 +22,7 @@ fun Release.toState(
 )
 
 fun FavoriteInfo.toState() = ReleaseFavoriteState(
-    rating = rating.toString(),
+    rating = rating.value.toString(),
     isAdded = isAdded
 )
 
@@ -69,7 +69,7 @@ fun BlockedInfo.toState(): ReleaseBlockedInfoState {
 }
 
 fun Release.toEpisodeControlState(episodesVisits: List<EpisodeVisit>): ReleaseEpisodesControlState? {
-    val hasEpisodes = episodesVisits.isNotEmpty()
+    val hasEpisodes = episodes?.isNotEmpty() == true
     val hasViewed = episodesVisits.any { it.isViewed }
     val hasWeb = !webPlayerUrl?.value.isNullOrEmpty()
     val continueTitle = if (hasViewed) {
@@ -97,8 +97,8 @@ fun Torrent.toState(systemUtils: SystemUtils): ReleaseTorrentItemState = Release
     title = "Серия $series",
     subtitle = quality.orEmpty(),
     size = systemUtils.readableFileSize(size.value),
-    seeders = seeders.toString(),
-    leechers = leechers.toString(),
+    seeders = seeders.value.toString(),
+    leechers = leechers.value.toString(),
     date = null
 )
 

@@ -299,7 +299,7 @@ class MyPlayerActivity : BaseActivity() {
         videoControls?.apply {
             setAnalytics(playerAnalytics)
             updatePIPControl()
-            player.setControls(this as VideoControlsCore)
+            this@MyPlayerActivity.player.setControls(this as VideoControlsCore)
             setOpeningListener(alibControlListener)
             setVisibilityListener(ControlsVisibilityListener())
             let {
